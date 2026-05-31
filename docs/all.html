@@ -130,7 +130,7 @@
   <span class="muted">查过再信 · 持续收集与查证</span>
 </div></footer>
 <script>
-function q(){const m=location.search.match(/[?&]q=([^&]*)/);return m?decodeURIComponent(m[1].replace(/\+/g,' ')).trim():'';}
+function q(){try{const m=location.search.match(/[?&]q=([^&]*)/);return m?decodeURIComponent(m[1].replace(/\+/g,' ')).trim():'';}catch(e){return '';}}
 const cards=[...document.querySelectorAll('.card')],note=document.getElementById('note');
 let curF='*',curQ=q();const si=document.querySelector('.search input');if(si&&curQ)si.value=curQ;
 function apply(){let n=0;cards.forEach(c=>{

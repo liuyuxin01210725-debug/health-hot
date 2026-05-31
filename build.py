@@ -12,7 +12,7 @@
 发布闸门：构建前校验，未来日期 / 缺来源 / 缺必填 / 未审核 的条目**不发布**并报警。
 纯标准库，无依赖。用法：python3 build.py
 """
-import json, glob, os, html, shutil, datetime
+import json, glob, os, re, html, shutil, datetime
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(ROOT, "data", "items")
@@ -42,7 +42,25 @@ EV_DESC = {
     "blogger": "个人观点 / 方案——非临床证据，仅供参考。",
     "anecdote": "个例 / 经验——证据级别最低，谨慎对待。",
 }
-REQUIRED = ["title", "source_url", "slug", "category", "evidence", "summary"]
+REQUIRED = ["title", "source_url", "slug", "category", "evidence", "summary", "source", "date", "reviewed_at"]
+EVIDENCE_OK = {"rct", "meta", "observational", "expert", "blogger", "anecdote"}
+SLUG_RE = re.compile(r'^[a-z0-9]+(?:-[a-z0-9]+)*$')  # 防路径穿越 / 注入
+
+
+def _isodate(s):
+    try:
+        return datetime.date.fromisoformat(s)
+    except Exception:
+        return None
+
+
+def _norm_url(u):
+    """归一化用于去重：去 fragment、host 小写。"""
+    if not isinstance(u, str):
+        return ""
+    u = re.sub(r'#.*$', '', u.strip())
+    m = re.match(r'^(https?://)([^/]+)(.*)$', u)
+    return (m.group(1) + m.group(2).lower() + m.group(3)) if m else u
 
 
 def load_items():
@@ -60,28 +78,58 @@ def load_items():
 
 
 def validate(items):
-    """发布闸门：返回 (合格条目, 被拦条目+原因)。不靠人记得，靠这里。"""
+    """发布闸门：返回 (合格条目, 被拦条目+原因)。坏数据在这里被拦，不靠人记得。"""
     good, blocked, seen_slug, seen_url = [], [], {}, {}
+    today = _isodate(TODAY)
     for it in items:
         errs = []
+        if not isinstance(it, dict):
+            blocked.append((str(it)[:40], ["条目不是对象"])); continue
+        # 必填 + 必须是非空字符串（防类型混淆崩溃）
         for k in REQUIRED:
-            if not it.get(k):
-                errs.append(f"缺字段 {k}")
-        d = it.get("date", "")
-        if d and d > TODAY:
-            errs.append(f"未来日期 {d}（今天 {TODAY}）")
-        if it.get("status") and it["status"] not in ("reviewed", "published"):
-            errs.append(f"未审核 status={it['status']}")
-        s, u = it.get("slug", ""), it.get("source_url", "")
-        if s and s in seen_slug:
+            v = it.get(k)
+            if not isinstance(v, str) or not v.strip():
+                errs.append(f"缺/非字符串字段 {k}")
+        # 类型校验
+        if not isinstance(it.get("featured", False), bool):
+            errs.append("featured 非布尔")
+        if not isinstance(it.get("rank", 0), int) or isinstance(it.get("rank", 0), bool):
+            errs.append("rank 非整数")
+        if it.get("evidence") not in EVIDENCE_OK:
+            errs.append(f"evidence 非法：{it.get('evidence')!r}")
+        # slug 白名单（防 ../ 路径穿越 与 属性注入）
+        s = it.get("slug", "")
+        if not (isinstance(s, str) and SLUG_RE.match(s)):
+            errs.append(f"slug 非法（仅 a-z0-9-）：{s!r}")
+        # source_url 必须 http(s)（防 javascript:/data: 伪协议）
+        u = it.get("source_url", "")
+        if not (isinstance(u, str) and re.match(r'^https?://', u)):
+            errs.append(f"source_url 非 http(s)：{u!r}")
+        # status 严格 reviewed（缺失 / published 都不放行）
+        if it.get("status") != "reviewed":
+            errs.append(f"status 非 reviewed：{it.get('status')!r}")
+        # 日期结构化解析：date/reviewed_at 必须 ISO 且不在未来；source_published_at 可未来但须可解析
+        for k in ("date", "reviewed_at"):
+            dv = it.get(k)
+            d = _isodate(dv) if isinstance(dv, str) else None
+            if dv and d is None:
+                errs.append(f"{k} 非 ISO 日期：{dv!r}")
+            elif d and today and d > today:
+                errs.append(f"{k} 未来日期 {dv}")
+        sp = it.get("source_published_at")
+        if sp is not None and (not isinstance(sp, str) or _isodate(sp) is None):
+            errs.append(f"source_published_at 非 ISO 日期：{sp!r}")
+        # 去重（slug 精确；url 归一化）
+        nu = _norm_url(u)
+        if isinstance(s, str) and s in seen_slug:
             errs.append(f"slug 重复（与 {seen_slug[s]}）")
-        if u and u in seen_url:
-            errs.append(f"来源链接重复（与 {seen_url[u]}）")
+        if nu and nu in seen_url:
+            errs.append(f"来源链接重复（与 {seen_url[nu]}）")
         if errs:
             blocked.append((it.get("_file", "?"), errs))
         else:
             seen_slug[s] = it["_file"]
-            seen_url[u] = it["_file"]
+            seen_url[nu] = it["_file"]
             it.setdefault("featured", False)
             it.setdefault("rank", 0)
             good.append(it)
@@ -131,11 +179,11 @@ def shell(title, active, inner, base="", extra_js="", desc="", canon=""):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{e(title)} · {e(SITE_TITLE)}</title>
 <meta name="description" content="{e(desc)}">
-<link rel="canonical" href="{SITE_URL}{canon}">
+<link rel="canonical" href="{e(SITE_URL + canon)}">
 <meta property="og:type" content="article">
 <meta property="og:title" content="{e(title)} · {e(SITE_TITLE)}">
 <meta property="og:description" content="{e(desc)}">
-<meta property="og:url" content="{SITE_URL}{canon}">
+<meta property="og:url" content="{e(SITE_URL + canon)}">
 <link rel="stylesheet" href="{base}styles.css">
 </head>
 <body>
@@ -231,7 +279,7 @@ def render_all(items):
             f'<div class="filters">{pills}</div>'
             f'<p class="result-note" id="note"></p>')
     js = '''<script>
-function q(){const m=location.search.match(/[?&]q=([^&]*)/);return m?decodeURIComponent(m[1].replace(/\\+/g,' ')).trim():'';}
+function q(){try{const m=location.search.match(/[?&]q=([^&]*)/);return m?decodeURIComponent(m[1].replace(/\\+/g,' ')).trim():'';}catch(e){return '';}}
 const cards=[...document.querySelectorAll('.card')],note=document.getElementById('note');
 let curF='*',curQ=q();const si=document.querySelector('.search input');if(si&&curQ)si.value=curQ;
 function apply(){let n=0;cards.forEach(c=>{
@@ -356,23 +404,31 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 def main():
     items = load_items()
     good, blocked = validate(items)
-    # 写出
-    shutil.rmtree(OUT, ignore_errors=True)
-    os.makedirs(CLAIMS, exist_ok=True)
-    open(os.path.join(OUT, ".nojekyll"), "w").close()
-    with open(os.path.join(OUT, "styles.css"), "w", encoding="utf-8") as f:
+    # 先全部写进临时目录，成功后再原子替换 docs/——渲染中途崩溃不会删掉已上线的站
+    tmp = OUT + ".tmp"
+    tmp_claims = os.path.join(tmp, "claims")
+    shutil.rmtree(tmp, ignore_errors=True)
+    os.makedirs(tmp_claims, exist_ok=True)
+    open(os.path.join(tmp, ".nojekyll"), "w").close()
+    with open(os.path.join(tmp, "styles.css"), "w", encoding="utf-8") as f:
         f.write(CSS)
-    with open(os.path.join(OUT, "index.html"), "w", encoding="utf-8") as f:
+    with open(os.path.join(tmp, "index.html"), "w", encoding="utf-8") as f:
         f.write(render_index(good))
-    with open(os.path.join(OUT, "all.html"), "w", encoding="utf-8") as f:
+    with open(os.path.join(tmp, "all.html"), "w", encoding="utf-8") as f:
         f.write(render_all(good))
-    with open(os.path.join(OUT, "about.html"), "w", encoding="utf-8") as f:
+    with open(os.path.join(tmp, "about.html"), "w", encoding="utf-8") as f:
         f.write(render_about())
     for it in good:
         related = [r for r in good if r.get("category") == it.get("category")
                    and r.get("slug") != it.get("slug")][:4]
-        with open(os.path.join(CLAIMS, it["slug"] + ".html"), "w", encoding="utf-8") as f:
-            f.write(detail_page(it, related))
+        # slug 已过白名单校验；再确认输出路径不逃出 claims/
+        dest = os.path.join(tmp_claims, it["slug"] + ".html")
+        if os.path.abspath(dest).startswith(os.path.abspath(tmp_claims) + os.sep):
+            with open(dest, "w", encoding="utf-8") as f:
+                f.write(detail_page(it, related))
+    # 原子替换
+    shutil.rmtree(OUT, ignore_errors=True)
+    os.rename(tmp, OUT)
     # 报告
     feat = sum(1 for it in good if it.get("featured"))
     print(f"✓ 发布 {len(good)} 条（精选 {feat}）+ {len(good)} 个详情页 → docs/")

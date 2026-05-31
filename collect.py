@@ -36,7 +36,8 @@ MON = {'jan':'01','feb':'02','mar':'03','apr':'04','may':'05','jun':'06',
 
 def fetch(url):
     req = urllib.request.Request(url, headers=UA)
-    return urllib.request.urlopen(req, timeout=25).read()
+    with urllib.request.urlopen(req, timeout=25) as r:
+        return r.read(8 * 1024 * 1024)  # 8MB 上限，防超大 feed 撑爆内存
 
 
 def t(el):
@@ -61,7 +62,9 @@ def norm_date(s):
     try:
         return parsedate_to_datetime(s).strftime('%Y-%m-%d')
     except Exception:
-        return s[:10]
+        pass
+    m = re.search(r'(\d{4})', s)  # 退而求其次：抓 4 位年份；抓不到就空（不吐 "Winter 202" 这种垃圾）
+    return f"{m.group(1)}-01-01" if m else ''
 
 
 def mon(m):
@@ -77,11 +80,16 @@ def parse_feed(raw):
     entries = root.findall(f'.//{ATOM}entry')
     if entries:
         for e in entries:
-            link_el = e.find(f'{ATOM}link')
+            links = e.findall(f'{ATOM}link')
+            href = next((l.get('href', '') for l in links if l.get('rel', 'alternate') == 'alternate'), '')
+            if not href and links:
+                href = links[0].get('href', '')
             mg = e.find(f'{MEDIA}group')
             desc = t(mg.find(f'{MEDIA}description')) if mg is not None else ''
+            if not desc:
+                desc = t(e.find(f'{ATOM}summary')) or t(e.find(f'{ATOM}content'))
             out.append({'title': t(e.find(f'{ATOM}title')),
-                        'url': link_el.get('href', '') if link_el is not None else '',
+                        'url': href,
                         'published': norm_date(t(e.find(f'{ATOM}published')) or t(e.find(f'{ATOM}updated'))),
                         'desc': clean_text(desc)})
     else:
@@ -96,7 +104,8 @@ def fetch_pubmed(query, n=PER_SOURCE):
     """PubMed：按主题找最新论文，抓免费摘要。返回 [{title,url,published,desc,journal}]"""
     es = (f"{EUTILS}/esearch.fcgi?db=pubmed&retmode=json&sort=date&retmax={n}"
           f"&tool=health-hot&term=" + urllib.parse.quote(query))
-    ids = json.loads(fetch(es).decode()).get('esearchresult', {}).get('idlist', [])
+    ids = [i for i in json.loads(fetch(es).decode()).get('esearchresult', {}).get('idlist', [])
+           if isinstance(i, str) and i.isdigit()]
     if not ids:
         return []
     time.sleep(0.4)
@@ -118,6 +127,8 @@ def fetch_pubmed(query, n=PER_SOURCE):
             if txt:
                 parts.append((f"{lab}：" if lab else "") + txt)
         abstract = clean_text(' '.join(parts))
+        if not abstract:  # 无摘要的（如部分 book/无 abstract 文章）跳过，不产空卡
+            continue
         journal = a.findtext('.//Journal/Title') or ''
         pd = a.find('.//Journal/JournalIssue/PubDate')
         published = ''
@@ -125,8 +136,10 @@ def fetch_pubmed(query, n=PER_SOURCE):
             y = pd.findtext('Year')
             if y:
                 published = f"{y}-{mon(pd.findtext('Month'))}-01"
-            elif pd.findtext('MedlineDate'):
-                published = pd.findtext('MedlineDate')[:4] + "-01-01"
+            else:
+                md = pd.findtext('MedlineDate') or ''
+                mm = re.search(r'\d{4}', md)
+                published = (mm.group(0) + "-01-01") if mm else ''
         out.append({'title': title, 'url': f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
                     'published': published, 'desc': abstract, 'journal': journal})
     return out
@@ -144,13 +157,23 @@ def seen_urls():
 
 def main():
     filt = [x.lower() for x in sys.argv[1:]]
-    sources = json.load(open(SRC, encoding='utf-8'))['sources']
+    try:
+        cfg = json.load(open(SRC, encoding='utf-8'))
+        sources = cfg.get('sources', [])
+        if not isinstance(sources, list):
+            raise ValueError("sources 不是数组")
+    except Exception as ex:
+        print(f"[!] 读取 sources.json 失败：{ex}")
+        return
     if filt:
-        sources = [s for s in sources if any(f in s['name'].lower() for f in filt)]
+        sources = [s for s in sources if isinstance(s, dict) and any(f in s.get('name', '').lower() for f in filt)]
     seen = seen_urls()
     cands = []
     for s in sources:
+        name = s.get('name', '<未命名>') if isinstance(s, dict) else '<非对象>'
         try:
+            if not isinstance(s, dict) or 'type' not in s:
+                raise ValueError("source 缺 type 字段")
             if s['type'] == 'pubmed':
                 entries = fetch_pubmed(s['query'])
             else:
@@ -158,20 +181,20 @@ def main():
                        if s['type'] == 'youtube' else s['url'])
                 entries = parse_feed(fetch(url))
         except Exception as ex:
-            print(f"[!] {s['name']}: 失败 — {ex}")
+            print(f"[!] {name}: 失败 — {ex}")
             continue
         new = 0
         for e in entries[:PER_SOURCE]:
             if not e['url'] or e['url'] in seen:
                 continue
-            src = (e['journal'] + " · PubMed") if e.get('journal') else s['name']
+            src = (e['journal'] + " · PubMed") if e.get('journal') else name
             cands.append({'source': src, 'category': s.get('category', ''),
                           'evidence': s.get('evidence', 'expert'),
                           'title': e['title'], 'source_url': e['url'],
                           'published': e['published'], 'desc': e['desc'][:DESC_CHARS]})
             seen.add(e['url'])
             new += 1
-        print(f"[✓] {s['name']}: 共 {len(entries)} 条，新增候选 {new} 条")
+        print(f"[✓] {name}: 共 {len(entries)} 条，新增候选 {new} 条")
     json.dump(cands, open(OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
     print(f"\n共 {len(cands)} 条候选 → {OUT}")
     for c in cands:
