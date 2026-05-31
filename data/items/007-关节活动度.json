@@ -7,5 +7,12 @@
   "featured": true,
   "rank": 86,
   "evidence": "expert",
-  "summary": "Kelly Starrett 的观点：活动度（ROM）是少数「不必随年龄必然下降」的生理维度，但长期不练几乎注定退化。本期讲怎么用日常动作模式维持身体耐用度。专家观点，重在方法论框架。"
+  "summary": "Kelly Starrett 的观点：活动度（ROM）是少数「不必随年龄必然下降」的生理维度，但长期不练几乎注定退化。本期讲怎么用日常动作模式维持身体耐用度。专家观点，重在方法论框架。",
+  "slug": "joint-mobility-aging",
+  "status": "reviewed",
+  "reviewed_at": "2026-05-31",
+  "source_published_at": "2026-04-24",
+  "conclusion": "活动度不必随年龄必然下降，但长期不练几乎注定退化。",
+  "population": "未特别限定，见原文",
+  "caveats": "本条为单一专家（Kelly Starrett）观点，重在方法论框架，非临床研究结论；具体方法见原文核对。"
 }

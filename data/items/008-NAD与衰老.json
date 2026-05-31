@@ -7,5 +7,12 @@
   "featured": false,
   "rank": 0,
   "evidence": "expert",
-  "summary": "不少「衰老症状」也符合慢性炎症 + NAD 代谢受损。Brenner（NAD 领域研究者）讲机制和人体数据，并对市面上一堆 NAD 补剂去伪存真。听点在于分清「机制说得通」和「真有人体证据」——具体补剂别照搬，回看原始研究。"
+  "summary": "不少「衰老症状」也符合慢性炎症 + NAD 代谢受损。Brenner（NAD 领域研究者）讲机制和人体数据，并对市面上一堆 NAD 补剂去伪存真。听点在于分清「机制说得通」和「真有人体证据」——具体补剂别照搬，回看原始研究。",
+  "slug": "nad-aging-interventions",
+  "status": "reviewed",
+  "reviewed_at": "2026-05-31",
+  "source_published_at": "2026-02-09",
+  "conclusion": "NAD 补剂要分清「机制说得通」与「真有人体证据」，别照搬。",
+  "population": "未特别限定，见原文",
+  "caveats": "需区分机制合理与人体证据，市面补剂良莠不齐，具体剂量与产品请回看原始研究核对。"
 }

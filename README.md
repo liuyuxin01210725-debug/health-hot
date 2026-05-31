@@ -5,17 +5,17 @@
 
 ## 结构
 
-- `data/sources.json` — 信源清单（RSS / YouTube 频道）
-- `data/items/*.json` — 收集到的条目（每条 = 一张卡片）
+- `data/sources.json` — 信源清单（RSS / YouTube 频道 / PubMed 主题）
+- `data/items/*.json` — 收集到的条目（每条 = 一张卡片 / 一条核验）
 - `collect.py` — 从信源抓取候选、去重（纯标准库）
-- `build.py` — 生成静态站到 `public/`（精选 + 全部 + 关于；纯标准库）
-- `.github/workflows/deploy.yml` — 推送即自动构建并部署到 GitHub Pages
+- `build.py` — 生成静态站到 `docs/`（精选 + 全部 + 关于 + 各条详情页；纯标准库）
+- 部署：GitHub Pages 从 `main` 分支 `/docs` 目录 serve，推送即更新（当前未用 GitHub Actions；如需每周自动化再加 workflow，需 `workflow` 授权）
 
 ## 本地预览
 
 ```bash
 python3 build.py
-python3 -m http.server 8000 --directory public
+python3 -m http.server 8000 --directory docs
 # 浏览器打开 http://localhost:8000
 ```
 
