@@ -1,5 +1,5 @@
 {
-  "_说明": "健康信源清单。type=youtube 用 channel_id（免登录）；type=rss 用 url。category/evidence 是默认标签，每条由摘要时再定。更新 2026-05-31：经 @handle 重新提取，修正全部失效/错误的 channel_id。",
+  "_说明": "健康信源清单。type: youtube(channel_id) / rss(url) / pubmed(query)。category/evidence 是默认标签，每条由摘要时再定。PubMed 用 E-utilities，免费无需 key；query 用 [pt] 选论文类型 + humans[mh] 过滤人类研究（避免混进兽医/材料学）。",
   "sources": [
     {"name": "Peter Attia MD", "type": "youtube", "channel_id": "UC8kGsMa0LygSX9nkBcBH1Sg", "category": "长寿", "evidence": "expert"},
     {"name": "Huberman Lab", "type": "youtube", "channel_id": "UC2D2CMWXMOVWx7giW1n3LIg", "category": "睡眠", "evidence": "expert"},
@@ -7,12 +7,16 @@
     {"name": "Bryan Johnson", "type": "youtube", "channel_id": "UCnRVL1-HJnXWB_Xi2dAoTcg", "category": "长寿", "evidence": "expert"},
     {"name": "Huberman Lab Podcast", "type": "rss", "url": "https://feeds.megaphone.fm/hubermanlab", "category": "睡眠", "evidence": "expert"},
     {"name": "FoundMyFitness Podcast", "type": "rss", "url": "https://podcast.foundmyfitness.com/rss.xml", "category": "营养", "evidence": "expert"},
-    {"name": "Bryan Johnson (Medium)", "type": "rss", "url": "https://bryan-johnson.medium.com/feed", "category": "长寿", "evidence": "expert"}
+    {"name": "Bryan Johnson (Medium)", "type": "rss", "url": "https://bryan-johnson.medium.com/feed", "category": "长寿", "evidence": "expert"},
+
+    {"name": "PubMed·间歇禁食RCT", "type": "pubmed", "query": "intermittent fasting AND randomized controlled trial[pt] AND humans[mh]", "category": "营养", "evidence": "rct"},
+    {"name": "PubMed·肌酸综述", "type": "pubmed", "query": "creatine supplementation AND review[pt] AND humans[mh]", "category": "补剂", "evidence": "meta"},
+    {"name": "PubMed·Omega-3 RCT", "type": "pubmed", "query": "omega-3 fatty acids AND randomized controlled trial[pt] AND humans[mh]", "category": "补剂", "evidence": "rct"},
+    {"name": "PubMed·心肺功能与死亡率", "type": "pubmed", "query": "cardiorespiratory fitness AND mortality AND humans[mh]", "category": "运动", "evidence": "observational"},
+    {"name": "PubMed·长寿综述", "type": "pubmed", "query": "(longevity OR healthy aging) AND review[pt] AND humans[mh]", "category": "长寿", "evidence": "meta"}
   ],
   "_未来扩展": [
-    "PubMed 检索 RSS（长寿/肌酸/间歇禁食/心肺-死亡率/Omega-3）——需在 PubMed 建 RSS 拿 rss_guid URL",
-    "The Lancet RSS: https://www.thelancet.com/content/rss",
-    "STAT News（日更新闻，量大，按需再加）: https://www.statnews.com/feed/",
-    "中文权威（丁香医生/卓正/张文宏）——需自托管 RSSHub"
+    "中文权威（丁香医生/卓正/果壳/张文宏）——需自托管 RSSHub",
+    "ScienceDaily 健康（科学新闻稿，需重度筛选）: https://www.sciencedaily.com/rss/health_medicine.xml"
   ]
 }
