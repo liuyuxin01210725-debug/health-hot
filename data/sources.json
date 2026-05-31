@@ -1,13 +1,18 @@
 {
-  "_说明": "健康信源清单。type=youtube 用 channel_id（免登录）；type=rss 用 url。category/evidence 是默认标签，每条由摘要时再定。collect.py 只抓 sources 里的；_待修复 不抓。",
+  "_说明": "健康信源清单。type=youtube 用 channel_id（免登录）；type=rss 用 url。category/evidence 是默认标签，每条由摘要时再定。更新 2026-05-31：经 @handle 重新提取，修正全部失效/错误的 channel_id。",
   "sources": [
+    {"name": "Peter Attia MD", "type": "youtube", "channel_id": "UC8kGsMa0LygSX9nkBcBH1Sg", "category": "长寿", "evidence": "expert"},
     {"name": "Huberman Lab", "type": "youtube", "channel_id": "UC2D2CMWXMOVWx7giW1n3LIg", "category": "睡眠", "evidence": "expert"},
+    {"name": "FoundMyFitness", "type": "youtube", "channel_id": "UC5fdyC4LxyyYv8Am6nDrkmg", "category": "营养", "evidence": "expert"},
+    {"name": "Bryan Johnson", "type": "youtube", "channel_id": "UCnRVL1-HJnXWB_Xi2dAoTcg", "category": "长寿", "evidence": "expert"},
     {"name": "Huberman Lab Podcast", "type": "rss", "url": "https://feeds.megaphone.fm/hubermanlab", "category": "睡眠", "evidence": "expert"},
-    {"name": "FoundMyFitness Podcast", "type": "rss", "url": "https://podcast.foundmyfitness.com/rss.xml", "category": "营养", "evidence": "expert"}
+    {"name": "FoundMyFitness Podcast", "type": "rss", "url": "https://podcast.foundmyfitness.com/rss.xml", "category": "营养", "evidence": "expert"},
+    {"name": "Bryan Johnson (Medium)", "type": "rss", "url": "https://bryan-johnson.medium.com/feed", "category": "长寿", "evidence": "expert"}
   ],
-  "_待修复": [
-    {"name": "Peter Attia MD", "type": "youtube", "channel_id": "UC8nLLwUMmHWS_M5BzD9-y-A", "问题": "channel_id 返回 404，已失效；需查正确 ID，或用其播客 RSS（The Drive，私有订阅制）"},
-    {"name": "Bryan Johnson", "type": "youtube", "channel_id": "UC3xpGYBp7VfGEqYpoO27prw", "问题": "channel_id 返回 404；需查正确 ID。Medium 有 RSS 可替代：https://bryan-johnson.medium.com/feed"},
-    {"name": "FoundMyFitness(YouTube)", "type": "youtube", "channel_id": "UC4QZ_LsYcvcq7qOsOhpAX4A", "问题": "该 ID 指向的是 AI/科技频道、非健康，ID 错误；FoundMyFitness 播客 RSS 已可用，YouTube 暂不需要"}
+  "_未来扩展": [
+    "PubMed 检索 RSS（长寿/肌酸/间歇禁食/心肺-死亡率/Omega-3）——需在 PubMed 建 RSS 拿 rss_guid URL",
+    "The Lancet RSS: https://www.thelancet.com/content/rss",
+    "STAT News（日更新闻，量大，按需再加）: https://www.statnews.com/feed/",
+    "中文权威（丁香医生/卓正/张文宏）——需自托管 RSSHub"
   ]
 }
