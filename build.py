@@ -64,6 +64,15 @@ def _norm_url(u):
     return (m.group(1) + m.group(2).lower() + m.group(3)) if m else u
 
 
+def _link_label(u):
+    """链接显示名：PubMed 显 PMID，其余显域名。"""
+    m = re.search(r'pubmed\.ncbi\.nlm\.nih\.gov/(\d+)', u or "")
+    if m:
+        return f"PubMed {m.group(1)}"
+    m = re.match(r'https?://([^/]+)', u or "")
+    return m.group(1) if m else (u or "")
+
+
 def load_items():
     items = []
     for f in sorted(glob.glob(os.path.join(DATA, "*.json"))):
@@ -120,6 +129,14 @@ def validate(items):
         sp = it.get("source_published_at")
         if sp is not None and (not isinstance(sp, str) or _isodate(sp) is None):
             errs.append(f"source_published_at 非 ISO 日期：{sp!r}")
+        # 双链接字段类型校验
+        ds = it.get("discovery_source_url")
+        if ds and (not isinstance(ds, str) or not re.match(r'^https?://', ds)):
+            errs.append("discovery_source_url 非 http(s)")
+        evl = it.get("evidence_source_urls")
+        if evl is not None and (not isinstance(evl, list)
+                                or any(not isinstance(x, str) or not re.match(r'^https?://', x) for x in evl)):
+            errs.append("evidence_source_urls 须为 http(s) 列表")
         # 去重（slug 精确；url 归一化）
         nu = _norm_url(u)
         if isinstance(s, str) and s in seen_slug:
@@ -228,12 +245,28 @@ def detail_page(it, related):
         rel = f'<section class="related"><h3>相关核验</h3><ul>{links}</ul></section>'
     src_date = it.get("source_published_at") or it.get("date", "")
     src_lbl = e(src_date) + ("（期刊预排，未到见刊日）" if src_date and src_date > TODAY else "")
+    # 双链接：在哪听到（discovery） vs 凭什么核验（evidence）
+    disc = it.get("discovery_source_url", "")
+    evs = [u for u in (it.get("evidence_source_urls") or []) if isinstance(u, str)]
+    dual = '<div class="dual">'
+    if disc:
+        dual += (f'<div class="dl-row"><span class="dl-k">🎧 你可能在哪听到</span>'
+                 f'<a href="{e(disc)}" target="_blank" rel="noopener">{e(_link_label(disc))} ↗</a></div>')
+    if evs:
+        dual += ('<div class="dl-row"><span class="dl-k">🔬 核验依据</span><span class="dl-v">'
+                 + " ".join(f'<a href="{e(u)}" target="_blank" rel="noopener">{e(_link_label(u))} ↗</a>' for u in evs)
+                 + '</span></div>')
+    else:
+        dual += ('<div class="dl-row"><span class="dl-k">🔬 核验依据</span>'
+                 '<span class="dl-pending">见原始来源中引用的研究（待单独标注）</span></div>')
+    dual += '</div>'
     inner = (f'<nav class="crumb"><a href="../all.html">← 全部核验</a></nav>\n'
              f'<article class="claim">\n'
              f'  {meta_row(it)}\n'
              f'  <h1>{e(it.get("title",""))}</h1>\n'
              f'  <p class="claim-concl"><span class="lbl">一句话结论</span>{e(it.get("conclusion") or it.get("summary",""))}</p>\n'
              f'  <dl class="fields">{"".join(fields)}</dl>\n'
+             f'  {dual}\n'
              f'  <a class="src-btn" href="{url}" target="_blank" rel="noopener">查看原始来源 ↗</a>\n'
              f'  <p class="prov">来源：{e(it.get("source",""))}'
              f'{(" · 原文日期 " + src_lbl) if src_date else ""}'
@@ -383,6 +416,11 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .src-btn{display:inline-block;background:var(--accent);color:#fff;border-radius:10px;padding:11px 20px;font-weight:700;font-size:15px}
 .src-btn:hover{background:var(--accent-ink);text-decoration:none}
 .prov{margin:14px 0 0;color:var(--muted);font-size:13px}
+.dual{margin:0 0 16px;display:flex;flex-direction:column;gap:8px}
+.dl-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;font-size:14px}
+.dl-k{flex:0 0 auto;font-weight:700;color:var(--accent-ink);background:var(--accent-soft);border-radius:7px;padding:2px 9px;font-size:12.5px}
+.dl-v{display:flex;flex-wrap:wrap;gap:10px}
+.dl-pending{color:var(--muted)}
 .related{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 20px}
 .related h3{margin:0 0 10px;font-size:16px}.related ul{margin:0;padding:0;list-style:none}
 .related li{padding:8px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px}

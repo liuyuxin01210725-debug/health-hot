@@ -14,5 +14,9 @@
   "source_published_at": "2026-05-01",
   "conclusion": "上班的体力劳动不等于护心运动，休闲运动才可靠降低心血管与死亡风险。",
   "population": "未特别限定，见原文",
-  "caveats": "证据仍偏弱、属观察性研究，工作体力活动的关联不一致，机制尚不确定，结论需谨慎，见原文核对。"
+  "caveats": "证据仍偏弱、属观察性研究，工作体力活动的关联不一致，机制尚不确定，结论需谨慎，见原文核对。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/42104355/"
+  ]
 }

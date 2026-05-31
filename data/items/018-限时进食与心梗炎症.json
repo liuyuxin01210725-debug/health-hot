@@ -14,5 +14,9 @@
   "source_published_at": "2026-04-01",
   "conclusion": "限时进食或降心梗患者炎症指标，属早期信号，别当定论。",
   "population": "有心梗病史／已有冠心病的患者（样本仅 19 人）",
-  "caveats": "样本很小、仅 2 周、看的是炎症指标而非「少发心梗」等硬结局，属早期信号，需就医个体化评估。"
+  "caveats": "样本很小、仅 2 周、看的是炎症指标而非「少发心梗」等硬结局，属早期信号，需就医个体化评估。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/41859904/"
+  ]
 }

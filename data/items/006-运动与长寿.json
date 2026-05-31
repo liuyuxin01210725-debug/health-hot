@@ -14,5 +14,9 @@
   "source_published_at": "2025-12-07",
   "conclusion": "剧烈运动对延寿或更高效，但属专家梳理而非定论。",
   "population": "未特别限定，见原文",
-  "caveats": "为专家梳理而非单一 RCT 定论，「1 分钟抵 10 分钟」为节目中说法，建议先听论证再回看原始研究核对。"
+  "caveats": "为专家梳理而非单一 RCT 定论，「1 分钟抵 10 分钟」为节目中说法，建议先听论证再回看原始研究核对。",
+  "discovery_source_url": "https://foundmyfitness.libsyn.com/108-the-best-type-of-exercise-for-longevity",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/36482104/"
+  ]
 }

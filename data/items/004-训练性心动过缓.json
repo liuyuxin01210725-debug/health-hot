@@ -14,5 +14,9 @@
   "source_published_at": "2026-05-29",
   "conclusion": "静息心率变慢、同等活动心率更低，是心肺变强而非退步。",
   "population": "未特别限定，见原文",
-  "caveats": "本条目基于机制综述（expert 级证据）。若出现莫名心慌、胸闷、头晕，属另一回事，应及时就医。"
+  "caveats": "本条目基于机制综述（expert 级证据）。若出现莫名心慌、胸闷、头晕，属另一回事，应及时就医。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/25871550/"
+  ]
 }

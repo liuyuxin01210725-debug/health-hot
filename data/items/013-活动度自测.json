@@ -14,5 +14,9 @@
   "source_published_at": "2026-05-29",
   "conclusion": "把活动度当成可长期维持、不必随龄必然退化的能力。",
   "population": "未特别限定，见原文",
-  "caveats": "坐下-起立测试与死亡率的关联来自观察性研究，并非因果；自测请量力而行，不适感或有伤病应停止。"
+  "caveats": "坐下-起立测试与死亡率的关联来自观察性研究，并非因果；自测请量力而行，不适感或有伤病应停止。",
+  "discovery_source_url": "https://www.youtube.com/watch?v=_i6vnLnwNC4",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/23242910/"
+  ]
 }

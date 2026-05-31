@@ -14,5 +14,9 @@
   "source_published_at": "2026-01-01",
   "conclusion": "8 项 RCT 荟萃显示肌酸对血脂无临床意义影响。",
   "population": "未特别限定，见原文",
-  "caveats": "证据确定性偏低，仍需更大样本确认；具体剂量/人群见原文核对。"
+  "caveats": "证据确定性偏低，仍需更大样本确认；具体剂量/人群见原文核对。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/42180567/"
+  ]
 }

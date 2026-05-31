@@ -14,5 +14,9 @@
   "source_published_at": "2026-05-29",
   "conclusion": "跳跃类高冲击运动增骨密度，Meta 分析显示可能优于抗阻训练。",
   "population": "summary 主要提到绝经前女性；其他人群见原文核对。",
-  "caveats": "部分研究用的是\"原地纵跳\"，严格的\"跳绳专项\"证据还不算多；是否适合自己请就医核对。"
+  "caveats": "部分研究用的是\"原地纵跳\"，严格的\"跳绳专项\"证据还不算多；是否适合自己请就医核对。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/40611942/"
+  ]
 }

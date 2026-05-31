@@ -14,5 +14,9 @@
   "source_published_at": "2022-11-08",
   "conclusion": "有测试能估衰老速度，速度略高于1关联未来7年更高死亡与慢病风险。",
   "population": "未特别限定，见原文",
-  "caveats": "证据为观察性研究（DunedinPACE 等纵向研究），仅显示相关而非因果；作者「12 个月逆转 31 年」属个人自测、营销色彩重，应当概念看、别当目标。"
+  "caveats": "证据为观察性研究（DunedinPACE 等纵向研究），仅显示相关而非因果；作者「12 个月逆转 31 年」属个人自测、营销色彩重，应当概念看、别当目标。",
+  "discovery_source_url": "https://medium.com/future-literacy/how-fast-are-you-aging-e845830d8a3c",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/35029144/"
+  ]
 }

@@ -14,5 +14,9 @@
   "source_published_at": "2026-12-01",
   "conclusion": "肌酸配合抗阻训练，对绝经后女性瘦体重和腿力有小但确实的提升，且安全。",
   "population": "绝经后女性（约 600 名受试者）。",
-  "caveats": "增益为「小但确实」，需剂量足够并配合抗阻训练，否则无效；骨密度无明显变化。具体剂量见原文，按需问医生。"
+  "caveats": "增益为「小但确实」，需剂量足够并配合抗阻训练，否则无效；骨密度无明显变化。具体剂量见原文，按需问医生。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/42141930/"
+  ]
 }
