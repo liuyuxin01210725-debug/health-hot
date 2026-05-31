@@ -348,6 +348,49 @@ def render_about():
                  desc="查过再信的方法论：怎么审核、证据如何分级、何时复核、如何纠错。", canon="about.html")
 
 
+def claims_feed(items):
+    """机读 feed：把已发布的核验导出成 JSON，供公开 Skill / Agent 直接调用（对标 AI HOT 的 public API）。
+    只导出已过发布闸门的 good 条目；带站点级医疗免责（铁律④），让任何下游消费方都能带着它一起呈现。"""
+    out = []
+    for it in items:
+        slug = it.get("slug", "")
+        # source_urls = 主源在前 + 证据链，去重，仅 http(s)；至少含 1 条（主源已过闸门校验）。
+        # discovery_source_url（"在哪听到"）不是证据，单列、不并入 source_urls。
+        srcs = []
+        for u in [it.get("source_url", "")] + [x for x in (it.get("evidence_source_urls") or []) if isinstance(x, str)]:
+            if isinstance(u, str) and u and re.match(r'^https?://', u) and u not in srcs:
+                srcs.append(u)
+        out.append({
+            "slug": slug,
+            "title": it.get("title", ""),
+            "detail_url": SITE_URL + "claims/" + slug + ".html",
+            "category": it.get("category", ""),
+            "evidence": it.get("evidence", ""),
+            "evidence_label": EV_LABEL.get(it.get("evidence", ""), it.get("evidence", "")),
+            "conclusion": it.get("conclusion") or it.get("summary", ""),
+            "population": it.get("population", ""),
+            "caveats": it.get("caveats", ""),
+            "summary": it.get("summary", ""),
+            "source": it.get("source", ""),
+            "source_urls": srcs,
+            "discovery_source_url": it.get("discovery_source_url", ""),
+            "featured": bool(it.get("featured", False)),
+            "date": it.get("date", ""),
+            "reviewed_at": it.get("reviewed_at", ""),
+        })
+    return {
+        "schema_version": "1.0",
+        "site": SITE_TITLE,
+        "site_url": SITE_URL,
+        "description": "中文循证健康说法核验库——每条结论标注证据强度、适用人群与原始出处。",
+        "disclaimer": "本数据为科普整理，非医疗建议；不提供具体剂量与个体化诊疗。"
+                      "每条结论的证据强度见 evidence 字段；请点击 detail_url / source_urls 回原文核对。",
+        "generated_at": TODAY,
+        "count": len(out),
+        "claims": out,
+    }
+
+
 CSS = '''
 :root{
   --bg:#f6f9f7; --panel:#ffffff; --ink:#16302a; --muted:#5f726c; --line:#e3ece8;
@@ -458,6 +501,8 @@ def main():
         f.write(render_all(good))
     with open(os.path.join(tmp, "about.html"), "w", encoding="utf-8") as f:
         f.write(render_about())
+    with open(os.path.join(tmp, "claims.json"), "w", encoding="utf-8") as f:
+        json.dump(claims_feed(good), f, ensure_ascii=False, indent=2)
     for it in good:
         related = [r for r in good if r.get("category") == it.get("category")
                    and r.get("slug") != it.get("slug")][:4]
@@ -471,7 +516,7 @@ def main():
     os.rename(tmp, OUT)
     # 报告
     feat = sum(1 for it in good if it.get("featured"))
-    print(f"✓ 发布 {len(good)} 条（精选 {feat}）+ {len(good)} 个详情页 → docs/")
+    print(f"✓ 发布 {len(good)} 条（精选 {feat}）+ {len(good)} 个详情页 + claims.json（机读 feed）→ docs/")
     if blocked:
         print(f"\n⚠️  发布闸门拦下 {len(blocked)} 条（未上线）：")
         for fn, errs in blocked:
