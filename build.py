@@ -21,7 +21,14 @@ CLAIMS = os.path.join(OUT, "claims")
 TODAY = datetime.date.today().isoformat()
 
 SITE_TITLE = "查过再信"
+SITE_URL = "https://liuyuxin01210725-debug.github.io/health-hot/"
 HERO_Q = "听到一个健康说法？先查一下证据。"
+
+# 日期字段语义（避免把"期刊预排日期"与"本站收录日"混为一谈）：
+#   date                = 本站 feed 日期，用于排序与发布闸门；通常等于原文日期，
+#                         但当原文为"预排/未来日期"时取收录日，确保 feed 不出现未来日期。
+#   source_published_at = 原文/源的真实发布日期（可为期刊预排的未来日期，仅作元数据展示，不参与闸门）。
+#   reviewed_at         = 本站复核日期。
 HERO_SUB = "每条结论都标注证据强度、适用人群和原始出处——把「听来的」和「有据的」分开。"
 REPO = "https://github.com/liuyuxin01210725-debug/health-hot"
 
@@ -112,7 +119,7 @@ def card(it):
             f'</article>')
 
 
-def shell(title, active, inner, base="", extra_js=""):
+def shell(title, active, inner, base="", extra_js="", desc="", canon=""):
     nav_items = [("精选", "index.html"), ("全部", "all.html"), ("关于", "about.html")]
     nav = "".join(
         f'<a class="navlink{" on" if lbl == active else ""}" href="{base}{href}">{lbl}</a>'
@@ -123,6 +130,12 @@ def shell(title, active, inner, base="", extra_js=""):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{e(title)} · {e(SITE_TITLE)}</title>
+<meta name="description" content="{e(desc)}">
+<link rel="canonical" href="{SITE_URL}{canon}">
+<meta property="og:type" content="article">
+<meta property="og:title" content="{e(title)} · {e(SITE_TITLE)}">
+<meta property="og:description" content="{e(desc)}">
+<meta property="og:url" content="{SITE_URL}{canon}">
 <link rel="stylesheet" href="{base}styles.css">
 </head>
 <body>
@@ -165,6 +178,7 @@ def detail_page(it, related):
                         f'<span class="rcat">{e(r.get("category",""))}</span></li>' for r in related)
         rel = f'<section class="related"><h3>相关核验</h3><ul>{links}</ul></section>'
     src_date = it.get("source_published_at") or it.get("date", "")
+    src_lbl = e(src_date) + ("（期刊预排，未到见刊日）" if src_date and src_date > TODAY else "")
     inner = (f'<nav class="crumb"><a href="../all.html">← 全部核验</a></nav>\n'
              f'<article class="claim">\n'
              f'  {meta_row(it)}\n'
@@ -173,10 +187,12 @@ def detail_page(it, related):
              f'  <dl class="fields">{"".join(fields)}</dl>\n'
              f'  <a class="src-btn" href="{url}" target="_blank" rel="noopener">查看原始来源 ↗</a>\n'
              f'  <p class="prov">来源：{e(it.get("source",""))}'
-             f'{(" · 原文日期 " + e(src_date)) if src_date else ""}'
+             f'{(" · 原文日期 " + src_lbl) if src_date else ""}'
              f' · 本站复核 {e(it.get("reviewed_at") or TODAY)}</p>\n'
              f'</article>\n{rel}')
-    return shell(it.get("title", ""), "", inner, base="../")
+    return shell(it.get("title", ""), "", inner, base="../",
+                 desc=(it.get("conclusion") or it.get("summary", "")),
+                 canon="claims/" + it.get("slug", "") + ".html")
 
 
 def render_index(items):
@@ -190,7 +206,8 @@ def render_index(items):
             f'<button type="submit">查证据</button></form></section>')
     head = (f'<div class="sec-head"><h2>重点核验</h2>'
             f'<a class="more" href="all.html">看全部 →</a></div>')
-    return shell("精选", "精选", hero + head + '<section class="cards">' + cards + '</section>')
+    return shell("精选", "精选", hero + head + '<section class="cards">' + cards + '</section>',
+                 desc=HERO_SUB, canon="index.html")
 
 
 def render_all(items):
@@ -229,7 +246,8 @@ document.querySelectorAll('.pill').forEach(p=>p.addEventListener('click',()=>{
   document.querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));p.classList.add('on');curF=p.dataset.f;apply();}));
 apply();
 </script>'''
-    return shell("全部", "全部", head + sections, extra_js=js)
+    return shell("全部", "全部", head + sections, extra_js=js,
+                 desc="全部健康说法核验，按主题分组，每条标注证据强度、适用人群与原始出处。", canon="all.html")
 
 
 def render_about():
@@ -244,7 +262,8 @@ def render_about():
 <div class="val"><h3>如何纠错</h3><p>发现错误或更新？欢迎到 <a href="{REPO}/issues" target="_blank" rel="noopener">GitHub 仓库提 issue</a> 指正——本站代码与数据全部公开、可追溯。</p></div>
 </section>
 <p class="hint">凭什么信？不靠"我读了很多书"——靠每一条都能点回原文，你自己能核对。</p>'''
-    return shell("关于", "关于", inner)
+    return shell("关于", "关于", inner,
+                 desc="查过再信的方法论：怎么审核、证据如何分级、何时复核、如何纠错。", canon="about.html")
 
 
 CSS = '''
