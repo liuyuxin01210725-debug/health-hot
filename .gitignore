@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+.DS_Store
+public/
+技术方案参考*.md
