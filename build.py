@@ -159,9 +159,25 @@ def e(s):
     return html.escape(str(s if s is not None else ""))
 
 
+def fmt(s):
+    """富文本字段：先 HTML 转义（防注入），再把 **粗体** 转成 <strong>。
+    用于 conclusion/summary/caveats/population —— 摘要时写的 Markdown 粗体不再裸露成 ** 星号。"""
+    return re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', e(s))
+
+
 def ev_badge(it):
     ev = it.get("evidence", "")
     return f'<span class="ev ev-{e(ev)}">{EV_LABEL.get(ev, e(ev))}</span>' if ev else ""
+
+
+def ev_legend():
+    """证据强度图例：给不懂术语的访客一眼看懂徽章含义、以及强弱次序。"""
+    order = ["rct", "meta", "guideline", "observational", "expert", "blogger", "anecdote"]
+    short = {"rct": "随机对照", "meta": "荟萃", "guideline": "指南", "observational": "观察性",
+             "expert": "专家观点", "blogger": "博主", "anecdote": "个例"}
+    chips = "".join(f'<span class="lg-item"><span class="ev ev-{k}">{EV_LABEL[k]}</span>{short[k]}</span>'
+                    for k in order)
+    return f'<div class="ev-legend"><span class="lg-lead">证据强度（强 → 弱）</span>{chips}</div>'
 
 
 def meta_row(it):
@@ -176,8 +192,8 @@ def card(it):
     slug = e(it.get("slug", ""))
     cat = e(it.get("category", ""))
     blob = e(" ".join(str(it.get(k, "")) for k in
-             ("title", "conclusion", "summary", "category", "population", "caveats")))
-    concl = e(it.get("conclusion") or it.get("summary", ""))
+             ("title", "conclusion", "summary", "category", "population", "caveats")).replace("**", ""))
+    concl = fmt(it.get("conclusion") or it.get("summary", ""))
     return (f'<article class="card" data-cat="{cat}" data-search="{blob}">\n'
             f'  {meta_row(it)}\n'
             f'  <h2 class="title"><a href="claims/{slug}.html">{e(it.get("title",""))}</a></h2>\n'
@@ -233,11 +249,11 @@ def detail_page(it, related):
     fields = []
     fields.append(f'<dt>证据强度</dt><dd>{ev_badge(it)} {e(EV_DESC.get(ev,""))}</dd>')
     if it.get("population"):
-        fields.append(f'<dt>适用于谁</dt><dd>{e(it["population"])}</dd>')
+        fields.append(f'<dt>适用于谁</dt><dd>{fmt(it["population"])}</dd>')
     if it.get("caveats"):
-        fields.append(f'<dt>需要注意</dt><dd>{e(it["caveats"])}</dd>')
+        fields.append(f'<dt>需要注意</dt><dd>{fmt(it["caveats"])}</dd>')
     if it.get("summary"):
-        fields.append(f'<dt>详情</dt><dd>{e(it["summary"])}</dd>')
+        fields.append(f'<dt>详情</dt><dd>{fmt(it["summary"])}</dd>')
     rel = ""
     if related:
         links = "".join(f'<li><a href="{e(r.get("slug",""))}.html">{e(r.get("title",""))}</a>'
@@ -264,7 +280,7 @@ def detail_page(it, related):
              f'<article class="claim">\n'
              f'  {meta_row(it)}\n'
              f'  <h1>{e(it.get("title",""))}</h1>\n'
-             f'  <p class="claim-concl"><span class="lbl">一句话结论</span>{e(it.get("conclusion") or it.get("summary",""))}</p>\n'
+             f'  <p class="claim-concl"><span class="lbl">一句话结论</span>{fmt(it.get("conclusion") or it.get("summary",""))}</p>\n'
              f'  <dl class="fields">{"".join(fields)}</dl>\n'
              f'  {dual}\n'
              f'  <a class="src-btn" href="{url}" target="_blank" rel="noopener">查看原始来源 ↗</a>\n'
@@ -288,7 +304,7 @@ def render_index(items):
             f'<button type="submit">查证据</button></form></section>')
     head = (f'<div class="sec-head"><h2>重点核验</h2>'
             f'<a class="more" href="all.html">看全部 →</a></div>')
-    return shell("精选", "精选", hero + head + '<section class="cards">' + cards + '</section>',
+    return shell("精选", "精选", hero + head + ev_legend() + '<section class="cards">' + cards + '</section>',
                  desc=HERO_SUB, canon="index.html")
 
 
@@ -328,13 +344,13 @@ document.querySelectorAll('.pill').forEach(p=>p.addEventListener('click',()=>{
   document.querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));p.classList.add('on');curF=p.dataset.f;apply();}));
 apply();
 </script>'''
-    return shell("全部", "全部", head + sections, extra_js=js,
+    return shell("全部", "全部", head + ev_legend() + sections, extra_js=js,
                  desc="全部健康说法核验，按主题分组，每条标注证据强度、适用人群与原始出处。", canon="all.html")
 
 
 def render_about():
     inner = f'''<section class="hero slim"><h1>关于本站</h1>
-<p class="lead">「{e(SITE_TITLE)}」是一个**健康说法核验库**：把流行的健康说法，一条条查到原始证据、标出强度、写清适用人群和注意事项。资讯流只是入口，核心是帮你分清「听来的」和「有据的」。</p></section>
+<p class="lead">「{e(SITE_TITLE)}」是一个<strong>健康说法核验库</strong>：把流行的健康说法，一条条查到原始证据、标出强度、写清适用人群和注意事项。资讯流只是入口，核心是帮你分清「听来的」和「有据的」。</p></section>
 <section class="values">
 <div class="val"><h3>怎么审核</h3><p>从权威信源（健康播客 / 研究者 / PubMed）抓取 → 提炼要点 → 按 7 条规则人工/AI 复核 → 标 <code>reviewed</code> 才发布。构建前有自动闸门：未来日期、缺来源、未审核的条目不会上线。</p></div>
 <div class="val"><h3>证据分级</h3><p>每条标清 RCT / 荟萃 / 观察 / 专家 / 博主，不混为一谈。点进详情页能看到这条结论"凭什么"。</p></div>
@@ -367,10 +383,10 @@ def claims_feed(items):
             "category": it.get("category", ""),
             "evidence": it.get("evidence", ""),
             "evidence_label": EV_LABEL.get(it.get("evidence", ""), it.get("evidence", "")),
-            "conclusion": it.get("conclusion") or it.get("summary", ""),
-            "population": it.get("population", ""),
-            "caveats": it.get("caveats", ""),
-            "summary": it.get("summary", ""),
+            "conclusion": (it.get("conclusion") or it.get("summary") or "").replace("**", ""),
+            "population": (it.get("population") or "").replace("**", ""),
+            "caveats": (it.get("caveats") or "").replace("**", ""),
+            "summary": (it.get("summary") or "").replace("**", ""),
             "source": it.get("source", ""),
             "source_urls": srcs,
             "discovery_source_url": it.get("discovery_source_url", ""),
@@ -445,6 +461,9 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .ev-guideline{background:#6b4fbb}
 .ev-expert{background:var(--exp)}.ev-blogger,.ev-anecdote{background:var(--blog)}
 .badge{margin-left:auto;background:#fff5e9;color:var(--warn);border:1px solid #f0d9bf;border-radius:7px;padding:2px 9px;font-size:11.5px;font-weight:800}
+.ev-legend{display:flex;flex-wrap:wrap;align-items:center;gap:7px 13px;margin:0 0 16px;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;font-size:12.5px;color:var(--muted)}
+.ev-legend .lg-lead{font-weight:700;color:var(--accent-ink)}
+.ev-legend .lg-item{display:inline-flex;align-items:center;gap:5px}
 .title{margin:0 0 7px;font-size:18px;line-height:1.45}
 .title a{color:var(--ink)}.title a:hover{color:var(--accent)}
 .concl{margin:0;font-size:14.5px;color:#3a4742}
@@ -503,6 +522,10 @@ def main():
         f.write(render_about())
     with open(os.path.join(tmp, "claims.json"), "w", encoding="utf-8") as f:
         json.dump(claims_feed(good), f, ensure_ascii=False, indent=2)
+    # 公开 Skill 源随站点发布：skill/ → docs/skill/（放在 tmp 里走原子替换，重建不丢）
+    skill_src = os.path.join(ROOT, "skill")
+    if os.path.isdir(skill_src):
+        shutil.copytree(skill_src, os.path.join(tmp, "skill"))
     for it in good:
         related = [r for r in good if r.get("category") == it.get("category")
                    and r.get("slug") != it.get("slug")][:4]
