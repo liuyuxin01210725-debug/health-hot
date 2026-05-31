@@ -32,18 +32,19 @@ HERO_Q = "听到一个健康说法？先查一下证据。"
 HERO_SUB = "每条结论都标注证据强度、适用人群和原始出处——把「听来的」和「有据的」分开。"
 REPO = "https://github.com/liuyuxin01210725-debug/health-hot"
 
-EV_LABEL = {"rct": "RCT", "meta": "Meta", "observational": "观察",
+EV_LABEL = {"rct": "RCT", "meta": "Meta", "guideline": "指南", "observational": "观察",
             "expert": "专家", "blogger": "博主", "anecdote": "个例"}
 EV_DESC = {
     "rct": "随机对照试验——证据强度高，但仍要看样本与重复性。",
     "meta": "系统综述 / 荟萃分析——综合多项研究，证据强度高。",
+    "guideline": "官方 / 学会指南——基于证据的实践推荐，注意适用地区。",
     "observational": "观察性研究——能显示相关，不能证明因果。",
     "expert": "专家观点 / 科普——有参考价值，待更强证据确认。",
     "blogger": "个人观点 / 方案——非临床证据，仅供参考。",
     "anecdote": "个例 / 经验——证据级别最低，谨慎对待。",
 }
 REQUIRED = ["title", "source_url", "slug", "category", "evidence", "summary", "source", "date", "reviewed_at"]
-EVIDENCE_OK = {"rct", "meta", "observational", "expert", "blogger", "anecdote"}
+EVIDENCE_OK = {"rct", "meta", "guideline", "observational", "expert", "blogger", "anecdote"}
 SLUG_RE = re.compile(r'^[a-z0-9]+(?:-[a-z0-9]+)*$')  # 防路径穿越 / 注入
 
 
@@ -365,6 +366,7 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .cat{background:var(--accent-soft);color:var(--accent-ink);border-radius:7px;padding:2px 9px;font-weight:700}
 .ev{border-radius:7px;padding:2px 8px;color:#fff;font-size:11.5px;font-weight:600}
 .ev-rct{background:var(--rct)}.ev-meta{background:var(--meta)}.ev-observational{background:var(--obs)}
+.ev-guideline{background:#6b4fbb}
 .ev-expert{background:var(--exp)}.ev-blogger,.ev-anecdote{background:var(--blog)}
 .badge{margin-left:auto;background:#fff5e9;color:var(--warn);border:1px solid #f0d9bf;border-radius:7px;padding:2px 9px;font-size:11.5px;font-weight:800}
 .title{margin:0 0 7px;font-size:18px;line-height:1.45}

@@ -103,14 +103,14 @@ def parse_feed(raw):
 def fetch_pubmed(query, n=PER_SOURCE):
     """PubMed：按主题找最新论文，抓免费摘要。返回 [{title,url,published,desc,journal}]"""
     es = (f"{EUTILS}/esearch.fcgi?db=pubmed&retmode=json&sort=date&retmax={n}"
-          f"&tool=health-hot&term=" + urllib.parse.quote(query))
+          f"&tool=health-hot&email=liuyuxin01210725-debug@users.noreply.github.com&term=" + urllib.parse.quote(query))
     ids = [i for i in json.loads(fetch(es).decode()).get('esearchresult', {}).get('idlist', [])
            if isinstance(i, str) and i.isdigit()]
     if not ids:
         return []
     time.sleep(0.4)
     ef = (f"{EUTILS}/efetch.fcgi?db=pubmed&retmode=xml&rettype=abstract"
-          f"&tool=health-hot&id=" + ",".join(ids))
+          f"&tool=health-hot&email=liuyuxin01210725-debug@users.noreply.github.com&id=" + ",".join(ids))
     root = ET.fromstring(fetch(ef))
     out = []
     for art in root.findall('.//PubmedArticle'):
@@ -140,8 +140,23 @@ def fetch_pubmed(query, n=PER_SOURCE):
                 md = pd.findtext('MedlineDate') or ''
                 mm = re.search(r'\d{4}', md)
                 published = (mm.group(0) + "-01-01") if mm else ''
+        # 证据级按 PublicationType 结果级判定（不靠 query 的 [pt]）
+        pts = [(pt.text or '').lower() for pt in a.findall('.//PublicationType')]
+        if any('randomized controlled trial' in p for p in pts):
+            ev = 'rct'
+        elif any(('meta-analysis' in p or 'systematic review' in p) for p in pts):
+            ev = 'meta'
+        elif any('guideline' in p for p in pts):
+            ev = 'guideline'
+        else:
+            ev = 'observational'
+        doi = ''
+        for el in a.findall('.//ELocationID'):
+            if el.get('EIdType') == 'doi' and el.text:
+                doi = el.text.strip().lower(); break
         out.append({'title': title, 'url': f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
-                    'published': published, 'desc': abstract, 'journal': journal})
+                    'published': published, 'desc': abstract, 'journal': journal,
+                    'evidence': ev, 'doi': doi})
     return out
 
 
@@ -168,6 +183,7 @@ def main():
     if filt:
         sources = [s for s in sources if isinstance(s, dict) and any(f in s.get('name', '').lower() for f in filt)]
     seen = seen_urls()
+    seen_doi, seen_title = set(), set()
     cands = []
     for s in sources:
         name = s.get('name', '<未命名>') if isinstance(s, dict) else '<非对象>'
@@ -184,17 +200,30 @@ def main():
             print(f"[!] {name}: 失败 — {ex}")
             continue
         new = 0
+        group = s.get('group', '')
         for e in entries[:PER_SOURCE]:
-            if not e['url'] or e['url'] in seen:
+            url = e.get('url', '')
+            if not url or url in seen:
+                continue
+            doi = e.get('doi', '')
+            if doi and doi in seen_doi:          # 跨源同一篇论文（DOI）只收一次
+                continue
+            tkey = (group, re.sub(r'\W+', '', (e.get('title', '') or '').lower())) if group else None
+            if tkey and tkey in seen_title:      # 同节目 YouTube+Podcast 同一期只收一次
                 continue
             src = (e['journal'] + " · PubMed") if e.get('journal') else name
             cands.append({'source': src, 'category': s.get('category', ''),
-                          'evidence': s.get('evidence', 'expert'),
-                          'title': e['title'], 'source_url': e['url'],
+                          'role': s.get('role', ''),
+                          'evidence': e.get('evidence') or s.get('evidence', 'expert'),
+                          'title': e['title'], 'source_url': url,
                           'published': e['published'], 'desc': e['desc'][:DESC_CHARS]})
-            seen.add(e['url'])
+            seen.add(url)
+            if doi:
+                seen_doi.add(doi)
+            if tkey:
+                seen_title.add(tkey)
             new += 1
-        print(f"[✓] {name}: 共 {len(entries)} 条，新增候选 {new} 条")
+        print(f"[✓] {name}（{s.get('role', '?')}）: 共 {len(entries)} 条，新增候选 {new} 条")
     json.dump(cands, open(OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
     print(f"\n共 {len(cands)} 条候选 → {OUT}")
     for c in cands:

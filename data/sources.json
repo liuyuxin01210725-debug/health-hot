@@ -1,22 +1,37 @@
 {
-  "_说明": "健康信源清单。type: youtube(channel_id) / rss(url) / pubmed(query)。category/evidence 是默认标签，每条由摘要时再定。PubMed 用 E-utilities，免费无需 key；query 用 [pt] 选论文类型 + humans[mh] 过滤人类研究（避免混进兽医/材料学）。",
+  "_说明": "健康信源清单。type: youtube(channel_id)/rss(url)/pubmed(query)。",
+  "_role": "anchor=核验锚点(系统综述/指南/Cochrane，可定结论) | discovery=选题雷达(播客，只生成待核验问题) | radar=趋势雷达(博主/泛主题，不直接定结论)。",
+  "_group": "同一节目的多个 feed 标同一 group，collect.py 按 group+标题去重，避免一期内容收两次。",
+  "_pubmed_evidence": "PubMed 条目的 evidence 由 collect.py 读 PublicationType 结果级判定(rct/meta/guideline/observational)，源里的 evidence 仅占位 unknown。",
   "sources": [
-    {"name": "Peter Attia MD", "type": "youtube", "channel_id": "UC8kGsMa0LygSX9nkBcBH1Sg", "category": "长寿", "evidence": "expert"},
-    {"name": "Huberman Lab", "type": "youtube", "channel_id": "UC2D2CMWXMOVWx7giW1n3LIg", "category": "睡眠", "evidence": "expert"},
-    {"name": "FoundMyFitness", "type": "youtube", "channel_id": "UC5fdyC4LxyyYv8Am6nDrkmg", "category": "营养", "evidence": "expert"},
-    {"name": "Bryan Johnson", "type": "youtube", "channel_id": "UCnRVL1-HJnXWB_Xi2dAoTcg", "category": "长寿", "evidence": "expert"},
-    {"name": "Huberman Lab Podcast", "type": "rss", "url": "https://feeds.megaphone.fm/hubermanlab", "category": "睡眠", "evidence": "expert"},
-    {"name": "FoundMyFitness Podcast", "type": "rss", "url": "https://podcast.foundmyfitness.com/rss.xml", "category": "营养", "evidence": "expert"},
-    {"name": "Bryan Johnson (Medium)", "type": "rss", "url": "https://bryan-johnson.medium.com/feed", "category": "长寿", "evidence": "expert"},
+    {"name": "PubMed·Cochrane系统综述", "type": "pubmed", "role": "anchor", "query": "Cochrane Database Syst Rev[jour] AND (exercise OR nutrition OR diet OR sleep OR supplement OR longevity OR vitamin)", "category": "综述", "evidence": "unknown"},
+    {"name": "PubMed·健康指南", "type": "pubmed", "role": "anchor", "query": "guideline[pt] AND humans[mh] AND (exercise OR nutrition OR diet OR sleep OR obesity OR hypertension OR diabetes)", "category": "指南", "evidence": "unknown"},
+    {"name": "PubMed·系统综述", "type": "pubmed", "role": "anchor", "query": "systematic review[pt] AND humans[mh] AND (creatine OR \"omega-3\" OR \"intermittent fasting\" OR \"resistance training\" OR longevity)", "category": "综述", "evidence": "unknown"},
 
-    {"name": "PubMed·间歇禁食RCT", "type": "pubmed", "query": "intermittent fasting AND randomized controlled trial[pt] AND humans[mh]", "category": "营养", "evidence": "rct"},
-    {"name": "PubMed·肌酸综述", "type": "pubmed", "query": "creatine supplementation AND review[pt] AND humans[mh]", "category": "补剂", "evidence": "meta"},
-    {"name": "PubMed·Omega-3 RCT", "type": "pubmed", "query": "omega-3 fatty acids AND randomized controlled trial[pt] AND humans[mh]", "category": "补剂", "evidence": "rct"},
-    {"name": "PubMed·心肺功能与死亡率", "type": "pubmed", "query": "cardiorespiratory fitness AND mortality AND humans[mh]", "category": "运动", "evidence": "observational"},
-    {"name": "PubMed·长寿综述", "type": "pubmed", "query": "(longevity OR healthy aging) AND review[pt] AND humans[mh]", "category": "长寿", "evidence": "meta"}
+    {"name": "PubMed·间歇禁食RCT", "type": "pubmed", "role": "radar", "query": "intermittent fasting AND randomized controlled trial[pt] AND humans[mh]", "category": "营养", "evidence": "unknown"},
+    {"name": "PubMed·肌酸", "type": "pubmed", "role": "radar", "query": "creatine supplementation AND humans[mh]", "category": "补剂", "evidence": "unknown"},
+    {"name": "PubMed·Omega-3 RCT", "type": "pubmed", "role": "radar", "query": "omega-3 fatty acids AND randomized controlled trial[pt] AND humans[mh]", "category": "补剂", "evidence": "unknown"},
+    {"name": "PubMed·心肺功能与死亡率", "type": "pubmed", "role": "radar", "query": "cardiorespiratory fitness AND mortality AND humans[mh]", "category": "运动", "evidence": "unknown"},
+
+    {"name": "Peter Attia MD", "type": "youtube", "role": "discovery", "group": "attia", "channel_id": "UC8kGsMa0LygSX9nkBcBH1Sg", "category": "长寿", "evidence": "expert"},
+    {"name": "Huberman Lab", "type": "youtube", "role": "discovery", "group": "huberman", "channel_id": "UC2D2CMWXMOVWx7giW1n3LIg", "category": "睡眠", "evidence": "expert"},
+    {"name": "Huberman Lab Podcast", "type": "rss", "role": "discovery", "group": "huberman", "url": "https://feeds.megaphone.fm/hubermanlab", "category": "睡眠", "evidence": "expert"},
+    {"name": "FoundMyFitness", "type": "youtube", "role": "discovery", "group": "fmf", "channel_id": "UC5fdyC4LxyyYv8Am6nDrkmg", "category": "营养", "evidence": "expert"},
+    {"name": "FoundMyFitness Podcast", "type": "rss", "role": "discovery", "group": "fmf", "url": "https://podcast.foundmyfitness.com/rss.xml", "category": "营养", "evidence": "expert"},
+
+    {"name": "Bryan Johnson", "type": "youtube", "role": "radar", "group": "bryan", "channel_id": "UCnRVL1-HJnXWB_Xi2dAoTcg", "category": "长寿", "evidence": "blogger"},
+    {"name": "Bryan Johnson (Medium)", "type": "rss", "role": "radar", "group": "bryan", "url": "https://bryan-johnson.medium.com/feed", "category": "长寿", "evidence": "blogger"}
   ],
-  "_未来扩展": [
-    "中文权威（丁香医生/卓正/果壳/张文宏）——需自托管 RSSHub",
-    "ScienceDaily 健康（科学新闻稿，需重度筛选）: https://www.sciencedaily.com/rss/health_medicine.xml"
+  "_仅作核验依据_不自动抓_在evidence_source_urls按需引用": [
+    "NIH ODS 补剂资料库: https://ods.od.nih.gov/factsheets/list-all/",
+    "NCCIH Herbs at a Glance: https://www.nccih.nih.gov/health/herbsataglance",
+    "WHO Fact Sheets: https://www.who.int/news-room/fact-sheets",
+    "USPSTF A/B 推荐(标注适用地区): https://www.uspreventiveservicestaskforce.org/",
+    "卫健委 健康素养66条 / 中国疾控(本土基线，无 RSS 需手录或 fetch-skill)",
+    "中文解释层(丁香医生/卓正/果壳)——只作通俗解释，不替代原始依据"
+  ],
+  "_未来": [
+    "卡片双链接：discovery_source_url(在哪听到) + evidence_source_urls(凭什么核验)——下一专项",
+    "ScienceDaily(科学新闻稿)仅作选题雷达，不进正式发布链路"
   ]
 }

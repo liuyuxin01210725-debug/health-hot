@@ -1,72 +1,68 @@
-# 查过再信 / health-hot — 项目快照 v2（供 Codex 复审）
+# 查过再信 / health-hot — 项目快照 v3（供 Codex 复审）
 
-> 上一轮 Codex 评审后已重构：从"卡片列表"升级为**健康说法核验库**——独立详情页 + 结构化字段 + 发布闸门。
-> 本轮按你的 7 点做了**验收**（结果见第 7 节），并补了 SEO 字段与预排日期标注。
-> 本轮约定**不扩功能**；`tags`/`confidence`/自动草稿 PR 留到下一轮。
+> 健康说法核验库：独立详情页 + 结构化字段 + 发布闸门，纯 Python 标准库静态站，GitHub Pages。
+> v3 变化：经一轮 Codex 对抗审查，**已硬化发布闸门与 collect.py 解析**（见第 8 节）。下方源码为硬化后最新版。
 
 ---
 
 ## 1. 这是什么
-**健康说法核验库**：把流行健康说法逐条查到原始证据、标证据强度、写清适用人群与注意事项。资讯流是入口，核心是分清「听来的」与「有据的」。无后端、无数据库、纯 Python 标准库静态站，部署在 GitHub Pages。
+把流行健康说法逐条查到原始证据、标证据强度、写清适用人群与注意事项。资讯流是入口，核心是分清「听来的」与「有据的」。无后端 / 数据库 / 框架。
 
 ## 2. 线上 / 仓库
 - 线上：https://liuyuxin01210725-debug.github.io/health-hot/
 - 详情页示例：https://liuyuxin01210725-debug.github.io/health-hot/claims/seed-oils.html
-- 仓库：`liuyuxin01210725-debug/health-hot`（公开）；本地：`~/Documents/AI health/`
+- 仓库：`liuyuxin01210725-debug/health-hot`（公开）；本地 `~/Documents/AI health/`
 
 ## 3. 架构与数据流
 ```
-data/sources.json  信源（youtube=channel_id / rss=url / pubmed=query）
-   ▼ collect.py     抓取+去重（RSS/Atom；PubMed=免费 E-utilities）→ /tmp/health_candidates.json
-   ▼ [人工/Claude 按 7 铁律 摘要 + 结构化]   ← 质量关口
-data/items/*.json  每条 = 一条核验（结构化字段）
-   ▼ build.py       ① 发布闸门校验 ② 生成 docs/{index,all,about}.html + docs/claims/<slug>.html
-   ▼ git push → GitHub Pages（main /docs）
+data/sources.json → collect.py(抓 RSS/Atom/PubMed + 去重) → /tmp/health_candidates.json
+  → [人工/Claude 按 7 铁律 摘要+结构化] → data/items/*.json
+  → build.py(① 发布闸门 validate() ② 临时目录渲染→原子替换 docs/) → git push → Pages(/docs)
 ```
 
 ## 4. 文件结构
-```
-build.py            生成器：闸门 + 首页/全部/关于 + 每条独立详情页
-collect.py          收集引擎（含 PubMed E-utilities）
-data/sources.json   信源
-data/items/*.json   22 条核验
-docs/               产物：index/all/about.html + claims/<slug>.html ×22 + styles.css + .nojekyll
-README.md / .gitignore
-```
+`build.py`（闸门 + 首页/全部/关于 + 每条详情页）· `collect.py`（含 PubMed E-utilities）· `data/sources.json` · `data/items/*.json`（22 条）· `docs/`（产物：index/all/about + claims/<slug>.html ×22 + styles.css + .nojekyll）
 
-## 5. 数据模型（item 字段）
-- 基本：`title` `source` `source_url`(必有) `category` `evidence`(rct/meta/observational/expert/blogger) `featured` `rank` `summary`
-- 结构化（本轮新增）：`slug`(URL) `status`(reviewed) `conclusion`(一句话结论) `population`(适用于谁) `caveats`(需要注意)
-- 日期三件套（**刻意分开，避免混淆**）：
-  - `date` = 本站 feed 日期（排序+闸门用；通常=原文日期，原文为预排/未来时取收录日，保证 feed 无未来日期）
-  - `source_published_at` = 原文真实发布日期（**可为期刊预排的未来日期**，仅元数据展示，不参与闸门；详情页对未来值标注「期刊预排」）
-  - `reviewed_at` = 本站复核日期
+## 5. 数据模型
+- 基本：`title` `source` `source_url`(http(s)) `category` `evidence`(rct/meta/observational/expert/blogger) `featured`(bool) `rank`(int) `summary`
+- 结构化：`slug`(限 `^[a-z0-9]+(-[a-z0-9]+)*$`) `status`(须 = reviewed) `conclusion` `population` `caveats`
+- 日期：`date`(feed 日，闸门校验、不得未来) / `source_published_at`(原文日，可为期刊预排未来，仅展示且标注) / `reviewed_at`(复核日，不得未来)。三者分开，避免混淆。
 
-## 6. 7 铁律（内容安全约束）
-证据分级 / 引用追溯(必有 source_url) / 不给具体剂量 / 医疗免责 / 不暗示治疗 / 标注不确定 / 只摘要+回链不搬全文。
+## 6. 7 铁律
+证据分级 / 引用追溯 / 不给剂量 / 医疗免责 / 不暗示治疗 / 标注不确定 / 只摘要 + 回链。
 
-## 7. 本轮验收结果（按你列的 7 点，附实测）⭐
-1. **发布闸门**：✅ 喂 6 种坏数据实测全拦——未来日期 / 缺 source_url / status≠reviewed / 缺 slug / 重复 slug / 重复 source_url；正常条目放行。（见 `build.py` 的 `validate()`）
-2. **22 详情页 + 相关链接**：✅ 22 个全生成；42 条「相关核验」链接经脚本核对 **0 断链**。
-3. **无编造适用人群**：✅ `population` 多为「未特别限定，见原文」；具体值（绝经后女性 / 心梗患者 n=19 / 慢性失眠）均可在原文摘要溯源，无凭空编造。
-4. **返回路径/移动端/SEO**：返回路径(面包屑)✅、`lang=zh-CN`✅、移动端媒体查询✅；**本轮补：每页加 `meta description` + `og:title/description/url` + `canonical`**（已验证生成）。
-5. **docs/README/实现一致**：✅ README `public/` 残留=0、已对齐 `docs/` 与详情页；docs 产物与实现一致。
-6. **GitHub Issues 纠错入口**：✅ 关于页有 `…/issues` 链接，仓库 `has_issues=true`，可用。
-7. **预排 vs 收录日**：✅ 未混淆——`date`/`source_published_at`/`reviewed_at` 分开存、详情页分别显示；creatine 的期刊预排日（2026-12-01）已标注「期刊预排，未到见刊日」，并 clamp `date` 为收录日通过闸门。
+## 7. 上轮验收（7 点，全过 / 已补）
+闸门拦截、22 详情页 0 断链、无编造适用人群、docs/README 一致、Issues 入口可用、日期不混淆；补了详情页 SEO 字段（description / og / canonical）。
 
-## 8. 设计决策
-浅色健康风（非 AI HOT 深色）；知识库优先 + 轻量更新流；信源求权威不求量；PubMed 作证据地基（免费，能出 RCT/荟萃级）。
+## 8. Codex 对抗审查 + 安全硬化（本轮）⭐
+对 `build.py` / `collect.py` 跑了 `codex challenge`，15 项发现，已逐条处理：
 
-## 9. 下一轮（已与 owner 约定推迟，本轮勿动）
-- 跨类 `tags` + 主题集合页（如"跳绳"横跨骨骼/运动/关节）
-- 独立 `confidence` 字段（当前用 `evidence` 证据等级代替）
-- 自动草稿 PR 流水线：`collect.py → LLM 草稿 → 人工审 → 合并 → Pages`（需 `workflow` 授权 + LLM key）
+**P1（已修）**
+- slug 路径穿越（`../index` 覆盖 docs/）→ slug 白名单正则 + 输出路径不得逃出 `claims/`。
+- slug 注入 canonical/og（存储型 XSS）→ slug 白名单 + `e()` 转义 canonical/og URL。
+- `source_url` 伪协议（`javascript:` / `data:`）→ 闸门要求 `^https?://`。
+- status 绕过（缺失 / `published`）→ 闸门严格要求 `status == "reviewed"`。
+
+**P2 / P3（已修）**
+- 日期：非字符串崩溃 / `2026-02-99` 字典序通过 → 用 `datetime.date.fromisoformat()` 结构化解析；`date`/`reviewed_at` 拒未来；类型/枚举校验（evidence、featured、rank、category 等）。
+- 渲染中途崩溃会删掉已上线 docs/ → 改为**先写 `docs.tmp`，成功后原子 `rename` 替换**。
+- 去重：`./a` 别名、URL 大小写/fragment → slug 白名单杀别名 + URL 归一化去重。
+- collect.py：Atom 取 `rel="alternate"` 链接（不再误取 feed 自链）+ 无 media:group 回退 summary/content；PubMed `MedlineDate` 正则抓年份（不再 `"Winter 202"`）、无摘要跳过、PMID 仅数字；单源失败隔离 + `s.get("name")` 不再二次崩溃；`fetch` 读取 8MB 上限防超大 feed。
+- 前端：`all.html` 搜索 `decodeURIComponent` 加 try/catch（`?q=%` 不再崩）。
+
+**复测证据**：14 个攻击输入喂给 `validate()`，正常放行、13 个攻击全拦；真实 22 条仍通过、原子替换无残留；collect.py 冒烟正常。
+
+## 9. 设计决策
+浅色健康风；知识库优先 + 轻量更新；信源求权威不求量；PubMed 作证据地基（免费）。
+
+## 10. 下一轮（推迟，本轮勿动）
+跨类 `tags` + 主题集合页；独立 `confidence` 字段；自动草稿 PR 流水线（需 `workflow` 授权 + LLM key）。
 
 ---
 
-（以下为本轮最新源码与全部内容，供逐行复审）
+（以下为**硬化后**最新源码与全部内容，供逐行复审）
 
-## 10. `build.py`（生成器 + 发布闸门 + 详情页 + SEO）
+## 11. `build.py`（硬化后：闸门+原子替换+详情页+SEO）
 
 ```python
 #!/usr/bin/env python3
@@ -83,7 +79,7 @@ README.md / .gitignore
 发布闸门：构建前校验，未来日期 / 缺来源 / 缺必填 / 未审核 的条目**不发布**并报警。
 纯标准库，无依赖。用法：python3 build.py
 """
-import json, glob, os, html, shutil, datetime
+import json, glob, os, re, html, shutil, datetime
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(ROOT, "data", "items")
@@ -113,7 +109,25 @@ EV_DESC = {
     "blogger": "个人观点 / 方案——非临床证据，仅供参考。",
     "anecdote": "个例 / 经验——证据级别最低，谨慎对待。",
 }
-REQUIRED = ["title", "source_url", "slug", "category", "evidence", "summary"]
+REQUIRED = ["title", "source_url", "slug", "category", "evidence", "summary", "source", "date", "reviewed_at"]
+EVIDENCE_OK = {"rct", "meta", "observational", "expert", "blogger", "anecdote"}
+SLUG_RE = re.compile(r'^[a-z0-9]+(?:-[a-z0-9]+)*$')  # 防路径穿越 / 注入
+
+
+def _isodate(s):
+    try:
+        return datetime.date.fromisoformat(s)
+    except Exception:
+        return None
+
+
+def _norm_url(u):
+    """归一化用于去重：去 fragment、host 小写。"""
+    if not isinstance(u, str):
+        return ""
+    u = re.sub(r'#.*$', '', u.strip())
+    m = re.match(r'^(https?://)([^/]+)(.*)$', u)
+    return (m.group(1) + m.group(2).lower() + m.group(3)) if m else u
 
 
 def load_items():
@@ -131,28 +145,58 @@ def load_items():
 
 
 def validate(items):
-    """发布闸门：返回 (合格条目, 被拦条目+原因)。不靠人记得，靠这里。"""
+    """发布闸门：返回 (合格条目, 被拦条目+原因)。坏数据在这里被拦，不靠人记得。"""
     good, blocked, seen_slug, seen_url = [], [], {}, {}
+    today = _isodate(TODAY)
     for it in items:
         errs = []
+        if not isinstance(it, dict):
+            blocked.append((str(it)[:40], ["条目不是对象"])); continue
+        # 必填 + 必须是非空字符串（防类型混淆崩溃）
         for k in REQUIRED:
-            if not it.get(k):
-                errs.append(f"缺字段 {k}")
-        d = it.get("date", "")
-        if d and d > TODAY:
-            errs.append(f"未来日期 {d}（今天 {TODAY}）")
-        if it.get("status") and it["status"] not in ("reviewed", "published"):
-            errs.append(f"未审核 status={it['status']}")
-        s, u = it.get("slug", ""), it.get("source_url", "")
-        if s and s in seen_slug:
+            v = it.get(k)
+            if not isinstance(v, str) or not v.strip():
+                errs.append(f"缺/非字符串字段 {k}")
+        # 类型校验
+        if not isinstance(it.get("featured", False), bool):
+            errs.append("featured 非布尔")
+        if not isinstance(it.get("rank", 0), int) or isinstance(it.get("rank", 0), bool):
+            errs.append("rank 非整数")
+        if it.get("evidence") not in EVIDENCE_OK:
+            errs.append(f"evidence 非法：{it.get('evidence')!r}")
+        # slug 白名单（防 ../ 路径穿越 与 属性注入）
+        s = it.get("slug", "")
+        if not (isinstance(s, str) and SLUG_RE.match(s)):
+            errs.append(f"slug 非法（仅 a-z0-9-）：{s!r}")
+        # source_url 必须 http(s)（防 javascript:/data: 伪协议）
+        u = it.get("source_url", "")
+        if not (isinstance(u, str) and re.match(r'^https?://', u)):
+            errs.append(f"source_url 非 http(s)：{u!r}")
+        # status 严格 reviewed（缺失 / published 都不放行）
+        if it.get("status") != "reviewed":
+            errs.append(f"status 非 reviewed：{it.get('status')!r}")
+        # 日期结构化解析：date/reviewed_at 必须 ISO 且不在未来；source_published_at 可未来但须可解析
+        for k in ("date", "reviewed_at"):
+            dv = it.get(k)
+            d = _isodate(dv) if isinstance(dv, str) else None
+            if dv and d is None:
+                errs.append(f"{k} 非 ISO 日期：{dv!r}")
+            elif d and today and d > today:
+                errs.append(f"{k} 未来日期 {dv}")
+        sp = it.get("source_published_at")
+        if sp is not None and (not isinstance(sp, str) or _isodate(sp) is None):
+            errs.append(f"source_published_at 非 ISO 日期：{sp!r}")
+        # 去重（slug 精确；url 归一化）
+        nu = _norm_url(u)
+        if isinstance(s, str) and s in seen_slug:
             errs.append(f"slug 重复（与 {seen_slug[s]}）")
-        if u and u in seen_url:
-            errs.append(f"来源链接重复（与 {seen_url[u]}）")
+        if nu and nu in seen_url:
+            errs.append(f"来源链接重复（与 {seen_url[nu]}）")
         if errs:
             blocked.append((it.get("_file", "?"), errs))
         else:
             seen_slug[s] = it["_file"]
-            seen_url[u] = it["_file"]
+            seen_url[nu] = it["_file"]
             it.setdefault("featured", False)
             it.setdefault("rank", 0)
             good.append(it)
@@ -202,11 +246,11 @@ def shell(title, active, inner, base="", extra_js="", desc="", canon=""):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{e(title)} · {e(SITE_TITLE)}</title>
 <meta name="description" content="{e(desc)}">
-<link rel="canonical" href="{SITE_URL}{canon}">
+<link rel="canonical" href="{e(SITE_URL + canon)}">
 <meta property="og:type" content="article">
 <meta property="og:title" content="{e(title)} · {e(SITE_TITLE)}">
 <meta property="og:description" content="{e(desc)}">
-<meta property="og:url" content="{SITE_URL}{canon}">
+<meta property="og:url" content="{e(SITE_URL + canon)}">
 <link rel="stylesheet" href="{base}styles.css">
 </head>
 <body>
@@ -302,7 +346,7 @@ def render_all(items):
             f'<div class="filters">{pills}</div>'
             f'<p class="result-note" id="note"></p>')
     js = '''<script>
-function q(){const m=location.search.match(/[?&]q=([^&]*)/);return m?decodeURIComponent(m[1].replace(/\\+/g,' ')).trim():'';}
+function q(){try{const m=location.search.match(/[?&]q=([^&]*)/);return m?decodeURIComponent(m[1].replace(/\\+/g,' ')).trim():'';}catch(e){return '';}}
 const cards=[...document.querySelectorAll('.card')],note=document.getElementById('note');
 let curF='*',curQ=q();const si=document.querySelector('.search input');if(si&&curQ)si.value=curQ;
 function apply(){let n=0;cards.forEach(c=>{
@@ -427,23 +471,31 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 def main():
     items = load_items()
     good, blocked = validate(items)
-    # 写出
-    shutil.rmtree(OUT, ignore_errors=True)
-    os.makedirs(CLAIMS, exist_ok=True)
-    open(os.path.join(OUT, ".nojekyll"), "w").close()
-    with open(os.path.join(OUT, "styles.css"), "w", encoding="utf-8") as f:
+    # 先全部写进临时目录，成功后再原子替换 docs/——渲染中途崩溃不会删掉已上线的站
+    tmp = OUT + ".tmp"
+    tmp_claims = os.path.join(tmp, "claims")
+    shutil.rmtree(tmp, ignore_errors=True)
+    os.makedirs(tmp_claims, exist_ok=True)
+    open(os.path.join(tmp, ".nojekyll"), "w").close()
+    with open(os.path.join(tmp, "styles.css"), "w", encoding="utf-8") as f:
         f.write(CSS)
-    with open(os.path.join(OUT, "index.html"), "w", encoding="utf-8") as f:
+    with open(os.path.join(tmp, "index.html"), "w", encoding="utf-8") as f:
         f.write(render_index(good))
-    with open(os.path.join(OUT, "all.html"), "w", encoding="utf-8") as f:
+    with open(os.path.join(tmp, "all.html"), "w", encoding="utf-8") as f:
         f.write(render_all(good))
-    with open(os.path.join(OUT, "about.html"), "w", encoding="utf-8") as f:
+    with open(os.path.join(tmp, "about.html"), "w", encoding="utf-8") as f:
         f.write(render_about())
     for it in good:
         related = [r for r in good if r.get("category") == it.get("category")
                    and r.get("slug") != it.get("slug")][:4]
-        with open(os.path.join(CLAIMS, it["slug"] + ".html"), "w", encoding="utf-8") as f:
-            f.write(detail_page(it, related))
+        # slug 已过白名单校验；再确认输出路径不逃出 claims/
+        dest = os.path.join(tmp_claims, it["slug"] + ".html")
+        if os.path.abspath(dest).startswith(os.path.abspath(tmp_claims) + os.sep):
+            with open(dest, "w", encoding="utf-8") as f:
+                f.write(detail_page(it, related))
+    # 原子替换
+    shutil.rmtree(OUT, ignore_errors=True)
+    os.rename(tmp, OUT)
     # 报告
     feat = sum(1 for it in good if it.get("featured"))
     print(f"✓ 发布 {len(good)} 条（精选 {feat}）+ {len(good)} 个详情页 → docs/")
@@ -461,7 +513,7 @@ if __name__ == "__main__":
 ```
 
 
-## 11. `collect.py`（收集引擎，含 PubMed）
+## 12. `collect.py`（硬化后：含 PubMed + 解析容错）
 
 ```python
 #!/usr/bin/env python3
@@ -502,7 +554,8 @@ MON = {'jan':'01','feb':'02','mar':'03','apr':'04','may':'05','jun':'06',
 
 def fetch(url):
     req = urllib.request.Request(url, headers=UA)
-    return urllib.request.urlopen(req, timeout=25).read()
+    with urllib.request.urlopen(req, timeout=25) as r:
+        return r.read(8 * 1024 * 1024)  # 8MB 上限，防超大 feed 撑爆内存
 
 
 def t(el):
@@ -527,7 +580,9 @@ def norm_date(s):
     try:
         return parsedate_to_datetime(s).strftime('%Y-%m-%d')
     except Exception:
-        return s[:10]
+        pass
+    m = re.search(r'(\d{4})', s)  # 退而求其次：抓 4 位年份；抓不到就空（不吐 "Winter 202" 这种垃圾）
+    return f"{m.group(1)}-01-01" if m else ''
 
 
 def mon(m):
@@ -543,11 +598,16 @@ def parse_feed(raw):
     entries = root.findall(f'.//{ATOM}entry')
     if entries:
         for e in entries:
-            link_el = e.find(f'{ATOM}link')
+            links = e.findall(f'{ATOM}link')
+            href = next((l.get('href', '') for l in links if l.get('rel', 'alternate') == 'alternate'), '')
+            if not href and links:
+                href = links[0].get('href', '')
             mg = e.find(f'{MEDIA}group')
             desc = t(mg.find(f'{MEDIA}description')) if mg is not None else ''
+            if not desc:
+                desc = t(e.find(f'{ATOM}summary')) or t(e.find(f'{ATOM}content'))
             out.append({'title': t(e.find(f'{ATOM}title')),
-                        'url': link_el.get('href', '') if link_el is not None else '',
+                        'url': href,
                         'published': norm_date(t(e.find(f'{ATOM}published')) or t(e.find(f'{ATOM}updated'))),
                         'desc': clean_text(desc)})
     else:
@@ -562,7 +622,8 @@ def fetch_pubmed(query, n=PER_SOURCE):
     """PubMed：按主题找最新论文，抓免费摘要。返回 [{title,url,published,desc,journal}]"""
     es = (f"{EUTILS}/esearch.fcgi?db=pubmed&retmode=json&sort=date&retmax={n}"
           f"&tool=health-hot&term=" + urllib.parse.quote(query))
-    ids = json.loads(fetch(es).decode()).get('esearchresult', {}).get('idlist', [])
+    ids = [i for i in json.loads(fetch(es).decode()).get('esearchresult', {}).get('idlist', [])
+           if isinstance(i, str) and i.isdigit()]
     if not ids:
         return []
     time.sleep(0.4)
@@ -584,6 +645,8 @@ def fetch_pubmed(query, n=PER_SOURCE):
             if txt:
                 parts.append((f"{lab}：" if lab else "") + txt)
         abstract = clean_text(' '.join(parts))
+        if not abstract:  # 无摘要的（如部分 book/无 abstract 文章）跳过，不产空卡
+            continue
         journal = a.findtext('.//Journal/Title') or ''
         pd = a.find('.//Journal/JournalIssue/PubDate')
         published = ''
@@ -591,8 +654,10 @@ def fetch_pubmed(query, n=PER_SOURCE):
             y = pd.findtext('Year')
             if y:
                 published = f"{y}-{mon(pd.findtext('Month'))}-01"
-            elif pd.findtext('MedlineDate'):
-                published = pd.findtext('MedlineDate')[:4] + "-01-01"
+            else:
+                md = pd.findtext('MedlineDate') or ''
+                mm = re.search(r'\d{4}', md)
+                published = (mm.group(0) + "-01-01") if mm else ''
         out.append({'title': title, 'url': f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
                     'published': published, 'desc': abstract, 'journal': journal})
     return out
@@ -610,13 +675,23 @@ def seen_urls():
 
 def main():
     filt = [x.lower() for x in sys.argv[1:]]
-    sources = json.load(open(SRC, encoding='utf-8'))['sources']
+    try:
+        cfg = json.load(open(SRC, encoding='utf-8'))
+        sources = cfg.get('sources', [])
+        if not isinstance(sources, list):
+            raise ValueError("sources 不是数组")
+    except Exception as ex:
+        print(f"[!] 读取 sources.json 失败：{ex}")
+        return
     if filt:
-        sources = [s for s in sources if any(f in s['name'].lower() for f in filt)]
+        sources = [s for s in sources if isinstance(s, dict) and any(f in s.get('name', '').lower() for f in filt)]
     seen = seen_urls()
     cands = []
     for s in sources:
+        name = s.get('name', '<未命名>') if isinstance(s, dict) else '<非对象>'
         try:
+            if not isinstance(s, dict) or 'type' not in s:
+                raise ValueError("source 缺 type 字段")
             if s['type'] == 'pubmed':
                 entries = fetch_pubmed(s['query'])
             else:
@@ -624,20 +699,20 @@ def main():
                        if s['type'] == 'youtube' else s['url'])
                 entries = parse_feed(fetch(url))
         except Exception as ex:
-            print(f"[!] {s['name']}: 失败 — {ex}")
+            print(f"[!] {name}: 失败 — {ex}")
             continue
         new = 0
         for e in entries[:PER_SOURCE]:
             if not e['url'] or e['url'] in seen:
                 continue
-            src = (e['journal'] + " · PubMed") if e.get('journal') else s['name']
+            src = (e['journal'] + " · PubMed") if e.get('journal') else name
             cands.append({'source': src, 'category': s.get('category', ''),
                           'evidence': s.get('evidence', 'expert'),
                           'title': e['title'], 'source_url': e['url'],
                           'published': e['published'], 'desc': e['desc'][:DESC_CHARS]})
             seen.add(e['url'])
             new += 1
-        print(f"[✓] {s['name']}: 共 {len(entries)} 条，新增候选 {new} 条")
+        print(f"[✓] {name}: 共 {len(entries)} 条，新增候选 {new} 条")
     json.dump(cands, open(OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
     print(f"\n共 {len(cands)} 条候选 → {OUT}")
     for c in cands:
@@ -650,7 +725,7 @@ if __name__ == '__main__':
 ```
 
 
-## 12. `data/sources.json`
+## 13. `data/sources.json`
 
 ```json
 {
@@ -679,224 +754,202 @@ if __name__ == '__main__':
 ```
 
 
-## 13. 全部核验内容（22 条，结构化字段）
+## 14. 全部核验内容（22 条）
 
 
 ### 绝经后女性补肌酸：小幅长肌力，且安全  `creatine-postmenopausal-muscle`
-- 分类 `补剂` · 证据 `meta` · 精选 True(rank 80) · status `reviewed`
-- 一句话结论：肌酸配合抗阻训练，对绝经后女性瘦体重和腿力有小但确实的提升，且安全。
-- 适用于谁：绝经后女性（约 600 名受试者）。
-- 需要注意：增益为「小但确实」，需剂量足够并配合抗阻训练，否则无效；骨密度无明显变化。具体剂量见原文，按需问医生。
+- `补剂` · 证据`meta` · 精选 True(80) · status `reviewed`
+- 结论：肌酸配合抗阻训练，对绝经后女性瘦体重和腿力有小但确实的提升，且安全。
+- 适用：绝经后女性（约 600 名受试者）。
+- 注意：增益为「小但确实」，需剂量足够并配合抗阻训练，否则无效；骨密度无明显变化。具体剂量见原文，按需问医生。
 - 来源：J Int Soc Sports Nutr · 7 项 RCT 荟萃 · https://pubmed.ncbi.nlm.nih.gov/42141930/
-- date=2026-05-31 / source_published_at=2026-12-01 / reviewed_at=2026-05-31
-- 摘要：7 项 RCT（约 600 名绝经后女性）荟萃：肌酸**在剂量足够、且配合抗阻训练**时，瘦体重和腿部力量有小但确实的提升；剂量不足又不训练则无效。骨密度无明显变化；肾功能等安全指标与安慰剂一致、无害迹象。（具体剂量见原文，按需问医生。）
+- date=2026-05-31 / src=2026-12-01 / reviewed=2026-05-31
 
 
 ### 跳跃类运动增骨密度，可能比举铁更管用  `jump-rope-bone-density`
-- 分类 `骨骼` · 证据 `meta` · 精选 True(rank 92) · status `reviewed`
-- 一句话结论：跳跃类高冲击运动增骨密度，Meta 分析显示可能优于抗阻训练。
-- 适用于谁：summary 主要提到绝经前女性；其他人群见原文核对。
-- 需要注意：部分研究用的是"原地纵跳"，严格的"跳绳专项"证据还不算多；是否适合自己请就医核对。
+- `骨骼` · 证据`meta` · 精选 True(92) · status `reviewed`
+- 结论：跳跃类高冲击运动增骨密度，Meta 分析显示可能优于抗阻训练。
+- 适用：summary 主要提到绝经前女性；其他人群见原文核对。
+- 注意：部分研究用的是"原地纵跳"，严格的"跳绳专项"证据还不算多；是否适合自己请就医核对。
 - 来源：Miao 2025（Meta 分析）+ Tucker 2015（RCT） · https://pubmed.ncbi.nlm.nih.gov/40611942/
-- date=2026-05-29 / source_published_at=2026-05-29 / reviewed_at=2026-05-31
-- 摘要：论"练骨头"，跳跃/蹦跳类高冲击运动的增骨密度效果，Meta 分析显示可能比抗阻训练还好。绝经前女性每天只跳一二十下，几个月后髋部骨密度就明显提升。担心骨质疏松的，跳绳可能比你以为的更对路。（注：部分研究用的是"原地纵跳"，严格的"跳绳专项"证据还不算多。）
+- date=2026-05-29 / src=2026-05-29 / reviewed=2026-05-31
 
 
 ### 运动可能并不能"独立"预防肾结石  `exercise-kidney-stones`
-- 分类 `代谢` · 证据 `observational` · 精选 True(rank 88) · status `reviewed`
-- 一句话结论：扣除体重饮食后，运动与肾结石无独立关联。
-- 适用于谁：未特别限定，见原文
-- 需要注意：观察性研究，不能证明因果；运动或仅通过控体重间接相关，靠运动直接预防结石暂无直接证据。
+- `代谢` · 证据`observational` · 精选 True(88) · status `reviewed`
+- 结论：扣除体重饮食后，运动与肾结石无独立关联。
+- 适用：未特别限定，见原文
+- 注意：观察性研究，不能证明因果；运动或仅通过控体重间接相关，靠运动直接预防结石暂无直接证据。
 - 来源：Ferraro & Curhan 2015（大型队列） · https://pubmed.ncbi.nlm.nih.gov/25229560/
-- date=2026-05-29 / source_published_at=2026-05-29 / reviewed_at=2026-05-31
-- 摘要：一项合并二十多万人的研究，在扣掉体重、饮食后发现运动与结石"没有"独立关系——运动可能只是通过帮你控制体重间接沾边。真正防结石的硬道理朴素得很：多喝水、控体重、别久坐。靠跳绳预防结石形成，目前一篇直接证据都没有。
+- date=2026-05-29 / src=2026-05-29 / reviewed=2026-05-31
 
 
 ### 越练越难飙到高心率，是心脏变强不是退步  `training-bradycardia`
-- 分类 `心肺` · 证据 `expert` · 精选 True(rank 85) · status `reviewed`
-- 一句话结论：静息心率变慢、同等活动心率更低，是心肺变强而非退步。
-- 适用于谁：未特别限定，见原文
-- 需要注意：本条目基于机制综述（expert 级证据）。若出现莫名心慌、胸闷、头晕，属另一回事，应及时就医。
+- `心肺` · 证据`expert` · 精选 True(85) · status `reviewed`
+- 结论：静息心率变慢、同等活动心率更低，是心肺变强而非退步。
+- 适用：未特别限定，见原文
+- 注意：本条目基于机制综述（expert 级证据）。若出现莫名心慌、胸闷、头晕，属另一回事，应及时就医。
 - 来源：Coote & White 2015（机制综述） · https://pubmed.ncbi.nlm.nih.gov/25871550/
-- date=2026-05-29 / source_published_at=2026-05-29 / reviewed_at=2026-05-31
-- 摘要：练久了爬同样的楼、心率却上不去，很多人以为退步——其实是"训练适应"：心脏每跳打出去的血更多，同样的活动不需要那么快的心跳。静息心率变慢、干同样活儿心率更低，恰恰是心肺变好的信号。（提醒：莫名心慌、胸闷、头晕是另一回事，该看医生。）
+- date=2026-05-29 / src=2026-05-29 / reviewed=2026-05-31
 
 
 ### 总觉得身体僵？几个在家能做的活动度自测  `mobility-self-tests`
-- 分类 `关节` · 证据 `expert` · 精选 True(rank 78) · status `reviewed`
-- 一句话结论：把活动度当成可长期维持、不必随龄必然退化的能力。
-- 适用于谁：未特别限定，见原文
-- 需要注意：坐下-起立测试与死亡率的关联来自观察性研究，并非因果；自测请量力而行，不适感或有伤病应停止。
+- `关节` · 证据`expert` · 精选 True(78) · status `reviewed`
+- 结论：把活动度当成可长期维持、不必随龄必然退化的能力。
+- 适用：未特别限定，见原文
+- 注意：坐下-起立测试与死亡率的关联来自观察性研究，并非因果；自测请量力而行，不适感或有伤病应停止。
 - 来源：FoundMyFitness · Rhonda Patrick × Kelly Starrett · https://www.youtube.com/watch?v=_i6vnLnwNC4
-- date=2026-05-29 / source_published_at=2026-05-29 / reviewed_at=2026-05-31
-- 摘要：Kelly Starrett 给了几个在家能做的活动度自测：坐下-起立测试（sit-and-rise，有观察性研究与死亡率相关，但不是因果）、沙发拉伸测髋伸展、能不能舒服地坐地上。要点不是「达标」，而是把活动度当成可长期维持、不必随龄必然退化的能力。专家观点 + 实操，自测量力而行。
+- date=2026-05-29 / src=2026-05-29 / reviewed=2026-05-31
 
 
 ### 只跳绳、不改饮食，八周几乎不掉脂  `jump-rope-diet-fat-loss`
-- 分类 `运动` · 证据 `rct` · 精选 False(rank 0) · status `reviewed`
-- 一句话结论：光跳绳不改饮食八周几乎不掉脂，配合少吃才真瘦。
-- 适用于谁：未特别限定，见原文
-- 需要注意：结论基于单项八周三臂 RCT，样本与具体方案见原文核对；减脂以控制饮食为主，跳绳无特殊燃脂魔法。
+- `运动` · 证据`rct` · 精选 False(0) · status `reviewed`
+- 结论：光跳绳不改饮食八周几乎不掉脂，配合少吃才真瘦。
+- 适用：未特别限定，见原文
+- 注意：结论基于单项八周三臂 RCT，样本与具体方案见原文核对；减脂以控制饮食为主，跳绳无特殊燃脂魔法。
 - 来源：Tang 2021（三臂 RCT） · https://pubmed.ncbi.nlm.nih.gov/34579097/
-- date=2026-05-29 / source_published_at=2026-05-29 / reviewed_at=2026-05-31
-- 摘要：把人分成"只控饮食 / 只跳绳 / 又控又跳"三组，八周后——光跳绳不改饮食那组，体脂、血脂、胰岛素几乎没动；只有配合少吃才真瘦。你瘦不瘦主要看吃多少，跳绳没有"特殊燃脂魔法"。
+- date=2026-05-29 / src=2026-05-29 / reviewed=2026-05-31
 
 
 ### 单摇跳绳对膝、髋的冲击，其实低于跑步  `jump-rope-knee-impact`
-- 分类 `关节` · 证据 `observational` · 精选 False(rank 0) · status `reviewed`
-- 一句话结论：单摇、落地轻、姿势对时，跳绳对膝髋冲击可低于跑步
-- 适用于谁：未特别限定，见原文
-- 需要注意：结论限于单摇、落地轻、姿势正确的前提；花式双摇、硬地猛跳不适用。证据为观察性研究（observational），并非随机对照，需谨慎；有关节不适请就医核对。
+- `关节` · 证据`observational` · 精选 False(0) · status `reviewed`
+- 结论：单摇、落地轻、姿势对时，跳绳对膝髋冲击可低于跑步
+- 适用：未特别限定，见原文
+- 注意：结论限于单摇、落地轻、姿势正确的前提；花式双摇、硬地猛跳不适用。证据为观察性研究（observational），并非随机对照，需谨慎；有关节不适请就医核对。
 - 来源：Mullerpatan 2021 · https://pubmed.ncbi.nlm.nih.gov/33992227/
-- date=2026-05-29 / source_published_at=2026-05-29 / reviewed_at=2026-05-31
-- 摘要：跟"跳绳毁膝盖"的直觉相反：有研究实测，单脚轻弹式跳绳对膝、髋的冲击比跑步还低一些。前提是单摇、落地轻、姿势对；花式双摇、硬地猛跳就另说了。
+- date=2026-05-29 / src=2026-05-29 / reviewed=2026-05-31
 
 
 ### 悲伤的科学：它和抑郁不是一回事  `grief-neuroscience`
-- 分类 `心理` · 证据 `expert` · 精选 False(rank 0) · status `reviewed`
-- 一句话结论：悲伤是大脑重塑关系神经回路的过程，与抑郁不是一回事。
-- 适用于谁：未特别限定，见原文
-- 需要注意：属专家科普，原文未给出研究细节/样本，工具（书写情绪、规律光照等）效果见原文核对；悲伤与抑郁需区分，必要时就医。
+- `心理` · 证据`expert` · 精选 False(0) · status `reviewed`
+- 结论：悲伤是大脑重塑关系神经回路的过程，与抑郁不是一回事。
+- 适用：未特别限定，见原文
+- 注意：属专家科普，原文未给出研究细节/样本，工具（书写情绪、规律光照等）效果见原文核对；悲伤与抑郁需区分，必要时就医。
 - 来源：Huberman Lab · Andrew Huberman · https://www.hubermanlab.com/episode/essentials-the-science-and-process-of-healing-from-grief
-- date=2026-05-28 / source_published_at=2026-05-28 / reviewed_at=2026-05-31
-- 摘要：Huberman 讲悲伤的神经科学：①大脑按「空间-时间-亲近度」给关系建图，失去某人需要重塑这套神经回路；②悲伤 ≠ 抑郁；③睡眠和皮质醇节律影响你能否适应性地度过；催产素解释了为何「思念」如此强烈。也提到书写情绪、规律光照等工具。专家科普。
+- date=2026-05-28 / src=2026-05-28 / reviewed=2026-05-31
 
 
 ### 被忽略的肌群与无伤训练  `overlooked-muscles-injury-free-training`
-- 分类 `运动` · 证据 `expert` · 精选 False(rank 0) · status `reviewed`
-- 一句话结论：想练到七八十岁，别只练大肌群，肩袖、颈、足等被忽略的肌肉同样关键。
-- 适用于谁：未特别限定，见原文；面向希望长期无痛训练的人群。
-- 需要注意：内容为物理治疗师的个人经验与实操方法论（evidence 标注为 expert），非随机对照研究结论；腰痛等问题成因多样，出现持续疼痛或伤病请就医评估，勿仅凭经验自我处理。
+- `运动` · 证据`expert` · 精选 False(0) · status `reviewed`
+- 结论：想练到七八十岁，别只练大肌群，肩袖、颈、足等被忽略的肌肉同样关键。
+- 适用：未特别限定，见原文；面向希望长期无痛训练的人群。
+- 注意：内容为物理治疗师的个人经验与实操方法论（evidence 标注为 expert），非随机对照研究结论；腰痛等问题成因多样，出现持续疼痛或伤病请就医评估，勿仅凭经验自我处理。
 - 来源：Huberman Lab · Jeff Cavaliere（物理治疗师） · https://www.hubermanlab.com/episode/build-muscle-great-posture-and-resilience-to-injury-jeff-cavaliere
-- date=2026-05-25 / source_published_at=2026-05-25 / reviewed_at=2026-05-31
-- 摘要：物理治疗师 Jeff Cavaliere 谈长期无痛训练的关键：①腰痛常和臀肌无力有关，可用走路类动作先激活、再强化臀肌；②用「老人测试」（从地上单脚起身）查功能性力量；③别只练大肌群——肩袖、颈、足这些「被忽略的」肌肉和结缔组织，决定你能不能一直练到七八十岁。偏实操方法论，专家经验。
+- date=2026-05-25 / src=2026-05-25 / reviewed=2026-05-31
 
 
 ### 降社交焦虑：和陌生人的小互动被低估了  `social-anxiety-small-talk`
-- 分类 `心理` · 证据 `expert` · 精选 False(rank 0) · status `reviewed`
-- 一句话结论：对搭话的悲观预期多半是错的，小互动能改善身心健康。
-- 适用于谁：未特别限定，见原文
-- 需要注意：证据为专家观点（非随机对照试验），具体研究细节、样本与适用边界见原文核对。
+- `心理` · 证据`expert` · 精选 False(0) · status `reviewed`
+- 结论：对搭话的悲观预期多半是错的，小互动能改善身心健康。
+- 适用：未特别限定，见原文
+- 注意：证据为专家观点（非随机对照试验），具体研究细节、样本与适用边界见原文核对。
 - 来源：Huberman Lab · Nick Epley 教授 · https://www.hubermanlab.com/episode/how-to-overcome-social-anxiety-nick-epley
-- date=2026-05-18 / source_published_at=2026-05-18 / reviewed_at=2026-05-31
-- 摘要：社会连接研究者 Epley：①我们总高估「主动搭话会尴尬 / 被嫌弃」，数据显示这些悲观预期大多是错的；②哪怕和陌生人的小互动，也能实打实改善身心健康；③降社交焦虑的可行工具是「小步测试 + 修正预期」。专家观点 + 实操。
+- date=2026-05-18 / src=2026-05-18 / reviewed=2026-05-31
 
 
 ### 运动悖论：上班的体力活，可能不像休闲运动那样护心  `physical-activity-paradox`
-- 分类 `运动` · 证据 `observational` · 精选 True(rank 84) · status `reviewed`
-- 一句话结论：上班的体力劳动不等于护心运动，休闲运动才可靠降低心血管与死亡风险。
-- 适用于谁：未特别限定，见原文
-- 需要注意：证据仍偏弱、属观察性研究，工作体力活动的关联不一致，机制尚不确定，结论需谨慎，见原文核对。
+- `运动` · 证据`observational` · 精选 True(84) · status `reviewed`
+- 结论：上班的体力劳动不等于护心运动，休闲运动才可靠降低心血管与死亡风险。
+- 适用：未特别限定，见原文
+- 注意：证据仍偏弱、属观察性研究，工作体力活动的关联不一致，机制尚不确定，结论需谨慎，见原文核对。
 - 来源：Int J Behav Nutr Phys Act · 综述 · https://pubmed.ncbi.nlm.nih.gov/42104355/
-- date=2026-05-01 / source_published_at=2026-05-01 / reviewed_at=2026-05-31
-- 摘要：「体力活动健康悖论」：休闲时的运动（跑步、健身）可靠地降低死亡与心血管风险；但**工作中的体力劳动**（搬运、长时间站走）关联却不一致、有时反而有害。可能机制：长时间无恢复的心血管负荷、动脉硬化、慢性炎症。证据仍偏弱，但提示「上班很累」≠「运动够了」。
+- date=2026-05-01 / src=2026-05-01 / reviewed=2026-05-31
 
 
 ### 任何年纪开始运动都不晚（对心血管）  `exercise-any-age-cardiovascular`
-- 分类 `运动` · 证据 `observational` · 精选 False(rank 0) · status `reviewed`
-- 一句话结论：任何年纪开始规律运动，都能改善心血管健康。
-- 适用于谁：各年龄段，尤其上了年纪、起步较晚者；具体人群见原文。
-- 需要注意：证据为观察性综述（非随机对照），存在因果与混杂局限；具体运动强度、方式与剂量见原文核对。
+- `运动` · 证据`observational` · 精选 False(0) · status `reviewed`
+- 结论：任何年纪开始规律运动，都能改善心血管健康。
+- 适用：各年龄段，尤其上了年纪、起步较晚者；具体人群见原文。
+- 注意：证据为观察性综述（非随机对照），存在因果与混杂局限；具体运动强度、方式与剂量见原文核对。
 - 来源：Clinics in Geriatric Medicine · 综述 · https://pubmed.ncbi.nlm.nih.gov/42161438/
-- date=2026-05-01 / source_published_at=2026-05-01 / reviewed_at=2026-05-31
-- 摘要：心肺功能随年龄下降会大幅抬高心血管病、衰弱、失能风险，久坐加速这一切。综述结论：规律运动能减缓与年龄相关的心肺功能下降、改善血管与代谢、降低发病与死亡——**即便上了年纪、身体适应变慢，仍有实打实的改善空间**。运动是心血管健康的基石。
+- date=2026-05-01 / src=2026-05-01 / reviewed=2026-05-31
 
 
 ### 关节活动度，可以不随年龄必然下降  `joint-mobility-aging`
-- 分类 `关节` · 证据 `expert` · 精选 True(rank 86) · status `reviewed`
-- 一句话结论：活动度不必随年龄必然下降，但长期不练几乎注定退化。
-- 适用于谁：未特别限定，见原文
-- 需要注意：本条为单一专家（Kelly Starrett）观点，重在方法论框架，非临床研究结论；具体方法见原文核对。
+- `关节` · 证据`expert` · 精选 True(86) · status `reviewed`
+- 结论：活动度不必随年龄必然下降，但长期不练几乎注定退化。
+- 适用：未特别限定，见原文
+- 注意：本条为单一专家（Kelly Starrett）观点，重在方法论框架，非临床研究结论；具体方法见原文核对。
 - 来源：FoundMyFitness 播客 #111 · Kelly Starrett · https://foundmyfitness.libsyn.com/111-the-optimal-mobility-protocol-for-a-durable-body-dr-kelly-starrett
-- date=2026-04-24 / source_published_at=2026-04-24 / reviewed_at=2026-05-31
-- 摘要：Kelly Starrett 的观点：活动度（ROM）是少数「不必随年龄必然下降」的生理维度，但长期不练几乎注定退化。本期讲怎么用日常动作模式维持身体耐用度。专家观点，重在方法论框架。
+- date=2026-04-24 / src=2026-04-24 / reviewed=2026-05-31
 
 
 ### 限时进食能降心梗患者的炎症？一个小型 RCT  `intermittent-fasting-mi`
-- 分类 `营养` · 证据 `rct` · 精选 True(rank 82) · status `reviewed`
-- 一句话结论：限时进食或降心梗患者炎症指标，属早期信号，别当定论。
-- 适用于谁：有心梗病史／已有冠心病的患者（样本仅 19 人）
-- 需要注意：样本很小、仅 2 周、看的是炎症指标而非「少发心梗」等硬结局，属早期信号，需就医个体化评估。
+- `营养` · 证据`rct` · 精选 True(82) · status `reviewed`
+- 结论：限时进食或降心梗患者炎症指标，属早期信号，别当定论。
+- 适用：有心梗病史／已有冠心病的患者（样本仅 19 人）
+- 注意：样本很小、仅 2 周、看的是炎症指标而非「少发心梗」等硬结局，属早期信号，需就医个体化评估。
 - 来源：J Am Heart Assoc · 随机交叉试验 · https://pubmed.ncbi.nlm.nih.gov/41859904/
-- date=2026-04-01 / source_published_at=2026-04-01 / reviewed_at=2026-05-31
-- 摘要：19 名有心梗病史的患者，做 2 周限时进食（每天 8–14 点之间吃）后，中性粒细胞、低度系统性炎症指标下降，单核细胞转向抗炎。提示限时进食或能帮已有冠心病的人降风险——但**样本很小、只 2 周、看的是炎症指标而非「少发心梗」这种硬结局**，属早期信号，别当定论。
+- date=2026-04-01 / src=2026-04-01 / reviewed=2026-05-31
 
 
 ### 幸福不是追来的：几件可训练的事  `trainable-happiness-brooks`
-- 分类 `心理` · 证据 `expert` · 精选 False(rank 0) · status `reviewed`
-- 一句话结论：幸福需享受+满足+意义三者，感恩、反向愿望清单、运动可主动调节。
-- 适用于谁：未特别限定；summary 特别提到高成就者易陷「奋斗者的诅咒」，见原文
-- 需要注意：本条为专家观点与方法论（evidence: expert），非临床研究结论；「运动作用可比拟抗抑郁」为讲者本人说法，情绪困扰请就医，详见原文核对。
+- `心理` · 证据`expert` · 精选 False(0) · status `reviewed`
+- 结论：幸福需享受+满足+意义三者，感恩、反向愿望清单、运动可主动调节。
+- 适用：未特别限定；summary 特别提到高成就者易陷「奋斗者的诅咒」，见原文
+- 注意：本条为专家观点与方法论（evidence: expert），非临床研究结论；「运动作用可比拟抗抑郁」为讲者本人说法，情绪困扰请就医，详见原文核对。
 - 来源：FoundMyFitness 播客 #110 · Arthur Brooks · https://foundmyfitness.libsyn.com/110-how-to-build-lasting-happiness-dr-arthur-brooks
-- date=2026-03-24 / source_published_at=2026-03-24 / reviewed_at=2026-05-31
-- 摘要：社会科学家 Arthur Brooks 几个反直觉点：①幸福需要「享受 + 满足 + 意义」三者，光追快乐反而空；②高成就者常陷「奋斗者的诅咒」，满足感越来越短；③练感恩、列「反向愿望清单」、规律运动（他说运动对情绪的作用可比拟抗抑郁）都能调节。专家观点、方法论为主。
+- date=2026-03-24 / src=2026-03-24 / reviewed=2026-05-31
 
 
 ### NAD 与衰老：哪些干预真有人体数据  `nad-aging-interventions`
-- 分类 `长寿` · 证据 `expert` · 精选 False(rank 0) · status `reviewed`
-- 一句话结论：NAD 补剂要分清「机制说得通」与「真有人体证据」，别照搬。
-- 适用于谁：未特别限定，见原文
-- 需要注意：需区分机制合理与人体证据，市面补剂良莠不齐，具体剂量与产品请回看原始研究核对。
+- `长寿` · 证据`expert` · 精选 False(0) · status `reviewed`
+- 结论：NAD 补剂要分清「机制说得通」与「真有人体证据」，别照搬。
+- 适用：未特别限定，见原文
+- 注意：需区分机制合理与人体证据，市面补剂良莠不齐，具体剂量与产品请回看原始研究核对。
 - 来源：FoundMyFitness 播客 #109 · Charles Brenner · https://foundmyfitness.libsyn.com/109-how-to-boost-nad-levels-to-fight-inflammation-improve-recovery-and-slow-aging-dr-charles-brenner
-- date=2026-02-09 / source_published_at=2026-02-09 / reviewed_at=2026-05-31
-- 摘要：不少「衰老症状」也符合慢性炎症 + NAD 代谢受损。Brenner（NAD 领域研究者）讲机制和人体数据，并对市面上一堆 NAD 补剂去伪存真。听点在于分清「机制说得通」和「真有人体证据」——具体补剂别照搬，回看原始研究。
+- date=2026-02-09 / src=2026-02-09 / reviewed=2026-05-31
 
 
 ### 种子油真有那么坏吗？一次把证据捋清  `seed-oils`
-- 分类 `营养` · 证据 `expert` · 精选 True(rank 80) · status `reviewed`
-- 一句话结论：种子油未被证明独有害，总热量、纤维、活动量才是关键。
-- 适用于谁：未特别限定，见原文
-- 需要注意：饱和脂肪与多不饱和脂肪的权衡缺人体试验定论，仍属争议；专家建议别凭直觉、去读原始研究。
+- `营养` · 证据`expert` · 精选 True(80) · status `reviewed`
+- 结论：种子油未被证明独有害，总热量、纤维、活动量才是关键。
+- 适用：未特别限定，见原文
+- 注意：饱和脂肪与多不饱和脂肪的权衡缺人体试验定论，仍属争议；专家建议别凭直觉、去读原始研究。
 - 来源：Peter Attia × Layne Norton 博士 · The Drive #380 · https://www.youtube.com/watch?v=7_cbaDXAWYM
-- date=2026-01-21 / source_published_at=2026-01-21 / reviewed_at=2026-05-31
-- 摘要：围绕「种子油是否独有害」，两人把几个流行说法逐个查：①「己烷残留」——提取用的己烷在加工中被蒸汽蒸掉，要达到危害得一次吃上万公斤油，不现实；②真正的权衡是「饱和脂肪（猪油）减少氧化但升 LDL」对「多不饱和（种子油）反之」，缺人体试验定论；③比纠结用哪种油重要得多的，是总热量、纤维、活动量——「盯着炸薯条的油，错过了真正的疾病驱动」。专家梳理、结论是他们反复说的：别凭直觉，去读原始研究。
+- date=2026-01-21 / src=2026-01-21 / reviewed=2026-05-31
 
 
 ### 补肌酸会搞坏血脂吗？荟萃说：不会  `creatine-lipids`
-- 分类 `补剂` · 证据 `meta` · 精选 False(rank 0) · status `reviewed`
-- 一句话结论：8 项 RCT 荟萃显示肌酸对血脂无临床意义影响。
-- 适用于谁：未特别限定，见原文
-- 需要注意：证据确定性偏低，仍需更大样本确认；具体剂量/人群见原文核对。
+- `补剂` · 证据`meta` · 精选 False(0) · status `reviewed`
+- 结论：8 项 RCT 荟萃显示肌酸对血脂无临床意义影响。
+- 适用：未特别限定，见原文
+- 注意：证据确定性偏低，仍需更大样本确认；具体剂量/人群见原文核对。
 - 来源：Frontiers in Nutrition · 8 项 RCT 荟萃 · https://pubmed.ncbi.nlm.nih.gov/42180567/
-- date=2026-01-01 / source_published_at=2026-01-01 / reviewed_at=2026-05-31
-- 摘要：针对「补肌酸是否影响血脂」的担心，8 项随机对照试验的荟萃：肌酸对总胆固醇、LDL、HDL、甘油三酯**都没有临床意义上的影响**。也就是说，常见的「肌酸伤血脂」担忧，目前证据不支持。（不过证据确定性偏低，仍需更大样本确认。）
+- date=2026-01-01 / src=2026-01-01 / reviewed=2026-05-31
 
 
 ### 哪种运动对长寿最有用？  `exercise-intensity-longevity`
-- 分类 `运动` · 证据 `expert` · 精选 True(rank 90) · status `reviewed`
-- 一句话结论：剧烈运动对延寿或更高效，但属专家梳理而非定论。
-- 适用于谁：未特别限定，见原文
-- 需要注意：为专家梳理而非单一 RCT 定论，「1 分钟抵 10 分钟」为节目中说法，建议先听论证再回看原始研究核对。
+- `运动` · 证据`expert` · 精选 True(90) · status `reviewed`
+- 结论：剧烈运动对延寿或更高效，但属专家梳理而非定论。
+- 适用：未特别限定，见原文
+- 注意：为专家梳理而非单一 RCT 定论，「1 分钟抵 10 分钟」为节目中说法，建议先听论证再回看原始研究核对。
 - 来源：FoundMyFitness 播客 #108（Rhonda Patrick） · https://foundmyfitness.libsyn.com/108-the-best-type-of-exercise-for-longevity
-- date=2025-12-07 / source_published_at=2025-12-07 / reviewed_at=2026-05-31
-- 摘要：本期聊不同强度运动对寿命的影响，提到「1 分钟剧烈运动可能抵约 10 分钟中等强度」的说法。属专家梳理（非单一 RCT 定论），适合先听其论证、再回看背后的原始研究——我们站内也有相关研究条目可对照。
+- date=2025-12-07 / src=2025-12-07 / reviewed=2026-05-31
 
 
 ### 失眠：不靠药能怎么改善  `insomnia-cbt-i`
-- 分类 `睡眠` · 证据 `expert` · 精选 False(rank 0) · status `reviewed`
-- 一句话结论：CBT-I 与刺激控制是有科学支持的非药物失眠干预手段。
-- 适用于谁：慢性失眠及未治疗睡眠呼吸暂停人群；其余未特别限定，见原文。
-- 需要注意：属专家梳理而非随机对照试验结论；严重或长期睡眠问题仍需就医评估，具体方案见原文核对。
+- `睡眠` · 证据`expert` · 精选 False(0) · status `reviewed`
+- 结论：CBT-I 与刺激控制是有科学支持的非药物失眠干预手段。
+- 适用：慢性失眠及未治疗睡眠呼吸暂停人群；其余未特别限定，见原文。
+- 注意：属专家梳理而非随机对照试验结论；严重或长期睡眠问题仍需就医评估，具体方案见原文核对。
 - 来源：FoundMyFitness 播客 #107 · Michael Grandner · https://foundmyfitness.libsyn.com/107-how-to-cure-insomnia-without-pills-fall-asleep-dr-michael-grandner
-- date=2025-10-02 / source_published_at=2025-10-02 / reviewed_at=2026-05-31
-- 摘要：慢性失眠和未治疗的睡眠呼吸暂停会明显伤认知与恢复力。Grandner 讲了几条有科学支持的非药物干预，重点是 CBT-I（失眠认知行为疗法）和刺激控制。属专家梳理；严重或长期睡眠问题仍需就医评估。
+- date=2025-10-02 / src=2025-10-02 / reviewed=2026-05-31
 
 
 ### 你的「衰老速度」其实能测  `aging-pace-test`
-- 分类 `长寿` · 证据 `observational` · 精选 False(rank 0) · status `reviewed`
-- 一句话结论：有测试能估衰老速度，速度略高于1关联未来7年更高死亡与慢病风险。
-- 适用于谁：未特别限定，见原文
-- 需要注意：证据为观察性研究（DunedinPACE 等纵向研究），仅显示相关而非因果；作者「12 个月逆转 31 年」属个人自测、营销色彩重，应当概念看、别当目标。
+- `长寿` · 证据`observational` · 精选 False(0) · status `reviewed`
+- 结论：有测试能估衰老速度，速度略高于1关联未来7年更高死亡与慢病风险。
+- 适用：未特别限定，见原文
+- 注意：证据为观察性研究（DunedinPACE 等纵向研究），仅显示相关而非因果；作者「12 个月逆转 31 年」属个人自测、营销色彩重，应当概念看、别当目标。
 - 来源：Bryan Johnson · Medium · https://medium.com/future-literacy/how-fast-are-you-aging-e845830d8a3c
-- date=2022-11-08 / source_published_at=2022-11-08 / reviewed_at=2026-05-31
-- 摘要：有一类测试（如 DunedinPACE，基于多年纵向研究）能估你「每过 1 年、身体老了多少」。研究提示：衰老速度略高于 1，就和未来 7 年更高的死亡与慢病风险相关。作者用它追踪自己——但他「12 个月逆转 31 年」属个人自测、营销色彩重，**当概念看、别当目标**。
+- date=2022-11-08 / src=2022-11-08 / reviewed=2026-05-31
 
 
 ### 「每天八杯水」——你怎么知道这是对的？  `eight-glasses-water-how-do-you-know`
-- 分类 `营养` · 证据 `blogger` · 精选 False(rank 0) · status `reviewed`
-- 一句话结论：分清「真的知道」和「只是听说」，是抵御伪健康信息的第一步。
-- 适用于谁：未特别限定，见原文（作者也指出饮水量因人而异）
-- 需要注意：这是观点 / 方法分享，非健康建议，证据级别为博主观点；「八杯水」只是被质疑的常识说法，作者并未给出推荐饮水量，具体饮水量因人而异，见原文核对。
+- `营养` · 证据`blogger` · 精选 False(0) · status `reviewed`
+- 结论：分清「真的知道」和「只是听说」，是抵御伪健康信息的第一步。
+- 适用：未特别限定，见原文（作者也指出饮水量因人而异）
+- 注意：这是观点 / 方法分享，非健康建议，证据级别为博主观点；「八杯水」只是被质疑的常识说法，作者并未给出推荐饮水量，具体饮水量因人而异，见原文核对。
 - 来源：Bryan Johnson · Medium · https://medium.com/future-literacy/how-much-water-should-i-drink-552be7d300e5
-- date=2022-10-07 / source_published_at=2022-10-07 / reviewed_at=2026-05-31
-- 摘要：一个思维实验：朋友问「每天该喝几杯水」，多数人脱口「八杯」——但追问「你怎么知道」，会发现只是在重复听来的常识，没真见过证据。作者的点不在水，在于：分清「我真的知道」和「我只是听说」，是抵御伪健康信息的第一步。（这是观点 / 方法分享，非健康建议；饮水量因人而异。）
+- date=2022-10-07 / src=2022-10-07 / reviewed=2026-05-31
