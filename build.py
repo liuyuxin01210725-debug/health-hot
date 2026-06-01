@@ -80,8 +80,8 @@ def _is_http_url(u):
     """合法 http(s) URL：scheme 为 http/https + 有真实主机名 + 主机含「.」+ 无控制字符。
     用 urlsplit 解析真 hostname，挡掉 'https://?q=x' / 'https://#x'（看似有内容实则无主机，codex 审出）
     与含 \\n/\\x00 的伪 URL。"""
-    if not isinstance(u, str) or re.search(r'[\x00-\x1f]', u):
-        return False
+    if not isinstance(u, str) or re.search(r'[\x00-\x1f\x7f-\x9f\s]', u):
+        return False  # 拒所有 C0/C1 控制字符 + 空白（含 DEL\x7f、NEL\x85，codex 边界探测）
     try:
         p = urllib.parse.urlsplit(u)
     except Exception:
@@ -95,23 +95,41 @@ def _safe_href(u):
     return u if _is_http_url(u) else "#"
 
 
+_STUDY_HOSTS = ("pubmed.ncbi.nlm.nih.gov", "ncbi.nlm.nih.gov", "doi.org",
+                "cochranelibrary.com", "www.cochranelibrary.com")
+
+
+def _is_study_url(u):
+    """是否为真研究链接：① 主机名在研究站白名单（按真实 hostname，不用子串——子串会被
+    'https://evil.com/?x=pubmed.ncbi.nlm.nih.gov' 骗过）② 且**路径指向具体条目**（非裸域名）——
+    'https://doi.org/' / 'https://ncbi.nlm.nih.gov/' 这种没有文章 ID 的不算研究（codex 二次审出）。"""
+    if not _is_http_url(u):
+        return False
+    p = urllib.parse.urlsplit(u)
+    host = (p.hostname or "").lower()
+    if not (host in _STUDY_HOSTS or host.endswith(".cochranelibrary.com")):
+        return False
+    path = p.path.strip("/")
+    return len(path) >= 2 and any(c.isdigit() for c in path)  # 须有具体条目（PMID/DOI 都含数字），裸域名不算
+
+
 def _has_study(it):
-    """是否有独立的研究/指南级证据链接（PubMed / DOI / Cochrane）。
-    判定信任分层的依据：源或证据链里有真研究 = 可称『已核验』。"""
+    """是否有独立的研究/指南级证据链接（PubMed / DOI / Cochrane）——判定信任分层。"""
     pool = [it.get("source_url", "")] + [x for x in (it.get("evidence_source_urls") or []) if isinstance(x, str)]
-    return any(("pubmed.ncbi.nlm.nih.gov" in u or "doi.org" in u or "cochrane" in u.lower())
-               for u in pool if isinstance(u, str))
+    return any(_is_study_url(u) for u in pool if isinstance(u, str))
 
 
 def verification_status(it):
     """信任分层（P0）：把『专家梳理』和『循证已核验』在数据层分开，不靠文字补丁。
       verified                  —— 有独立 PubMed/指南/Cochrane 支撑，可称『已核验』
       curated_pending_evidence  —— 专家/播客梳理，原文证据链待补，**不可**称『已核验』
-    显式写在条目里时以条目为准（便于人工降级有疑问的条），否则按证据链自动判定。"""
-    vs = it.get("verification_status")
-    if vs in ("verified", "curated_pending_evidence"):
-        return vs
-    return "verified" if _has_study(it) else "curated_pending_evidence"
+    规则：『verified』必须有真研究 URL 兜底——**不允许**手动把无研究的条目标成 verified
+    （codex 审出：显式字段曾可绕过研究要求）。只允许显式**降级**为 curated。"""
+    if not _has_study(it):
+        return "curated_pending_evidence"          # 无真研究 → 一律 curated，显式字段不能强升
+    if it.get("verification_status") == "curated_pending_evidence":
+        return "curated_pending_evidence"          # 有研究但人工选择降级（如对结论有疑），尊重
+    return "verified"
 
 
 VS_LABEL = {"verified": "已核验", "curated_pending_evidence": "专家梳理 · 证据链待补"}
@@ -338,7 +356,7 @@ def ld_json(it):
     }
     cites, seen = [], set()
     for u in [it.get("source_url", "")] + (it.get("evidence_source_urls") or []):
-        if isinstance(u, str) and re.match(r'^https?://', u) and u not in seen:
+        if _is_study_url(u) and u not in seen:  # JSON-LD citation 只列真研究（与 feed/详情页同尺）
             seen.add(u); cites.append(u)
     if cites:
         data["citation"] = cites
@@ -372,8 +390,11 @@ def detail_page(it, related):
     src_date = it.get("source_published_at") or it.get("date", "")
     src_lbl = e(src_date) + ("（期刊预排，未到见刊日）" if src_date and src_date > TODAY else "")
     # 双链接：在哪听到（discovery） vs 凭什么核验（evidence）
-    disc = it.get("discovery_source_url", "")
-    evs = [u for u in (it.get("evidence_source_urls") or []) if isinstance(u, str)]
+    # 「核验依据」只放真研究 URL（与 feed 同一把尺 _is_study_url）——误放进 evidence 的播客 URL
+    # 不会被当成研究展示，而是回落到「在哪听到」（codex 审出 HTML 与 feed 不一致）。
+    evs = [u for u in (it.get("evidence_source_urls") or []) if isinstance(u, str) and _is_study_url(u)]
+    nonstudy = [u for u in (it.get("evidence_source_urls") or []) if isinstance(u, str) and not _is_study_url(u)]
+    disc = it.get("discovery_source_url", "") or (nonstudy[0] if nonstudy else "")
     dual = '<div class="dual">'
     if disc:
         dual += (f'<div class="dl-row"><span class="dl-k">🎧 你可能在哪听到</span>'
@@ -500,9 +521,8 @@ def claims_feed(items):
             if isinstance(u, str) and u and re.match(r'^https?://', u) and u not in srcs:
                 srcs.append(u)
         vs = verification_status(it)
-        # 证据链 = 只含真研究链接（PubMed/DOI/Cochrane）；发现链 = 播客/YT「在哪听到」，单列、不混入。
-        evidence_urls = [u for u in srcs
-                         if "pubmed.ncbi.nlm.nih.gov" in u or "doi.org" in u or "cochrane" in u.lower()]
+        # 证据链 = 只含真研究链接（按主机名判定，不用子串——见 _is_study_url）；发现链 = 播客/YT「在哪听到」，单列。
+        evidence_urls = [u for u in srcs if _is_study_url(u)]
         out.append({
             "slug": slug,
             "title": it.get("title", ""),
@@ -717,9 +737,20 @@ def main():
             print(f"   ✗ {fn}: {'; '.join(errs)}")
         print("   修好后重跑；确需用合格内容强制重建请加 --force。")
         sys.exit(1)
-    # 原子替换：渲染中途崩溃不会删掉已上线的站
-    shutil.rmtree(OUT, ignore_errors=True)
-    os.rename(tmp, OUT)
+    # 接近原子的替换：旧站挪到 .old → 新站就位 → 删旧站。两次 rename 之间的窗口若失败，
+    # except 把 .old 挪回 OUT，保证 docs/ 不会消失（codex 审出无 rollback）。
+    old = OUT + ".old"
+    shutil.rmtree(old, ignore_errors=True)
+    moved = False
+    if os.path.exists(OUT):
+        os.rename(OUT, old); moved = True
+    try:
+        os.rename(tmp, OUT)
+    except Exception:
+        if moved and not os.path.exists(OUT):  # 第二步失败 → 回滚：把旧站挪回来
+            os.rename(old, OUT)
+        raise
+    shutil.rmtree(old, ignore_errors=True)
     print(f"✓ 发布 {len(good)} 条（精选 {feat}）+ {len(good)} 个详情页 + claims.json（机读 feed）→ docs/")
     if blocked:  # 仅 --force 时会走到这
         print(f"\n⚠️  --force 强制发布，已忽略 {len(blocked)} 条被拦条目：")

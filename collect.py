@@ -14,7 +14,7 @@ data/items/*.json，再跑 build.py 上站。
     python3 collect.py                 # 抓全部信源
     python3 collect.py PubMed Attia    # 只抓名字匹配的
 """
-import json, os, sys, glob, re, html, time, urllib.request, urllib.parse
+import json, os, sys, glob, re, html, time, threading, urllib.request, urllib.parse
 import xml.etree.ElementTree as ET
 from email.utils import parsedate_to_datetime
 
@@ -35,13 +35,15 @@ MON = {'jan':'01','feb':'02','mar':'03','apr':'04','may':'05','jun':'06',
 
 
 _last_fetch = [0.0]  # 全局限速：NCBI 无 API key 建议 ≤3 req/s，这里统一 ≥0.35s 一次
+_fetch_lock = threading.Lock()  # 加锁串行化 wait+update，否则并发调用者会一起醒来（codex 审出）
 
 
 def fetch(url):
-    wait = 0.35 - (time.monotonic() - _last_fetch[0])
-    if wait > 0:
-        time.sleep(wait)
-    _last_fetch[0] = time.monotonic()
+    with _fetch_lock:  # 串行节流：即使将来并发调用，间隔也真正 ≥0.35s
+        wait = 0.35 - (time.monotonic() - _last_fetch[0])
+        if wait > 0:
+            time.sleep(wait)
+        _last_fetch[0] = time.monotonic()
     req = urllib.request.Request(url, headers=UA)
     with urllib.request.urlopen(req, timeout=25) as r:
         # 跟随重定向后，确认最终 URL 仍是 http(s)——挡 file:// 等伪协议跳转（SSRF 纵深防御，codex 审出）。
