@@ -39,6 +39,9 @@ GitHub Actions 工作流位于 `.github/workflows/collect-candidates.yml`。它�
 每次运行会保存 `health-candidates` Artifact（候选 JSON、采集日志、审核摘要），并新建或刷新
 标题为「每周健康候选采集」的 issue。健康内容仍需人工或 AI 复核后写入 `data/items/*.json`，
 再运行 `build.py`；定时采集不会自动发布未经核验的说法。
+审核 issue 会先列未来日期、标题弱相关、摘要为空等风险项，再按「研究 / 指南锚点候选」、
+「PubMed 趋势雷达」、「播客 / 视频 / 博客发现来源」分组。`anchor` 表示可作证据依据，
+不表示选题自动相关；仍需人工或 AI 判断是否值得入库。
 
 ## Agent 接入
 
