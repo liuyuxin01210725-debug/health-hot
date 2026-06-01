@@ -41,45 +41,86 @@ jobs:
           python3 - <<'PY'
           import json
           import os
+          from datetime import date
           from pathlib import Path
 
           candidates_file = Path("/tmp/health_candidates.json")
           report_file = Path("/tmp/health_candidates_report.md")
           outcome = os.environ["COLLECTION_OUTCOME"]
           run_url = os.environ["RUN_URL"]
+          today = date.today().isoformat()
 
           if candidates_file.exists():
               candidates = json.loads(candidates_file.read_text(encoding="utf-8"))
           else:
               candidates = []
 
+          def clean(value):
+              return str(value or "").replace("\n", " ").strip()
+
+          def is_pubmed(item):
+              return "pubmed.ncbi.nlm.nih.gov" in clean(item.get("source_url"))
+
+          def warning_flags(item):
+              flags = []
+              published = clean(item.get("published"))
+              if published and published > today:
+                  flags.append("⚠ 未来排期")
+              if item.get("relevance_hint") == "query_match_only":
+                  flags.append("⚠ 标题弱相关")
+              if not clean(item.get("desc")):
+                  flags.append("⚠ 摘要为空")
+              return flags
+
+          def append_items(lines, items):
+              if not items:
+                  lines.append("无。")
+                  return
+              for index, item in enumerate(items, start=1):
+                  title = clean(item.get("title")) or "无标题"
+                  source = clean(item.get("source")) or "来源待核"
+                  published = clean(item.get("published")) or "日期待核"
+                  role = clean(item.get("role")) or "角色待核"
+                  evidence = clean(item.get("evidence")) or "证据待核"
+                  url = clean(item.get("source_url"))
+                  flags = warning_flags(item)
+                  flag_text = f" · {' · '.join(flags)}" if flags else ""
+                  lines.append(f"{index}. **{title}**{flag_text}")
+                  lines.append(f"   `{source}` · `{published}` · `{role}` · `{evidence}`")
+                  if url:
+                      lines.append(f"   原文：{url}")
+
+          anchors = [item for item in candidates if item.get("role") == "anchor"]
+          pubmed_radar = [item for item in candidates if item.get("role") == "radar" and is_pubmed(item)]
+          discovery = [item for item in candidates if item.get("role") in {"discovery", "radar"} and not is_pubmed(item)]
+          warnings = [item for item in candidates if warning_flags(item)]
+          ungrouped = [item for item in candidates if item not in anchors and item not in pubmed_radar and item not in discovery]
           status = "成功" if outcome == "success" else "失败：请先查看日志，不要进入发布流程"
           lines = [
               "# 每周健康候选采集",
               "",
               f"- 状态：**{status}**",
               f"- 新候选：**{len(candidates)} 条**",
+              f"- 研究 / 指南锚点：**{len(anchors)} 条** · PubMed 趋势雷达：**{len(pubmed_radar)} 条** · 发现来源：**{len(discovery)} 条**",
+              f"- 需重点人工检查：**{len(warnings)} 条**",
               f"- Actions 运行记录：[打开本次运行]({run_url})",
               "- 完整文件：在本次运行页面下载 `health-candidates` Artifact",
               "",
-              "## 候选预览",
+              "> 这是审核收件箱，不是发布清单。先处理风险提醒，再从各组选择值得入库的说法。anchor 代表可作证据依据，不代表选题自动相关。",
+              "",
+              "## 0. 风险提醒",
               "",
           ]
-          if not candidates:
-              lines.append("本次没有新增候选。")
-          for index, item in enumerate(candidates[:30], start=1):
-              title = str(item.get("title", "")).replace("\n", " ").strip()
-              source = str(item.get("source", "")).replace("\n", " ").strip()
-              published = str(item.get("published", "")).replace("\n", " ").strip()
-              role = str(item.get("role", "")).replace("\n", " ").strip()
-              evidence = str(item.get("evidence", "")).replace("\n", " ").strip()
-              url = str(item.get("source_url", "")).replace("\n", "").strip()
-              lines.append(f"{index}. **{title}**")
-              lines.append(f"   `{source}` · `{published or '日期待核'}` · `{role}` · `{evidence}`")
-              if url:
-                  lines.append(f"   原文：{url}")
-          if len(candidates) > 30:
-              lines.extend(["", f"另有 {len(candidates) - 30} 条，请下载 Artifact 查看。"])
+          append_items(lines, warnings)
+          lines.extend(["", "## A. 研究 / 指南锚点候选（仍需判断选题价值）", ""])
+          append_items(lines, anchors)
+          lines.extend(["", "## B. PubMed 趋势雷达", ""])
+          append_items(lines, pubmed_radar)
+          lines.extend(["", "## C. 播客 / 视频 / 博客发现来源", ""])
+          append_items(lines, discovery)
+          if ungrouped:
+              lines.extend(["", "## D. 未分组候选", ""])
+              append_items(lines, ungrouped)
 
           report = "\n".join(lines) + "\n"
           report_file.write_text(report, encoding="utf-8")
