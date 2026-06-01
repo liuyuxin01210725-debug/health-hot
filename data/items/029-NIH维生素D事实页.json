@@ -1,0 +1,21 @@
+{
+  "title": "维生素 D 对骨骼重要，但不是所有人都需要盲目补充",
+  "source": "NIH ODS · 维生素 D 消费者事实页",
+  "source_url": "https://ods.od.nih.gov/factsheets/VitaminD-Consumer/",
+  "date": "2026-06-01",
+  "category": "补剂",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "NIH ODS 事实页说明，维生素 D 有助于身体吸收钙，并支持骨骼、肌肉、神经和免疫功能。维生素 D 可以来自日晒、食物和补充剂；是否容易摄入不足、是否需要补充，要结合个体风险判断。",
+  "slug": "nih-vitamin-d-supplement-boundaries",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "维生素 D 对骨骼健康重要，但“重要”不等于“所有人都应该自行长期补充”。",
+  "population": "一般人群；较少接触阳光、饮食来源不足或存在特定风险的人群更值得关注，具体见 NIH ODS 原文。",
+  "caveats": "是否缺乏、是否需要补充以及补充方式，应结合个体情况判断。补充剂也可能过量，不应把通用科普当作个人用量建议。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://ods.od.nih.gov/factsheets/VitaminD-Consumer/"
+  ]
+}

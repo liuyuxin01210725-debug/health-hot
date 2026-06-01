@@ -125,6 +125,51 @@ class CollectTests(unittest.TestCase):
         entry = {"url": "https://pubmed.ncbi.nlm.nih.gov/42197030/"}
         self.assertEqual(collect.canonical_id(entry), "pmid:42197030")
 
+    def test_official_catalog_accepts_whitelisted_specific_page(self):
+        entries = collect.official_catalog_entries({
+            "role": "anchor",
+            "entries": [{
+                "title": "Physical activity",
+                "url": "https://www.who.int/news-room/fact-sheets/detail/physical-activity",
+                "desc": "WHO fact sheet",
+                "category": "运动",
+            }],
+        })
+        self.assertEqual(entries[0]["evidence"], "guideline")
+        self.assertEqual(entries[0]["category"], "运动")
+
+    def test_official_catalog_rejects_untrusted_or_spoofed_page(self):
+        for url in (
+            "https://example.com/news-room/fact-sheets/detail/physical-activity",
+            "https://evil.example@www.who.int/news-room/fact-sheets/detail/physical-activity",
+            "https://www.who.int/",
+        ):
+            with self.subTest(url=url):
+                with self.assertRaises(ValueError):
+                    collect.official_catalog_entries({
+                        "role": "anchor",
+                        "entries": [{"title": "fixture", "url": url, "desc": "fixture"}],
+                    })
+
+    def test_configured_official_catalogs_are_whitelisted(self):
+        with open(collect.SRC, encoding="utf-8") as fh:
+            sources = json.load(fh)["sources"]
+        catalogs = [source for source in sources if source.get("type") == "official_catalog"]
+        self.assertGreaterEqual(len(catalogs), 1)
+        for source in catalogs:
+            with self.subTest(source=source.get("name")):
+                self.assertTrue(collect.official_catalog_entries(source))
+
+    def test_default_collection_excludes_opt_in_discovery_sources(self):
+        sources = [
+            {"name": "WHO", "type": "official_catalog"},
+            {"name": "Huberman", "type": "youtube", "default_enabled": False},
+        ]
+        self.assertEqual([s["name"] for s in collect.select_sources(sources, [])], ["WHO"])
+        self.assertEqual([s["name"] for s in collect.select_sources(sources, ["--include-discovery"])],
+                         ["WHO", "Huberman"])
+        self.assertEqual([s["name"] for s in collect.select_sources(sources, ["Huberman"])], ["Huberman"])
+
     def test_fetch_retries_transient_rate_limit(self):
         rate_limit = urllib.error.HTTPError(
             "https://example.com/feed", 429, "Too Many Requests", {"Retry-After": "0"}, None

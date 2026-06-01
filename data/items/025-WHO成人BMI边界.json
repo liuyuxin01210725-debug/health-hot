@@ -1,0 +1,22 @@
+{
+  "title": "BMI 能筛查超重和肥胖，但不能单独概括一个人的健康",
+  "source": "WHO · 超重和肥胖事实页",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight",
+  "date": "2025-12-08",
+  "category": "代谢",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "WHO 对成人超重和肥胖提供了通用 BMI 阈值，同时明确儿童和青少年需要结合年龄判断。BMI 适合做群体筛查和初步识别，但个体健康风险仍需要结合腰围、代谢指标、身体组成和临床情况评估。",
+  "slug": "who-adult-bmi-boundaries",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "source_published_at": "2025-12-08",
+  "conclusion": "BMI 是识别成人超重和肥胖的常用筛查指标，但不能单独概括个人健康风险。",
+  "population": "成人；儿童和青少年不能直接套用成人阈值，需要按年龄和生长情况判断。",
+  "caveats": "BMI 不是完整诊断，也不直接反映脂肪分布或身体组成。个人风险判断应结合其他指标和专业评估。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight"
+  ]
+}

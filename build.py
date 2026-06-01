@@ -464,7 +464,7 @@ def detail_page(it, related):
     if evs:
         buttons = "".join(
             f'<a class="ev-link" href="{e(_safe_href(u))}" target="_blank" rel="noopener">'
-            f'<span class="el-ic">🔬</span><span class="el-t">核验依据 · 点回原始研究'
+            f'<span class="el-ic">🔬</span><span class="el-t">核验依据 · 点回原始来源'
             f'<small>{e(_link_label(u))}</small></span><span class="el-go">↗</span></a>' for u in evs)
         evidence_links = f'<div class="ev-links">{buttons}</div>'
     star = '<span class="star">✦ 精选</span>' if it.get("featured") else ""
@@ -574,9 +574,9 @@ def render_about():
 <div class="method-item"><div class="mi-n">03</div><div><h3>双链接：你在哪听到 ≠ 凭什么相信</h3>
 <p><b>发现来源（discovery）</b>是「你可能在某播客听到这个说法」，<b>核验依据（evidence）</b>是「支撑它的研究在哪里」。<b>播客负责提出问题，研究负责回答问题</b>。</p></div></div>
 <div class="method-item"><div class="mi-n">04</div><div><h3>信源体系：三种角色，各司其职</h3><div class="src-table">
-<div class="src-role"><span class="role-tag anchor">锚点 ANCHOR</span><div class="role-d"><strong>决定结论、做核验依据</strong><span>PubMed 的 Cochrane 系统综述 / 官方指南 / 系统综述查询</span></div></div>
-<div class="src-role"><span class="role-tag discovery">发现 DISCOVERY</span><div class="role-d"><strong>只负责发现「大家在讨论什么」，不下结论</strong><span>Peter Attia、Huberman Lab、FoundMyFitness（播客 / YouTube）</span></div></div>
-<div class="src-role"><span class="role-tag radar">雷达 RADAR</span><div class="role-d"><strong>追踪新论文与趋势</strong><span>PubMed 主题查询、Bryan Johnson</span></div></div>
+<div class="src-role"><span class="role-tag anchor">锚点 ANCHOR</span><div class="role-d"><strong>决定结论、做核验依据</strong><span>WHO / USPSTF / NIH 官方事实页与指南，PubMed 的 Cochrane 系统综述 / 指南 / 系统综述查询</span></div></div>
+<div class="src-role"><span class="role-tag discovery">发现 DISCOVERY</span><div class="role-d"><strong>只负责发现「大家在讨论什么」，不下结论</strong><span>播客 / YouTube 等创作者入口默认不采集，需要时手动启用</span></div></div>
+<div class="src-role"><span class="role-tag radar">雷达 RADAR</span><div class="role-d"><strong>追踪新论文与趋势</strong><span>PubMed 窄主题查询；趋势不能直接冒充结论</span></div></div>
 </div></div></div>
 <div class="method-item"><div class="mi-n">05</div><div><h3>复核与纠错</h3>
 <p>每条都带<b>复核日期</b>，随研究更新而重新审视。发布前有自动闸门：缺来源、未来日期、伪链接、未审核的条目一律进不了线上。发现错误？欢迎通过 <a href="{REPO}/issues" target="_blank" rel="noopener"><b>GitHub issue</b></a> 指出。</p></div></div>

@@ -1,27 +1,96 @@
 {
-  "_说明": "健康信源清单。type: youtube(channel_id)/rss(url)/pubmed(query)。",
+  "_说明": "健康信源清单。默认采集只跑权威来源：official_catalog(entries) / pubmed(query)。youtube / rss 发现层需显式加 --include-discovery 或按名称手动采集。",
   "_role": "anchor=核验锚点(系统综述/指南/Cochrane，可定结论) | discovery=选题雷达(播客，只生成待核验问题) | radar=趋势雷达(博主/泛主题，不直接定结论)。",
+  "_official_catalog": "官方精选目录只放政府或官方机构的具体事实页/指南页。collect.py 还有硬编码域名白名单，配置文件不能把任意网站伪装成官方锚点。",
   "_group": "同一节目的多个 feed 标同一 group，collect.py 按 group+标题去重，避免一期内容收两次。",
   "_pubmed_evidence": "PubMed 条目的 evidence 由 collect.py 读 PublicationType 结果级判定(rct/meta/guideline/observational/unknown)，无法确定时必须保留 unknown 等人工复核。",
   "_title_terms": "窄主题 PubMed 雷达可配置 title_terms。未命中标题时仍保留候选，但 relevance_hint=query_match_only，必须人工/AI 再判断相关性。",
   "sources": [
-    {"name": "PubMed·Cochrane系统综述", "type": "pubmed", "role": "anchor", "query": "Cochrane Database Syst Rev[jour] AND (exercise OR nutrition OR diet OR sleep OR supplement OR longevity OR vitamin)", "category": "综述", "evidence": "unknown"},
-    {"name": "PubMed·健康指南", "type": "pubmed", "role": "anchor", "query": "guideline[pt] AND humans[mh] AND (exercise OR nutrition OR diet OR sleep OR obesity OR hypertension OR diabetes)", "category": "指南", "evidence": "unknown"},
-    {"name": "PubMed·系统综述", "type": "pubmed", "role": "anchor", "query": "systematic review[pt] AND humans[mh] AND (creatine OR \"omega-3\" OR \"intermittent fasting\" OR \"resistance training\" OR longevity)", "category": "综述", "evidence": "unknown"},
+    {
+      "name": "WHO·常青事实页",
+      "type": "official_catalog",
+      "role": "anchor",
+      "authority_level": "official",
+      "category": "其他",
+      "evidence": "guideline",
+      "limit": 10,
+      "entries": [
+        {"title": "身体活动：任何活动都算，少坐比完全不动更重要", "url": "https://www.who.int/news-room/fact-sheets/detail/physical-activity", "published": "2024-06-26", "category": "运动", "desc": "WHO 身体活动事实页。核验：身体活动对不同年龄段的益处、久坐风险，以及“任何量的活动都比没有更好”的适用边界。"},
+        {"title": "健康饮食：不是追单一食物，而是看整体结构", "url": "https://www.who.int/news-room/fact-sheets/detail/healthy-diet", "published": "2026-01-26", "category": "营养", "desc": "WHO 健康饮食事实页。核验：饮食多样、平衡、适度的基础原则，以及盐、游离糖、不健康脂肪和蔬果摄入的边界。"},
+        {"title": "成人超重和肥胖：BMI 阈值能说明什么，不能说明什么", "url": "https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight", "published": "2025-12-08", "category": "代谢", "desc": "WHO 超重和肥胖事实页。核验：成人 BMI 阈值、儿童判断方式，以及群体筛查指标与个体诊断之间的差别。"},
+        {"title": "高血压：为什么不能只看一次测量", "url": "https://www.who.int/news-room/fact-sheets/detail/hypertension", "category": "心肺", "desc": "WHO 高血压事实页。核验：高血压的常见风险、筛查价值和重复测量的重要性。"},
+        {"title": "饮酒：所谓“适量”能否当作健康建议", "url": "https://www.who.int/news-room/fact-sheets/detail/alcohol", "category": "营养", "desc": "WHO 酒精事实页。核验：酒精相关风险，以及是否应把饮酒包装为保健建议。"}
+      ]
+    },
+    {
+      "name": "USPSTF·预防筛查推荐",
+      "type": "official_catalog",
+      "role": "anchor",
+      "authority_level": "official",
+      "category": "其他",
+      "evidence": "guideline",
+      "limit": 10,
+      "entries": [
+        {"title": "高血压筛查：治疗前为什么要做诊室外确认", "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/hypertension-in-adults-screening", "published": "2021-04-27", "category": "心肺", "desc": "USPSTF A 级推荐。核验：成人血压筛查，以及开始治疗前用诊室外测量确认诊断。"},
+        {"title": "骨质疏松筛查：哪些女性应优先评估", "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/osteoporosis-screening", "published": "2025-01-14", "category": "骨骼", "desc": "USPSTF 推荐。核验：65 岁及以上女性、较年轻绝经后高风险女性的筛查建议，以及男性证据不足的边界。"},
+        {"title": "糖尿病前期和 2 型糖尿病：哪些成年人需要筛查", "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/screening-for-prediabetes-and-type-2-diabetes", "published": "2021-08-24", "category": "代谢", "desc": "USPSTF B 级推荐。核验：无症状成年人中，糖尿病前期和 2 型糖尿病筛查的适用人群与地区边界。"},
+        {"title": "结直肠癌筛查：为什么不能等有症状再查", "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/colorectal-cancer-screening", "category": "其他", "desc": "USPSTF 推荐。核验：结直肠癌筛查适用年龄、不同筛查方式和个体化决策边界。"},
+        {"title": "乳腺癌筛查：普通风险女性应该从何时开始讨论", "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/breast-cancer-screening", "category": "其他", "desc": "USPSTF 推荐。核验：普通风险女性乳腺癌筛查建议、收益与潜在伤害，以及地区差异。"},
+        {"title": "体重管理：高 BMI 成年人何时值得接受行为干预", "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/obesity-in-adults-interventions", "category": "代谢", "desc": "USPSTF 推荐。核验：成人肥胖相关行为干预的适用范围，以及不要把单一减肥技巧包装成通用方案。"}
+      ]
+    },
+    {
+      "name": "NIH ODS·补充剂事实页",
+      "type": "official_catalog",
+      "role": "anchor",
+      "authority_level": "official",
+      "category": "补剂",
+      "evidence": "guideline",
+      "limit": 10,
+      "entries": [
+        {"title": "维生素 D：不是所有人都需要盲目补充", "url": "https://ods.od.nih.gov/factsheets/VitaminD-Consumer/", "category": "补剂", "desc": "NIH ODS 消费者事实页。核验：维生素 D 的作用、来源、缺乏风险和补充边界。"},
+        {"title": "Omega-3：鱼类摄入和补充剂不能简单画等号", "url": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-Consumer/", "category": "补剂", "desc": "NIH ODS 消费者事实页。核验：Omega-3 来源、常见健康说法、补充剂证据和用药相互作用。"},
+        {"title": "钙：骨骼健康不等于补得越多越好", "url": "https://ods.od.nih.gov/factsheets/Calcium-Consumer/", "category": "补剂", "desc": "NIH ODS 消费者事实页。核验：钙的作用、食物来源、缺乏与过量风险。"},
+        {"title": "镁：常见补充剂说法里哪些有依据", "url": "https://ods.od.nih.gov/factsheets/Magnesium-Consumer/", "category": "补剂", "desc": "NIH ODS 消费者事实页。核验：镁的作用、来源、缺乏风险和补充剂边界。"},
+        {"title": "维生素 B12：哪些人更容易摄入不足", "url": "https://ods.od.nih.gov/factsheets/VitaminB12-Consumer/", "category": "补剂", "desc": "NIH ODS 消费者事实页。核验：维生素 B12 来源、缺乏风险和需要重点关注的人群。"},
+        {"title": "运动补剂：有效、无效和风险不能混在一起说", "url": "https://ods.od.nih.gov/factsheets/ExerciseAndAthleticPerformance-Consumer/", "category": "补剂", "desc": "NIH ODS 运动表现补充剂事实页。核验：常见运动补剂的证据、安全性和产品质量风险。"},
+        {"title": "减肥补充剂：宣传很满，证据通常没那么满", "url": "https://ods.od.nih.gov/factsheets/WeightLoss-Consumer/", "category": "补剂", "desc": "NIH ODS 减肥补充剂事实页。核验：常见成分的证据、安全性和营销风险。"}
+      ]
+    },
+    {
+      "name": "NCCIH·补充剂与睡眠事实页",
+      "type": "official_catalog",
+      "role": "anchor",
+      "authority_level": "official",
+      "category": "补剂",
+      "evidence": "guideline",
+      "limit": 10,
+      "entries": [
+        {"title": "褪黑素：对部分睡眠问题可能有帮助，但不是万能助眠药", "url": "https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know", "category": "睡眠", "desc": "NIH NCCIH 事实页。核验：褪黑素对不同睡眠问题的证据、短期安全性与长期未知。"},
+        {"title": "益生菌：不要把“可能有用”说成“人人都该吃”", "url": "https://www.nccih.nih.gov/health/probiotics-usefulness-and-safety", "category": "营养", "desc": "NIH NCCIH 事实页。核验：益生菌针对不同健康问题的证据差异与安全边界。"},
+        {"title": "南非醉茄：流行不等于证据充分", "url": "https://www.nccih.nih.gov/health/ashwagandha", "category": "补剂", "desc": "NIH NCCIH 事实页。核验：南非醉茄常见用途、证据局限和安全注意事项。"},
+        {"title": "姜黄：食物、提取物和治疗宣称不是一回事", "url": "https://www.nccih.nih.gov/health/turmeric", "category": "补剂", "desc": "NIH NCCIH 事实页。核验：姜黄和姜黄素补充剂的证据局限与安全注意事项。"},
+        {"title": "Omega-3 补充剂：常见健康说法需要分开核验", "url": "https://www.nccih.nih.gov/health/omega3-supplements-what-you-need-to-know", "category": "补剂", "desc": "NIH NCCIH 事实页。核验：Omega-3 补充剂对不同健康结局的证据、安全性和相互作用。"}
+      ]
+    },
+
+    {"name": "PubMed·Cochrane系统综述", "type": "pubmed", "role": "anchor", "query": "Cochrane Database Syst Rev[jour] AND (exercise[ti] OR nutrition[ti] OR diet[ti] OR sleep[ti] OR supplement*[ti] OR vitamin*[ti])", "title_terms": ["exercise", "nutrition", "diet", "sleep", "supplement", "vitamin"], "category": "综述", "evidence": "unknown"},
+    {"name": "PubMed·健康指南", "type": "pubmed", "role": "anchor", "query": "guideline[pt] AND humans[mh] AND (exercise[ti] OR nutrition[ti] OR diet[ti] OR sleep[ti] OR obesity[ti] OR hypertension[ti] OR diabetes[ti])", "title_terms": ["exercise", "nutrition", "diet", "sleep", "obesity", "hypertension", "diabetes"], "category": "指南", "evidence": "unknown"},
+    {"name": "PubMed·系统综述", "type": "pubmed", "role": "anchor", "query": "systematic review[pt] AND humans[mh] AND (creatine[tiab] OR \"omega-3\"[tiab] OR \"intermittent fasting\"[tiab] OR \"resistance training\"[tiab] OR sleep[tiab])", "title_terms": ["creatine", "omega-3", "intermittent fasting", "time-restricted", "resistance training", "sleep"], "category": "综述", "evidence": "unknown"},
 
     {"name": "PubMed·间歇禁食RCT", "type": "pubmed", "role": "radar", "query": "intermittent fasting AND randomized controlled trial[pt] AND humans[mh]", "title_terms": ["intermittent fasting", "time-restricted"], "category": "营养", "evidence": "unknown"},
     {"name": "PubMed·肌酸", "type": "pubmed", "role": "radar", "query": "creatine supplementation AND humans[mh]", "title_terms": ["creatine"], "category": "补剂", "evidence": "unknown"},
     {"name": "PubMed·Omega-3 RCT", "type": "pubmed", "role": "radar", "query": "omega-3 fatty acids AND randomized controlled trial[pt] AND humans[mh]", "title_terms": ["omega-3", "n-3 pufa", "n-3 fatty"], "category": "补剂", "evidence": "unknown"},
     {"name": "PubMed·心肺功能与死亡率", "type": "pubmed", "role": "radar", "query": "cardiorespiratory fitness AND mortality AND humans[mh]", "title_terms": ["cardiorespiratory fitness", "cardiorespiratory", "fitness"], "category": "运动", "evidence": "unknown"},
 
-    {"name": "Peter Attia MD", "type": "youtube", "role": "discovery", "group": "attia", "channel_id": "UC8kGsMa0LygSX9nkBcBH1Sg", "category": "长寿", "evidence": "expert"},
-    {"name": "Huberman Lab", "type": "youtube", "role": "discovery", "group": "huberman", "channel_id": "UC2D2CMWXMOVWx7giW1n3LIg", "category": "睡眠", "evidence": "expert"},
-    {"name": "Huberman Lab Podcast", "type": "rss", "role": "discovery", "group": "huberman", "url": "https://feeds.megaphone.fm/hubermanlab", "category": "睡眠", "evidence": "expert"},
-    {"name": "FoundMyFitness", "type": "youtube", "role": "discovery", "group": "fmf", "channel_id": "UC5fdyC4LxyyYv8Am6nDrkmg", "category": "营养", "evidence": "expert"},
-    {"name": "FoundMyFitness Podcast", "type": "rss", "role": "discovery", "group": "fmf", "url": "https://podcast.foundmyfitness.com/rss.xml", "category": "营养", "evidence": "expert"},
+    {"name": "Peter Attia MD", "type": "youtube", "role": "discovery", "default_enabled": false, "group": "attia", "channel_id": "UC8kGsMa0LygSX9nkBcBH1Sg", "category": "长寿", "evidence": "expert"},
+    {"name": "Huberman Lab", "type": "youtube", "role": "discovery", "default_enabled": false, "group": "huberman", "channel_id": "UC2D2CMWXMOVWx7giW1n3LIg", "category": "睡眠", "evidence": "expert"},
+    {"name": "Huberman Lab Podcast", "type": "rss", "role": "discovery", "default_enabled": false, "group": "huberman", "url": "https://feeds.megaphone.fm/hubermanlab", "category": "睡眠", "evidence": "expert"},
+    {"name": "FoundMyFitness", "type": "youtube", "role": "discovery", "default_enabled": false, "group": "fmf", "channel_id": "UC5fdyC4LxyyYv8Am6nDrkmg", "category": "营养", "evidence": "expert"},
+    {"name": "FoundMyFitness Podcast", "type": "rss", "role": "discovery", "default_enabled": false, "group": "fmf", "url": "https://podcast.foundmyfitness.com/rss.xml", "category": "营养", "evidence": "expert"},
 
-    {"name": "Bryan Johnson", "type": "youtube", "role": "radar", "group": "bryan", "channel_id": "UCnRVL1-HJnXWB_Xi2dAoTcg", "category": "长寿", "evidence": "blogger"},
-    {"name": "Bryan Johnson (Medium)", "type": "rss", "role": "radar", "group": "bryan", "url": "https://bryan-johnson.medium.com/feed", "category": "长寿", "evidence": "blogger"}
+    {"name": "Bryan Johnson", "type": "youtube", "role": "radar", "default_enabled": false, "group": "bryan", "channel_id": "UCnRVL1-HJnXWB_Xi2dAoTcg", "category": "长寿", "evidence": "blogger"},
+    {"name": "Bryan Johnson (Medium)", "type": "rss", "role": "radar", "default_enabled": false, "group": "bryan", "url": "https://bryan-johnson.medium.com/feed", "category": "长寿", "evidence": "blogger"}
   ],
   "_仅作核验依据_不自动抓_在evidence_source_urls按需引用": [
     "NIH ODS 补剂资料库: https://ods.od.nih.gov/factsheets/list-all/",

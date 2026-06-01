@@ -1,0 +1,22 @@
+{
+  "title": "运动不是非得练到很狠：动起来就比完全不动好",
+  "source": "WHO · 身体活动事实页",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/physical-activity",
+  "date": "2024-06-26",
+  "category": "运动",
+  "featured": true,
+  "rank": 7,
+  "evidence": "guideline",
+  "summary": "WHO 的身体活动事实页强调：任何量的身体活动都比完全不动更好，所有活动都算；不同年龄段都应减少久坐。规律活动与更好的身心健康相关，而活动不足与更高的慢病和死亡风险相关。",
+  "slug": "who-physical-activity-baseline",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "source_published_at": "2024-06-26",
+  "conclusion": "运动不是“做满一套才算”：任何量的身体活动都比完全不动更好，日常活动也算。",
+  "population": "儿童、青少年、成人、老年人，以及孕产期女性和慢病或残障人群；不同人群的具体建议见 WHO 原文。",
+  "caveats": "这是公共健康基线，不是个体运动处方。有基础疾病、疼痛或运动风险者，应根据专业评估调整方式和强度。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/physical-activity"
+  ]
+}

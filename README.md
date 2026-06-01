@@ -8,7 +8,7 @@
 
 ## 结构
 
-- `data/sources.json` — 信源清单（RSS / YouTube 频道 / PubMed 主题）
+- `data/sources.json` — 信源清单（官方精选目录 / PubMed 主题；RSS / YouTube 仅为可选发现层）
 - `data/items/*.json` — 收集到的条目（每条 = 一张卡片 / 一条核验）
 - `collect.py` — 从信源抓取候选、去重（纯标准库）
 - `build.py` — 生成静态站到 `docs/`（精选 + 全部 + 关于 + 各条详情页 + `claims.json` 机读 feed；纯标准库）
@@ -27,20 +27,23 @@
 ## 候选采集
 
 ```bash
-python3 collect.py                 # 抓全部信源
-python3 collect.py 'PubMed·肌酸'   # 只抓名字匹配的信源
+python3 collect.py                       # 默认：只抓官方目录与 PubMed
+python3 collect.py --include-discovery   # 可选：额外抓创作者发现层
+python3 collect.py 'PubMed·肌酸'         # 只抓名字匹配的信源
 ```
 
 候选写入 `/tmp/health_candidates.json`。PubMed 窄主题雷达会附带 `relevance_hint`：
 `title_match` 可优先看，`query_match_only` 表示查询命中但标题未命中主题词，必须人工/AI 再判断。
 候选提升为正式条目时应保留 `canonical_id`，用于跨次采集去重。
+官方精选目录为常青问题池，只接受 WHO、USPSTF、NIH ODS、NIH NCCIH 等白名单官方域名下的具体事实页或
+指南页。`collect.py` 在代码中再次校验域名，不能只靠配置文件把任意网站标成官方锚点。
 
 GitHub Actions 工作流位于 `.github/workflows/collect-candidates.yml`。它也支持在 Actions 页面手动触发。
 每次运行会保存 `health-candidates` Artifact（候选 JSON、采集日志、审核摘要），并新建或刷新
 标题为「每周健康候选采集」的 issue。健康内容仍需人工或 AI 复核后写入 `data/items/*.json`，
 再运行 `build.py`；定时采集不会自动发布未经核验的说法。
-审核 issue 会先列未来日期、标题弱相关、摘要为空等风险项，再按「研究 / 指南锚点候选」、
-「PubMed 趋势雷达」、「播客 / 视频 / 博客发现来源」分组。`anchor` 表示可作证据依据，
+审核 issue 会先列未来日期、标题弱相关、摘要为空等风险项，再按「官方事实页 / 指南常青候选」、
+「PubMed 研究 / 指南锚点」、「PubMed 趋势雷达」、「可选发现来源」分组。`anchor` 表示可作证据依据，
 不表示选题自动相关；仍需人工或 AI 判断是否值得入库。
 
 ## Agent 接入

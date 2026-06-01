@@ -1,0 +1,22 @@
+{
+  "title": "没有症状，也可能值得筛查糖尿病前期和 2 型糖尿病",
+  "source": "USPSTF · 糖尿病前期和 2 型糖尿病筛查 B 级推荐",
+  "source_url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/screening-for-prediabetes-and-type-2-diabetes",
+  "date": "2021-08-24",
+  "category": "代谢",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "USPSTF 建议为部分没有症状、但存在超重或肥胖的成年人筛查糖尿病前期和 2 型糖尿病。筛查价值不只在于发现疾病，也在于识别可以通过有效预防干预降低风险的人群。",
+  "slug": "uspstf-prediabetes-type2-screening",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "source_published_at": "2021-08-24",
+  "conclusion": "没有症状不代表无需关注：部分有超重或肥胖的成年人值得筛查糖尿病前期和 2 型糖尿病。",
+  "population": "35 至 70 岁、存在超重或肥胖、且尚无糖尿病症状的成年人。该条依据美国 USPSTF 推荐。",
+  "caveats": "这是美国预防筛查建议，其他地区应结合本地指南。年龄、家族史、妊娠糖尿病史等因素可能影响个体筛查决策。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/screening-for-prediabetes-and-type-2-diabetes"
+  ]
+}

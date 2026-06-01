@@ -6,9 +6,61 @@
   "disclaimer": "本数据为科普整理，非医疗建议；不提供具体剂量与个体化诊疗。请点击 detail_url / evidence_source_urls 回原文核对。",
   "usage_note": "verification_status=verified 的条目有独立研究/指南支撑，可称『已核验』；=curated_pending_evidence 的是专家/播客梳理、原文证据链待补，**不可**冒充『已核验』，须标明『专家梳理·证据待补』。evidence_source_urls 为真研究链接，discovery_source_url 是『在哪听到』（非证据）。",
   "generated_at": "2026-06-01",
-  "count": 22,
-  "verified_count": 14,
+  "count": 30,
+  "verified_count": 22,
   "claims": [
+    {
+      "slug": "nccih-melatonin-sleep-boundaries",
+      "title": "褪黑素不是万能助眠药：不同睡眠问题要分开看",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/nccih-melatonin-sleep-boundaries.html",
+      "category": "睡眠",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "evidence": "guideline",
+      "evidence_label": "指南",
+      "conclusion": "褪黑素对部分睡眠问题可能有帮助，但不是适用于所有失眠的通用答案。",
+      "population": "存在时差、昼夜节律相关睡眠问题或考虑使用褪黑素的人群；具体适用范围见 NCCIH 原文。",
+      "caveats": "长期安全性信息不足。儿童、孕哺期人群和正在使用药物者不应仅凭科普自行决定，长期失眠也需要排查原因。",
+      "summary": "NIH NCCIH 的事实页指出，褪黑素对部分睡眠问题可能有帮助，但不能把所有失眠混为一谈。短期使用对多数人似乎相对安全，长期安全性仍缺少足够信息，儿童、孕哺期和正在用药者尤其需要谨慎。",
+      "source": "NIH NCCIH · 褪黑素事实页",
+      "evidence_source_urls": [
+        "https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know"
+      ],
+      "featured": true,
+      "date": "2026-06-01",
+      "source_published_at": "",
+      "reviewed_at": "2026-06-01"
+    },
+    {
+      "slug": "nih-vitamin-d-supplement-boundaries",
+      "title": "维生素 D 对骨骼重要，但不是所有人都需要盲目补充",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/nih-vitamin-d-supplement-boundaries.html",
+      "category": "补剂",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "evidence": "guideline",
+      "evidence_label": "指南",
+      "conclusion": "维生素 D 对骨骼健康重要，但“重要”不等于“所有人都应该自行长期补充”。",
+      "population": "一般人群；较少接触阳光、饮食来源不足或存在特定风险的人群更值得关注，具体见 NIH ODS 原文。",
+      "caveats": "是否缺乏、是否需要补充以及补充方式，应结合个体情况判断。补充剂也可能过量，不应把通用科普当作个人用量建议。",
+      "summary": "NIH ODS 事实页说明，维生素 D 有助于身体吸收钙，并支持骨骼、肌肉、神经和免疫功能。维生素 D 可以来自日晒、食物和补充剂；是否容易摄入不足、是否需要补充，要结合个体风险判断。",
+      "source": "NIH ODS · 维生素 D 消费者事实页",
+      "evidence_source_urls": [
+        "https://ods.od.nih.gov/factsheets/VitaminD-Consumer/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://ods.od.nih.gov/factsheets/VitaminD-Consumer/"
+      ],
+      "featured": false,
+      "date": "2026-06-01",
+      "source_published_at": "",
+      "reviewed_at": "2026-06-01"
+    },
     {
       "slug": "creatine-postmenopausal-muscle",
       "title": "绝经后女性补肌酸：小幅长肌力，且安全",
@@ -415,6 +467,32 @@
       "reviewed_at": "2026-05-31"
     },
     {
+      "slug": "who-healthy-diet-baseline",
+      "title": "健康饮食不是追一种超级食物，而是看整体结构",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-healthy-diet-baseline.html",
+      "category": "营养",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "evidence": "guideline",
+      "evidence_label": "指南",
+      "conclusion": "健康饮食首先看长期整体结构，不靠某一种食物或补充剂解决问题。",
+      "population": "一般人群；婴幼儿、孕产期、慢病患者和有特殊营养需求者需要结合个体情况。",
+      "caveats": "这是公共健康原则，不替代个体化饮食建议。具体食物选择还会受到文化、可获得性、疾病状态和过敏情况影响。",
+      "summary": "WHO 将健康饮食概括为充足、多样、平衡和适度。重点不是追逐单一食物，而是整体上增加蔬果、全谷物和膳食纤维来源，并限制高盐、高游离糖和不健康脂肪较多的食物。",
+      "source": "WHO · 健康饮食事实页",
+      "evidence_source_urls": [
+        "https://www.who.int/news-room/fact-sheets/detail/healthy-diet"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://www.who.int/news-room/fact-sheets/detail/healthy-diet"
+      ],
+      "featured": true,
+      "date": "2026-01-26",
+      "source_published_at": "2026-01-26",
+      "reviewed_at": "2026-06-01"
+    },
+    {
       "slug": "seed-oils",
       "title": "种子油真有那么坏吗？一次把证据捋清",
       "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/seed-oils.html",
@@ -463,6 +541,32 @@
       "date": "2026-01-01",
       "source_published_at": "2026-05-08",
       "reviewed_at": "2026-05-31"
+    },
+    {
+      "slug": "who-adult-bmi-boundaries",
+      "title": "BMI 能筛查超重和肥胖，但不能单独概括一个人的健康",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-adult-bmi-boundaries.html",
+      "category": "代谢",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "evidence": "guideline",
+      "evidence_label": "指南",
+      "conclusion": "BMI 是识别成人超重和肥胖的常用筛查指标，但不能单独概括个人健康风险。",
+      "population": "成人；儿童和青少年不能直接套用成人阈值，需要按年龄和生长情况判断。",
+      "caveats": "BMI 不是完整诊断，也不直接反映脂肪分布或身体组成。个人风险判断应结合其他指标和专业评估。",
+      "summary": "WHO 对成人超重和肥胖提供了通用 BMI 阈值，同时明确儿童和青少年需要结合年龄判断。BMI 适合做群体筛查和初步识别，但个体健康风险仍需要结合腰围、代谢指标、身体组成和临床情况评估。",
+      "source": "WHO · 超重和肥胖事实页",
+      "evidence_source_urls": [
+        "https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight"
+      ],
+      "featured": false,
+      "date": "2025-12-08",
+      "source_published_at": "2025-12-08",
+      "reviewed_at": "2026-06-01"
     },
     {
       "slug": "exercise-intensity-longevity",
@@ -519,6 +623,58 @@
       "reviewed_at": "2026-05-31"
     },
     {
+      "slug": "uspstf-osteoporosis-screening-women",
+      "title": "骨质疏松筛查：65 岁以上女性应优先关注",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/uspstf-osteoporosis-screening-women.html",
+      "category": "骨骼",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "evidence": "guideline",
+      "evidence_label": "指南",
+      "conclusion": "65 岁及以上女性应优先关注骨质疏松筛查；较年轻绝经后女性需要结合骨折风险评估。",
+      "population": "65 岁及以上女性，以及有骨质疏松风险因素的较年轻绝经后女性。该条依据美国 USPSTF 推荐。",
+      "caveats": "男性常规筛查的净收益证据仍不足。不同地区的筛查路径可能不同，个体决策应结合本地指南和临床风险。",
+      "summary": "USPSTF 建议为 65 岁及以上女性筛查骨质疏松，以预防骨质疏松性骨折；65 岁以下绝经后女性如果骨折风险升高，也应评估是否筛查。对于男性，现有证据仍不足以给出同等明确的常规筛查建议。",
+      "source": "USPSTF · 骨质疏松筛查推荐",
+      "evidence_source_urls": [
+        "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/osteoporosis-screening"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/osteoporosis-screening"
+      ],
+      "featured": true,
+      "date": "2025-01-14",
+      "source_published_at": "2025-01-14",
+      "reviewed_at": "2026-06-01"
+    },
+    {
+      "slug": "who-physical-activity-baseline",
+      "title": "运动不是非得练到很狠：动起来就比完全不动好",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-physical-activity-baseline.html",
+      "category": "运动",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "evidence": "guideline",
+      "evidence_label": "指南",
+      "conclusion": "运动不是“做满一套才算”：任何量的身体活动都比完全不动更好，日常活动也算。",
+      "population": "儿童、青少年、成人、老年人，以及孕产期女性和慢病或残障人群；不同人群的具体建议见 WHO 原文。",
+      "caveats": "这是公共健康基线，不是个体运动处方。有基础疾病、疼痛或运动风险者，应根据专业评估调整方式和强度。",
+      "summary": "WHO 的身体活动事实页强调：任何量的身体活动都比完全不动更好，所有活动都算；不同年龄段都应减少久坐。规律活动与更好的身心健康相关，而活动不足与更高的慢病和死亡风险相关。",
+      "source": "WHO · 身体活动事实页",
+      "evidence_source_urls": [
+        "https://www.who.int/news-room/fact-sheets/detail/physical-activity"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://www.who.int/news-room/fact-sheets/detail/physical-activity"
+      ],
+      "featured": true,
+      "date": "2024-06-26",
+      "source_published_at": "2024-06-26",
+      "reviewed_at": "2026-06-01"
+    },
+    {
       "slug": "aging-pace-test",
       "title": "你的「衰老速度」其实能测",
       "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/aging-pace-test.html",
@@ -568,6 +724,58 @@
       "date": "2022-10-07",
       "source_published_at": "2022-10-07",
       "reviewed_at": "2026-05-31"
+    },
+    {
+      "slug": "uspstf-prediabetes-type2-screening",
+      "title": "没有症状，也可能值得筛查糖尿病前期和 2 型糖尿病",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/uspstf-prediabetes-type2-screening.html",
+      "category": "代谢",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "evidence": "guideline",
+      "evidence_label": "指南",
+      "conclusion": "没有症状不代表无需关注：部分有超重或肥胖的成年人值得筛查糖尿病前期和 2 型糖尿病。",
+      "population": "35 至 70 岁、存在超重或肥胖、且尚无糖尿病症状的成年人。该条依据美国 USPSTF 推荐。",
+      "caveats": "这是美国预防筛查建议，其他地区应结合本地指南。年龄、家族史、妊娠糖尿病史等因素可能影响个体筛查决策。",
+      "summary": "USPSTF 建议为部分没有症状、但存在超重或肥胖的成年人筛查糖尿病前期和 2 型糖尿病。筛查价值不只在于发现疾病，也在于识别可以通过有效预防干预降低风险的人群。",
+      "source": "USPSTF · 糖尿病前期和 2 型糖尿病筛查 B 级推荐",
+      "evidence_source_urls": [
+        "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/screening-for-prediabetes-and-type-2-diabetes"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/screening-for-prediabetes-and-type-2-diabetes"
+      ],
+      "featured": false,
+      "date": "2021-08-24",
+      "source_published_at": "2021-08-24",
+      "reviewed_at": "2026-06-01"
+    },
+    {
+      "slug": "uspstf-hypertension-screening-confirmation",
+      "title": "一次血压高，不等于已经确诊高血压",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/uspstf-hypertension-screening-confirmation.html",
+      "category": "心肺",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "evidence": "guideline",
+      "evidence_label": "指南",
+      "conclusion": "一次诊室血压偏高不能直接等同于确诊；开始治疗前应通过诊室外测量确认。",
+      "population": "18 岁及以上、尚未确诊高血压的成年人。该条依据美国 USPSTF 推荐，其他地区请结合本地指南。",
+      "caveats": "这是筛查和确认诊断的原则，不是自行判断或调整用药的依据。已经出现明显不适或极高读数时，应及时就医。",
+      "summary": "USPSTF 建议为没有已知高血压的成年人做血压筛查，并在开始治疗前通过诊室外血压测量确认诊断。一次测量异常值得重视，但不能脱离重复测量和实际场景直接下结论。",
+      "source": "USPSTF · 成人高血压筛查 A 级推荐",
+      "evidence_source_urls": [
+        "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/hypertension-in-adults-screening"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/hypertension-in-adults-screening"
+      ],
+      "featured": true,
+      "date": "2021-04-27",
+      "source_published_at": "2021-04-27",
+      "reviewed_at": "2026-06-01"
     }
   ]
 }

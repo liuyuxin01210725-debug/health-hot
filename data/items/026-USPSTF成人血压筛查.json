@@ -1,0 +1,22 @@
+{
+  "title": "一次血压高，不等于已经确诊高血压",
+  "source": "USPSTF · 成人高血压筛查 A 级推荐",
+  "source_url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/hypertension-in-adults-screening",
+  "date": "2021-04-27",
+  "category": "心肺",
+  "featured": true,
+  "rank": 9,
+  "evidence": "guideline",
+  "summary": "USPSTF 建议为没有已知高血压的成年人做血压筛查，并在开始治疗前通过诊室外血压测量确认诊断。一次测量异常值得重视，但不能脱离重复测量和实际场景直接下结论。",
+  "slug": "uspstf-hypertension-screening-confirmation",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "source_published_at": "2021-04-27",
+  "conclusion": "一次诊室血压偏高不能直接等同于确诊；开始治疗前应通过诊室外测量确认。",
+  "population": "18 岁及以上、尚未确诊高血压的成年人。该条依据美国 USPSTF 推荐，其他地区请结合本地指南。",
+  "caveats": "这是筛查和确认诊断的原则，不是自行判断或调整用药的依据。已经出现明显不适或极高读数时，应及时就医。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/hypertension-in-adults-screening"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "title": "骨质疏松筛查：65 岁以上女性应优先关注",
+  "source": "USPSTF · 骨质疏松筛查推荐",
+  "source_url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/osteoporosis-screening",
+  "date": "2025-01-14",
+  "category": "骨骼",
+  "featured": true,
+  "rank": 8,
+  "evidence": "guideline",
+  "summary": "USPSTF 建议为 65 岁及以上女性筛查骨质疏松，以预防骨质疏松性骨折；65 岁以下绝经后女性如果骨折风险升高，也应评估是否筛查。对于男性，现有证据仍不足以给出同等明确的常规筛查建议。",
+  "slug": "uspstf-osteoporosis-screening-women",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "source_published_at": "2025-01-14",
+  "conclusion": "65 岁及以上女性应优先关注骨质疏松筛查；较年轻绝经后女性需要结合骨折风险评估。",
+  "population": "65 岁及以上女性，以及有骨质疏松风险因素的较年轻绝经后女性。该条依据美国 USPSTF 推荐。",
+  "caveats": "男性常规筛查的净收益证据仍不足。不同地区的筛查路径可能不同，个体决策应结合本地指南和临床风险。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/osteoporosis-screening"
+  ]
+}

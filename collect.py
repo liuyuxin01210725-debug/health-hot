@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-收集引擎 v3：从 data/sources.json 抓 RSS / YouTube / PubMed，去重，产出"候选条目"。
+收集引擎 v4：从 data/sources.json 抓官方精选目录 / RSS / YouTube / PubMed，去重，产出"候选条目"。
+
+v4 新增官方精选目录（type: official_catalog）：
+  仅接受白名单政府 / 官方机构域名下的具体事实页或指南页，作为 anchor 候选。
 
 v3 新增 PubMed 源（type: pubmed）：
   esearch 按主题找最新论文 PMID → efetch 抓免费摘要 → 候选。
@@ -27,6 +30,14 @@ PER_SOURCE = 5
 DESC_CHARS = 2500
 FETCH_ATTEMPTS = 3
 TRANSIENT_HTTP_CODES = {429, 500, 502, 503, 504}
+OFFICIAL_HOSTS = {
+    "who.int", "www.who.int",
+    "uspreventiveservicestaskforce.org", "www.uspreventiveservicestaskforce.org",
+    "ods.od.nih.gov",
+    "nccih.nih.gov", "www.nccih.nih.gov",
+    "cdc.gov", "www.cdc.gov",
+    "nhc.gov.cn", "www.nhc.gov.cn",
+}
 
 ATOM = '{http://www.w3.org/2005/Atom}'
 MEDIA = '{http://search.yahoo.com/mrss/}'
@@ -249,6 +260,42 @@ def relevance_hint(source, entry):
     return 'title_match' if any(isinstance(term, str) and term.lower() in title for term in terms) else 'query_match_only'
 
 
+def official_catalog_entries(source):
+    """官方精选目录：只接收白名单官方域名下的具体页面。
+
+    目录是编辑层的常青问题池，不自动把网页内容发布为结论。它进入审核收件箱后仍要人工/AI
+    摘要并写入 data/items/*.json，再走 build.py 发布闸门。
+    """
+    if source.get('role') != 'anchor':
+        raise ValueError("official_catalog 的 role 必须为 anchor")
+    entries = source.get('entries')
+    if not isinstance(entries, list) or not entries:
+        raise ValueError("official_catalog 缺 entries 数组")
+    out = []
+    for index, entry in enumerate(entries, start=1):
+        if not isinstance(entry, dict):
+            raise ValueError(f"official_catalog 第 {index} 项不是对象")
+        url = entry.get('url', '')
+        try:
+            p = urllib.parse.urlsplit(url)
+        except Exception as ex:
+            raise ValueError(f"official_catalog 第 {index} 项 URL 非法：{url!r}") from ex
+        host = (p.hostname or '').lower()
+        if (p.scheme != 'https' or host not in OFFICIAL_HOSTS or p.username is not None
+                or p.password is not None or len(p.path.strip('/')) < 2):
+            raise ValueError(f"official_catalog 第 {index} 项不是白名单官方具体页面：{url!r}")
+        title = entry.get('title', '')
+        desc = entry.get('desc', '')
+        if not isinstance(title, str) or not title.strip():
+            raise ValueError(f"official_catalog 第 {index} 项缺 title")
+        if not isinstance(desc, str) or not desc.strip():
+            raise ValueError(f"official_catalog 第 {index} 项缺 desc")
+        out.append({'title': title.strip(), 'url': url, 'published': entry.get('published', ''),
+                    'desc': desc.strip(), 'category': entry.get('category', source.get('category', '')),
+                    'evidence': 'guideline'})
+    return out
+
+
 def seen_records():
     urls, keys = set(), set()
     for f in glob.glob(os.path.join(ITEMS, '*.json')):
@@ -262,8 +309,19 @@ def seen_records():
     return urls, keys
 
 
+def select_sources(sources, args):
+    """默认只跑权威层；发现层必须显式开启，或按名称单独采集。"""
+    include_discovery = '--include-discovery' in args
+    filt = [x.lower() for x in args if x != '--include-discovery']
+    if filt:
+        return [s for s in sources if isinstance(s, dict)
+                and any(f in s.get('name', '').lower() for f in filt)]
+    if include_discovery:
+        return [s for s in sources if isinstance(s, dict)]
+    return [s for s in sources if isinstance(s, dict) and s.get('default_enabled', True) is not False]
+
+
 def main():
-    filt = [x.lower() for x in sys.argv[1:]]
     try:
         cfg = json.load(open(SRC, encoding='utf-8'))
         sources = cfg.get('sources', [])
@@ -272,8 +330,7 @@ def main():
     except Exception as ex:
         print(f"[!] 读取 sources.json 失败：{ex}")
         sys.exit(1)  # 配置坏 → 退出码 1，让自动化能察觉失败（此前 return=退出码0，会被误判成功，codex 审出）
-    if filt:
-        sources = [s for s in sources if isinstance(s, dict) and any(f in s.get('name', '').lower() for f in filt)]
+    sources = select_sources(sources, sys.argv[1:])
     if not sources:
         print("[!] 没有匹配的信源，请检查筛选参数或 sources.json")
         sys.exit(1)
@@ -287,6 +344,8 @@ def main():
                 raise ValueError("source 缺 type 字段")
             if s['type'] == 'pubmed':
                 entries = fetch_pubmed(s['query'])
+            elif s['type'] == 'official_catalog':
+                entries = official_catalog_entries(s)
             elif s['type'] in ('youtube', 'rss'):
                 url = (f"https://www.youtube.com/feeds/videos.xml?channel_id={s['channel_id']}"
                        if s['type'] == 'youtube' else s['url'])
@@ -300,7 +359,12 @@ def main():
         succeeded += 1
         new = 0
         group = s.get('group', '')
-        for e in entries[:PER_SOURCE]:
+        limit = s.get('limit', PER_SOURCE)
+        if not isinstance(limit, int) or isinstance(limit, bool) or not (1 <= limit <= 30):
+            print(f"[!] {name}: 失败 — limit 必须为 1–30 的整数")
+            failed += 1
+            continue
+        for e in entries[:limit]:
             url = e.get('url', '')
             if not url or not re.match(r'^https?://', url) or url in seen:  # 采集层即拒非 http(s) 链接
                 continue
@@ -315,13 +379,14 @@ def main():
                 continue
             src = (e['journal'] + " · PubMed") if e.get('journal') else name
             rel = relevance_hint(s, e)
-            cands.append({'source': src, 'category': s.get('category', ''),
+            cands.append({'source': src, 'category': e.get('category') or s.get('category', ''),
                           'role': s.get('role', ''),
                           'evidence': e.get('evidence') or s.get('evidence', 'expert'),
                           'title': e['title'], 'source_url': url,
                           'published': e['published'], 'desc': e['desc'][:DESC_CHARS],
                           'doi': doi, 'canonical_id': cid,
                           'collection_source': name, 'collection_query': s.get('query', ''),
+                          'authority_level': s.get('authority_level', ''),
                           'relevance_hint': rel})
             seen.add(url)
             if doi:

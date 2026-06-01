@@ -1,0 +1,22 @@
+{
+  "title": "健康饮食不是追一种超级食物，而是看整体结构",
+  "source": "WHO · 健康饮食事实页",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/healthy-diet",
+  "date": "2026-01-26",
+  "category": "营养",
+  "featured": true,
+  "rank": 6,
+  "evidence": "guideline",
+  "summary": "WHO 将健康饮食概括为充足、多样、平衡和适度。重点不是追逐单一食物，而是整体上增加蔬果、全谷物和膳食纤维来源，并限制高盐、高游离糖和不健康脂肪较多的食物。",
+  "slug": "who-healthy-diet-baseline",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "source_published_at": "2026-01-26",
+  "conclusion": "健康饮食首先看长期整体结构，不靠某一种食物或补充剂解决问题。",
+  "population": "一般人群；婴幼儿、孕产期、慢病患者和有特殊营养需求者需要结合个体情况。",
+  "caveats": "这是公共健康原则，不替代个体化饮食建议。具体食物选择还会受到文化、可获得性、疾病状态和过敏情况影响。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/healthy-diet"
+  ]
+}

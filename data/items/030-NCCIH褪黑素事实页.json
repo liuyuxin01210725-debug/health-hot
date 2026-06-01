@@ -1,0 +1,21 @@
+{
+  "title": "褪黑素不是万能助眠药：不同睡眠问题要分开看",
+  "source": "NIH NCCIH · 褪黑素事实页",
+  "source_url": "https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know",
+  "date": "2026-06-01",
+  "category": "睡眠",
+  "featured": true,
+  "rank": 5,
+  "evidence": "guideline",
+  "summary": "NIH NCCIH 的事实页指出，褪黑素对部分睡眠问题可能有帮助，但不能把所有失眠混为一谈。短期使用对多数人似乎相对安全，长期安全性仍缺少足够信息，儿童、孕哺期和正在用药者尤其需要谨慎。",
+  "slug": "nccih-melatonin-sleep-boundaries",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "褪黑素对部分睡眠问题可能有帮助，但不是适用于所有失眠的通用答案。",
+  "population": "存在时差、昼夜节律相关睡眠问题或考虑使用褪黑素的人群；具体适用范围见 NCCIH 原文。",
+  "caveats": "长期安全性信息不足。儿童、孕哺期人群和正在使用药物者不应仅凭科普自行决定，长期失眠也需要排查原因。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know"
+  ]
+}
