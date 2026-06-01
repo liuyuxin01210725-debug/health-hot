@@ -1,0 +1,125 @@
+name: 每周健康候选采集
+
+on:
+  schedule:
+    # GitHub Actions cron 使用 UTC：每周一 00:00 UTC = 北京时间周一 08:00。
+    - cron: "0 0 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  collect:
+    name: 抓取候选并生成审核清单
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 配置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 抓取 RSS、YouTube 与 PubMed 候选
+        id: collect
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          python3 collect.py 2>&1 | tee /tmp/health_candidates.log
+
+      - name: 生成审核摘要
+        if: always()
+        env:
+          COLLECTION_OUTCOME: ${{ steps.collect.outcome }}
+          RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          candidates_file = Path("/tmp/health_candidates.json")
+          report_file = Path("/tmp/health_candidates_report.md")
+          outcome = os.environ["COLLECTION_OUTCOME"]
+          run_url = os.environ["RUN_URL"]
+
+          if candidates_file.exists():
+              candidates = json.loads(candidates_file.read_text(encoding="utf-8"))
+          else:
+              candidates = []
+
+          status = "成功" if outcome == "success" else "失败：请先查看日志，不要进入发布流程"
+          lines = [
+              "# 每周健康候选采集",
+              "",
+              f"- 状态：**{status}**",
+              f"- 新候选：**{len(candidates)} 条**",
+              f"- Actions 运行记录：[打开本次运行]({run_url})",
+              "- 完整文件：在本次运行页面下载 `health-candidates` Artifact",
+              "",
+              "## 候选预览",
+              "",
+          ]
+          if not candidates:
+              lines.append("本次没有新增候选。")
+          for index, item in enumerate(candidates[:30], start=1):
+              title = str(item.get("title", "")).replace("\n", " ").strip()
+              source = str(item.get("source", "")).replace("\n", " ").strip()
+              published = str(item.get("published", "")).replace("\n", " ").strip()
+              role = str(item.get("role", "")).replace("\n", " ").strip()
+              evidence = str(item.get("evidence", "")).replace("\n", " ").strip()
+              url = str(item.get("source_url", "")).replace("\n", "").strip()
+              lines.append(f"{index}. **{title}**")
+              lines.append(f"   `{source}` · `{published or '日期待核'}` · `{role}` · `{evidence}`")
+              if url:
+                  lines.append(f"   原文：{url}")
+          if len(candidates) > 30:
+              lines.extend(["", f"另有 {len(candidates) - 30} 条，请下载 Artifact 查看。"])
+
+          report = "\n".join(lines) + "\n"
+          report_file.write_text(report, encoding="utf-8")
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
+              summary.write(report)
+          PY
+
+      - name: 保存候选与采集日志
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: health-candidates
+          path: |
+            /tmp/health_candidates.json
+            /tmp/health_candidates.log
+            /tmp/health_candidates_report.md
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: 刷新 GitHub 审核收件箱
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          issue_number="$(
+            gh issue list \
+              --state open \
+              --search '"每周健康候选采集" in:title' \
+              --json number,title \
+              --jq '.[] | select(.title == "每周健康候选采集") | .number' \
+              | head -n 1
+          )"
+          if [ -n "$issue_number" ]; then
+            gh issue edit "$issue_number" --body-file /tmp/health_candidates_report.md
+          else
+            gh issue create --title "每周健康候选采集" --body-file /tmp/health_candidates_report.md
+          fi
+
+      - name: 采集不完整时阻止后续发布
+        if: steps.collect.outcome != 'success'
+        run: |
+          echo "部分或全部信源采集失败。候选与日志已保存，但本次任务按失败处理。"
+          exit 1
