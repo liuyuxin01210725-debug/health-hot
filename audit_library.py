@@ -19,7 +19,7 @@ DEFAULT_OUT = "/tmp/health_library_audit.json"
 DEFAULT_REPORT = "/tmp/health_library_audit_report.md"
 DEFAULT_STALE_DAYS = 180
 UA = {"User-Agent": "health-hot-library-audit/1.0 (+https://github.com/liuyuxin01210725-debug/health-hot)"}
-RESTRICTED_CODES = {401, 403, 429}
+RESTRICTED_CODES = {401, 403, 412, 429, 445}
 BROKEN_CODES = {404, 410}
 
 

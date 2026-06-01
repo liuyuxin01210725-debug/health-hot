@@ -105,7 +105,8 @@ _STUDY_HOSTS = ("pubmed.ncbi.nlm.nih.gov", "ncbi.nlm.nih.gov", "doi.org",
 _GUIDELINE_HOSTS = ("who.int", "www.who.int", "uspreventiveservicestaskforce.org",
                     "www.uspreventiveservicestaskforce.org", "ods.od.nih.gov",
                     "nccih.nih.gov", "www.nccih.nih.gov", "cdc.gov", "www.cdc.gov",
-                    "nhc.gov.cn", "www.nhc.gov.cn")
+                    "nhc.gov.cn", "www.nhc.gov.cn", "chinacdc.cn", "www.chinacdc.cn",
+                    "en.chinacdc.cn")
 
 
 def _is_study_url(u):

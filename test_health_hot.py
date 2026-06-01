@@ -149,6 +149,15 @@ class CollectTests(unittest.TestCase):
         self.assertEqual(entries[0]["evidence"], "guideline")
         self.assertEqual(entries[0]["category"], "运动")
 
+    def test_china_cdc_guideline_page_is_an_evidence_anchor(self):
+        url = "https://en.chinacdc.cn/health_topics/nutrition_health/202206/t20220616_259702.html"
+        entries = collect.official_catalog_entries({
+            "role": "anchor",
+            "entries": [{"title": "Dietary guidelines", "url": url, "desc": "China CDC guideline"}],
+        })
+        self.assertEqual(entries[0]["evidence"], "guideline")
+        self.assertTrue(build._is_study_url(url))
+
     def test_official_catalog_rejects_untrusted_or_spoofed_page(self):
         for url in (
             "https://example.com/news-room/fact-sheets/detail/physical-activity",
@@ -220,6 +229,15 @@ class BuildFailSafeTests(unittest.TestCase):
 
 
 class LibraryAuditTests(unittest.TestCase):
+    def test_audit_treats_official_site_antibot_codes_as_restricted(self):
+        for code in (412, 445):
+            with self.subTest(code=code), mock.patch.object(
+                audit_library.urllib.request,
+                "urlopen",
+                side_effect=urllib.error.HTTPError("https://example.com", code, "restricted", {}, None),
+            ):
+                self.assertEqual(audit_library.check_url("https://example.com")["status"], "restricted")
+
     def test_audit_reports_pending_official_and_review_due(self):
         item = valid_item()
         item["reviewed_at"] = "2026-01-01"

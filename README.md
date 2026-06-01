@@ -36,8 +36,13 @@ python3 collect.py 'PubMed·肌酸'         # 只抓名字匹配的信源
 候选写入 `/tmp/health_candidates.json`。PubMed 窄主题雷达会附带 `relevance_hint`：
 `title_match` 可优先看，`query_match_only` 表示查询命中但标题未命中主题词，必须人工/AI 再判断。
 候选提升为正式条目时应保留 `canonical_id`，用于跨次采集去重。
-官方精选目录为常青问题池，只接受 WHO、USPSTF、NIH ODS、NIH NCCIH 等白名单官方域名下的具体事实页或
-指南页。`collect.py` 在代码中再次校验域名，不能只靠配置文件把任意网站标成官方锚点。
+官方精选目录为常青问题池，只接受 WHO、USPSTF、NIH ODS、NIH NCCIH、国家卫健委、中国疾控中心等
+白名单官方域名下的具体事实页或指南页。`collect.py` 在代码中再次校验域名，不能只靠配置文件把任意
+网站标成官方锚点。
+
+创作者播客、YouTube 和博客默认关闭，但保留为可选发现层。原因不是否定它们的选题价值，而是它们的
+更新频率高、重复与观点性内容多，不能自动作为证据依据。需要扩展选题时可运行
+`python3 collect.py --include-discovery`；进入正式条目前仍必须回到研究、指南或官方原文补齐证据链。
 
 GitHub Actions 工作流位于 `.github/workflows/collect-candidates.yml`。它也支持在 Actions 页面手动触发。
 每次运行会保存 `health-candidates` Artifact（候选 JSON、采集日志、审核摘要、馆藏审计），并新建或刷新

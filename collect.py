@@ -37,6 +37,7 @@ OFFICIAL_HOSTS = {
     "nccih.nih.gov", "www.nccih.nih.gov",
     "cdc.gov", "www.cdc.gov",
     "nhc.gov.cn", "www.nhc.gov.cn",
+    "chinacdc.cn", "www.chinacdc.cn", "en.chinacdc.cn",
 }
 
 ATOM = '{http://www.w3.org/2005/Atom}'

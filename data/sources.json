@@ -73,6 +73,33 @@
         {"title": "Omega-3 补充剂：常见健康说法需要分开核验", "url": "https://www.nccih.nih.gov/health/omega3-supplements-what-you-need-to-know", "category": "补剂", "desc": "NIH NCCIH 事实页。核验：Omega-3 补充剂对不同健康结局的证据、安全性和相互作用。"}
       ]
     },
+    {
+      "name": "国家卫健委·本土健康基线与指南",
+      "type": "official_catalog",
+      "role": "anchor",
+      "authority_level": "official",
+      "category": "其他",
+      "evidence": "guideline",
+      "limit": 10,
+      "entries": [
+        {"title": "中国公民健康素养 66 条：哪些基础健康能力值得长期核对", "url": "https://www.nhc.gov.cn/xcs/c100123/202405/73a4927142f34152abed875634a3c13b.shtml", "published": "2024-05-30", "category": "其他", "desc": "国家卫生健康委《中国公民健康素养——基本知识与技能（2024年版）》。核验：预防、就医、用药、急救、慢性病管理和健康生活方式等本土基础健康能力。"},
+        {"title": "高血压、糖尿病与高脂血症食养：不能只靠单一食物", "url": "https://www.nhc.gov.cn/sps/c100088/202301/f01895a06c5349ef999f25da833c166d.shtml", "published": "2023-01-18", "category": "营养", "desc": "国家卫生健康委 2023 年 4 项食养指南。核验：成人高脂血症、高血压、糖尿病与儿童青少年生长迟缓的食养建议和适用边界。"},
+        {"title": "高尿酸、肥胖与慢性肾脏病食养：需要区分适用人群", "url": "https://www.nhc.gov.cn/wjw/c100378/202402/afd5dda4bd6745fda10aad8d43a16369.shtml", "published": "2024-02-08", "category": "营养", "desc": "国家卫生健康委 2024 年 4 项食养指南。核验：成人高尿酸血症与痛风、成人肥胖、儿童青少年肥胖、成人慢性肾脏病的食养建议和疾病边界。"},
+        {"title": "慢性病管理：营养与运动是治疗支持，不是替代治疗", "url": "https://www.nhc.gov.cn/ylyjs/gzdt/202407/256b4eb8398440a8811344c7be50a333.shtml", "published": "2024-07-01", "category": "代谢", "desc": "国家卫生健康委《高血压等慢性病营养和运动指导原则（2024年版）》。核验：高血压、高血糖、高脂血症和高尿酸血症人群的营养与运动干预边界。"}
+      ]
+    },
+    {
+      "name": "中国疾控中心·居民膳食指南",
+      "type": "official_catalog",
+      "role": "anchor",
+      "authority_level": "official",
+      "category": "营养",
+      "evidence": "guideline",
+      "limit": 10,
+      "entries": [
+        {"title": "中国居民膳食指南：健康饮食首先看八项核心建议", "url": "https://en.chinacdc.cn/health_topics/nutrition_health/202206/t20220616_259702.html", "published": "2022-06-16", "category": "营养", "desc": "中国疾病预防控制中心发布的《中国居民膳食指南（2022）》八项核心建议。核验：饮食多样、体重管理、蔬果全谷、动物性食物、少盐少油、规律进餐和食品安全等本土基线。"}
+      ]
+    },
 
     {"name": "PubMed·Cochrane系统综述", "type": "pubmed", "role": "anchor", "query": "Cochrane Database Syst Rev[jour] AND (exercise[ti] OR nutrition[ti] OR diet[ti] OR sleep[ti] OR supplement*[ti] OR vitamin*[ti])", "title_terms": ["exercise", "nutrition", "diet", "sleep", "supplement", "vitamin"], "category": "综述", "evidence": "unknown"},
     {"name": "PubMed·健康指南", "type": "pubmed", "role": "anchor", "query": "guideline[pt] AND humans[mh] AND (exercise[ti] OR nutrition[ti] OR diet[ti] OR sleep[ti] OR obesity[ti] OR hypertension[ti] OR diabetes[ti])", "title_terms": ["exercise", "nutrition", "diet", "sleep", "obesity", "hypertension", "diabetes"], "category": "指南", "evidence": "unknown"},
@@ -97,7 +124,7 @@
     "NCCIH Herbs at a Glance: https://www.nccih.nih.gov/health/herbsataglance",
     "WHO Fact Sheets: https://www.who.int/news-room/fact-sheets",
     "USPSTF A/B 推荐(标注适用地区): https://www.uspreventiveservicestaskforce.org/",
-    "卫健委 健康素养66条 / 中国疾控(本土基线，无 RSS 需手录或 fetch-skill)",
+    "国家卫健委 / 中国疾控中心本土基线已进入 official_catalog；后续继续扩充具体指南页",
     "中文解释层(丁香医生/卓正/果壳)——只作通俗解释，不替代原始依据"
   ],
   "_未来": [
