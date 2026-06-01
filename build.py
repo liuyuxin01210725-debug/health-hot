@@ -261,54 +261,99 @@ def fmt(s):
     return re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', e(s))
 
 
-def ev_badge(it):
-    ev = it.get("evidence", "")
-    return f'<span class="ev ev-{e(ev)}">{EV_LABEL.get(ev, e(ev))}</span>' if ev else ""
+EVIDENCE_SCORE = {"rct": 7, "meta": 6, "guideline": 5, "observational": 4,
+                  "expert": 3, "blogger": 2, "anecdote": 1}
+EVIDENCE_ABOUT = {"rct": "随机对照试验", "meta": "荟萃 / 系统综述", "guideline": "权威机构指南",
+                  "observational": "观察性研究", "expert": "专家观点梳理",
+                  "blogger": "科普博主", "anecdote": "个案 / 轶事"}
 
 
-def ev_legend():
-    """证据强度图例：给不懂术语的访客一眼看懂徽章含义、以及强弱次序。"""
-    order = ["rct", "meta", "guideline", "observational", "expert", "blogger", "anecdote"]
-    short = {"rct": "随机对照", "meta": "荟萃", "guideline": "指南", "observational": "观察性",
-             "expert": "专家观点", "blogger": "博主", "anecdote": "个例"}
-    chips = "".join(f'<span class="lg-item"><span class="ev ev-{k}">{EV_LABEL[k]}</span>{short[k]}</span>'
-                    for k in order)
-    return f'<div class="ev-legend"><span class="lg-lead">证据强度（强 → 弱）</span>{chips}</div>'
+def trust_badge(status):
+    """维度 A：二元信任分层。待补是诚实的不确定，不渲染成错误或警告。"""
+    if status == "verified":
+        return '<span class="trust verified"><span class="seal">✓</span>已核验</span>'
+    return '<span class="trust pending"><span class="seal"></span>专家梳理 · 证据待补</span>'
 
 
-def vs_badge(it):
-    """信任分层徽章：verified=已核验（绿）/ curated=专家梳理待补（琥珀），让访客一眼分清。"""
-    vs = verification_status(it)
-    if vs == "verified":
-        return '<span class="vs vs-ok" title="有独立研究/指南支撑">✓ 已核验</span>'
-    return '<span class="vs vs-pend" title="专家或播客梳理，原文证据链待补">◔ 专家梳理·证据待补</span>'
+def strength_meter(evidence, show_label=True):
+    """维度 B：七级证据强度。视觉使用中性石墨，服从于信任徽章。"""
+    n = EVIDENCE_SCORE.get(evidence, 0)
+    bars = "".join('<i class="on"></i>' if i <= n else '<i></i>' for i in range(1, 8))
+    label = (f'<span class="lab">证据 <b>{e(EV_LABEL.get(evidence, evidence))}</b></span>'
+             if show_label else "")
+    return f'<span class="strength"><span class="bars">{bars}</span>{label}</span>'
 
 
-def meta_row(it):
-    return (f'<div class="meta"><span class="cat">{e(it.get("category",""))}</span>'
-            f'{vs_badge(it)}{ev_badge(it)}<span class="src">{e(it.get("source",""))}</span>'
-            f'<span class="date">复核 {e(it.get("reviewed_at") or it.get("date",""))}</span>'
-            f'{("<span class=badge>✦ 精选</span>") if it.get("featured") else ""}</div>')
+def search_blob(it):
+    return e(" ".join(str(it.get(k, "")) for k in
+             ("title", "conclusion", "summary", "category", "population", "caveats")).replace("**", ""))
+
+
+def legend_strip():
+    chunks = []
+    for ev in ("rct", "meta", "observational", "expert"):
+        chunks.append(f'<span class="ls-item">{strength_meter(ev, False)}<span>{e(EV_LABEL[ev])}</span></span>')
+        if ev != "expert":
+            chunks.append('<span class="ls-sep"></span>')
+    items = "".join(chunks)
+    return (f'<div class="legend-strip"><span class="ls-title">证据强度（强→弱）</span>{items}'
+            f'<span class="ls-item" style="margin-left:auto;color:var(--faint)">个例 →</span></div>')
 
 
 def card(it):
-    """信息流卡：标题进**详情页**（不再直接跳外链），展示一句话结论。"""
-    slug = e(it.get("slug", ""))
+    """首页核验卡：信任分层为主信号，证据强度为副信号。"""
+    slug, cat = e(it.get("slug", "")), e(it.get("category", ""))
+    status = verification_status(it)
+    source_lead = "你可能在这听到" if status == "curated_pending_evidence" else "核验依据"
+    feat = " feat" if it.get("featured") else ""
+    star = '<span class="star">✦ 精选</span>' if it.get("featured") else ""
+    return (f'<a class="card{feat}" href="claims/{slug}.html">\n'
+            f'  <div class="card-top"><span class="cat">{cat}</span>{star}</div>\n'
+            f'  <div class="signal">{trust_badge(status)}{strength_meter(it.get("evidence", ""))}</div>\n'
+            f'  <h3>{e(it.get("title", ""))}</h3>\n'
+            f'  <p class="verdict">{fmt(it.get("conclusion") or it.get("summary", ""))}</p>\n'
+            f'  <div class="card-foot"><span class="src"><span class="lead">{source_lead}</span><br>'
+            f'{e(it.get("source", ""))}</span><span class="go">→</span></div>\n'
+            f'</a>')
+
+
+def list_row(it):
+    """全部页可扫读列表行：静态渲染，JS 只负责筛选和搜索。"""
     cat = e(it.get("category", ""))
-    blob = e(" ".join(str(it.get(k, "")) for k in
-             ("title", "conclusion", "summary", "category", "population", "caveats")).replace("**", ""))
-    concl = fmt(it.get("conclusion") or it.get("summary", ""))
-    return (f'<article class="card" data-cat="{cat}" data-search="{blob}">\n'
-            f'  {meta_row(it)}\n'
-            f'  <h2 class="title"><a href="claims/{slug}.html">{e(it.get("title",""))}</a></h2>\n'
-            f'  <p class="concl">{concl}</p>\n'
-            f'</article>')
+    reviewed = e((it.get("reviewed_at") or it.get("date", ""))[5:])
+    return (f'<a class="list-row" href="claims/{e(it.get("slug", ""))}.html" '
+            f'data-cat="{cat}" data-search="{search_blob(it)}">\n'
+            f'  <span class="lr-cat">{cat}</span>\n'
+            f'  <span class="lr-sig">{trust_badge(verification_status(it))}'
+            f'{strength_meter(it.get("evidence", ""), False)}</span>\n'
+            f'  <span class="lr-claim"><span class="lc-t">{e(it.get("title", ""))}</span>'
+            f'<span class="lc-v">{fmt(it.get("conclusion") or it.get("summary", ""))}</span></span>\n'
+            f'  <span class="lr-date">{reviewed}</span>\n'
+            f'</a>')
 
 
-def shell(title, active, inner, base="", extra_js="", desc="", canon=""):
+def footer(base="", narrow=False, detail=False):
+    wrap = "wrap narrow" if narrow else "wrap"
+    extra = " detail-foot" if detail else ""
+    return f'''<footer class="foot{extra}"><div class="{wrap}">
+  <div class="foot-in">
+    <div>
+      <div class="f-logo"><span class="x">✚</span>{e(SITE_TITLE)}</div>
+      <p class="f-claim">把「听来的」和「有据的」分开。每条说法可追溯、可被机器调用。</p>
+    </div>
+    <div class="f-links">
+      <div class="f-col"><h5>浏览</h5><a href="{base}index.html">精选</a><a href="{base}all.html">全部核验</a><a href="{base}about.html">关于方法论</a></div>
+      <div class="f-col"><h5>AI 接入</h5><a href="{base}index.html#ai">claims.json</a><a href="{base}index.html#ai">安装 Skill</a></div>
+    </div>
+  </div>
+  <div class="foot-bottom">本站为科普整理，<b>非医疗建议</b>；每条说法标注证据等级与来源状态，点击可回来源核对。 · {e(SITE_TITLE)} · 持续收集与查证</div>
+</div></footer>'''
+
+
+def shell(title, active, inner, base="", extra_js="", desc="", canon="", narrow_footer=False, detail=False):
     nav_items = [("精选", "index.html"), ("全部", "all.html"), ("关于", "about.html")]
     nav = "".join(
-        f'<a class="navlink{" on" if lbl == active else ""}" href="{base}{href}">{lbl}</a>'
+        f'<a class="{"on" if lbl == active else ""}" href="{base}{href}">{lbl}</a>'
         for lbl, href in nav_items)
     return f'''<!doctype html>
 <html lang="zh-CN">
@@ -329,25 +374,17 @@ def shell(title, active, inner, base="", extra_js="", desc="", canon=""):
 <meta name="twitter:description" content="{e(desc)}">
 <meta name="twitter:image" content="{e(SITE_URL)}og.png">
 <link rel="icon" href="{base}favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="{base}styles.css">
+<link rel="stylesheet" href="{base}claims.css">
 </head>
-<body>
-<header class="top">
-  <div class="bar">
-    <a class="brand" href="{base}index.html"><span class="leaf">✚</span>{e(SITE_TITLE)}<span class="tag">· 健康说法核验库</span></a>
-    <form class="search" action="{base}all.html" method="get" role="search">
-      <input type="search" name="q" placeholder="查一个说法：肌酸、种子油、间歇禁食…" aria-label="搜索">
-    </form>
-    <nav class="nav">{nav}</nav>
-  </div>
-</header>
-<main class="main">
+<body class="vfy">
+<nav class="nav"><div class="wrap nav-in">
+  <a class="logo" href="{base}index.html"><span class="x">✚</span>{e(SITE_TITLE)}<small>· 健康说法核验库</small></a>
+  <div class="nav-links">{nav}<a href="{base}index.html#ai" class="ai">🤖 AI 接入</a></div>
+</div></nav>
+<main>
 {inner}
 </main>
-<footer class="foot"><div class="bar">
-  <span>本站为科普整理，<strong>非医疗建议</strong>；每条说法标注证据等级与来源状态，点击可回来源核对。</span>
-  <span class="muted">{e(SITE_TITLE)} · 持续收集与查证</span>
-</div></footer>
+{footer(base, narrow_footer, detail)}
 {extra_js}
 </body>
 </html>'''
@@ -382,94 +419,102 @@ def ld_json(it):
 
 
 def detail_page(it, related):
-    slug = it.get("slug", "")
-    url = e(_safe_href(it.get("source_url", "")))
-    source_btn = "查看核验依据 ↗" if _is_study_url(it.get("source_url", "")) else "查看发现来源 ↗"
     ev = it.get("evidence", "")
-    fields = []
-    fields.append(f'<dt>证据强度</dt><dd>{ev_badge(it)} {e(EV_DESC.get(ev,""))}</dd>')
+    status = verification_status(it)
+    pending = status == "curated_pending_evidence"
+    fields = [f'<div class="field"><div class="fk"><span class="ico">◎</span> 证据强度说明</div>'
+              f'<p>{e(EV_DESC.get(ev, ""))}</p></div>']
     if it.get("population"):
-        fields.append(f'<dt>适用于谁</dt><dd>{fmt(it["population"])}</dd>')
+        fields.append(f'<div class="field"><div class="fk"><span class="ico">👥</span> 适用于谁</div>'
+                      f'<p>{fmt(it["population"])}</p></div>')
     if it.get("caveats"):
-        fields.append(f'<dt>需要注意</dt><dd>{fmt(it["caveats"])}</dd>')
+        fields.append(f'<div class="field note"><div class="fk"><span class="ico">△</span> 需要注意</div>'
+                      f'<p>{fmt(it["caveats"])}</p></div>')
     if it.get("summary"):
-        fields.append(f'<dt>详情</dt><dd>{fmt(it["summary"])}</dd>')
-    # 信任分层横幅：专家梳理待补证据的条目，明确告诉访客「这不是已核验结论」
-    banner = ""
-    if verification_status(it) == "curated_pending_evidence":
-        banner = ('<div class="pend-banner"><b>◔ 专家梳理 · 证据链待补</b>　'
-                  '这条来自播客 / 研究者的梳理，<b>尚未链接到独立的原始研究</b>，'
-                  '不等于「已核验」结论。请结合下方来源自行判断，我们会持续补上原文证据。</div>')
+        fields.append(f'<div class="field"><div class="fk"><span class="ico">≡</span> 详情</div>'
+                      f'<p>{fmt(it["summary"])}</p></div>')
     rel = ""
     if related:
-        links = "".join(f'<li><a href="{e(r.get("slug",""))}.html">{e(r.get("title",""))}</a>'
-                        f'<span class="rcat">{e(r.get("category",""))}</span></li>' for r in related)
-        rel = f'<section class="related"><h3>相关核验</h3><ul>{links}</ul></section>'
+        links = "".join(f'<a class="d-rel-item" href="{e(r.get("slug",""))}.html">'
+                        f'<span class="rt">{e(r.get("title",""))}</span>'
+                        f'<span class="rc">{e(r.get("category",""))}</span></a>' for r in related)
+        rel = f'<div class="d-related"><h5>相关核验</h5>{links}</div>'
     src_date = it.get("source_published_at") or it.get("date", "")
     src_lbl = e(src_date) + ("（期刊预排，未到见刊日）" if src_date and src_date > TODAY else "")
-    # 双链接：在哪听到（discovery） vs 凭什么核验（evidence）
-    # 「核验依据」只放真研究 URL（与 feed 同一把尺 _is_study_url）——误放进 evidence 的播客 URL
-    # 不会被当成研究展示，而是回落到「在哪听到」（codex 审出 HTML 与 feed 不一致）。
     evs = [u for u in (it.get("evidence_source_urls") or []) if isinstance(u, str) and _is_study_url(u)]
     nonstudy = [u for u in (it.get("evidence_source_urls") or []) if isinstance(u, str) and not _is_study_url(u)]
-    disc = it.get("discovery_source_url", "") or (nonstudy[0] if nonstudy else "")
-    dual = '<div class="dual">'
+    fallback_disc = it.get("source_url", "") if not _is_study_url(it.get("source_url", "")) else ""
+    disc = it.get("discovery_source_url", "") or (nonstudy[0] if nonstudy else "") or fallback_disc
+    dual = ""
     if disc:
-        dual += (f'<div class="dl-row"><span class="dl-k">🎧 你可能在哪听到</span>'
-                 f'<a href="{e(_safe_href(disc))}" target="_blank" rel="noopener">{e(_link_label(disc))} ↗</a></div>')
+        proof = (f'<a href="{e(_safe_href(evs[0]))}" target="_blank" rel="noopener">'
+                 f'{e(_link_label(evs[0]))}</a>') if evs else "原始研究待补"
+        proof_note = "evidence · 回答问题" if evs else "尚未补齐，不当定论"
+        proof_class = "" if evs else " 待补"
+        proof_style = "" if evs else ' style="color:var(--pd-ink)"'
+        dual = (f'<div class="dlink"><div class="dlink-head">把「听来的」和「有据的」分开</div>'
+                f'<div class="dlink-track"><div class="dnode heard">'
+                f'<div class="dn-k">🎧 你可能在这听到</div>'
+                f'<div class="dn-v"><a href="{e(_safe_href(disc))}" target="_blank" rel="noopener">'
+                f'{e(it.get("source", "") or _link_label(disc))}</a><small>discovery · 提出问题</small></div></div>'
+                f'<div class="dlink-mid"><span class="dots">····</span><span class="arrow">→</span></div>'
+                f'<div class="dnode proof{proof_class}"><div class="dn-k">🔬 支撑它的研究</div>'
+                f'<div class="dn-v"{proof_style}>{proof}<small>{proof_note}</small></div></div></div></div>')
+    evidence_links = ""
     if evs:
-        dual += ('<div class="dl-row"><span class="dl-k">🔬 核验依据</span><span class="dl-v">'
-                 + " ".join(f'<a href="{e(_safe_href(u))}" target="_blank" rel="noopener">{e(_link_label(u))} ↗</a>' for u in evs)
-                 + '</span></div>')
-    else:
-        dual += ('<div class="dl-row"><span class="dl-k">🔬 核验依据</span>'
-                 '<span class="dl-pending">见原始来源中引用的研究（待单独标注）</span></div>')
-    dual += '</div>'
-    inner = (f'<nav class="crumb"><a href="../all.html">← 全部核验</a></nav>\n'
-             f'<article class="claim">\n'
-             f'  {meta_row(it)}\n'
-             f'  <h1>{e(it.get("title",""))}</h1>\n'
-             f'  {banner}\n'
-             f'  <p class="claim-concl"><span class="lbl">一句话结论</span>{fmt(it.get("conclusion") or it.get("summary",""))}</p>\n'
-             f'  <dl class="fields">{"".join(fields)}</dl>\n'
-             f'  {dual}\n'
-             f'  <a class="src-btn" href="{url}" target="_blank" rel="noopener">{source_btn}</a>\n'
-             f'  <p class="prov">来源：{e(it.get("source",""))}'
-             f'{(" · 原文日期 " + src_lbl) if src_date else ""}'
-             f' · 本站复核 {e(it.get("reviewed_at") or TODAY)}</p>\n'
-             f'</article>\n{rel}')
+        buttons = "".join(
+            f'<a class="ev-link" href="{e(_safe_href(u))}" target="_blank" rel="noopener">'
+            f'<span class="el-ic">🔬</span><span class="el-t">核验依据 · 点回原始研究'
+            f'<small>{e(_link_label(u))}</small></span><span class="el-go">↗</span></a>' for u in evs)
+        evidence_links = f'<div class="ev-links">{buttons}</div>'
+    star = '<span class="star">✦ 精选</span>' if it.get("featured") else ""
+    inner = (f'<div class="detail-page"><a class="d-back" href="../all.html">← 全部核验</a>'
+             f'<div class="d-meta-top"><span class="cat">{e(it.get("category", ""))}</span>{star}</div>'
+             f'<h1 class="d-title">{e(it.get("title", ""))}</h1>'
+             f'<div class="d-verdict{" pend" if pending else ""}"><div class="vk">一句话结论</div>'
+             f'<p>{fmt(it.get("conclusion") or it.get("summary", ""))}</p></div>'
+             f'<div class="d-signal"><div class="row"><span class="k">信任分层</span>{trust_badge(status)}</div>'
+             f'<div class="row"><span class="k">证据强度</span>{strength_meter(ev)}</div></div>'
+             f'{dual}{"".join(fields)}{evidence_links}'
+             f'<div class="src-line">来源：{e(it.get("source", ""))}<br>'
+             f'{("原文日期 " + src_lbl + " · ") if src_date else ""}'
+             f'本站复核 {e(it.get("reviewed_at") or TODAY)}</div>{rel}'
+             f'<div class="disclaim">本站为科普整理，<b>非医疗建议</b>；每条说法标注证据等级与来源状态，'
+             f'点击可回来源核对。具体到个人，请咨询医生或专业人士。</div></div>')
     return shell(it.get("title", ""), "", inner + ld_json(it), base="../",
                  desc=(it.get("conclusion") or it.get("summary", "")),
-                 canon="claims/" + it.get("slug", "") + ".html")
+                 canon="claims/" + it.get("slug", "") + ".html", detail=True)
 
 
 def render_index(items):
     feats = sorted([it for it in items if it.get("featured")],
                    key=lambda x: x.get("rank", 0), reverse=True)
     cards = "\n".join(card(it) for it in feats) or '<p class="empty">还没有核验条目。</p>'
-    hero = (f'<section class="hero"><h1>{e(HERO_Q)}</h1>'
-            f'<p class="lead">{e(HERO_SUB)}</p>'
-            f'<form class="hero-search" action="all.html" method="get">'
-            f'<input type="search" name="q" placeholder="查一个说法：肌酸、种子油、跳绳、间歇禁食…">'
-            f'<button type="submit">查证据</button></form></section>')
-    head = (f'<div class="sec-head"><h2>重点核验</h2>'
-            f'<a class="more" href="all.html">看全部 →</a></div>')
-    agent = (f'<section class="agent-cta">'
-             f'<h2>🤖 让 AI 助手直接查本站</h2>'
-             f'<p>本站提供公开机读接口，你的 AI 助手可以区分「已核验」与「专家梳理·证据待补」，'
-             f'回答时带上证据强度和对应来源。</p>'
-             f'<div class="agent-grid">'
-             f'<div class="agent-box"><h3>数据接口</h3>'
-             f'<p>任何人可匿名抓取的 JSON feed：</p>'
-             f'<code class="agent-url">{e(SITE_URL)}claims.json</code></div>'
-             f'<div class="agent-box"><h3>安装 Skill</h3>'
-             f'<p>Claude Code：</p>'
-             f'<code class="agent-url">mkdir -p ~/.claude/skills/health-hot &amp;&amp; curl -fsSL {e(SITE_URL)}skill/SKILL.md -o ~/.claude/skills/health-hot/SKILL.md</code>'
-             f'<p>Codex：</p>'
-             f'<code class="agent-url">mkdir -p ~/.codex/skills/health-hot &amp;&amp; curl -fsSL {e(SITE_URL)}skill/SKILL.md -o ~/.codex/skills/health-hot/SKILL.md</code>'
-             f'<p><a href="skill/SKILL.md">阅读 Skill 规则 →</a></p></div>'
-             f'</div></section>')
-    return shell("精选", "精选", hero + head + ev_legend() + '<section class="cards">' + cards + '</section>' + agent,
+    hero = (f'<header class="hero"><div class="wrap"><span class="eyebrow">EVIDENCE-CHECKED · 循证核验</span>'
+            f'<h1>听到一个健康说法？<br>先查一下证据。</h1>'
+            f'<p class="lede">每条说法都标注<b>证据强度</b>、<b>适用人群</b>和<b>来源状态</b>'
+            f'——把「听来的」和「有据的」分开。</p>'
+            f'<form class="searchbox" action="all.html" method="get">'
+            f'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '
+            f'stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>'
+            f'<input type="text" name="q" placeholder="比如：肌酸伤肾吗、种子油、限时进食…">'
+            f'<button type="submit">查证据</button></form>{legend_strip()}</div></header>')
+    featured = (f'<section class="sec"><div class="wrap"><div class="sec-head"><h2>重点核验</h2>'
+                f'<a class="more" href="all.html">看全部 {len(items)} 条 →</a></div>'
+                f'<div class="grid">{cards}</div></div></section>')
+    agent = (f'<section class="sec" id="ai" style="padding-top:0"><div class="wrap"><div class="ai-band">'
+             f'<div class="ab-l"><div class="robot">🤖 第二形态 · 被 AI 调用</div><h3>让 AI 助手直接查本站</h3>'
+             f'<p>本站提供公开机读接口。你的 AI 助手可以区分「已核验」与「专家梳理·证据待补」，'
+             f'回答健康问题时带上证据强度和对应来源链接。</p></div><div class="ab-r">'
+             f'<div class="codeblk"><div class="ck">公开数据接口 · 任何人可匿名抓取</div>'
+             f'<code>{e(SITE_URL)}claims.json</code></div>'
+             f'<div class="codeblk"><div class="ck">安装 Skill（Claude Code）</div>'
+             f'<code>mkdir -p ~/.claude/skills/health-hot &amp;&amp; curl -fsSL {e(SITE_URL)}skill/SKILL.md '
+             f'-o ~/.claude/skills/health-hot/SKILL.md</code></div>'
+             f'<div class="codeblk"><div class="ck">安装 Skill（Codex）</div>'
+             f'<code>mkdir -p ~/.codex/skills/health-hot &amp;&amp; curl -fsSL {e(SITE_URL)}skill/SKILL.md '
+             f'-o ~/.codex/skills/health-hot/SKILL.md</code></div></div></div></div></section>')
+    return shell("精选", "精选", hero + featured + agent,
                  desc=HERO_SUB, canon="index.html")
 
 
@@ -481,53 +526,66 @@ def render_all(items):
             by[c] = []; cats.append(c)
         by[c].append(it)
     cats.sort(key=lambda c: -len(by[c]))
-    pills = '<button class="pill on" data-f="*">全部</button>' + "".join(
-        f'<button class="pill" data-f="{e(c)}">{e(c)}（{len(by[c])}）</button>' for c in cats)
-    sections = ""
-    for c in cats:
-        cards = "\n".join(card(it) for it in by[c])
-        sections += (f'<section class="catsec" data-cat="{e(c)}">'
-                     f'<h3 class="cat-h">{e(c)}<span class="cnt">{len(by[c])}</span></h3>'
-                     f'<div class="cards">{cards}</div></section>')
-    head = (f'<div class="sec-head"><h2>全部核验</h2>'
-            f'<span class="muted">共 {len(items)} 条 · 按主题分组</span></div>'
-            f'<div class="filters">{pills}</div>'
-            f'<p class="result-note" id="note"></p>')
+    pills = f'<button class="fchip on" data-c="all">全部<span class="ct">{len(items)}</span></button>' + "".join(
+        f'<button class="fchip" data-c="{e(c)}">{e(c)}<span class="ct">{len(by[c])}</span></button>' for c in cats)
+    rows = "\n".join(list_row(it) for it in items)
+    inner = (f'<header class="hero all-hero"><div class="wrap"><span class="eyebrow">ALL CLAIMS · 全部核验</span>'
+             f'<h1>全部核验</h1><p class="lede">一行一条，信任分层与证据强度在扫读时就能分辨。</p>'
+             f'<form class="searchbox all-search" onsubmit="event.preventDefault();applyFilters()">'
+             f'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '
+             f'stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>'
+             f'<input type="text" id="q" placeholder="搜索说法、结论或关键词…" oninput="applyFilters()">'
+             f'</form></div></header><section class="sec all-sec"><div class="wrap"><div class="controls">'
+             f'<div class="filterbar" id="filterbar">{pills}</div><span class="count" id="count"></span></div>'
+             f'<div class="listwrap"><div class="list-head"><span>主题</span><span>信任 / 强度</span>'
+             f'<span>说法 · 结论</span><span>复核</span></div><div id="list">{rows}</div>'
+             f'<div class="empty" id="empty" hidden>没有找到匹配的核验，换个关键词或主题试试。</div>'
+             f'</div></div></section>')
     js = '''<script>
-function q(){try{const m=location.search.match(/[?&]q=([^&]*)/);return m?decodeURIComponent(m[1].replace(/\\+/g,' ')).trim():'';}catch(e){return '';}}
-const cards=[...document.querySelectorAll('.card')],note=document.getElementById('note');
-let curF='*',curQ=q();const si=document.querySelector('.search input');if(si&&curQ)si.value=curQ;
-function apply(){let n=0;cards.forEach(c=>{
-  const okF=curF==='*'||c.dataset.cat===curF;
-  const okQ=!curQ||c.dataset.search.toLowerCase().includes(curQ.toLowerCase());
-  const show=okF&&okQ;c.style.display=show?'':'none';if(show)n++;});
-  document.querySelectorAll('.catsec').forEach(s=>{
-    const vis=[...s.querySelectorAll('.card')].some(c=>c.style.display!=='none');
-    s.style.display=vis?'':'none';});
-  note.textContent=curQ?('「'+curQ+'」匹配 '+n+' 条'):'';}
-document.querySelectorAll('.pill').forEach(p=>p.addEventListener('click',()=>{
-  document.querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));p.classList.add('on');curF=p.dataset.f;apply();}));
-apply();
+let activeCat='all'; const rows=[...document.querySelectorAll('.list-row')];
+const input=document.getElementById('q'), count=document.getElementById('count'), empty=document.getElementById('empty');
+const qp=new URLSearchParams(location.search).get('q'); if(qp) input.value=qp;
+function applyFilters(){const query=(input.value||'').trim().toLowerCase();let n=0;rows.forEach(r=>{
+  const show=(activeCat==='all'||r.dataset.cat===activeCat)&&(!query||r.dataset.search.toLowerCase().includes(query));
+  r.style.display=show?'':'none';if(show)n++;});count.textContent=n+' 条 · 共 '+rows.length+' 条';empty.hidden=n!==0;}
+document.getElementById('filterbar').addEventListener('click',e=>{const b=e.target.closest('.fchip');if(!b)return;
+  activeCat=b.dataset.c;document.querySelectorAll('.fchip').forEach(x=>x.classList.toggle('on',x===b));applyFilters();});
+applyFilters();
 </script>'''
-    return shell("全部", "全部", head + ev_legend() + sections, extra_js=js,
+    return shell("全部", "全部", inner, extra_js=js,
                  desc="全部健康说法核验，按主题分组，每条标注证据强度、适用人群与原始出处。", canon="all.html")
 
 
 def render_about():
-    inner = f'''<section class="hero slim"><h1>关于本站</h1>
-<p class="lead">「{e(SITE_TITLE)}」是一个<strong>健康说法核验库</strong>：把流行的健康说法逐条标出证据强度、适用人群、注意事项和来源状态。资讯流只是入口，核心是帮你分清「听来的」和「有据的」。</p></section>
-<section class="values">
-<div class="val"><h3>怎么审核</h3><p>从权威信源（健康播客 / 研究者 / PubMed）抓取 → 提炼要点 → 按 7 条规则人工/AI 复核 → 标 <code>reviewed</code> 才发布。构建前有自动闸门：未来日期、缺来源、未审核的条目不会上线。</p></div>
-<div class="val"><h3>两层信任</h3><p>有独立研究 / 指南锚点的条目标为「✓ 已核验」；播客与专家梳理若还没补齐原始证据，只标为「◔ 专家梳理·证据待补」，不能冒充定论。</p></div>
-<div class="val"><h3>证据分级</h3><p>每条标清 RCT / 荟萃 / 观察 / 专家 / 博主，不混为一谈。点进详情页能看到这条结论"凭什么"。</p></div>
-<div class="val"><h3>何时复核</h3><p>每条带「复核日期」，按约半年的节奏回头审；健康结论会过时，过时的会标出或更新。</p></div>
-<div class="val"><h3>不开处方</h3><p>涉及剂量、治疗的只讲原则、不写具体克数，不暗示治疗任何疾病。具体执行请咨询持证医生或注册营养师。</p></div>
-<div class="val"><h3>标注不确定</h3><p>小样本、早期、阴性、有争议的结论都会明确标注，不替它下定论。</p></div>
-<div class="val"><h3>如何纠错</h3><p>发现错误或更新？欢迎到 <a href="{REPO}/issues" target="_blank" rel="noopener">GitHub 仓库提 issue</a> 指正——本站代码与数据全部公开、可追溯。</p></div>
-</section>
-<p class="hint">凭什么信？不靠"我读了很多书"——靠每一条都能点回原文，你自己能核对。</p>'''
+    grades = "".join(
+        f'<div class="src-role grade-role"><span>{strength_meter(ev, False)}</span>'
+        f'<div class="role-d"><strong>{e(EV_LABEL[ev])}</strong><span>{e(EVIDENCE_ABOUT[ev])}</span></div>'
+        f'<span class="lr-date">{EVIDENCE_SCORE[ev]}/7</span></div>'
+        for ev in ("rct", "meta", "guideline", "observational", "expert", "blogger", "anecdote"))
+    inner = f'''<header class="about-h"><div class="wrap narrow"><span class="eyebrow">METHODOLOGY · 方法论</span>
+<h1>我们怎么把「听来的」<br>变成「有据的」</h1>
+<p class="lede">这个库不生产观点，它核验说法。每一条结论怎么来、证据强弱怎么分、什么时候复核、发现错了怎么改——都写在这里。</p>
+</div></header><section class="method"><div class="wrap narrow">
+<div class="method-item"><div class="mi-n">01</div><div><h3>两层信任：先分「查实了没有」</h3>
+<p>每条说法先归入两种状态之一。<b>已核验</b>：有独立的 PubMed / 官方指南 / Cochrane 研究支撑，可点回原始研究。<b>专家梳理·证据待补</b>：来自播客或专家的梳理，方向有参考价值，但原始研究链接还没补齐。我们老实标注「还没查到」，<b>这不是错误，是诚实</b>。</p></div></div>
+<div class="method-item"><div class="mi-n">02</div><div><h3>证据分级：再标「支撑它的研究有多硬」</h3>
+<p>对有研究支撑的条目，再按证据强度分七级。两个维度组合出可信度光谱：一条可以是「已核验 + Meta」，也可以是「专家梳理待补 + 专家」。</p>
+<div class="src-table about-grade">{grades}</div></div></div>
+<div class="method-item"><div class="mi-n">03</div><div><h3>双链接：你在哪听到 ≠ 凭什么相信</h3>
+<p><b>发现来源（discovery）</b>是「你可能在某播客听到这个说法」，<b>核验依据（evidence）</b>是「支撑它的研究在哪里」。<b>播客负责提出问题，研究负责回答问题</b>。</p></div></div>
+<div class="method-item"><div class="mi-n">04</div><div><h3>信源体系：三种角色，各司其职</h3><div class="src-table">
+<div class="src-role"><span class="role-tag anchor">锚点 ANCHOR</span><div class="role-d"><strong>决定结论、做核验依据</strong><span>PubMed 的 Cochrane 系统综述 / 官方指南 / 系统综述查询</span></div></div>
+<div class="src-role"><span class="role-tag discovery">发现 DISCOVERY</span><div class="role-d"><strong>只负责发现「大家在讨论什么」，不下结论</strong><span>Peter Attia、Huberman Lab、FoundMyFitness（播客 / YouTube）</span></div></div>
+<div class="src-role"><span class="role-tag radar">雷达 RADAR</span><div class="role-d"><strong>追踪新论文与趋势</strong><span>PubMed 主题查询、Bryan Johnson</span></div></div>
+</div></div></div>
+<div class="method-item"><div class="mi-n">05</div><div><h3>复核与纠错</h3>
+<p>每条都带<b>复核日期</b>，随研究更新而重新审视。发布前有自动闸门：缺来源、未来日期、伪链接、未审核的条目一律进不了线上。发现错误？欢迎通过 <a href="{REPO}/issues" target="_blank" rel="noopener"><b>GitHub issue</b></a> 指出。</p></div></div>
+<div class="method-item"><div class="mi-n">06</div><div><h3>内容红线</h3>
+<p>这是健康产品，有刚性约束：<b>不是医疗建议</b>，不开处方、不给具体剂量、不暗示治疗任何疾病；不确定的、证据弱的，明确标注，绝不替它下定论。</p></div></div>
+</div></section>'''
     return shell("关于", "关于", inner,
-                 desc="查过再信的方法论：怎么审核、证据如何分级、何时复核、如何纠错。", canon="about.html")
+                 desc="查过再信的方法论：怎么审核、证据如何分级、何时复核、如何纠错。",
+                 canon="about.html", narrow_footer=True)
 
 
 def claims_feed(items):
@@ -587,113 +645,6 @@ def claims_feed(items):
     }
 
 
-CSS = '''
-:root{
-  --bg:#f6f9f7; --panel:#ffffff; --ink:#16302a; --muted:#5f726c; --line:#e3ece8;
-  --accent:#0c7560; --accent-soft:#e6f4f0; --accent-ink:#0a5d4d;
-  --rct:#146b3f; --meta:#0c7d73; --obs:#54605c; --exp:#34619f; --blog:#5f6863;
-  --warn:#b06a2c;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
-  line-height:1.7;font-size:16px}
-a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
-.bar{max-width:920px;margin:0 auto;padding:0 22px}
-.top{background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
-.top .bar{display:flex;align-items:center;gap:16px;height:62px}
-.brand{display:flex;align-items:center;gap:7px;font-weight:800;font-size:19px;color:var(--ink);white-space:nowrap}
-.brand:hover{text-decoration:none}.brand .tag{font-weight:500;font-size:13px;color:var(--muted)}
-.leaf{display:inline-grid;place-items:center;width:25px;height:25px;border-radius:8px;background:var(--accent);color:#fff;font-size:14px}
-.search{flex:1;max-width:380px}
-.search input{width:100%;border:1px solid var(--line);background:#fbfdfc;border-radius:999px;padding:9px 15px;font-size:14px;color:var(--ink)}
-.search input:focus{outline:none;border-color:var(--accent);background:#fff}
-.nav{display:flex;gap:4px;margin-left:auto}
-.navlink{color:var(--muted);font-size:15px;padding:7px 12px;border-radius:8px}
-.navlink:hover{background:var(--accent-soft);color:var(--accent-ink);text-decoration:none}
-.navlink.on{color:var(--accent);font-weight:700}
-.main{max-width:920px;margin:0 auto;padding:8px 22px 56px}
-.hero{padding:44px 0 24px;text-align:center}.hero.slim{padding:34px 0 10px}
-.hero h1{margin:0 0 12px;font-size:30px;letter-spacing:.5px}
-.lead{margin:0 auto 22px;color:var(--muted);font-size:16px;max-width:620px}
-.hero-search{display:flex;gap:8px;max-width:560px;margin:0 auto}
-.hero-search input{flex:1;border:1px solid var(--line);border-radius:12px;padding:13px 16px;font-size:15px;background:#fff}
-.hero-search input:focus{outline:none;border-color:var(--accent)}
-.hero-search button{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:0 22px;font-size:15px;font-weight:700;cursor:pointer}
-.hero-search button:hover{background:var(--accent-ink)}
-.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin:14px 0;border-bottom:2px solid var(--line);padding-bottom:8px}
-.sec-head h2{margin:0;font-size:21px}.more{font-size:14px}.muted{color:var(--muted);font-size:14px}
-.filters{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px}
-.pill{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:999px;padding:6px 14px;font-size:14px;cursor:pointer}
-.pill:hover{color:var(--accent-ink);border-color:var(--accent)}
-.pill.on{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700}
-.result-note{color:var(--muted);font-size:14px;margin:4px 0 0;min-height:1em}
-.catsec{margin-top:18px}
-.cat-h{font-size:16px;margin:0 0 10px;color:var(--accent-ink);display:flex;align-items:center;gap:8px}
-.cat-h .cnt{font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:999px;padding:1px 9px}
-.cards{display:flex;flex-direction:column;gap:13px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:0 1px 2px rgba(20,60,50,.03);transition:box-shadow .15s,transform .15s,border-color .15s}
-.card:hover{box-shadow:0 8px 26px rgba(20,60,50,.08);transform:translateY(-1px);border-color:#cfe3db}
-.meta{display:flex;flex-wrap:wrap;align-items:center;gap:9px;font-size:12.5px;color:var(--muted);margin-bottom:7px}
-.cat{background:var(--accent-soft);color:var(--accent-ink);border-radius:7px;padding:2px 9px;font-weight:700}
-.ev{border-radius:7px;padding:2px 8px;color:#fff;font-size:11.5px;font-weight:600}
-.ev-rct{background:var(--rct)}.ev-meta{background:var(--meta)}.ev-observational{background:var(--obs)}
-.ev-guideline{background:#5e45a4}
-.ev-expert{background:var(--exp)}.ev-blogger,.ev-anecdote{background:var(--blog)}
-.badge{margin-left:auto;background:#fff5e9;color:var(--warn);border:1px solid #f0d9bf;border-radius:7px;padding:2px 9px;font-size:11.5px;font-weight:800}
-.ev-legend{display:flex;flex-wrap:wrap;align-items:center;gap:7px 13px;margin:0 0 16px;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;font-size:12.5px;color:var(--muted)}
-.ev-legend .lg-lead{font-weight:700;color:var(--accent-ink)}
-.ev-legend .lg-item{display:inline-flex;align-items:center;gap:5px}
-.vs{border-radius:7px;padding:2px 8px;font-size:11.5px;font-weight:700}
-.vs-ok{background:var(--accent-soft);color:var(--accent-ink)}
-.vs-pend{background:#fff5e9;color:#9a5a1f;border:1px solid #f0d9bf}
-.pend-banner{background:#fff5e9;border:1px solid #f0d9bf;color:#7a4a18;border-radius:12px;padding:12px 16px;margin:0 0 16px;font-size:14px}
-.pend-banner b{color:#9a5a1f}
-.agent-cta{margin:32px 0 0;padding:22px 24px;background:var(--accent-soft);border:1px solid #cfe3db;border-radius:16px}
-.agent-cta h2{margin:0 0 6px;font-size:19px;color:var(--accent-ink)}
-.agent-cta>p{margin:0 0 16px;color:var(--muted);font-size:14px}
-.agent-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
-.agent-box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-.agent-box h3{margin:0 0 4px;font-size:15px;color:var(--ink)}
-.agent-box p{margin:0 0 8px;color:var(--muted);font-size:13px}
-.agent-url{display:block;background:#0f201c;color:#7fe3c4;border-radius:8px;padding:10px 12px;font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all;line-height:1.5}
-.title{margin:0 0 7px;font-size:18px;line-height:1.45}
-.title a{color:var(--ink)}.title a:hover{color:var(--accent)}
-.concl{margin:0;font-size:14.5px;color:#3a4742}
-/* 详情页 */
-.crumb{margin:14px 0 6px;font-size:14px}
-.claim{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:18px}
-.claim h1{margin:6px 0 14px;font-size:25px;line-height:1.4}
-.claim-concl{background:var(--accent-soft);border-radius:12px;padding:14px 16px;font-size:17px;color:var(--accent-ink);margin:0 0 18px}
-.claim-concl .lbl{display:block;font-size:12px;font-weight:800;color:var(--accent);margin-bottom:4px;letter-spacing:.5px}
-.fields{margin:0 0 18px}.fields dt{font-weight:800;color:var(--accent-ink);font-size:14px;margin-top:14px}
-.fields dd{margin:4px 0 0;color:#33403b}
-.src-btn{display:inline-block;background:var(--accent);color:#fff;border-radius:10px;padding:11px 20px;font-weight:700;font-size:15px}
-.src-btn:hover{background:var(--accent-ink);text-decoration:none}
-.prov{margin:14px 0 0;color:var(--muted);font-size:13px}
-.dual{margin:0 0 16px;display:flex;flex-direction:column;gap:8px}
-.dl-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;font-size:14px}
-.dl-k{flex:0 0 auto;font-weight:700;color:var(--accent-ink);background:var(--accent-soft);border-radius:7px;padding:2px 9px;font-size:12.5px}
-.dl-v{display:flex;flex-wrap:wrap;gap:10px}
-.dl-pending{color:var(--muted)}
-.related{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 20px}
-.related h3{margin:0 0 10px;font-size:16px}.related ul{margin:0;padding:0;list-style:none}
-.related li{padding:8px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px}
-.related li:first-child{border-top:none}.related .rcat{color:var(--muted);font-size:12px;flex:none}
-.values{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin:18px 0}
-.val{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
-.val h3{margin:0 0 6px;color:var(--accent-ink);font-size:16px}.val p{margin:0;color:var(--muted);font-size:14px}
-.val code{background:var(--accent-soft);color:var(--accent-ink);border-radius:5px;padding:0 5px;font-size:13px}
-.hint{color:var(--muted);text-align:center;margin:18px 0}
-.foot{border-top:1px solid var(--line);margin-top:30px;background:var(--panel)}
-.foot .bar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding:18px 22px;color:var(--muted);font-size:13px}
-.empty{color:var(--muted);padding:30px 0}
-@media(max-width:680px){
-  .top .bar{flex-wrap:wrap;height:auto;padding:10px 16px;gap:10px}
-  .search{order:3;max-width:none;flex-basis:100%}.brand .tag{display:none}
-  .hero h1{font-size:24px}.hero{padding:30px 0 18px}
-}
-'''
 
 
 def main():
@@ -705,8 +656,10 @@ def main():
     shutil.rmtree(tmp, ignore_errors=True)
     os.makedirs(tmp_claims, exist_ok=True)
     open(os.path.join(tmp, ".nojekyll"), "w").close()
-    with open(os.path.join(tmp, "styles.css"), "w", encoding="utf-8") as f:
-        f.write(CSS)
+    css_src = os.path.join(ROOT, "claims.css")
+    if not os.path.isfile(css_src):
+        raise FileNotFoundError("缺少 claims.css：设计样式未加入仓库")
+    shutil.copy(css_src, os.path.join(tmp, "claims.css"))
     with open(os.path.join(tmp, "index.html"), "w", encoding="utf-8") as f:
         f.write(render_index(good))
     with open(os.path.join(tmp, "all.html"), "w", encoding="utf-8") as f:

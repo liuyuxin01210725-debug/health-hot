@@ -1,0 +1,406 @@
+/* ============================================================
+   查过再信 — 设计语言样张（scoped under .vfy）
+   "循证档案" : 暖纸底 · 证据青绿 · 诚实琥珀 · 衬线判定 · 等宽溯源
+   两个正交维度：A 信任分层(主) / B 证据强度(副)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap');
+
+.vfy {
+  /* —— surfaces —— */
+  --paper:   oklch(98.6% 0.005 95);
+  --surface: oklch(100% 0 0);
+  --ink:     oklch(27% 0.02 250);
+  --muted:   oklch(48% 0.018 250);
+  --faint:   oklch(64% 0.014 250);
+  --line:    oklch(91% 0.008 250);
+  --hair:    oklch(94.5% 0.006 250);
+
+  /* —— A · 已核验 (confident evidence-teal) —— */
+  --vf:        oklch(52% 0.10 178);
+  --vf-solid:  oklch(46% 0.105 178);
+  --vf-soft:   oklch(95.5% 0.035 178);
+  --vf-line:   oklch(82% 0.06 178);
+
+  /* —— A · 证据待补 (honest warm amber — NOT red, NOT error) —— */
+  --pd:        oklch(62% 0.10 72);
+  --pd-ink:    oklch(45% 0.09 62);
+  --pd-soft:   oklch(96% 0.04 78);
+  --pd-line:   oklch(83% 0.07 72);
+
+  /* —— B · 证据强度 meter (neutral graphite, subordinate to A) —— */
+  --str:       oklch(40% 0.015 250);
+  --str-faint: oklch(89% 0.008 250);
+
+  --r-sm: 9px; --r-md: 14px; --r-lg: 20px;
+  --ease: cubic-bezier(.2,.7,.2,1);
+
+  font-family: "Noto Sans SC", system-ui, sans-serif;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+.vfy * { box-sizing: border-box; margin: 0; padding: 0; }
+.vfy .serif { font-family: "Noto Serif SC", serif; }
+.vfy .mono  { font-family: "Space Mono", monospace; }
+
+/* ============================================================
+   信任徽章 (Dimension A — primary, binary)
+   ============================================================ */
+.vfy .trust {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 13px; font-weight: 500; letter-spacing: .01em;
+  padding: 5px 12px 5px 9px; border-radius: 100px; white-space: nowrap;
+}
+.vfy .trust .seal {
+  width: 17px; height: 17px; border-radius: 50%; flex: none;
+  display: grid; place-items: center; font-size: 11px; line-height: 1;
+}
+/* verified — solid confident seal */
+.vfy .trust.verified { background: var(--vf-soft); color: var(--vf-solid); }
+.vfy .trust.verified .seal { background: var(--vf-solid); color: #fff; }
+/* pending — honest, in-progress, dashed ring, warm */
+.vfy .trust.pending { background: var(--pd-soft); color: var(--pd-ink); border: 1px dashed var(--pd-line); padding: 4px 12px 4px 8px; }
+.vfy .trust.pending .seal {
+  background: transparent; color: var(--pd);
+  border: 1.5px solid var(--pd); position: relative;
+  /* quarter-filled ◔ = "evidence still being gathered" */
+  background-image: conic-gradient(var(--pd) 0 90deg, transparent 90deg 360deg);
+}
+
+/* ============================================================
+   证据强度梯度条 (Dimension B — secondary, 7-level ramp)
+   RCT > Meta > 指南 > 观察 > 专家 > 博主 > 个例
+   ============================================================ */
+.vfy .strength { display: inline-flex; align-items: center; gap: 9px; }
+.vfy .strength .bars { display: inline-flex; align-items: flex-end; gap: 2.5px; height: 16px; }
+.vfy .strength .bars i {
+  width: 4px; border-radius: 1.5px; background: var(--str-faint); display: block;
+  transition: background .3s var(--ease);
+}
+.vfy .strength .bars i:nth-child(1){ height: 5px; }
+.vfy .strength .bars i:nth-child(2){ height: 7px; }
+.vfy .strength .bars i:nth-child(3){ height: 9px; }
+.vfy .strength .bars i:nth-child(4){ height: 11px; }
+.vfy .strength .bars i:nth-child(5){ height: 13px; }
+.vfy .strength .bars i:nth-child(6){ height: 14.5px; }
+.vfy .strength .bars i:nth-child(7){ height: 16px; }
+.vfy .strength .bars i.on { background: var(--str); }
+.vfy .strength .lab { font-family: "Space Mono", monospace; font-size: 11.5px; color: var(--muted); letter-spacing: .04em; }
+.vfy .strength .lab b { color: var(--ink); font-weight: 700; }
+
+/* ============================================================
+   核验卡片
+   ============================================================ */
+.vfy .card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md);
+  padding: 18px 18px 16px; position: relative;
+  transition: box-shadow .3s var(--ease), border-color .3s, transform .3s var(--ease);
+}
+.vfy .card:hover { box-shadow: 0 2px 6px oklch(40% .03 250 /.05), 0 14px 30px oklch(40% .03 250 /.08); border-color: oklch(86% 0.01 250); transform: translateY(-2px); }
+.vfy .card.feat { border-color: var(--vf-line); }
+.vfy .card.feat::before { content: ""; position: absolute; left: 0; top: 16px; bottom: 16px; width: 3px; border-radius: 0 3px 3px 0; background: var(--vf); }
+
+.vfy .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 13px; }
+.vfy .cat {
+  font-size: 12px; color: var(--muted); font-weight: 400;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.vfy .cat::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--vf); }
+.vfy .star { font-size: 11px; color: var(--vf); letter-spacing: .08em; font-family: "Space Mono", monospace; display: inline-flex; align-items: center; gap: 4px; }
+
+/* trust + strength sit together as the signal block; A leads, B follows */
+.vfy .signal { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+
+.vfy .card h3 {
+  font-family: "Noto Serif SC", serif; font-weight: 600; font-size: 18px; line-height: 1.4;
+  letter-spacing: -.005em; color: var(--ink); cursor: pointer; transition: color .2s;
+}
+.vfy .card:hover h3 { color: var(--vf-solid); }
+.vfy .card .verdict {
+  font-size: 13.5px; color: var(--muted); line-height: 1.62; margin-top: 9px; font-weight: 300;
+}
+.vfy .card .verdict b { color: var(--ink); font-weight: 500; }
+
+.vfy .card-foot {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  margin-top: 15px; padding-top: 13px; border-top: 1px solid var(--hair);
+}
+.vfy .src { font-family: "Space Mono", monospace; font-size: 11px; color: var(--faint); line-height: 1.5; min-width: 0; }
+.vfy .src .lead { color: var(--muted); }
+.vfy .go {
+  flex: none; width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--line);
+  display: grid; place-items: center; color: var(--muted); transition: all .25s var(--ease);
+}
+.vfy .card:hover .go { background: var(--vf-solid); border-color: var(--vf-solid); color: #fff; transform: translateX(2px); }
+
+/* ============================================================
+   图例 / 规范卡
+   ============================================================ */
+.vfy .spec { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 22px; }
+.vfy .spec h4 { font-size: 12px; font-family: "Space Mono", monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); margin-bottom: 18px; }
+.vfy .legend-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--hair); }
+.vfy .legend-row:last-child { border-bottom: none; }
+.vfy .legend-row .ramp { flex: none; }
+.vfy .legend-row .nm { font-size: 14px; font-weight: 500; }
+.vfy .legend-row .nm small { display: block; font-weight: 300; color: var(--muted); font-size: 12.5px; margin-top: 1px; }
+.vfy .legend-row .lvl { margin-left: auto; font-family: "Space Mono", monospace; font-size: 11px; color: var(--faint); }
+
+.vfy .spec-block { padding: 14px 0; border-bottom: 1px solid var(--hair); }
+.vfy .spec-block:last-child { border-bottom: none; }
+.vfy .spec-block .sb-head { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+.vfy .spec-block p { font-size: 13px; color: var(--muted); line-height: 1.6; font-weight: 300; }
+.vfy .spec-block p b { color: var(--ink); font-weight: 500; }
+
+/* ============================================================
+   详情页（移动端）
+   ============================================================ */
+.vfy.detail, .vfy .detail-inner { background: var(--paper); }
+.vfy .d-bar { display: flex; align-items: center; gap: 8px; padding: 14px 20px; border-bottom: 1px solid var(--line); background: var(--surface); }
+.vfy .d-bar .logo { display: inline-flex; align-items: center; gap: 7px; font-weight: 500; font-size: 14.5px; }
+.vfy .d-bar .logo .x { width: 20px; height: 20px; border-radius: 6px; background: var(--vf-solid); color: #fff; display: grid; place-items: center; font-size: 13px; }
+.vfy .d-back { font-size: 12.5px; color: var(--muted); padding: 12px 20px 0; display: inline-flex; align-items: center; gap: 5px; }
+
+.vfy .d-body { padding: 16px 20px 26px; }
+.vfy .d-meta-top { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.vfy .d-title { font-family: "Noto Serif SC", serif; font-weight: 700; font-size: 25px; line-height: 1.32; letter-spacing: -.01em; text-wrap: balance; }
+
+/* the verdict — hero statement */
+.vfy .d-verdict {
+  background: var(--vf-soft); border-radius: var(--r-md); padding: 18px 18px;
+  margin: 18px 0 22px; border: 1px solid var(--vf-line);
+}
+.vfy .d-verdict.pend { background: var(--pd-soft); border-color: var(--pd-line); }
+.vfy .d-verdict .vk { font-family: "Space Mono", monospace; font-size: 11px; letter-spacing: .08em; color: var(--vf-solid); margin-bottom: 9px; text-transform: uppercase; }
+.vfy .d-verdict.pend .vk { color: var(--pd-ink); }
+.vfy .d-verdict p { font-family: "Noto Serif SC", serif; font-weight: 500; font-size: 17.5px; line-height: 1.55; color: var(--ink); }
+
+/* signal block on detail */
+.vfy .d-signal { display: flex; flex-direction: column; gap: 14px; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 20px; }
+.vfy .d-signal .row { display: flex; align-items: center; gap: 12px; }
+.vfy .d-signal .row .k { font-size: 12px; color: var(--faint); width: 64px; flex: none; }
+
+/* field blocks */
+.vfy .field { margin-bottom: 18px; }
+.vfy .field .fk { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 500; color: var(--vf-solid); margin-bottom: 6px; font-family: "Space Mono", monospace; letter-spacing: .03em; }
+.vfy .field .fk .ico { font-size: 13px; }
+.vfy .field p { font-size: 14.5px; color: var(--ink); line-height: 1.7; font-weight: 300; }
+.vfy .field.note .fk { color: var(--pd-ink); }
+.vfy .field p b { font-weight: 500; }
+
+/* double link — the signature: heard-here ↔ verified-here */
+.vfy .dlink { margin: 22px 0; }
+.vfy .dlink-head { font-family: "Space Mono", monospace; font-size: 11px; letter-spacing: .06em; color: var(--faint); text-transform: uppercase; margin-bottom: 12px; }
+.vfy .dlink-track { display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch; gap: 0; }
+.vfy .dnode { border: 1px solid var(--line); border-radius: var(--r-sm); padding: 13px 13px; background: var(--surface); min-width: 0; }
+.vfy .dnode .dn-k { font-size: 10.5px; color: var(--faint); display: flex; align-items: center; gap: 5px; margin-bottom: 7px; white-space: nowrap; }
+.vfy .dnode .dn-v { font-size: 13px; font-weight: 500; line-height: 1.4; }
+.vfy .dnode .dn-v small { display: block; font-family: "Space Mono", monospace; font-size: 10.5px; color: var(--muted); font-weight: 400; margin-top: 4px; }
+.vfy .dnode.heard { border-style: solid; }
+.vfy .dnode.proof { border-color: var(--vf-line); background: var(--vf-soft); }
+.vfy .dnode.proof.待补 { border-color: var(--pd-line); background: var(--pd-soft); }
+.vfy .dlink-mid { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 10px; }
+.vfy .dlink-mid .dots { color: var(--faint); font-family: "Space Mono", monospace; font-size: 12px; letter-spacing: 1px; }
+.vfy .dlink-mid .arrow { color: var(--vf); font-size: 15px; margin-top: 2px; }
+
+/* evidence link button */
+.vfy .ev-link {
+  display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: var(--r-md);
+  background: var(--vf-solid); color: #fff; text-decoration: none; margin: 6px 0 4px;
+}
+.vfy .ev-link .el-ic { width: 30px; height: 30px; border-radius: 8px; background: oklch(100% 0 0 / .18); display: grid; place-items: center; flex: none; }
+.vfy .ev-link .el-t { font-size: 13.5px; font-weight: 500; }
+.vfy .ev-link .el-t small { display: block; font-family: "Space Mono", monospace; font-size: 11px; opacity: .85; font-weight: 400; margin-top: 2px; }
+.vfy .ev-link .el-go { margin-left: auto; font-size: 16px; }
+
+.vfy .src-line { font-family: "Space Mono", monospace; font-size: 11px; color: var(--faint); line-height: 1.7; margin: 16px 0 4px; }
+
+.vfy .d-related { border-top: 1px solid var(--line); margin-top: 22px; padding-top: 18px; }
+.vfy .d-related h5 { font-family: "Space Mono", monospace; font-size: 11px; letter-spacing: .08em; color: var(--faint); text-transform: uppercase; margin-bottom: 12px; }
+.vfy .d-rel-item { display: flex; align-items: center; gap: 11px; padding: 11px 0; border-bottom: 1px solid var(--hair); }
+.vfy .d-rel-item:last-child { border-bottom: none; }
+.vfy .d-rel-item .rt { font-size: 14px; font-weight: 400; flex: 1; }
+.vfy .d-rel-item .rc { font-size: 11px; color: var(--muted); }
+
+.vfy .disclaim { font-size: 11.5px; color: var(--faint); line-height: 1.6; margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--hair); }
+.vfy .disclaim b { color: var(--muted); font-weight: 500; }
+
+/* ============================================================
+   可扫读列表行（桌面 / 全部页）
+   ============================================================ */
+.vfy .list-row {
+  display: grid; grid-template-columns: 96px 150px 1fr auto; align-items: center; gap: 18px;
+  padding: 15px 18px; border-bottom: 1px solid var(--hair); cursor: pointer; transition: background .18s;
+}
+.vfy .list-row:hover { background: var(--surface); }
+.vfy .list-row .lr-cat { font-size: 12.5px; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
+.vfy .list-row .lr-cat::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--vf); }
+.vfy .list-row .lr-claim { min-width: 0; }
+.vfy .list-row .lr-claim .lc-t { font-size: 14.5px; font-weight: 500; line-height: 1.4; }
+.vfy .list-row .lr-claim .lc-v { font-size: 12.5px; color: var(--muted); margin-top: 3px; font-weight: 300; }
+.vfy .list-row .lr-date { font-family: "Space Mono", monospace; font-size: 11px; color: var(--faint); text-align: right; }
+.vfy .list-head {
+  display: grid; grid-template-columns: 96px 150px 1fr auto; gap: 18px;
+  padding: 11px 18px; font-family: "Space Mono", monospace; font-size: 10.5px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--faint); border-bottom: 1.5px solid var(--line);
+}
+
+/* ============================================================
+   ★ 页面级（生产页面，body.vfy 整页）
+   ============================================================ */
+body.vfy { background: var(--paper); min-height: 100vh; }
+.vfy a { color: inherit; text-decoration: none; }
+.vfy .wrap { width: 100%; max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+.vfy .wrap.narrow { max-width: 760px; }
+
+/* —— top nav —— */
+.vfy .nav {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in oklab, var(--paper) 85%, transparent);
+  backdrop-filter: blur(16px) saturate(1.3); -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  border-bottom: 1px solid var(--line);
+}
+.vfy .nav-in { display: flex; align-items: center; gap: 20px; height: 60px; }
+.vfy .logo { display: inline-flex; align-items: center; gap: 9px; font-weight: 500; font-size: 16px; white-space: nowrap; }
+.vfy .logo .x { width: 24px; height: 24px; border-radius: 7px; background: var(--vf-solid); color: #fff; display: grid; place-items: center; font-size: 15px; flex: none; }
+.vfy .logo small { color: var(--faint); font-weight: 300; font-size: 12.5px; }
+.vfy .nav-links { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.vfy .nav-links a { font-size: 14px; color: var(--muted); padding: 7px 14px; border-radius: 100px; transition: background .2s, color .2s; white-space: nowrap; }
+.vfy .nav-links a:hover { color: var(--ink); background: var(--surface); }
+.vfy .nav-links a.on { color: var(--vf-solid); font-weight: 500; }
+.vfy .nav-links a.ai { border: 1px solid var(--line); }
+.vfy .nav-links a.ai:hover { border-color: var(--vf-line); }
+@media (max-width: 600px){
+  .vfy .logo small { display: none; }
+  .vfy .nav-links { gap: 0; }
+  .vfy .nav-links a { padding: 7px 10px; font-size: 13.5px; }
+  .vfy .nav-links a.ai { display: none; }
+}
+
+/* —— hero (index) —— */
+.vfy .hero { padding: 64px 0 30px; }
+.vfy .hero .eyebrow { font-family: "Space Mono", monospace; font-size: 12px; letter-spacing: .14em; color: var(--vf-solid); text-transform: uppercase; display: inline-flex; align-items: center; gap: 9px; }
+.vfy .hero .eyebrow::before { content: ""; width: 22px; height: 1px; background: var(--vf); }
+.vfy .hero h1 { font-family: "Noto Serif SC", serif; font-weight: 700; font-size: clamp(30px, 5.2vw, 52px); line-height: 1.18; letter-spacing: -.015em; margin: 18px 0 0; text-wrap: balance; }
+.vfy .hero .lede { font-size: clamp(15px, 1.5vw, 18px); color: var(--muted); max-width: 30em; margin-top: 18px; font-weight: 300; }
+
+/* search box */
+.vfy .searchbox { display: flex; align-items: center; gap: 10px; margin-top: 30px; max-width: 540px; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 6px 6px 18px; transition: border-color .2s, box-shadow .2s; }
+.vfy .searchbox:focus-within { border-color: var(--vf); box-shadow: 0 0 0 4px var(--vf-soft); }
+.vfy .searchbox svg { color: var(--faint); flex: none; }
+.vfy .searchbox input { flex: 1; border: none; outline: none; background: none; font-family: inherit; font-size: 15px; color: var(--ink); }
+.vfy .searchbox input::placeholder { color: var(--faint); font-weight: 300; }
+.vfy .searchbox button { font-family: inherit; cursor: pointer; border: none; background: var(--vf-solid); color: #fff; font-size: 14px; font-weight: 500; padding: 10px 20px; border-radius: 100px; white-space: nowrap; transition: background .2s, transform .2s; }
+.vfy .searchbox button:hover { transform: translateY(-1px); background: var(--vf); }
+
+/* legend strip (compact, horizontal) */
+.vfy .legend-strip { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; padding: 16px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); margin-top: 28px; }
+.vfy .legend-strip .ls-title { font-family: "Space Mono", monospace; font-size: 11px; letter-spacing: .06em; color: var(--faint); text-transform: uppercase; }
+.vfy .legend-strip .ls-item { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--muted); }
+.vfy .legend-strip .ls-sep { width: 1px; height: 16px; background: var(--line); }
+
+/* section header */
+.vfy .sec { padding: 44px 0; }
+.vfy .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+.vfy .sec-head h2 { font-family: "Noto Serif SC", serif; font-weight: 600; font-size: clamp(22px, 3vw, 30px); letter-spacing: -.01em; }
+.vfy .sec-head .more { font-size: 14px; color: var(--vf-solid); white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; transition: gap .2s; }
+.vfy .sec-head .more:hover { gap: 8px; }
+
+/* featured grid */
+.vfy .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+@media (max-width: 880px){ .vfy .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px){ .vfy .grid { grid-template-columns: 1fr; } }
+.vfy .card { cursor: pointer; }
+
+/* AI access band */
+.vfy .ai-band { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 34px; margin: 20px 0 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+.vfy .ai-band .ab-l h3 { font-family: "Noto Serif SC", serif; font-weight: 600; font-size: 22px; margin-bottom: 10px; }
+.vfy .ai-band .ab-l p { font-size: 14px; color: var(--muted); font-weight: 300; line-height: 1.7; }
+.vfy .ai-band .robot { font-size: 13px; color: var(--vf-solid); font-family: "Space Mono", monospace; margin-bottom: 14px; display: inline-flex; gap: 7px; align-items: center; }
+.vfy .ai-band .ab-r { display: flex; flex-direction: column; gap: 12px; }
+.vfy .codeblk { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 13px 14px; }
+.vfy .codeblk .ck { font-size: 11px; color: var(--faint); margin-bottom: 7px; font-family: "Space Mono", monospace; letter-spacing: .04em; }
+.vfy .codeblk code { font-family: "Space Mono", monospace; font-size: 11.5px; color: var(--vf-solid); word-break: break-all; line-height: 1.5; display: block; }
+@media (max-width: 720px){ .vfy .ai-band { grid-template-columns: 1fr; padding: 26px; } }
+
+/* —— all page controls —— */
+.vfy .controls { display: flex; flex-direction: column; gap: 16px; margin: 24px 0 20px; }
+.vfy .filterbar { display: flex; gap: 8px; flex-wrap: wrap; }
+.vfy .fchip { font-family: inherit; cursor: pointer; font-size: 13.5px; font-weight: 400; padding: 7px 15px; border-radius: 100px; border: 1px solid var(--line); background: var(--surface); color: var(--muted); transition: all .2s var(--ease); }
+.vfy .fchip:hover { color: var(--ink); border-color: var(--faint); }
+.vfy .fchip.on { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.vfy .fchip .ct { opacity: .6; margin-left: 4px; font-family: "Space Mono", monospace; font-size: 11px; }
+.vfy .count { font-size: 13px; color: var(--faint); font-family: "Space Mono", monospace; }
+.vfy .listwrap { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; }
+.vfy .list-row .lr-sig { display: flex; flex-direction: column; gap: 7px; align-items: flex-start; }
+.vfy .empty { padding: 60px 18px; text-align: center; color: var(--faint); font-size: 14px; }
+@media (max-width: 680px){
+  .vfy .list-head { display: none; }
+  .vfy .list-row { grid-template-columns: 1fr; gap: 10px; padding: 16px; }
+  .vfy .list-row .lr-date { text-align: left; }
+  .vfy .list-row .lr-sig { flex-direction: row; align-items: center; }
+}
+
+/* —— about page —— */
+.vfy .about-h { padding: 56px 0 10px; }
+.vfy .about-h h1 { font-family: "Noto Serif SC", serif; font-weight: 700; font-size: clamp(28px, 4.4vw, 44px); line-height: 1.2; letter-spacing: -.012em; text-wrap: balance; }
+.vfy .about-h .lede { font-size: 17px; color: var(--muted); margin-top: 16px; font-weight: 300; max-width: 36em; line-height: 1.7; }
+.vfy .method { padding: 30px 0; }
+.vfy .method-item { display: grid; grid-template-columns: 56px 1fr; gap: 20px; padding: 26px 0; border-top: 1px solid var(--line); }
+.vfy .method-item .mi-n { font-family: "Space Mono", monospace; font-size: 13px; color: var(--vf-solid); font-weight: 700; }
+.vfy .method-item h3 { font-family: "Noto Serif SC", serif; font-weight: 600; font-size: 20px; margin-bottom: 10px; }
+.vfy .method-item p { font-size: 14.5px; color: var(--muted); line-height: 1.75; font-weight: 300; }
+.vfy .method-item p b { color: var(--ink); font-weight: 500; }
+.vfy .src-table { margin-top: 6px; display: flex; flex-direction: column; gap: 10px; }
+.vfy .src-role { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-sm); }
+.vfy .src-role .role-tag { font-family: "Space Mono", monospace; font-size: 11px; padding: 4px 10px; border-radius: 100px; white-space: nowrap; flex: none; }
+.vfy .src-role .role-tag.anchor { background: var(--vf-soft); color: var(--vf-solid); }
+.vfy .src-role .role-tag.discovery { background: var(--pd-soft); color: var(--pd-ink); }
+.vfy .src-role .role-tag.radar { background: var(--paper); color: var(--muted); border: 1px solid var(--line); }
+.vfy .src-role .role-d strong { font-size: 14px; font-weight: 500; display: block; margin-bottom: 3px; }
+.vfy .src-role .role-d span { font-size: 13px; color: var(--muted); font-weight: 300; }
+@media (max-width: 560px){ .vfy .method-item { grid-template-columns: 1fr; gap: 8px; } }
+
+/* —— footer —— */
+.vfy .foot { border-top: 1px solid var(--line); margin-top: 40px; padding: 36px 0 48px; }
+.vfy .foot-in { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.vfy .foot .f-logo { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; font-size: 15px; margin-bottom: 10px; }
+.vfy .foot .f-logo .x { width: 22px; height: 22px; border-radius: 6px; background: var(--vf-solid); color: #fff; display: grid; place-items: center; font-size: 13px; }
+.vfy .foot .f-claim { font-size: 13px; color: var(--faint); max-width: 26em; line-height: 1.6; }
+.vfy .foot .f-links { display: flex; gap: 30px; }
+.vfy .foot .f-col { display: flex; flex-direction: column; gap: 9px; }
+.vfy .foot .f-col h5 { font-family: "Space Mono", monospace; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); margin-bottom: 3px; }
+.vfy .foot .f-col a { font-size: 13.5px; color: var(--muted); transition: color .2s; }
+.vfy .foot .f-col a:hover { color: var(--vf-solid); }
+.vfy .foot-bottom { font-size: 12px; color: var(--faint); margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--hair); line-height: 1.6; }
+.vfy .foot-bottom b { color: var(--muted); font-weight: 500; }
+
+/* page-level detail tweaks (detail rendered full-width centered) */
+.vfy .detail-page { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+.vfy .detail-page .d-title { font-size: clamp(24px, 4vw, 34px); }
+.vfy .detail-page .d-verdict p { font-size: clamp(17px, 2.2vw, 21px); }
+.vfy .detail-page .d-back { padding-left: 0; }
+
+
+/* Production integration helpers */
+.vfy .eyebrow { font-family:"Space Mono",monospace; font-size:12px; letter-spacing:.14em; color:var(--vf-solid); text-transform:uppercase; }
+.vfy .lede b { color:var(--ink); font-weight:500; }
+.vfy .dnode a { color:inherit; }
+.vfy .ev-links { display:flex; flex-direction:column; gap:9px; margin:6px 0 4px; }
+.vfy .d-related a { text-decoration:none; }
+.vfy .detail-page { padding-top:18px; padding-bottom:20px; }
+.vfy .all-hero { padding-bottom:0; }
+.vfy .all-hero h1 { font-size:clamp(26px,4vw,40px); }
+.vfy .all-search { margin-top:24px; }
+.vfy .all-sec { padding-top:24px; }
+.vfy .about-grade { margin-top:16px; }
+.vfy .grade-role { align-items:center; }
+.vfy .grade-role .lr-date { margin-left:auto; font-family:"Space Mono",monospace; font-size:11px; color:var(--faint); }
+.vfy .detail-foot .foot-bottom { border-top:none; margin-top:0; }
+@media (max-width:560px){
+  .vfy .dlink-track { grid-template-columns:1fr; gap:8px; }
+  .vfy .dlink-mid { flex-direction:row; padding:0 4px; justify-content:flex-start; gap:7px; }
+  .vfy .dlink-mid .arrow { transform:rotate(90deg); margin-top:0; }
+}

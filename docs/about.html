@@ -17,35 +17,48 @@
 <meta name="twitter:description" content="查过再信的方法论：怎么审核、证据如何分级、何时复核、如何纠错。">
 <meta name="twitter:image" content="https://liuyuxin01210725-debug.github.io/health-hot/og.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="claims.css">
 </head>
-<body>
-<header class="top">
-  <div class="bar">
-    <a class="brand" href="index.html"><span class="leaf">✚</span>查过再信<span class="tag">· 健康说法核验库</span></a>
-    <form class="search" action="all.html" method="get" role="search">
-      <input type="search" name="q" placeholder="查一个说法：肌酸、种子油、间歇禁食…" aria-label="搜索">
-    </form>
-    <nav class="nav"><a class="navlink" href="index.html">精选</a><a class="navlink" href="all.html">全部</a><a class="navlink on" href="about.html">关于</a></nav>
-  </div>
-</header>
-<main class="main">
-<section class="hero slim"><h1>关于本站</h1>
-<p class="lead">「查过再信」是一个<strong>健康说法核验库</strong>：把流行的健康说法逐条标出证据强度、适用人群、注意事项和来源状态。资讯流只是入口，核心是帮你分清「听来的」和「有据的」。</p></section>
-<section class="values">
-<div class="val"><h3>怎么审核</h3><p>从权威信源（健康播客 / 研究者 / PubMed）抓取 → 提炼要点 → 按 7 条规则人工/AI 复核 → 标 <code>reviewed</code> 才发布。构建前有自动闸门：未来日期、缺来源、未审核的条目不会上线。</p></div>
-<div class="val"><h3>两层信任</h3><p>有独立研究 / 指南锚点的条目标为「✓ 已核验」；播客与专家梳理若还没补齐原始证据，只标为「◔ 专家梳理·证据待补」，不能冒充定论。</p></div>
-<div class="val"><h3>证据分级</h3><p>每条标清 RCT / 荟萃 / 观察 / 专家 / 博主，不混为一谈。点进详情页能看到这条结论"凭什么"。</p></div>
-<div class="val"><h3>何时复核</h3><p>每条带「复核日期」，按约半年的节奏回头审；健康结论会过时，过时的会标出或更新。</p></div>
-<div class="val"><h3>不开处方</h3><p>涉及剂量、治疗的只讲原则、不写具体克数，不暗示治疗任何疾病。具体执行请咨询持证医生或注册营养师。</p></div>
-<div class="val"><h3>标注不确定</h3><p>小样本、早期、阴性、有争议的结论都会明确标注，不替它下定论。</p></div>
-<div class="val"><h3>如何纠错</h3><p>发现错误或更新？欢迎到 <a href="https://github.com/liuyuxin01210725-debug/health-hot/issues" target="_blank" rel="noopener">GitHub 仓库提 issue</a> 指正——本站代码与数据全部公开、可追溯。</p></div>
-</section>
-<p class="hint">凭什么信？不靠"我读了很多书"——靠每一条都能点回原文，你自己能核对。</p>
+<body class="vfy">
+<nav class="nav"><div class="wrap nav-in">
+  <a class="logo" href="index.html"><span class="x">✚</span>查过再信<small>· 健康说法核验库</small></a>
+  <div class="nav-links"><a class="" href="index.html">精选</a><a class="" href="all.html">全部</a><a class="on" href="about.html">关于</a><a href="index.html#ai" class="ai">🤖 AI 接入</a></div>
+</div></nav>
+<main>
+<header class="about-h"><div class="wrap narrow"><span class="eyebrow">METHODOLOGY · 方法论</span>
+<h1>我们怎么把「听来的」<br>变成「有据的」</h1>
+<p class="lede">这个库不生产观点，它核验说法。每一条结论怎么来、证据强弱怎么分、什么时候复核、发现错了怎么改——都写在这里。</p>
+</div></header><section class="method"><div class="wrap narrow">
+<div class="method-item"><div class="mi-n">01</div><div><h3>两层信任：先分「查实了没有」</h3>
+<p>每条说法先归入两种状态之一。<b>已核验</b>：有独立的 PubMed / 官方指南 / Cochrane 研究支撑，可点回原始研究。<b>专家梳理·证据待补</b>：来自播客或专家的梳理，方向有参考价值，但原始研究链接还没补齐。我们老实标注「还没查到」，<b>这不是错误，是诚实</b>。</p></div></div>
+<div class="method-item"><div class="mi-n">02</div><div><h3>证据分级：再标「支撑它的研究有多硬」</h3>
+<p>对有研究支撑的条目，再按证据强度分七级。两个维度组合出可信度光谱：一条可以是「已核验 + Meta」，也可以是「专家梳理待补 + 专家」。</p>
+<div class="src-table about-grade"><div class="src-role grade-role"><span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></span></span><div class="role-d"><strong>RCT</strong><span>随机对照试验</span></div><span class="lr-date">7/7</span></div><div class="src-role grade-role"><span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></span></span><div class="role-d"><strong>Meta</strong><span>荟萃 / 系统综述</span></div><span class="lr-date">6/7</span></div><div class="src-role grade-role"><span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span><div class="role-d"><strong>指南</strong><span>权威机构指南</span></div><span class="lr-date">5/7</span></div><div class="src-role grade-role"><span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span></span></span><div class="role-d"><strong>观察</strong><span>观察性研究</span></div><span class="lr-date">4/7</span></div><div class="src-role grade-role"><span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i></span></span></span><div class="role-d"><strong>专家</strong><span>专家观点梳理</span></div><span class="lr-date">3/7</span></div><div class="src-role grade-role"><span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i></span></span></span><div class="role-d"><strong>博主</strong><span>科普博主</span></div><span class="lr-date">2/7</span></div><div class="src-role grade-role"><span><span class="strength"><span class="bars"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></span></span></span><div class="role-d"><strong>个例</strong><span>个案 / 轶事</span></div><span class="lr-date">1/7</span></div></div></div></div>
+<div class="method-item"><div class="mi-n">03</div><div><h3>双链接：你在哪听到 ≠ 凭什么相信</h3>
+<p><b>发现来源（discovery）</b>是「你可能在某播客听到这个说法」，<b>核验依据（evidence）</b>是「支撑它的研究在哪里」。<b>播客负责提出问题，研究负责回答问题</b>。</p></div></div>
+<div class="method-item"><div class="mi-n">04</div><div><h3>信源体系：三种角色，各司其职</h3><div class="src-table">
+<div class="src-role"><span class="role-tag anchor">锚点 ANCHOR</span><div class="role-d"><strong>决定结论、做核验依据</strong><span>PubMed 的 Cochrane 系统综述 / 官方指南 / 系统综述查询</span></div></div>
+<div class="src-role"><span class="role-tag discovery">发现 DISCOVERY</span><div class="role-d"><strong>只负责发现「大家在讨论什么」，不下结论</strong><span>Peter Attia、Huberman Lab、FoundMyFitness（播客 / YouTube）</span></div></div>
+<div class="src-role"><span class="role-tag radar">雷达 RADAR</span><div class="role-d"><strong>追踪新论文与趋势</strong><span>PubMed 主题查询、Bryan Johnson</span></div></div>
+</div></div></div>
+<div class="method-item"><div class="mi-n">05</div><div><h3>复核与纠错</h3>
+<p>每条都带<b>复核日期</b>，随研究更新而重新审视。发布前有自动闸门：缺来源、未来日期、伪链接、未审核的条目一律进不了线上。发现错误？欢迎通过 <a href="https://github.com/liuyuxin01210725-debug/health-hot/issues" target="_blank" rel="noopener"><b>GitHub issue</b></a> 指出。</p></div></div>
+<div class="method-item"><div class="mi-n">06</div><div><h3>内容红线</h3>
+<p>这是健康产品，有刚性约束：<b>不是医疗建议</b>，不开处方、不给具体剂量、不暗示治疗任何疾病；不确定的、证据弱的，明确标注，绝不替它下定论。</p></div></div>
+</div></section>
 </main>
-<footer class="foot"><div class="bar">
-  <span>本站为科普整理，<strong>非医疗建议</strong>；每条说法标注证据等级与来源状态，点击可回来源核对。</span>
-  <span class="muted">查过再信 · 持续收集与查证</span>
+<footer class="foot"><div class="wrap narrow">
+  <div class="foot-in">
+    <div>
+      <div class="f-logo"><span class="x">✚</span>查过再信</div>
+      <p class="f-claim">把「听来的」和「有据的」分开。每条说法可追溯、可被机器调用。</p>
+    </div>
+    <div class="f-links">
+      <div class="f-col"><h5>浏览</h5><a href="index.html">精选</a><a href="all.html">全部核验</a><a href="about.html">关于方法论</a></div>
+      <div class="f-col"><h5>AI 接入</h5><a href="index.html#ai">claims.json</a><a href="index.html#ai">安装 Skill</a></div>
+    </div>
+  </div>
+  <div class="foot-bottom">本站为科普整理，<b>非医疗建议</b>；每条说法标注证据等级与来源状态，点击可回来源核对。 · 查过再信 · 持续收集与查证</div>
 </div></footer>
 
 </body>

@@ -90,6 +90,17 @@ class FeedTrustTests(unittest.TestCase):
         self.assertEqual(build.verification_status(item), "curated_pending_evidence")
 
 
+class RenderDesignTests(unittest.TestCase):
+    def test_trust_badges_keep_verified_and_pending_distinct(self):
+        self.assertIn('class="trust verified"', build.trust_badge("verified"))
+        self.assertIn('class="trust pending"', build.trust_badge("curated_pending_evidence"))
+
+    def test_strength_meter_uses_seven_bars_and_expected_fill(self):
+        meter = build.strength_meter("expert")
+        self.assertEqual(meter.count("<i"), 7)
+        self.assertEqual(meter.count('class="on"'), 3)
+
+
 class CollectTests(unittest.TestCase):
     def test_title_relevance_hint(self):
         source = {"title_terms": ["creatine"]}
