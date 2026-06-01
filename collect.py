@@ -46,13 +46,16 @@ def fetch(url):
 
 
 def safe_fromstring(raw):
-    """解析不可信 XML：拒绝含 DOCTYPE / ENTITY 的文档——挡 billion-laughs 实体膨胀与 XXE。
-    必须全量扫描：只扫前 N 字节会被「长前导注释把 DOCTYPE 推到后面」绕过（codex 审出的 bypass）。
-    expat 默认不取外部实体，但内部实体膨胀仍能拖垮 CPU/内存。纯标准库零依赖。"""
+    """解析不可信 XML：拒绝含内部实体定义 <!ENTITY 的文档——挡 billion-laughs 实体膨胀。
+    只拒 <!ENTITY，不拒纯 DOCTYPE 声明：PubMed efetch 合法返回带外部 DTD 引用的
+      <!DOCTYPE PubmedArticleSet PUBLIC ... "https://dtd.nlm.nih.gov/...">（无内部实体），
+    一刀切拒 DOCTYPE 会把正常 PubMed 抓取也拒掉（已踩过这个回归）。
+    XXE 方面：ElementTree/expat 默认不取外部实体（codex 实测确认），故外部 DTD 引用安全。
+    全量扫描 + 去 NUL：防「长前导注释推后 <!ENTITY」与 UTF-16/32 编码绕过。纯标准库零依赖。"""
     if isinstance(raw, (bytes, bytearray)):
-        low = raw.replace(b'\x00', b'').lower()  # 去 NUL：连 UTF-16/32 编码的 <!DOCTYPE 也能识别（codex 审出的编码绕过）
-        if b'<!doctype' in low or b'<!entity' in low:
-            raise ValueError("XML 含 DOCTYPE/ENTITY，已拒绝（防实体膨胀/XXE）")
+        low = raw.replace(b'\x00', b'').lower()
+        if b'<!entity' in low:
+            raise ValueError("XML 含内部实体定义 <!ENTITY，已拒绝（防实体膨胀 DoS）")
     return ET.fromstring(raw)
 
 
