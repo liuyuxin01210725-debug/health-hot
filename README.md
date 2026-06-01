@@ -14,7 +14,8 @@
 - `build.py` — 生成静态站到 `docs/`（精选 + 全部 + 关于 + 各条详情页 + `claims.json` 机读 feed；纯标准库）
 - `make_og.py` — 生成社交分享卡 `assets/og.png`（需 Pillow，单独运行，不进构建）
 - `skill/SKILL.md` — 公开 health-hot Skill，构建时拷进 `docs/skill/`
-- 部署：GitHub Pages 从 `main` 分支 `/docs` 目录 serve，推送即更新（当前未用 GitHub Actions；如需每周自动化再加 workflow，需 `workflow` 授权）
+- 部署：GitHub Pages 从 `main` 分支 `/docs` 目录 serve，推送即更新
+- 自动采集：GitHub Actions 每周一北京时间 08:00 抓取候选，并刷新 GitHub issue 审核收件箱；不会绕过人工核验直接发布
 
 ## 信任分层
 
@@ -33,6 +34,11 @@ python3 collect.py 'PubMed·肌酸'   # 只抓名字匹配的信源
 候选写入 `/tmp/health_candidates.json`。PubMed 窄主题雷达会附带 `relevance_hint`：
 `title_match` 可优先看，`query_match_only` 表示查询命中但标题未命中主题词，必须人工/AI 再判断。
 候选提升为正式条目时应保留 `canonical_id`，用于跨次采集去重。
+
+GitHub Actions 工作流位于 `.github/workflows/collect-candidates.yml`。它也支持在 Actions 页面手动触发。
+每次运行会保存 `health-candidates` Artifact（候选 JSON、采集日志、审核摘要），并新建或刷新
+标题为「每周健康候选采集」的 issue。健康内容仍需人工或 AI 复核后写入 `data/items/*.json`，
+再运行 `build.py`；定时采集不会自动发布未经核验的说法。
 
 ## Agent 接入
 
