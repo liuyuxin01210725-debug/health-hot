@@ -1,0 +1,21 @@
+{
+  "title": "Omega-3 补充剂要按具体健康目标分别判断",
+  "source": "NIH NCCIH · Health Fact Sheet",
+  "source_url": "https://www.nccih.nih.gov/health/omega3-supplements-what-you-need-to-know",
+  "date": "2026-06-01",
+  "category": "补剂",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "Omega-3 补充剂对不同健康结局的证据并不相同，不能用一个笼统结论概括所有用途。 本条根据 NIH NCCIH · Health Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "nccih-omega3-outcome-specific",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "Omega-3 补充剂对不同健康结局的证据并不相同，不能用一个笼统结论概括所有用途。",
+  "population": "考虑使用 Omega-3 补充剂的人群。",
+  "caveats": "补充剂可能与药物相互作用。是否使用应结合饮食、疾病风险和专业建议。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.nccih.nih.gov/health/omega3-supplements-what-you-need-to-know"
+  ]
+}

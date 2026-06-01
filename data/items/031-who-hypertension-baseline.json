@@ -1,0 +1,21 @@
+{
+  "title": "高血压可能没有明显症状，测量才知道",
+  "source": "WHO · Fact Sheet",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/hypertension",
+  "date": "2026-06-01",
+  "category": "心肺",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "高血压常常没有明显症状，不能只凭感觉判断；规范测量和持续管理很重要。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "who-hypertension-baseline",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "高血压常常没有明显症状，不能只凭感觉判断；规范测量和持续管理很重要。",
+  "population": "成年人，尤其存在心血管风险因素或既往血压异常者。",
+  "caveats": "单次读数不能代替诊断。已经确诊或正在用药者应按医生建议监测和治疗。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/hypertension"
+  ]
+}

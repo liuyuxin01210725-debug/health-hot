@@ -1,0 +1,21 @@
+{
+  "title": "饮酒不能包装成保健建议",
+  "source": "WHO · Fact Sheet",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/alcohol",
+  "date": "2026-06-01",
+  "category": "营养",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "酒精会带来健康风险，不能为了所谓保健作用而开始饮酒。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "who-alcohol-health-risk",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "酒精会带来健康风险，不能为了所谓保健作用而开始饮酒。",
+  "population": "一般人群；孕产期、驾驶前、服药期间或有相关疾病者尤其应避免饮酒。",
+  "caveats": "风险会随饮酒量、频率和场景变化。该条不是酒精依赖的自行处置方案，需要帮助时应寻求专业支持。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/alcohol"
+  ]
+}

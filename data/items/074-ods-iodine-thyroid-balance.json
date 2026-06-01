@@ -1,0 +1,21 @@
+{
+  "title": "碘和甲状腺的关系不是越多越好",
+  "source": "NIH ODS · Consumer Fact Sheet",
+  "source_url": "https://ods.od.nih.gov/factsheets/Iodine-Consumer/",
+  "date": "2026-06-01",
+  "category": "补剂",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "碘是甲状腺激素合成所需营养素，但摄入过少或过多都可能带来问题。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "ods-iodine-thyroid-balance",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "碘是甲状腺激素合成所需营养素，但摄入过少或过多都可能带来问题。",
+  "population": "一般人群，孕产期和甲状腺相关人群尤其值得关注。",
+  "caveats": "甲状腺问题不能仅靠自行补碘处理。是否补充应结合饮食、地区和专业建议。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://ods.od.nih.gov/factsheets/Iodine-Consumer/"
+  ]
+}

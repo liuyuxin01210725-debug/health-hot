@@ -1,0 +1,21 @@
+{
+  "title": "维生素 A 不能因为重要就随意高剂量补",
+  "source": "NIH ODS · Consumer Fact Sheet",
+  "source_url": "https://ods.od.nih.gov/factsheets/VitaminA-Consumer/",
+  "date": "2026-06-01",
+  "category": "补剂",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "维生素 A 对视力和身体功能重要，但高剂量摄入可能有害，不能随意叠加补充。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "ods-vitamin-a-boundaries",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "维生素 A 对视力和身体功能重要，但高剂量摄入可能有害，不能随意叠加补充。",
+  "population": "一般人群；孕产期或考虑使用含维生素 A 补充剂者尤其需要谨慎。",
+  "caveats": "不同形式的维生素 A 风险不同。孕产期和服药人群应先咨询专业人员。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://ods.od.nih.gov/factsheets/VitaminA-Consumer/"
+  ]
+}

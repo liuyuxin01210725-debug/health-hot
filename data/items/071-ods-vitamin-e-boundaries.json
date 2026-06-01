@@ -1,0 +1,21 @@
+{
+  "title": "抗氧化不等于维生素 E 补充剂越多越好",
+  "source": "NIH ODS · Consumer Fact Sheet",
+  "source_url": "https://ods.od.nih.gov/factsheets/VitaminE-Consumer/",
+  "date": "2026-06-01",
+  "category": "补剂",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "维生素 E 是必需营养素，但“抗氧化”不能自动推导出高剂量补充有额外健康收益。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "ods-vitamin-e-boundaries",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "维生素 E 是必需营养素，但“抗氧化”不能自动推导出高剂量补充有额外健康收益。",
+  "population": "一般人群。",
+  "caveats": "高剂量补充可能带来风险或与药物相互作用。不要把营销概念当作个体化建议。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://ods.od.nih.gov/factsheets/VitaminE-Consumer/"
+  ]
+}

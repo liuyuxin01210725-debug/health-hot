@@ -1,0 +1,21 @@
+{
+  "title": "饮水健康首先是安全，而不是追固定杯数",
+  "source": "WHO · Fact Sheet",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/drinking-water",
+  "date": "2026-06-01",
+  "category": "营养",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "饮水健康首先要关注水源安全和卫生，不能把所有人的需求简化成固定杯数。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "who-drinking-water",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "饮水健康首先要关注水源安全和卫生，不能把所有人的需求简化成固定杯数。",
+  "population": "一般人群。",
+  "caveats": "饮水需求受环境、活动量和健康状态影响。特定疾病人群需要遵循专业建议。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/drinking-water"
+  ]
+}

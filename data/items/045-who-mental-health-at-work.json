@@ -1,0 +1,21 @@
+{
+  "title": "工作环境本身也会影响心理健康",
+  "source": "WHO · Fact Sheet",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/mental-health-at-work",
+  "date": "2026-06-01",
+  "category": "心理",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "工作负荷、控制感、支持和歧视等环境因素会影响心理健康，不能只要求个人自行调节。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "who-mental-health-at-work",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "工作负荷、控制感、支持和歧视等环境因素会影响心理健康，不能只要求个人自行调节。",
+  "population": "劳动者、管理者和组织负责人。",
+  "caveats": "组织改进和个体支持需要并行。严重困扰仍应寻求专业帮助。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/mental-health-at-work"
+  ]
+}

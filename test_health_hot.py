@@ -101,6 +101,15 @@ class RenderDesignTests(unittest.TestCase):
         self.assertEqual(meter.count("<i"), 7)
         self.assertEqual(meter.count('class="on"'), 3)
 
+    def test_detail_distinguishes_collection_date_from_source_date(self):
+        item = valid_item()
+        page = build.detail_page(item, [])
+        self.assertIn("本站收录 2026-05-31", page)
+        self.assertNotIn("原文日期 2026-05-31", page)
+        item["source_published_at"] = "2026-05-01"
+        page = build.detail_page(item, [])
+        self.assertIn("原文日期 2026-05-01", page)
+
 
 class CollectTests(unittest.TestCase):
     class _Response:

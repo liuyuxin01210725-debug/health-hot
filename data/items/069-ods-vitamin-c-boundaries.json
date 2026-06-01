@@ -1,0 +1,21 @@
+{
+  "title": "维生素 C 重要，但不能替代整体饮食",
+  "source": "NIH ODS · Consumer Fact Sheet",
+  "source_url": "https://ods.od.nih.gov/factsheets/VitaminC-Consumer/",
+  "date": "2026-06-01",
+  "category": "补剂",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "维生素 C 是必需营养素，但补充剂不能替代多样化饮食，也不是所有问题的通用解决方案。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "ods-vitamin-c-boundaries",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "维生素 C 是必需营养素，但补充剂不能替代多样化饮食，也不是所有问题的通用解决方案。",
+  "population": "一般人群；饮食来源不足或存在特定风险者。",
+  "caveats": "高剂量补充可能带来不适或风险。具体需求应结合饮食和健康情况。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://ods.od.nih.gov/factsheets/VitaminC-Consumer/"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "title": "长期咳喘不一定只是年纪大或体力差",
+  "source": "WHO · Fact Sheet",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/chronic-obstructive-pulmonary-disease-(copd)",
+  "date": "2026-06-01",
+  "category": "心肺",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "慢性阻塞性肺疾病会造成持续呼吸问题，烟草和空气污染等暴露值得重视。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "who-copd-baseline",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "慢性阻塞性肺疾病会造成持续呼吸问题，烟草和空气污染等暴露值得重视。",
+  "population": "长期咳嗽、咳痰、气短者，以及有吸烟或空气污染暴露的人群。",
+  "caveats": "需要通过专业评估明确原因。出现明显呼吸困难时应及时就医。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/chronic-obstructive-pulmonary-disease-(copd)"
+  ]
+}

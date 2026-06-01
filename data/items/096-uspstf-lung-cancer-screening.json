@@ -1,0 +1,21 @@
+{
+  "title": "肺癌筛查不是所有人都做，而是面向特定高风险人群",
+  "source": "USPSTF · Recommendation",
+  "source_url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/lung-cancer-screening",
+  "date": "2026-06-01",
+  "category": "其他",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "肺癌筛查适用于特定高风险人群，不应把低剂量 CT 当作所有人的常规体检项目。 本条根据 USPSTF · Recommendation 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "uspstf-lung-cancer-screening",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "肺癌筛查适用于特定高风险人群，不应把低剂量 CT 当作所有人的常规体检项目。",
+  "population": "依据美国 USPSTF：特定年龄、吸烟史和戒烟年限范围内的高风险成年人。",
+  "caveats": "筛查有适用条件和潜在伤害。该条依据美国建议，个人决策应结合本地指南和专业评估。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/lung-cancer-screening"
+  ]
+}

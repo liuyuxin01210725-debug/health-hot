@@ -1,0 +1,21 @@
+{
+  "title": "维生素 B1 很重要，但通常先看饮食和风险因素",
+  "source": "NIH ODS · Consumer Fact Sheet",
+  "source_url": "https://ods.od.nih.gov/factsheets/Thiamin-Consumer/",
+  "date": "2026-06-01",
+  "category": "补剂",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "维生素 B1 参与能量代谢，是否需要额外补充应结合饮食和个体风险。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "ods-thiamin-baseline",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "维生素 B1 参与能量代谢，是否需要额外补充应结合饮食和个体风险。",
+  "population": "一般人群；饮食受限或存在特定缺乏风险者。",
+  "caveats": "疲劳等症状原因很多，不能仅凭感觉判断缺乏。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://ods.od.nih.gov/factsheets/Thiamin-Consumer/"
+  ]
+}

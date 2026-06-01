@@ -1,0 +1,21 @@
+{
+  "title": "成人肥胖管理不是靠一个小技巧解决",
+  "source": "USPSTF · Recommendation",
+  "source_url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/obesity-in-adults-interventions",
+  "date": "2026-06-01",
+  "category": "代谢",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "对部分成人肥胖人群，有结构的、多组分行为干预比单一减肥技巧更符合证据。 本条根据 USPSTF · Recommendation 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "uspstf-obesity-behavioral-interventions",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "对部分成人肥胖人群，有结构的、多组分行为干预比单一减肥技巧更符合证据。",
+  "population": "依据美国 USPSTF：BMI 较高的成年人，具体适用条件见原文。",
+  "caveats": "BMI 不是完整健康评估。个体方案需要结合疾病、药物、生活条件和本地医疗建议。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/obesity-in-adults-interventions"
+  ]
+}

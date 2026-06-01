@@ -1,0 +1,21 @@
+{
+  "title": "反复头痛不是都能用同一种办法处理",
+  "source": "WHO · Fact Sheet",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/headache-disorders",
+  "date": "2026-06-01",
+  "category": "其他",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "头痛类型不同，反复或严重头痛需要根据特点评估，不能一概而论。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "who-headache-disorders",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "头痛类型不同，反复或严重头痛需要根据特点评估，不能一概而论。",
+  "population": "存在反复头痛或头痛影响生活的人群。",
+  "caveats": "突发剧烈头痛、神经系统异常或其他危险信号需要及时就医。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/headache-disorders"
+  ]
+}

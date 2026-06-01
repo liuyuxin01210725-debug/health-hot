@@ -1,0 +1,21 @@
+{
+  "title": "钾很重要，但补充剂和低钠盐并非人人适合",
+  "source": "NIH ODS · Consumer Fact Sheet",
+  "source_url": "https://ods.od.nih.gov/factsheets/Potassium-Consumer/",
+  "date": "2026-06-01",
+  "category": "补剂",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "钾参与神经、肌肉和体液平衡，优先关注食物来源；补充剂并非人人适合。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "ods-potassium-boundaries",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "钾参与神经、肌肉和体液平衡，优先关注食物来源；补充剂并非人人适合。",
+  "population": "一般人群；存在肾脏问题或使用相关药物者尤其需要谨慎。",
+  "caveats": "肾功能异常或服用某些药物时，补钾和使用低钠盐可能有风险，应先咨询专业人员。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://ods.od.nih.gov/factsheets/Potassium-Consumer/"
+  ]
+}

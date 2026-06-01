@@ -1,0 +1,21 @@
+{
+  "title": "瑜伽可以是活动方式，但也需要适配身体状况",
+  "source": "NIH NCCIH · Health Fact Sheet",
+  "source_url": "https://www.nccih.nih.gov/health/yoga-effectiveness-and-safety",
+  "date": "2026-06-01",
+  "category": "运动",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "瑜伽可能有助于身心健康，但练习方式应适配个人能力和健康情况。 本条根据 NIH NCCIH · Health Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "nccih-yoga-safety",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "瑜伽可能有助于身心健康，但练习方式应适配个人能力和健康情况。",
+  "population": "希望将瑜伽作为活动或身心练习的人群。",
+  "caveats": "疼痛、受伤、孕产期或存在疾病者应调整动作并寻求合适指导。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.nccih.nih.gov/health/yoga-effectiveness-and-safety"
+  ]
+}

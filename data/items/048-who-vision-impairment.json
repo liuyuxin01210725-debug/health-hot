@@ -1,0 +1,21 @@
+{
+  "title": "视力问题不应等到严重影响生活才处理",
+  "source": "WHO · Fact Sheet",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/blindness-and-visual-impairment",
+  "date": "2026-06-01",
+  "category": "其他",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "许多视力问题可以预防、识别或干预，定期检查和及时处理很重要。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "who-vision-impairment",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "许多视力问题可以预防、识别或干预，定期检查和及时处理很重要。",
+  "population": "一般人群，尤其出现视力变化、慢病风险或年龄相关风险者。",
+  "caveats": "突然视力变化、眼痛或视野异常应及时就医。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/blindness-and-visual-impairment"
+  ]
+}

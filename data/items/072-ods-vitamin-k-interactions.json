@@ -1,0 +1,21 @@
+{
+  "title": "维生素 K 很重要，也需要留意药物相互作用",
+  "source": "NIH ODS · Consumer Fact Sheet",
+  "source_url": "https://ods.od.nih.gov/factsheets/VitaminK-Consumer/",
+  "date": "2026-06-01",
+  "category": "补剂",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "维生素 K 与凝血和骨骼功能有关，正在使用特定药物的人尤其需要关注摄入稳定性。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "ods-vitamin-k-interactions",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "维生素 K 与凝血和骨骼功能有关，正在使用特定药物的人尤其需要关注摄入稳定性。",
+  "population": "一般人群，尤其是使用抗凝药物者。",
+  "caveats": "使用抗凝药物时不要自行大幅改变补充剂或饮食摄入，应咨询专业人员。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://ods.od.nih.gov/factsheets/VitaminK-Consumer/"
+  ]
+}

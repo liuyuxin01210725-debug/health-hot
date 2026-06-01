@@ -1,0 +1,21 @@
+{
+  "title": "婴幼儿喂养不能照搬成人饮食逻辑",
+  "source": "WHO · Fact Sheet",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/infant-and-young-child-feeding",
+  "date": "2026-06-01",
+  "category": "营养",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "婴幼儿喂养有独立的营养和安全原则，不能把成人饮食潮流直接套用在婴幼儿身上。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "who-infant-feeding",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "婴幼儿喂养有独立的营养和安全原则，不能把成人饮食潮流直接套用在婴幼儿身上。",
+  "population": "婴幼儿照护者。",
+  "caveats": "喂养决策应结合儿童年龄、生长情况和专业建议。出现喂养困难或生长问题应及时评估。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/infant-and-young-child-feeding"
+  ]
+}

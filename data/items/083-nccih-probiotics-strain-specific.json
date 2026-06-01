@@ -1,0 +1,21 @@
+{
+  "title": "益生菌不是一个统一产品，效果要看具体菌株和场景",
+  "source": "NIH NCCIH · Health Fact Sheet",
+  "source_url": "https://www.nccih.nih.gov/health/probiotics-usefulness-and-safety",
+  "date": "2026-06-01",
+  "category": "补剂",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "不同益生菌产品和应用场景的证据不同，不能把“可能有用”推广成人人都该吃。 本条根据 NIH NCCIH · Health Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "nccih-probiotics-strain-specific",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "不同益生菌产品和应用场景的证据不同，不能把“可能有用”推广成人人都该吃。",
+  "population": "考虑使用益生菌的人群。",
+  "caveats": "免疫功能较弱或存在严重疾病者应谨慎。产品菌株、质量和适用场景需要具体看。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.nccih.nih.gov/health/probiotics-usefulness-and-safety"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "title": "运动补剂要逐个看证据和风险，不能一锅端",
+  "source": "NIH ODS · Consumer Fact Sheet",
+  "source_url": "https://ods.od.nih.gov/factsheets/ExerciseAndAthleticPerformance-Consumer/",
+  "date": "2026-06-01",
+  "category": "补剂",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "运动表现补充剂成分复杂，证据和安全性差异很大，不能把“运动补剂”当作一个统一类别判断。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "ods-performance-supplements",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "运动表现补充剂成分复杂，证据和安全性差异很大，不能把“运动补剂”当作一个统一类别判断。",
+  "population": "考虑使用运动表现补充剂的成年人。",
+  "caveats": "产品质量、成分叠加和药物相互作用都值得关注。竞技人群还应留意禁用成分风险。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://ods.od.nih.gov/factsheets/ExerciseAndAthleticPerformance-Consumer/"
+  ]
+}

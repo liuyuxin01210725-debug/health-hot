@@ -1,0 +1,21 @@
+{
+  "title": "老年跌倒不是“年纪大了没办法”",
+  "source": "WHO · Fact Sheet",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/falls",
+  "date": "2026-06-01",
+  "category": "骨骼",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "跌倒风险可以通过识别危险因素、改善环境和适当训练来降低，不应视为不可避免。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "who-falls-prevention",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "跌倒风险可以通过识别危险因素、改善环境和适当训练来降低，不应视为不可避免。",
+  "population": "老年人、既往跌倒者，以及存在平衡、视力、用药或居家环境风险者。",
+  "caveats": "反复跌倒可能有多重原因，应接受评估。训练方式需要结合身体能力和安全条件。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/falls"
+  ]
+}

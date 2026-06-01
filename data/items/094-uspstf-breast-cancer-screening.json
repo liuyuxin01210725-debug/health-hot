@@ -1,0 +1,21 @@
+{
+  "title": "乳腺癌筛查要按年龄和风险讨论，不是越频繁越好",
+  "source": "USPSTF · Recommendation",
+  "source_url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/breast-cancer-screening",
+  "date": "2026-06-01",
+  "category": "其他",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "乳腺癌筛查需要权衡收益和潜在伤害，并结合年龄与风险，而不是简单追求越频繁越好。 本条根据 USPSTF · Recommendation 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "uspstf-breast-cancer-screening",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "乳腺癌筛查需要权衡收益和潜在伤害，并结合年龄与风险，而不是简单追求越频繁越好。",
+  "population": "依据美国 USPSTF：普通风险女性，具体年龄和频率见原文。",
+  "caveats": "高风险人群可能需要不同策略。该条依据美国建议，其他地区应结合本地指南。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/breast-cancer-screening"
+  ]
+}

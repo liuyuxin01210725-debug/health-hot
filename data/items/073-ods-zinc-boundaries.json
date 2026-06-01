@@ -1,0 +1,21 @@
+{
+  "title": "锌参与免疫功能，但长期高剂量补充也会出问题",
+  "source": "NIH ODS · Consumer Fact Sheet",
+  "source_url": "https://ods.od.nih.gov/factsheets/Zinc-Consumer/",
+  "date": "2026-06-01",
+  "category": "补剂",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "锌对免疫和身体功能重要，但并不意味着长期高剂量补充更好。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "ods-zinc-boundaries",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "锌对免疫和身体功能重要，但并不意味着长期高剂量补充更好。",
+  "population": "一般人群；饮食不足或存在特定风险者。",
+  "caveats": "过量锌可能造成不良影响并干扰其他营养素。不要把短期流行说法当作长期方案。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://ods.od.nih.gov/factsheets/Zinc-Consumer/"
+  ]
+}

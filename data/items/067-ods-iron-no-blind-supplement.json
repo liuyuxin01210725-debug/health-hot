@@ -1,0 +1,21 @@
+{
+  "title": "缺铁需要重视，但补铁不应靠猜",
+  "source": "NIH ODS · Consumer Fact Sheet",
+  "source_url": "https://ods.od.nih.gov/factsheets/Iron-Consumer/",
+  "date": "2026-06-01",
+  "category": "补剂",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "铁对血液和身体功能重要，但并非所有疲劳或贫血都等于缺铁，补充前应先判断原因。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "ods-iron-no-blind-supplement",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "铁对血液和身体功能重要，但并非所有疲劳或贫血都等于缺铁，补充前应先判断原因。",
+  "population": "一般人群；孕产期、婴幼儿、月经量较大或存在缺铁风险者更值得关注。",
+  "caveats": "铁过量可能有害，也可能与药物相互作用。不要在未评估原因时长期自行补铁。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://ods.od.nih.gov/factsheets/Iron-Consumer/"
+  ]
+}

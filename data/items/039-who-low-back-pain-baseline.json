@@ -1,0 +1,21 @@
+{
+  "title": "腰痛不等于必须长期躺着不动",
+  "source": "WHO · Fact Sheet",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/low-back-pain",
+  "date": "2026-06-01",
+  "category": "关节",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "腰痛很常见，处理通常需要结合评估、活动管理和康复，而不是简单长期卧床。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "who-low-back-pain-baseline",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "腰痛很常见，处理通常需要结合评估、活动管理和康复，而不是简单长期卧床。",
+  "population": "存在腰痛的人群。",
+  "caveats": "出现严重外伤、进行性无力、大小便异常或其他危险信号时应及时就医。具体康复方案应个体化。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/low-back-pain"
+  ]
+}

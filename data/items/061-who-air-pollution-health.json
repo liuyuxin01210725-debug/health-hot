@@ -1,0 +1,21 @@
+{
+  "title": "空气污染不是只影响呼吸道",
+  "source": "WHO · Fact Sheet",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/ambient-(outdoor)-air-quality-and-health",
+  "date": "2026-06-01",
+  "category": "心肺",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "室外空气污染会增加多种健康风险，不应只把它理解为短期咳嗽或不适。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "who-air-pollution-health",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "室外空气污染会增加多种健康风险，不应只把它理解为短期咳嗽或不适。",
+  "population": "一般人群，儿童、老年人和心肺疾病患者尤其值得关注。",
+  "caveats": "个体防护不能替代公共环境治理。高风险人群应结合本地空气质量提示安排活动。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/ambient-(outdoor)-air-quality-and-health"
+  ]
+}

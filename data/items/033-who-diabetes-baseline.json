@@ -1,0 +1,21 @@
+{
+  "title": "糖尿病管理不只是盯一次血糖",
+  "source": "WHO · Fact Sheet",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/diabetes",
+  "date": "2026-06-01",
+  "category": "代谢",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "糖尿病需要持续管理；饮食、活动、体重、血压和规范诊疗都比只盯一次血糖更重要。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "who-diabetes-baseline",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "糖尿病需要持续管理；饮食、活动、体重、血压和规范诊疗都比只盯一次血糖更重要。",
+  "population": "糖尿病患者、糖尿病前期人群和存在代谢风险的人群。",
+  "caveats": "不能根据科普自行停药或调整药物。出现明显症状或检测异常时应及时就医。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/diabetes"
+  ]
+}

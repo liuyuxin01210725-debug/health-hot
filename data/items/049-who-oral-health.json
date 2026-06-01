@@ -1,0 +1,21 @@
+{
+  "title": "口腔健康不是只在牙痛时才需要关注",
+  "source": "WHO · Fact Sheet",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/oral-health",
+  "date": "2026-06-01",
+  "category": "其他",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "多数常见口腔疾病可以预防，日常清洁、风险管理和适时检查比牙痛后再处理更重要。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "who-oral-health",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "多数常见口腔疾病可以预防，日常清洁、风险管理和适时检查比牙痛后再处理更重要。",
+  "population": "一般人群。",
+  "caveats": "持续牙痛、出血、肿胀或口腔异常应接受专业检查。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/oral-health"
+  ]
+}

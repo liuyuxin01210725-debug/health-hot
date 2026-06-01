@@ -1,0 +1,21 @@
+{
+  "title": "抑郁症不只是心情不好",
+  "source": "WHO · Fact Sheet",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/depression",
+  "date": "2026-06-01",
+  "category": "心理",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "抑郁症不同于短暂情绪低落，它会持续影响生活，但可以获得有效帮助。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "who-depression-not-sadness",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "抑郁症不同于短暂情绪低落，它会持续影响生活，但可以获得有效帮助。",
+  "population": "持续情绪低落、兴趣下降或功能受影响的人群，以及其家人朋友。",
+  "caveats": "出现自伤或自杀想法时应立即寻求紧急帮助。科普不能替代专业评估。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/depression"
+  ]
+}

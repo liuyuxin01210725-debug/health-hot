@@ -1,0 +1,21 @@
+{
+  "title": "南非醉茄流行，不等于证据和安全边界已经清楚",
+  "source": "NIH NCCIH · Health Fact Sheet",
+  "source_url": "https://www.nccih.nih.gov/health/ashwagandha",
+  "date": "2026-06-01",
+  "category": "补剂",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "南非醉茄在部分用途上的研究仍有限，不能因为流行就默认适合长期使用。 本条根据 NIH NCCIH · Health Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "nccih-ashwagandha-boundaries",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "南非醉茄在部分用途上的研究仍有限，不能因为流行就默认适合长期使用。",
+  "population": "考虑使用南非醉茄补充剂的人群。",
+  "caveats": "孕产期、甲状腺问题、服药或存在其他疾病者尤其应先咨询专业人员。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.nccih.nih.gov/health/ashwagandha"
+  ]
+}

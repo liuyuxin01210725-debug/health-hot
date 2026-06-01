@@ -1,0 +1,21 @@
+{
+  "title": "肾脏问题可能在早期不明显",
+  "source": "WHO · Fact Sheet",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/kidney-disease",
+  "date": "2026-06-01",
+  "category": "代谢",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "肾脏疾病可能在早期缺少明显症状，控制相关风险和按需检测比凭感觉判断更可靠。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "who-kidney-disease-baseline",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "肾脏疾病可能在早期缺少明显症状，控制相关风险和按需检测比凭感觉判断更可靠。",
+  "population": "存在高血压、糖尿病或其他肾病风险的人群。",
+  "caveats": "检测项目和频率应结合本地指南与个体情况。不要根据科普自行调整药物或补充剂。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/kidney-disease"
+  ]
+}

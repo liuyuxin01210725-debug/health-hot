@@ -1,0 +1,21 @@
+{
+  "title": "烟草没有“更健康”的安全版本",
+  "source": "WHO · Fact Sheet",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/tobacco",
+  "date": "2026-06-01",
+  "category": "其他",
+  "featured": true,
+  "rank": 4,
+  "evidence": "guideline",
+  "summary": "各种烟草使用都会造成健康伤害，也不存在安全的二手烟暴露。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "who-tobacco-no-safe-form",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "各种烟草使用都会造成健康伤害，也不存在安全的二手烟暴露。",
+  "population": "吸烟者、电子烟或其他烟草产品使用者，以及暴露于二手烟的人群。",
+  "caveats": "戒烟通常需要支持和可执行方案。不要用另一种未经证实安全的产品替代专业戒烟帮助。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/tobacco"
+  ]
+}

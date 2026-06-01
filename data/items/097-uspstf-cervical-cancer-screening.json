@@ -1,0 +1,21 @@
+{
+  "title": "宫颈癌筛查是常规预防，不应等有症状才做",
+  "source": "USPSTF · Recommendation",
+  "source_url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/cervical-cancer-screening",
+  "date": "2026-06-01",
+  "category": "其他",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "宫颈癌筛查的价值在于症状出现前识别风险，适龄人群应按可靠指南安排筛查。 本条根据 USPSTF · Recommendation 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "uspstf-cervical-cancer-screening",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "宫颈癌筛查的价值在于症状出现前识别风险，适龄人群应按可靠指南安排筛查。",
+  "population": "依据美国 USPSTF：特定年龄范围内的女性，具体方法和间隔见原文。",
+  "caveats": "筛查方法和地区建议可能不同。出现症状时不能用常规筛查替代及时就医。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/cervical-cancer-screening"
+  ]
+}

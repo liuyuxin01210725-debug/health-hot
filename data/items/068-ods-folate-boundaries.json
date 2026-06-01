@@ -1,0 +1,21 @@
+{
+  "title": "叶酸重要，尤其在备孕期，但不是越多越好",
+  "source": "NIH ODS · Consumer Fact Sheet",
+  "source_url": "https://ods.od.nih.gov/factsheets/Folate-Consumer/",
+  "date": "2026-06-01",
+  "category": "补剂",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "叶酸参与细胞生长，在备孕和孕早期尤其重要，但补充仍应遵循可靠建议。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "ods-folate-boundaries",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "叶酸参与细胞生长，在备孕和孕早期尤其重要，但补充仍应遵循可靠建议。",
+  "population": "一般人群，尤其是备孕和孕早期人群。",
+  "caveats": "具体补充需求和方式应结合专业建议。高剂量补充并不等于更好。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://ods.od.nih.gov/factsheets/Folate-Consumer/"
+  ]
+}

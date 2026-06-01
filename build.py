@@ -439,8 +439,11 @@ def detail_page(it, related):
                         f'<span class="rt">{e(r.get("title",""))}</span>'
                         f'<span class="rc">{e(r.get("category",""))}</span></a>' for r in related)
         rel = f'<div class="d-related"><h5>相关核验</h5>{links}</div>'
-    src_date = it.get("source_published_at") or it.get("date", "")
+    src_date = it.get("source_published_at", "")
+    collected = it.get("date", "")
     src_lbl = e(src_date) + ("（期刊预排，未到见刊日）" if src_date and src_date > TODAY else "")
+    date_meta = ("原文日期 " + src_lbl + " · " if src_date
+                 else ("本站收录 " + e(collected) + " · " if collected else ""))
     evs = [u for u in (it.get("evidence_source_urls") or []) if isinstance(u, str) and _is_study_url(u)]
     nonstudy = [u for u in (it.get("evidence_source_urls") or []) if isinstance(u, str) and not _is_study_url(u)]
     fallback_disc = it.get("source_url", "") if not _is_study_url(it.get("source_url", "")) else ""
@@ -477,7 +480,7 @@ def detail_page(it, related):
              f'<div class="row"><span class="k">证据强度</span>{strength_meter(ev)}</div></div>'
              f'{dual}{"".join(fields)}{evidence_links}'
              f'<div class="src-line">来源：{e(it.get("source", ""))}<br>'
-             f'{("原文日期 " + src_lbl + " · ") if src_date else ""}'
+             f'{date_meta}'
              f'本站复核 {e(it.get("reviewed_at") or TODAY)}</div>{rel}'
              f'<div class="disclaim">本站为科普整理，<b>非医疗建议</b>；每条说法标注证据等级与来源状态，'
              f'点击可回来源核对。具体到个人，请咨询医生或专业人士。</div></div>')

@@ -25,16 +25,436 @@
   <div class="nav-links"><a class="" href="index.html">精选</a><a class="on" href="all.html">全部</a><a class="" href="about.html">关于</a><a href="index.html#ai" class="ai">🤖 AI 接入</a></div>
 </div></nav>
 <main>
-<header class="hero all-hero"><div class="wrap"><span class="eyebrow">ALL CLAIMS · 全部核验</span><h1>全部核验</h1><p class="lede">一行一条，信任分层与证据强度在扫读时就能分辨。</p><form class="searchbox all-search" onsubmit="event.preventDefault();applyFilters()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input type="text" id="q" placeholder="搜索说法、结论或关键词…" oninput="applyFilters()"></form></div></header><section class="sec all-sec"><div class="wrap"><div class="controls"><div class="filterbar" id="filterbar"><button class="fchip on" data-c="all">全部<span class="ct">30</span></button><button class="fchip" data-c="运动">运动<span class="ct">6</span></button><button class="fchip" data-c="营养">营养<span class="ct">4</span></button><button class="fchip" data-c="补剂">补剂<span class="ct">3</span></button><button class="fchip" data-c="代谢">代谢<span class="ct">3</span></button><button class="fchip" data-c="关节">关节<span class="ct">3</span></button><button class="fchip" data-c="心理">心理<span class="ct">3</span></button><button class="fchip" data-c="睡眠">睡眠<span class="ct">2</span></button><button class="fchip" data-c="骨骼">骨骼<span class="ct">2</span></button><button class="fchip" data-c="心肺">心肺<span class="ct">2</span></button><button class="fchip" data-c="长寿">长寿<span class="ct">2</span></button></div><span class="count" id="count"></span></div><div class="listwrap"><div class="list-head"><span>主题</span><span>信任 / 强度</span><span>说法 · 结论</span><span>复核</span></div><div id="list"><a class="list-row" href="claims/nccih-melatonin-sleep-boundaries.html" data-cat="睡眠" data-search="褪黑素不是万能助眠药：不同睡眠问题要分开看 褪黑素对部分睡眠问题可能有帮助，但不是适用于所有失眠的通用答案。 NIH NCCIH 的事实页指出，褪黑素对部分睡眠问题可能有帮助，但不能把所有失眠混为一谈。短期使用对多数人似乎相对安全，长期安全性仍缺少足够信息，儿童、孕哺期和正在用药者尤其需要谨慎。 睡眠 存在时差、昼夜节律相关睡眠问题或考虑使用褪黑素的人群；具体适用范围见 NCCIH 原文。 长期安全性信息不足。儿童、孕哺期人群和正在使用药物者不应仅凭科普自行决定，长期失眠也需要排查原因。">
+<header class="hero all-hero"><div class="wrap"><span class="eyebrow">ALL CLAIMS · 全部核验</span><h1>全部核验</h1><p class="lede">一行一条，信任分层与证据强度在扫读时就能分辨。</p><form class="searchbox all-search" onsubmit="event.preventDefault();applyFilters()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input type="text" id="q" placeholder="搜索说法、结论或关键词…" oninput="applyFilters()"></form></div></header><section class="sec all-sec"><div class="wrap"><div class="controls"><div class="filterbar" id="filterbar"><button class="fchip on" data-c="all">全部<span class="ct">100</span></button><button class="fchip" data-c="补剂">补剂<span class="ct">29</span></button><button class="fchip" data-c="其他">其他<span class="ct">17</span></button><button class="fchip" data-c="营养">营养<span class="ct">9</span></button><button class="fchip" data-c="心理">心理<span class="ct">9</span></button><button class="fchip" data-c="心肺">心肺<span class="ct">7</span></button><button class="fchip" data-c="运动">运动<span class="ct">7</span></button><button class="fchip" data-c="代谢">代谢<span class="ct">6</span></button><button class="fchip" data-c="骨骼">骨骼<span class="ct">5</span></button><button class="fchip" data-c="关节">关节<span class="ct">5</span></button><button class="fchip" data-c="长寿">长寿<span class="ct">4</span></button><button class="fchip" data-c="睡眠">睡眠<span class="ct">2</span></button></div><span class="count" id="count"></span></div><div class="listwrap"><div class="list-head"><span>主题</span><span>信任 / 强度</span><span>说法 · 结论</span><span>复核</span></div><div id="list"><a class="list-row" href="claims/nccih-melatonin-sleep-boundaries.html" data-cat="睡眠" data-search="褪黑素不是万能助眠药：不同睡眠问题要分开看 褪黑素对部分睡眠问题可能有帮助，但不是适用于所有失眠的通用答案。 NIH NCCIH 的事实页指出，褪黑素对部分睡眠问题可能有帮助，但不能把所有失眠混为一谈。短期使用对多数人似乎相对安全，长期安全性仍缺少足够信息，儿童、孕哺期和正在用药者尤其需要谨慎。 睡眠 存在时差、昼夜节律相关睡眠问题或考虑使用褪黑素的人群；具体适用范围见 NCCIH 原文。 长期安全性信息不足。儿童、孕哺期人群和正在使用药物者不应仅凭科普自行决定，长期失眠也需要排查原因。">
   <span class="lr-cat">睡眠</span>
   <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
   <span class="lr-claim"><span class="lc-t">褪黑素不是万能助眠药：不同睡眠问题要分开看</span><span class="lc-v">褪黑素对部分睡眠问题可能有帮助，但不是适用于所有失眠的通用答案。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-tobacco-no-safe-form.html" data-cat="其他" data-search="烟草没有“更健康”的安全版本 各种烟草使用都会造成健康伤害，也不存在安全的二手烟暴露。 各种烟草使用都会造成健康伤害，也不存在安全的二手烟暴露。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 其他 吸烟者、电子烟或其他烟草产品使用者，以及暴露于二手烟的人群。 戒烟通常需要支持和可执行方案。不要用另一种未经证实安全的产品替代专业戒烟帮助。">
+  <span class="lr-cat">其他</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">烟草没有“更健康”的安全版本</span><span class="lc-v">各种烟草使用都会造成健康伤害，也不存在安全的二手烟暴露。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-antimicrobial-resistance.html" data-cat="其他" data-search="抗生素不是感冒的通用答案 抗微生物药物的错误和过度使用会加剧耐药问题，不能把抗生素当作感冒的通用答案。 抗微生物药物的错误和过度使用会加剧耐药问题，不能把抗生素当作感冒的通用答案。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 其他 一般人群、照护者和医疗相关人员。 是否需要抗生素应由专业人员判断。已经开具的药物也应按医嘱使用。">
+  <span class="lr-cat">其他</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">抗生素不是感冒的通用答案</span><span class="lc-v">抗微生物药物的错误和过度使用会加剧耐药问题，不能把抗生素当作感冒的通用答案。</span></span>
   <span class="lr-date">06-01</span>
 </a>
 <a class="list-row" href="claims/nih-vitamin-d-supplement-boundaries.html" data-cat="补剂" data-search="维生素 D 对骨骼重要，但不是所有人都需要盲目补充 维生素 D 对骨骼健康重要，但“重要”不等于“所有人都应该自行长期补充”。 NIH ODS 事实页说明，维生素 D 有助于身体吸收钙，并支持骨骼、肌肉、神经和免疫功能。维生素 D 可以来自日晒、食物和补充剂；是否容易摄入不足、是否需要补充，要结合个体风险判断。 补剂 一般人群；较少接触阳光、饮食来源不足或存在特定风险的人群更值得关注，具体见 NIH ODS 原文。 是否缺乏、是否需要补充以及补充方式，应结合个体情况判断。补充剂也可能过量，不应把通用科普当作个人用量建议。">
   <span class="lr-cat">补剂</span>
   <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
   <span class="lr-claim"><span class="lc-t">维生素 D 对骨骼重要，但不是所有人都需要盲目补充</span><span class="lc-v">维生素 D 对骨骼健康重要，但“重要”不等于“所有人都应该自行长期补充”。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-hypertension-baseline.html" data-cat="心肺" data-search="高血压可能没有明显症状，测量才知道 高血压常常没有明显症状，不能只凭感觉判断；规范测量和持续管理很重要。 高血压常常没有明显症状，不能只凭感觉判断；规范测量和持续管理很重要。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 心肺 成年人，尤其存在心血管风险因素或既往血压异常者。 单次读数不能代替诊断。已经确诊或正在用药者应按医生建议监测和治疗。">
+  <span class="lr-cat">心肺</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">高血压可能没有明显症状，测量才知道</span><span class="lc-v">高血压常常没有明显症状，不能只凭感觉判断；规范测量和持续管理很重要。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-alcohol-health-risk.html" data-cat="营养" data-search="饮酒不能包装成保健建议 酒精会带来健康风险，不能为了所谓保健作用而开始饮酒。 酒精会带来健康风险，不能为了所谓保健作用而开始饮酒。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 营养 一般人群；孕产期、驾驶前、服药期间或有相关疾病者尤其应避免饮酒。 风险会随饮酒量、频率和场景变化。该条不是酒精依赖的自行处置方案，需要帮助时应寻求专业支持。">
+  <span class="lr-cat">营养</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">饮酒不能包装成保健建议</span><span class="lc-v">酒精会带来健康风险，不能为了所谓保健作用而开始饮酒。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-diabetes-baseline.html" data-cat="代谢" data-search="糖尿病管理不只是盯一次血糖 糖尿病需要持续管理；饮食、活动、体重、血压和规范诊疗都比只盯一次血糖更重要。 糖尿病需要持续管理；饮食、活动、体重、血压和规范诊疗都比只盯一次血糖更重要。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 代谢 糖尿病患者、糖尿病前期人群和存在代谢风险的人群。 不能根据科普自行停药或调整药物。出现明显症状或检测异常时应及时就医。">
+  <span class="lr-cat">代谢</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">糖尿病管理不只是盯一次血糖</span><span class="lc-v">糖尿病需要持续管理；饮食、活动、体重、血压和规范诊疗都比只盯一次血糖更重要。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-cardiovascular-risk-factors.html" data-cat="心肺" data-search="心血管病风险不是只看胆固醇一个数字 心血管风险受多种因素影响，控烟、饮食、活动、血压和血糖管理需要一起看。 心血管风险受多种因素影响，控烟、饮食、活动、血压和血糖管理需要一起看。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 心肺 一般成年人，尤其存在高血压、糖尿病、吸烟或家族风险者。 个体风险评估和治疗目标需要结合病史与检查结果，不能靠单一指标自行判断。">
+  <span class="lr-cat">心肺</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">心血管病风险不是只看胆固醇一个数字</span><span class="lc-v">心血管风险受多种因素影响，控烟、饮食、活动、血压和血糖管理需要一起看。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-cancer-prevention-baseline.html" data-cat="其他" data-search="癌症风险管理既包括预防，也包括早发现 部分癌症可以通过减少风险暴露和规范筛查降低负担；出现可疑症状也不应拖延评估。 部分癌症可以通过减少风险暴露和规范筛查降低负担；出现可疑症状也不应拖延评估。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 其他 一般人群；筛查项目需结合年龄、性别、风险因素和所在地区指南。 癌症不是单一疾病，不能把通用科普当作个人筛查计划或诊断结论。">
+  <span class="lr-cat">其他</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">癌症风险管理既包括预防，也包括早发现</span><span class="lc-v">部分癌症可以通过减少风险暴露和规范筛查降低负担；出现可疑症状也不应拖延评估。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-healthy-ageing.html" data-cat="长寿" data-search="健康老龄化不等于完全没有疾病 健康老龄化更关注维持功能、行动能力和参与生活，而不是追求完全没有疾病。 健康老龄化更关注维持功能、行动能力和参与生活，而不是追求完全没有疾病。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 长寿 中老年人及其照护者，也适合更早开始规划健康习惯的人群。 衰老差异很大。科普不能代替对跌倒、认知、营养和慢病风险的个体评估。">
+  <span class="lr-cat">长寿</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">健康老龄化不等于完全没有疾病</span><span class="lc-v">健康老龄化更关注维持功能、行动能力和参与生活，而不是追求完全没有疾病。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-falls-prevention.html" data-cat="骨骼" data-search="老年跌倒不是“年纪大了没办法” 跌倒风险可以通过识别危险因素、改善环境和适当训练来降低，不应视为不可避免。 跌倒风险可以通过识别危险因素、改善环境和适当训练来降低，不应视为不可避免。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 骨骼 老年人、既往跌倒者，以及存在平衡、视力、用药或居家环境风险者。 反复跌倒可能有多重原因，应接受评估。训练方式需要结合身体能力和安全条件。">
+  <span class="lr-cat">骨骼</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">老年跌倒不是“年纪大了没办法”</span><span class="lc-v">跌倒风险可以通过识别危险因素、改善环境和适当训练来降低，不应视为不可避免。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-low-back-pain-baseline.html" data-cat="关节" data-search="腰痛不等于必须长期躺着不动 腰痛很常见，处理通常需要结合评估、活动管理和康复，而不是简单长期卧床。 腰痛很常见，处理通常需要结合评估、活动管理和康复，而不是简单长期卧床。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 关节 存在腰痛的人群。 出现严重外伤、进行性无力、大小便异常或其他危险信号时应及时就医。具体康复方案应个体化。">
+  <span class="lr-cat">关节</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">腰痛不等于必须长期躺着不动</span><span class="lc-v">腰痛很常见，处理通常需要结合评估、活动管理和康复，而不是简单长期卧床。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-osteoarthritis-baseline.html" data-cat="关节" data-search="骨关节炎不是只能硬扛的磨损 骨关节炎会影响疼痛和功能，但通过合适的活动、康复和规范管理可以减轻负担。 骨关节炎会影响疼痛和功能，但通过合适的活动、康复和规范管理可以减轻负担。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 关节 骨关节炎患者和有关节疼痛、活动受限的人群。 疼痛原因不止一种。不能仅凭年龄或疼痛自行诊断，训练和治疗需要结合评估。">
+  <span class="lr-cat">关节</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">骨关节炎不是只能硬扛的磨损</span><span class="lc-v">骨关节炎会影响疼痛和功能，但通过合适的活动、康复和规范管理可以减轻负担。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-fragility-fractures.html" data-cat="骨骼" data-search="轻微外力导致骨折，值得进一步评估骨骼风险 脆性骨折不是单纯意外，它可能提示骨骼脆弱和后续骨折风险，需要进一步评估。 脆性骨折不是单纯意外，它可能提示骨骼脆弱和后续骨折风险，需要进一步评估。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 骨骼 发生低能量骨折的中老年人，以及存在骨质疏松风险的人群。 骨折后应及时接受医疗处理。后续评估、康复和预防方案需要由专业人员制定。">
+  <span class="lr-cat">骨骼</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">轻微外力导致骨折，值得进一步评估骨骼风险</span><span class="lc-v">脆性骨折不是单纯意外，它可能提示骨骼脆弱和后续骨折风险，需要进一步评估。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-depression-not-sadness.html" data-cat="心理" data-search="抑郁症不只是心情不好 抑郁症不同于短暂情绪低落，它会持续影响生活，但可以获得有效帮助。 抑郁症不同于短暂情绪低落，它会持续影响生活，但可以获得有效帮助。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 心理 持续情绪低落、兴趣下降或功能受影响的人群，以及其家人朋友。 出现自伤或自杀想法时应立即寻求紧急帮助。科普不能替代专业评估。">
+  <span class="lr-cat">心理</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">抑郁症不只是心情不好</span><span class="lc-v">抑郁症不同于短暂情绪低落，它会持续影响生活，但可以获得有效帮助。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-anxiety-disorders.html" data-cat="心理" data-search="焦虑障碍不是“想开点就好了” 当焦虑持续、过度并影响生活时，它可能需要专业评估和支持，而不是简单归咎于意志力。 当焦虑持续、过度并影响生活时，它可能需要专业评估和支持，而不是简单归咎于意志力。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 心理 焦虑持续影响学习、工作、睡眠或社交的人群。 不同焦虑问题的处理不同。出现明显痛苦或功能损害时，应寻求专业帮助。">
+  <span class="lr-cat">心理</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">焦虑障碍不是“想开点就好了”</span><span class="lc-v">当焦虑持续、过度并影响生活时，它可能需要专业评估和支持，而不是简单归咎于意志力。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-mental-health-baseline.html" data-cat="心理" data-search="心理健康不只是“没有诊断” 心理健康不只是没有精神障碍，也包括应对压力、学习工作和参与社会生活的能力。 心理健康不只是没有精神障碍，也包括应对压力、学习工作和参与社会生活的能力。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 心理 一般人群。 心理健康受个人、家庭、工作和社会环境共同影响，不能把复杂问题简化为个人意志。">
+  <span class="lr-cat">心理</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">心理健康不只是“没有诊断”</span><span class="lc-v">心理健康不只是没有精神障碍，也包括应对压力、学习工作和参与社会生活的能力。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-mental-health-at-work.html" data-cat="心理" data-search="工作环境本身也会影响心理健康 工作负荷、控制感、支持和歧视等环境因素会影响心理健康，不能只要求个人自行调节。 工作负荷、控制感、支持和歧视等环境因素会影响心理健康，不能只要求个人自行调节。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 心理 劳动者、管理者和组织负责人。 组织改进和个体支持需要并行。严重困扰仍应寻求专业帮助。">
+  <span class="lr-cat">心理</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">工作环境本身也会影响心理健康</span><span class="lc-v">工作负荷、控制感、支持和歧视等环境因素会影响心理健康，不能只要求个人自行调节。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-dementia-not-normal-ageing.html" data-cat="长寿" data-search="痴呆不是正常衰老的必然结果 痴呆会影响记忆、思考和日常功能，它不是正常衰老的必然结果。 痴呆会影响记忆、思考和日常功能，它不是正常衰老的必然结果。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 长寿 出现持续认知变化的人群及其家属，也适用于关心老年认知健康的人群。 短期健忘不等于痴呆。认知变化可能有多种原因，应接受专业评估。">
+  <span class="lr-cat">长寿</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">痴呆不是正常衰老的必然结果</span><span class="lc-v">痴呆会影响记忆、思考和日常功能，它不是正常衰老的必然结果。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-hearing-loss.html" data-cat="其他" data-search="听力下降不应只当作“老了正常” 听力问题会影响沟通和生活质量，部分原因可以预防或干预，值得尽早评估。 听力问题会影响沟通和生活质量，部分原因可以预防或干预，值得尽早评估。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 其他 出现听力下降、耳鸣或沟通困难的人群，以及长期噪声暴露者。 突然听力下降需要及时就医。具体原因和干预方式应由专业人员判断。">
+  <span class="lr-cat">其他</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">听力下降不应只当作“老了正常”</span><span class="lc-v">听力问题会影响沟通和生活质量，部分原因可以预防或干预，值得尽早评估。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-vision-impairment.html" data-cat="其他" data-search="视力问题不应等到严重影响生活才处理 许多视力问题可以预防、识别或干预，定期检查和及时处理很重要。 许多视力问题可以预防、识别或干预，定期检查和及时处理很重要。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 其他 一般人群，尤其出现视力变化、慢病风险或年龄相关风险者。 突然视力变化、眼痛或视野异常应及时就医。">
+  <span class="lr-cat">其他</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">视力问题不应等到严重影响生活才处理</span><span class="lc-v">许多视力问题可以预防、识别或干预，定期检查和及时处理很重要。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-oral-health.html" data-cat="其他" data-search="口腔健康不是只在牙痛时才需要关注 多数常见口腔疾病可以预防，日常清洁、风险管理和适时检查比牙痛后再处理更重要。 多数常见口腔疾病可以预防，日常清洁、风险管理和适时检查比牙痛后再处理更重要。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 其他 一般人群。 持续牙痛、出血、肿胀或口腔异常应接受专业检查。">
+  <span class="lr-cat">其他</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">口腔健康不是只在牙痛时才需要关注</span><span class="lc-v">多数常见口腔疾病可以预防，日常清洁、风险管理和适时检查比牙痛后再处理更重要。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-asthma-management.html" data-cat="心肺" data-search="哮喘不是偶尔喘一下就不用管 哮喘是需要长期管理的慢性呼吸道疾病，规范评估和治疗有助于控制症状。 哮喘是需要长期管理的慢性呼吸道疾病，规范评估和治疗有助于控制症状。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 心肺 出现反复喘息、咳嗽、胸闷或已确诊哮喘的人群。 急性呼吸困难需要及时就医。不要仅凭科普自行停用或调整药物。">
+  <span class="lr-cat">心肺</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">哮喘不是偶尔喘一下就不用管</span><span class="lc-v">哮喘是需要长期管理的慢性呼吸道疾病，规范评估和治疗有助于控制症状。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-copd-baseline.html" data-cat="心肺" data-search="长期咳喘不一定只是年纪大或体力差 慢性阻塞性肺疾病会造成持续呼吸问题，烟草和空气污染等暴露值得重视。 慢性阻塞性肺疾病会造成持续呼吸问题，烟草和空气污染等暴露值得重视。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 心肺 长期咳嗽、咳痰、气短者，以及有吸烟或空气污染暴露的人群。 需要通过专业评估明确原因。出现明显呼吸困难时应及时就医。">
+  <span class="lr-cat">心肺</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">长期咳喘不一定只是年纪大或体力差</span><span class="lc-v">慢性阻塞性肺疾病会造成持续呼吸问题，烟草和空气污染等暴露值得重视。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-kidney-disease-baseline.html" data-cat="代谢" data-search="肾脏问题可能在早期不明显 肾脏疾病可能在早期缺少明显症状，控制相关风险和按需检测比凭感觉判断更可靠。 肾脏疾病可能在早期缺少明显症状，控制相关风险和按需检测比凭感觉判断更可靠。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 代谢 存在高血压、糖尿病或其他肾病风险的人群。 检测项目和频率应结合本地指南与个体情况。不要根据科普自行调整药物或补充剂。">
+  <span class="lr-cat">代谢</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">肾脏问题可能在早期不明显</span><span class="lc-v">肾脏疾病可能在早期缺少明显症状，控制相关风险和按需检测比凭感觉判断更可靠。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-anaemia-causes.html" data-cat="营养" data-search="贫血不是补铁两个字就能概括 贫血可能有不同原因，疲劳等症状也不具有特异性；先明确原因再处理更可靠。 贫血可能有不同原因，疲劳等症状也不具有特异性；先明确原因再处理更可靠。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 营养 出现乏力、头晕或检查提示贫血的人群，孕产期和儿童等重点人群。 并非所有贫血都由缺铁导致。不要在未评估原因时长期自行补铁。">
+  <span class="lr-cat">营养</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">贫血不是补铁两个字就能概括</span><span class="lc-v">贫血可能有不同原因，疲劳等症状也不具有特异性；先明确原因再处理更可靠。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-food-safety.html" data-cat="营养" data-search="吃得健康，也要先保证食物安全 不安全食品会导致疾病，储存、处理和烹饪卫生是健康饮食的基础。 不安全食品会导致疾病，储存、处理和烹饪卫生是健康饮食的基础。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 营养 一般人群，尤其是儿童、老年人、孕产期和免疫功能较弱者。 出现严重腹泻、脱水、高热或其他危险症状时应及时就医。">
+  <span class="lr-cat">营养</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">吃得健康，也要先保证食物安全</span><span class="lc-v">不安全食品会导致疾病，储存、处理和烹饪卫生是健康饮食的基础。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-drinking-water.html" data-cat="营养" data-search="饮水健康首先是安全，而不是追固定杯数 饮水健康首先要关注水源安全和卫生，不能把所有人的需求简化成固定杯数。 饮水健康首先要关注水源安全和卫生，不能把所有人的需求简化成固定杯数。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 营养 一般人群。 饮水需求受环境、活动量和健康状态影响。特定疾病人群需要遵循专业建议。">
+  <span class="lr-cat">营养</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">饮水健康首先是安全，而不是追固定杯数</span><span class="lc-v">饮水健康首先要关注水源安全和卫生，不能把所有人的需求简化成固定杯数。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-infant-feeding.html" data-cat="营养" data-search="婴幼儿喂养不能照搬成人饮食逻辑 婴幼儿喂养有独立的营养和安全原则，不能把成人饮食潮流直接套用在婴幼儿身上。 婴幼儿喂养有独立的营养和安全原则，不能把成人饮食潮流直接套用在婴幼儿身上。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 营养 婴幼儿照护者。 喂养决策应结合儿童年龄、生长情况和专业建议。出现喂养困难或生长问题应及时评估。">
+  <span class="lr-cat">营养</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">婴幼儿喂养不能照搬成人饮食逻辑</span><span class="lc-v">婴幼儿喂养有独立的营养和安全原则，不能把成人饮食潮流直接套用在婴幼儿身上。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-menopause-baseline.html" data-cat="其他" data-search="绝经是生命阶段，不等于所有不适都只能忍 绝经是自然生命阶段，但相关症状和长期健康问题可以讨论、评估和管理。 绝经是自然生命阶段，但相关症状和长期健康问题可以讨论、评估和管理。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 其他 围绝经期和绝经后女性。 症状差异很大。具体评估和处理需要结合个人风险，不应自行套用他人的方案。">
+  <span class="lr-cat">其他</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">绝经是生命阶段，不等于所有不适都只能忍</span><span class="lc-v">绝经是自然生命阶段，但相关症状和长期健康问题可以讨论、评估和管理。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-pcos-baseline.html" data-cat="其他" data-search="多囊卵巢综合征不只是月经不规律 多囊卵巢综合征会涉及生殖、代谢和心理健康，不应只把它理解成月经问题。 多囊卵巢综合征会涉及生殖、代谢和心理健康，不应只把它理解成月经问题。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 其他 怀疑或已确诊多囊卵巢综合征的人群。 诊断和管理需要个体化评估。不能仅凭单一症状或网络清单自行确诊。">
+  <span class="lr-cat">其他</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">多囊卵巢综合征不只是月经不规律</span><span class="lc-v">多囊卵巢综合征会涉及生殖、代谢和心理健康，不应只把它理解成月经问题。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-endometriosis-baseline.html" data-cat="其他" data-search="严重痛经不应简单归为“忍一忍就好” 子宫内膜异位症可能带来疼痛和生活影响，严重或持续症状值得接受评估。 子宫内膜异位症可能带来疼痛和生活影响，严重或持续症状值得接受评估。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 其他 存在严重痛经、慢性盆腔痛或相关困扰的人群。 痛经原因不止一种。不能仅凭症状自行诊断，持续影响生活时应就医。">
+  <span class="lr-cat">其他</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">严重痛经不应简单归为“忍一忍就好”</span><span class="lc-v">子宫内膜异位症可能带来疼痛和生活影响，严重或持续症状值得接受评估。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-headache-disorders.html" data-cat="其他" data-search="反复头痛不是都能用同一种办法处理 头痛类型不同，反复或严重头痛需要根据特点评估，不能一概而论。 头痛类型不同，反复或严重头痛需要根据特点评估，不能一概而论。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 其他 存在反复头痛或头痛影响生活的人群。 突发剧烈头痛、神经系统异常或其他危险信号需要及时就医。">
+  <span class="lr-cat">其他</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">反复头痛不是都能用同一种办法处理</span><span class="lc-v">头痛类型不同，反复或严重头痛需要根据特点评估，不能一概而论。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/who-air-pollution-health.html" data-cat="心肺" data-search="空气污染不是只影响呼吸道 室外空气污染会增加多种健康风险，不应只把它理解为短期咳嗽或不适。 室外空气污染会增加多种健康风险，不应只把它理解为短期咳嗽或不适。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 心肺 一般人群，儿童、老年人和心肺疾病患者尤其值得关注。 个体防护不能替代公共环境治理。高风险人群应结合本地空气质量提示安排活动。">
+  <span class="lr-cat">心肺</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">空气污染不是只影响呼吸道</span><span class="lc-v">室外空气污染会增加多种健康风险，不应只把它理解为短期咳嗽或不适。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/ods-vitamin-b12-boundaries.html" data-cat="补剂" data-search="维生素 B12 很重要，但不是人人都缺 维生素 B12 对神经和血细胞功能重要，但是否需要补充取决于饮食、吸收和个体风险。 维生素 B12 对神经和血细胞功能重要，但是否需要补充取决于饮食、吸收和个体风险。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 一般人群；纯素饮食者、部分老年人和存在吸收问题者更值得关注。 疲劳原因很多。不要仅凭症状把问题归为 B12 缺乏，必要时应接受评估。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">维生素 B12 很重要，但不是人人都缺</span><span class="lc-v">维生素 B12 对神经和血细胞功能重要，但是否需要补充取决于饮食、吸收和个体风险。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/ods-calcium-boundaries.html" data-cat="补剂" data-search="钙对骨骼重要，但不是补得越多越好 钙是骨骼健康的重要营养素，但应关注总体摄入和个体需求，不是补得越多越好。 钙是骨骼健康的重要营养素，但应关注总体摄入和个体需求，不是补得越多越好。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 一般人群，骨骼风险较高或饮食摄入不足者更值得关注。 补充剂可能有副作用或相互作用。具体摄入目标和补充方式应结合个人情况。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">钙对骨骼重要，但不是补得越多越好</span><span class="lc-v">钙是骨骼健康的重要营养素，但应关注总体摄入和个体需求，不是补得越多越好。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/ods-magnesium-boundaries.html" data-cat="补剂" data-search="镁补充剂不是所有不适的万能答案 镁参与多种身体功能，但不能把各种疲劳、睡眠或抽筋问题一概归为缺镁。 镁参与多种身体功能，但不能把各种疲劳、睡眠或抽筋问题一概归为缺镁。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 一般人群；饮食摄入不足或存在特定风险者。 补充剂可能导致腹泻并与药物相互作用。肾功能异常者尤其需要谨慎。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">镁补充剂不是所有不适的万能答案</span><span class="lc-v">镁参与多种身体功能，但不能把各种疲劳、睡眠或抽筋问题一概归为缺镁。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/ods-omega3-food-vs-supplement.html" data-cat="补剂" data-search="吃鱼和吃 Omega-3 补充剂不是一回事 Omega-3 可以来自食物和补充剂，但不同健康目标的证据不同，不能简单互相替代。 Omega-3 可以来自食物和补充剂，但不同健康目标的证据不同，不能简单互相替代。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 关注心血管健康、饮食结构或考虑使用 Omega-3 补充剂的人群。 补充剂可能与药物相互作用。具体是否使用应结合饮食和个人风险。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">吃鱼和吃 Omega-3 补充剂不是一回事</span><span class="lc-v">Omega-3 可以来自食物和补充剂，但不同健康目标的证据不同，不能简单互相替代。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/ods-iron-no-blind-supplement.html" data-cat="补剂" data-search="缺铁需要重视，但补铁不应靠猜 铁对血液和身体功能重要，但并非所有疲劳或贫血都等于缺铁，补充前应先判断原因。 铁对血液和身体功能重要，但并非所有疲劳或贫血都等于缺铁，补充前应先判断原因。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 一般人群；孕产期、婴幼儿、月经量较大或存在缺铁风险者更值得关注。 铁过量可能有害，也可能与药物相互作用。不要在未评估原因时长期自行补铁。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">缺铁需要重视，但补铁不应靠猜</span><span class="lc-v">铁对血液和身体功能重要，但并非所有疲劳或贫血都等于缺铁，补充前应先判断原因。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/ods-folate-boundaries.html" data-cat="补剂" data-search="叶酸重要，尤其在备孕期，但不是越多越好 叶酸参与细胞生长，在备孕和孕早期尤其重要，但补充仍应遵循可靠建议。 叶酸参与细胞生长，在备孕和孕早期尤其重要，但补充仍应遵循可靠建议。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 一般人群，尤其是备孕和孕早期人群。 具体补充需求和方式应结合专业建议。高剂量补充并不等于更好。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">叶酸重要，尤其在备孕期，但不是越多越好</span><span class="lc-v">叶酸参与细胞生长，在备孕和孕早期尤其重要，但补充仍应遵循可靠建议。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/ods-vitamin-c-boundaries.html" data-cat="补剂" data-search="维生素 C 重要，但不能替代整体饮食 维生素 C 是必需营养素，但补充剂不能替代多样化饮食，也不是所有问题的通用解决方案。 维生素 C 是必需营养素，但补充剂不能替代多样化饮食，也不是所有问题的通用解决方案。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 一般人群；饮食来源不足或存在特定风险者。 高剂量补充可能带来不适或风险。具体需求应结合饮食和健康情况。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">维生素 C 重要，但不能替代整体饮食</span><span class="lc-v">维生素 C 是必需营养素，但补充剂不能替代多样化饮食，也不是所有问题的通用解决方案。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/ods-vitamin-a-boundaries.html" data-cat="补剂" data-search="维生素 A 不能因为重要就随意高剂量补 维生素 A 对视力和身体功能重要，但高剂量摄入可能有害，不能随意叠加补充。 维生素 A 对视力和身体功能重要，但高剂量摄入可能有害，不能随意叠加补充。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 一般人群；孕产期或考虑使用含维生素 A 补充剂者尤其需要谨慎。 不同形式的维生素 A 风险不同。孕产期和服药人群应先咨询专业人员。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">维生素 A 不能因为重要就随意高剂量补</span><span class="lc-v">维生素 A 对视力和身体功能重要，但高剂量摄入可能有害，不能随意叠加补充。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/ods-vitamin-e-boundaries.html" data-cat="补剂" data-search="抗氧化不等于维生素 E 补充剂越多越好 维生素 E 是必需营养素，但“抗氧化”不能自动推导出高剂量补充有额外健康收益。 维生素 E 是必需营养素，但“抗氧化”不能自动推导出高剂量补充有额外健康收益。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 一般人群。 高剂量补充可能带来风险或与药物相互作用。不要把营销概念当作个体化建议。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">抗氧化不等于维生素 E 补充剂越多越好</span><span class="lc-v">维生素 E 是必需营养素，但“抗氧化”不能自动推导出高剂量补充有额外健康收益。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/ods-vitamin-k-interactions.html" data-cat="补剂" data-search="维生素 K 很重要，也需要留意药物相互作用 维生素 K 与凝血和骨骼功能有关，正在使用特定药物的人尤其需要关注摄入稳定性。 维生素 K 与凝血和骨骼功能有关，正在使用特定药物的人尤其需要关注摄入稳定性。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 一般人群，尤其是使用抗凝药物者。 使用抗凝药物时不要自行大幅改变补充剂或饮食摄入，应咨询专业人员。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">维生素 K 很重要，也需要留意药物相互作用</span><span class="lc-v">维生素 K 与凝血和骨骼功能有关，正在使用特定药物的人尤其需要关注摄入稳定性。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/ods-zinc-boundaries.html" data-cat="补剂" data-search="锌参与免疫功能，但长期高剂量补充也会出问题 锌对免疫和身体功能重要，但并不意味着长期高剂量补充更好。 锌对免疫和身体功能重要，但并不意味着长期高剂量补充更好。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 一般人群；饮食不足或存在特定风险者。 过量锌可能造成不良影响并干扰其他营养素。不要把短期流行说法当作长期方案。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">锌参与免疫功能，但长期高剂量补充也会出问题</span><span class="lc-v">锌对免疫和身体功能重要，但并不意味着长期高剂量补充更好。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/ods-iodine-thyroid-balance.html" data-cat="补剂" data-search="碘和甲状腺的关系不是越多越好 碘是甲状腺激素合成所需营养素，但摄入过少或过多都可能带来问题。 碘是甲状腺激素合成所需营养素，但摄入过少或过多都可能带来问题。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 一般人群，孕产期和甲状腺相关人群尤其值得关注。 甲状腺问题不能仅靠自行补碘处理。是否补充应结合饮食、地区和专业建议。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">碘和甲状腺的关系不是越多越好</span><span class="lc-v">碘是甲状腺激素合成所需营养素，但摄入过少或过多都可能带来问题。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/ods-potassium-boundaries.html" data-cat="补剂" data-search="钾很重要，但补充剂和低钠盐并非人人适合 钾参与神经、肌肉和体液平衡，优先关注食物来源；补充剂并非人人适合。 钾参与神经、肌肉和体液平衡，优先关注食物来源；补充剂并非人人适合。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 一般人群；存在肾脏问题或使用相关药物者尤其需要谨慎。 肾功能异常或服用某些药物时，补钾和使用低钠盐可能有风险，应先咨询专业人员。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">钾很重要，但补充剂和低钠盐并非人人适合</span><span class="lc-v">钾参与神经、肌肉和体液平衡，优先关注食物来源；补充剂并非人人适合。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/ods-selenium-boundaries.html" data-cat="补剂" data-search="硒是必需营养素，但需要量并不大 硒对身体功能重要，但所需量有限，额外高剂量补充不等于更健康。 硒对身体功能重要，但所需量有限，额外高剂量补充不等于更健康。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 一般人群。 长期过量摄入可能有害。不要把微量元素的重要性误解为需要自行高剂量补充。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">硒是必需营养素，但需要量并不大</span><span class="lc-v">硒对身体功能重要，但所需量有限，额外高剂量补充不等于更健康。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/ods-choline-baseline.html" data-cat="补剂" data-search="胆碱重要，但先看整体饮食来源 胆碱参与细胞和神经功能，关注整体饮食来源比盲目跟风补充更可靠。 胆碱参与细胞和神经功能，关注整体饮食来源比盲目跟风补充更可靠。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 一般人群，孕产期和饮食结构受限者更值得关注。 具体需求因人而异。补充剂不能替代整体饮食评估。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">胆碱重要，但先看整体饮食来源</span><span class="lc-v">胆碱参与细胞和神经功能，关注整体饮食来源比盲目跟风补充更可靠。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/ods-vitamin-b6-boundaries.html" data-cat="补剂" data-search="维生素 B6 不是可以无限叠加的日常补充剂 维生素 B6 是必需营养素，但长期高剂量摄入可能造成神经损伤。 维生素 B6 是必需营养素，但长期高剂量摄入可能造成神经损伤。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 一般人群，使用含 B6 的多种补充剂者尤其应核对总摄入。 注意不同产品叠加。出现异常感觉或其他不适时应停止自行加量并咨询专业人员。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">维生素 B6 不是可以无限叠加的日常补充剂</span><span class="lc-v">维生素 B6 是必需营养素，但长期高剂量摄入可能造成神经损伤。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/ods-performance-supplements.html" data-cat="补剂" data-search="运动补剂要逐个看证据和风险，不能一锅端 运动表现补充剂成分复杂，证据和安全性差异很大，不能把“运动补剂”当作一个统一类别判断。 运动表现补充剂成分复杂，证据和安全性差异很大，不能把“运动补剂”当作一个统一类别判断。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 考虑使用运动表现补充剂的成年人。 产品质量、成分叠加和药物相互作用都值得关注。竞技人群还应留意禁用成分风险。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">运动补剂要逐个看证据和风险，不能一锅端</span><span class="lc-v">运动表现补充剂成分复杂，证据和安全性差异很大，不能把“运动补剂”当作一个统一类别判断。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/ods-weight-loss-supplements.html" data-cat="补剂" data-search="减肥补充剂宣传很多，可靠证据通常有限 许多减肥补充剂证据有限，也可能存在副作用或成分风险，不能把宣传当作效果保证。 许多减肥补充剂证据有限，也可能存在副作用或成分风险，不能把宣传当作效果保证。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 考虑使用减肥补充剂的人群。 体重管理需要结合整体方案。已有疾病、服药或出现不适者应先咨询专业人员。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">减肥补充剂宣传很多，可靠证据通常有限</span><span class="lc-v">许多减肥补充剂证据有限，也可能存在副作用或成分风险，不能把宣传当作效果保证。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/ods-multivitamin-boundaries.html" data-cat="补剂" data-search="复合维生素不能替代均衡饮食 复合维生素和矿物质补充剂不能替代多样化饮食，是否有价值取决于个体需求。 复合维生素和矿物质补充剂不能替代多样化饮食，是否有价值取决于个体需求。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 一般人群；饮食受限或存在特定营养风险者更值得评估。 注意不同产品重复成分和总摄入。不要把补充剂当作饮食质量的补偿券。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">复合维生素不能替代均衡饮食</span><span class="lc-v">复合维生素和矿物质补充剂不能替代多样化饮食，是否有价值取决于个体需求。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/ods-thiamin-baseline.html" data-cat="补剂" data-search="维生素 B1 很重要，但通常先看饮食和风险因素 维生素 B1 参与能量代谢，是否需要额外补充应结合饮食和个体风险。 维生素 B1 参与能量代谢，是否需要额外补充应结合饮食和个体风险。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 一般人群；饮食受限或存在特定缺乏风险者。 疲劳等症状原因很多，不能仅凭感觉判断缺乏。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">维生素 B1 很重要，但通常先看饮食和风险因素</span><span class="lc-v">维生素 B1 参与能量代谢，是否需要额外补充应结合饮食和个体风险。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/nccih-probiotics-strain-specific.html" data-cat="补剂" data-search="益生菌不是一个统一产品，效果要看具体菌株和场景 不同益生菌产品和应用场景的证据不同，不能把“可能有用”推广成人人都该吃。 不同益生菌产品和应用场景的证据不同，不能把“可能有用”推广成人人都该吃。 本条根据 NIH NCCIH · Health Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 考虑使用益生菌的人群。 免疫功能较弱或存在严重疾病者应谨慎。产品菌株、质量和适用场景需要具体看。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">益生菌不是一个统一产品，效果要看具体菌株和场景</span><span class="lc-v">不同益生菌产品和应用场景的证据不同，不能把“可能有用”推广成人人都该吃。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/nccih-ashwagandha-boundaries.html" data-cat="补剂" data-search="南非醉茄流行，不等于证据和安全边界已经清楚 南非醉茄在部分用途上的研究仍有限，不能因为流行就默认适合长期使用。 南非醉茄在部分用途上的研究仍有限，不能因为流行就默认适合长期使用。 本条根据 NIH NCCIH · Health Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 考虑使用南非醉茄补充剂的人群。 孕产期、甲状腺问题、服药或存在其他疾病者尤其应先咨询专业人员。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">南非醉茄流行，不等于证据和安全边界已经清楚</span><span class="lc-v">南非醉茄在部分用途上的研究仍有限，不能因为流行就默认适合长期使用。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/nccih-turmeric-food-vs-extract.html" data-cat="补剂" data-search="姜黄入菜和高浓度姜黄素补充剂不是一回事 食物中的姜黄和高浓度提取物不能简单等同，针对疾病的治疗宣称需要单独核验证据。 食物中的姜黄和高浓度提取物不能简单等同，针对疾病的治疗宣称需要单独核验证据。 本条根据 NIH NCCIH · Health Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 考虑使用姜黄或姜黄素补充剂的人群。 补充剂可能存在不良反应和相互作用。不要用补充剂替代规范治疗。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">姜黄入菜和高浓度姜黄素补充剂不是一回事</span><span class="lc-v">食物中的姜黄和高浓度提取物不能简单等同，针对疾病的治疗宣称需要单独核验证据。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/nccih-omega3-outcome-specific.html" data-cat="补剂" data-search="Omega-3 补充剂要按具体健康目标分别判断 Omega-3 补充剂对不同健康结局的证据并不相同，不能用一个笼统结论概括所有用途。 Omega-3 补充剂对不同健康结局的证据并不相同，不能用一个笼统结论概括所有用途。 本条根据 NIH NCCIH · Health Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 考虑使用 Omega-3 补充剂的人群。 补充剂可能与药物相互作用。是否使用应结合饮食、疾病风险和专业建议。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">Omega-3 补充剂要按具体健康目标分别判断</span><span class="lc-v">Omega-3 补充剂对不同健康结局的证据并不相同，不能用一个笼统结论概括所有用途。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/nccih-yoga-safety.html" data-cat="运动" data-search="瑜伽可以是活动方式，但也需要适配身体状况 瑜伽可能有助于身心健康，但练习方式应适配个人能力和健康情况。 瑜伽可能有助于身心健康，但练习方式应适配个人能力和健康情况。 本条根据 NIH NCCIH · Health Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 运动 希望将瑜伽作为活动或身心练习的人群。 疼痛、受伤、孕产期或存在疾病者应调整动作并寻求合适指导。">
+  <span class="lr-cat">运动</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">瑜伽可以是活动方式，但也需要适配身体状况</span><span class="lc-v">瑜伽可能有助于身心健康，但练习方式应适配个人能力和健康情况。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/nccih-meditation-boundaries.html" data-cat="心理" data-search="冥想可能有帮助，但不能替代需要的治疗 冥想和正念对部分人可能有帮助，但不应包装成可以解决所有心理或身体问题的万能工具。 冥想和正念对部分人可能有帮助，但不应包装成可以解决所有心理或身体问题的万能工具。 本条根据 NIH NCCIH · Health Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 心理 希望尝试冥想或正念练习的人群。 出现明显心理困扰时，应寻求专业帮助。练习引发不适时也不应勉强继续。">
+  <span class="lr-cat">心理</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">冥想可能有帮助，但不能替代需要的治疗</span><span class="lc-v">冥想和正念对部分人可能有帮助，但不应包装成可以解决所有心理或身体问题的万能工具。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/nccih-acupuncture-condition-specific.html" data-cat="其他" data-search="针灸是否有帮助，要按具体问题分别看证据 针灸对不同问题的研究结果不同，不能用一个笼统结论概括所有用途。 针灸对不同问题的研究结果不同，不能用一个笼统结论概括所有用途。 本条根据 NIH NCCIH · Health Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 其他 考虑接受针灸的人群。 应选择合格从业者并注意卫生与安全。针灸不能替代必要的诊断和治疗。">
+  <span class="lr-cat">其他</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">针灸是否有帮助，要按具体问题分别看证据</span><span class="lc-v">针灸对不同问题的研究结果不同，不能用一个笼统结论概括所有用途。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/nccih-ginger-boundaries.html" data-cat="补剂" data-search="姜和姜补充剂的效果与风险要分开看 姜在部分场景可能有研究支持，但食物使用和补充剂使用不能简单等同。 姜在部分场景可能有研究支持，但食物使用和补充剂使用不能简单等同。 本条根据 NIH NCCIH · Health Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 考虑使用姜补充剂的人群。 补充剂可能带来不适或相互作用。孕产期、服药或有疾病者应先咨询专业人员。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">姜和姜补充剂的效果与风险要分开看</span><span class="lc-v">姜在部分场景可能有研究支持，但食物使用和补充剂使用不能简单等同。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/nccih-green-tea-extract.html" data-cat="补剂" data-search="喝茶和高浓度绿茶提取物不是同一件事 绿茶饮品和高浓度提取物的暴露不同，不能把日常饮茶经验直接套到补充剂上。 绿茶饮品和高浓度提取物的暴露不同，不能把日常饮茶经验直接套到补充剂上。 本条根据 NIH NCCIH · Health Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 补剂 饮用绿茶或考虑使用绿茶提取物的人群。 提取物可能存在安全风险或相互作用。出现不适时应停止使用并及时评估。">
+  <span class="lr-cat">补剂</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">喝茶和高浓度绿茶提取物不是同一件事</span><span class="lc-v">绿茶饮品和高浓度提取物的暴露不同，不能把日常饮茶经验直接套到补充剂上。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/nccih-cannabis-product-specific.html" data-cat="其他" data-search="大麻和大麻素不能用一个笼统的“有用”或“无害”概括 大麻和大麻素产品差异很大，针对具体用途的证据、风险和法规需要分别判断。 大麻和大麻素产品差异很大，针对具体用途的证据、风险和法规需要分别判断。 本条根据 NIH NCCIH · Health Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 其他 考虑使用相关产品或希望理解健康宣称的人群。 不同地区法规不同。相关产品可能影响认知、驾驶、药物使用和心理健康，不应自行替代规范治疗。">
+  <span class="lr-cat">其他</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">大麻和大麻素不能用一个笼统的“有用”或“无害”概括</span><span class="lc-v">大麻和大麻素产品差异很大，针对具体用途的证据、风险和法规需要分别判断。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/uspstf-colorectal-screening.html" data-cat="其他" data-search="结直肠癌筛查不能等到有症状再开始 对适龄成年人，结直肠癌筛查的价值在于症状出现前发现风险，而不是等不舒服再检查。 对适龄成年人，结直肠癌筛查的价值在于症状出现前发现风险，而不是等不舒服再检查。 本条根据 USPSTF · Recommendation 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 其他 依据美国 USPSTF：45 至 75 岁成年人；更高年龄段需个体化决策。 筛查方式不止一种。该条依据美国建议，其他地区应结合本地指南和个人风险。">
+  <span class="lr-cat">其他</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">结直肠癌筛查不能等到有症状再开始</span><span class="lc-v">对适龄成年人，结直肠癌筛查的价值在于症状出现前发现风险，而不是等不舒服再检查。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/uspstf-breast-cancer-screening.html" data-cat="其他" data-search="乳腺癌筛查要按年龄和风险讨论，不是越频繁越好 乳腺癌筛查需要权衡收益和潜在伤害，并结合年龄与风险，而不是简单追求越频繁越好。 乳腺癌筛查需要权衡收益和潜在伤害，并结合年龄与风险，而不是简单追求越频繁越好。 本条根据 USPSTF · Recommendation 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 其他 依据美国 USPSTF：普通风险女性，具体年龄和频率见原文。 高风险人群可能需要不同策略。该条依据美国建议，其他地区应结合本地指南。">
+  <span class="lr-cat">其他</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">乳腺癌筛查要按年龄和风险讨论，不是越频繁越好</span><span class="lc-v">乳腺癌筛查需要权衡收益和潜在伤害，并结合年龄与风险，而不是简单追求越频繁越好。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/uspstf-obesity-behavioral-interventions.html" data-cat="代谢" data-search="成人肥胖管理不是靠一个小技巧解决 对部分成人肥胖人群，有结构的、多组分行为干预比单一减肥技巧更符合证据。 对部分成人肥胖人群，有结构的、多组分行为干预比单一减肥技巧更符合证据。 本条根据 USPSTF · Recommendation 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 代谢 依据美国 USPSTF：BMI 较高的成年人，具体适用条件见原文。 BMI 不是完整健康评估。个体方案需要结合疾病、药物、生活条件和本地医疗建议。">
+  <span class="lr-cat">代谢</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">成人肥胖管理不是靠一个小技巧解决</span><span class="lc-v">对部分成人肥胖人群，有结构的、多组分行为干预比单一减肥技巧更符合证据。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/uspstf-lung-cancer-screening.html" data-cat="其他" data-search="肺癌筛查不是所有人都做，而是面向特定高风险人群 肺癌筛查适用于特定高风险人群，不应把低剂量 CT 当作所有人的常规体检项目。 肺癌筛查适用于特定高风险人群，不应把低剂量 CT 当作所有人的常规体检项目。 本条根据 USPSTF · Recommendation 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 其他 依据美国 USPSTF：特定年龄、吸烟史和戒烟年限范围内的高风险成年人。 筛查有适用条件和潜在伤害。该条依据美国建议，个人决策应结合本地指南和专业评估。">
+  <span class="lr-cat">其他</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">肺癌筛查不是所有人都做，而是面向特定高风险人群</span><span class="lc-v">肺癌筛查适用于特定高风险人群，不应把低剂量 CT 当作所有人的常规体检项目。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/uspstf-cervical-cancer-screening.html" data-cat="其他" data-search="宫颈癌筛查是常规预防，不应等有症状才做 宫颈癌筛查的价值在于症状出现前识别风险，适龄人群应按可靠指南安排筛查。 宫颈癌筛查的价值在于症状出现前识别风险，适龄人群应按可靠指南安排筛查。 本条根据 USPSTF · Recommendation 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 其他 依据美国 USPSTF：特定年龄范围内的女性，具体方法和间隔见原文。 筛查方法和地区建议可能不同。出现症状时不能用常规筛查替代及时就医。">
+  <span class="lr-cat">其他</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">宫颈癌筛查是常规预防，不应等有症状才做</span><span class="lc-v">宫颈癌筛查的价值在于症状出现前识别风险，适龄人群应按可靠指南安排筛查。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/uspstf-depression-screening-adults.html" data-cat="心理" data-search="成年人抑郁筛查需要有后续评估和支持承接 筛查不是做完问卷就结束；发现风险后，需要有进一步评估、治疗和随访的支持系统。 筛查不是做完问卷就结束；发现风险后，需要有进一步评估、治疗和随访的支持系统。 本条根据 USPSTF · Recommendation 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 心理 依据美国 USPSTF：成年人，包括孕产期人群，具体见原文。 筛查工具不能自行确诊。出现自伤或自杀想法时应立即寻求紧急帮助。">
+  <span class="lr-cat">心理</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">成年人抑郁筛查需要有后续评估和支持承接</span><span class="lc-v">筛查不是做完问卷就结束；发现风险后，需要有进一步评估、治疗和随访的支持系统。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/uspstf-tobacco-cessation.html" data-cat="其他" data-search="戒烟值得获得系统支持，不必只靠硬扛 戒烟可以获得行为支持；部分成年人还可以在专业建议下使用经验证的辅助方式。 戒烟可以获得行为支持；部分成年人还可以在专业建议下使用经验证的辅助方式。 本条根据 USPSTF · Recommendation 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 其他 依据美国 USPSTF：使用烟草的成年人；孕产期人群的干预边界需单独看。 具体辅助方式要结合个人情况和所在地区建议。不要自行混用产品。">
+  <span class="lr-cat">其他</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">戒烟值得获得系统支持，不必只靠硬扛</span><span class="lc-v">戒烟可以获得行为支持；部分成年人还可以在专业建议下使用经验证的辅助方式。</span></span>
+  <span class="lr-date">06-01</span>
+</a>
+<a class="list-row" href="claims/uspstf-falls-prevention-exercise.html" data-cat="骨骼" data-search="高跌倒风险老年人值得讨论运动干预 对跌倒风险升高的社区老年人，合适的运动干预值得纳入预防讨论。 对跌倒风险升高的社区老年人，合适的运动干预值得纳入预防讨论。 本条根据 USPSTF · Recommendation 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。 骨骼 依据美国 USPSTF：居住在社区、跌倒风险升高的 65 岁及以上成年人。 运动方案需要适配能力和风险。反复跌倒者还应评估环境、用药和健康因素。">
+  <span class="lr-cat">骨骼</span>
+  <span class="lr-sig"><span class="trust verified"><span class="seal">✓</span>已核验</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
+  <span class="lr-claim"><span class="lc-t">高跌倒风险老年人值得讨论运动干预</span><span class="lc-v">对跌倒风险升高的社区老年人，合适的运动干预值得纳入预防讨论。</span></span>
   <span class="lr-date">06-01</span>
 </a>
 <a class="list-row" href="claims/creatine-postmenopausal-muscle.html" data-cat="补剂" data-search="绝经后女性补肌酸：小幅长肌力，且安全 肌酸配合抗阻训练，对绝经后女性瘦体重和腿力有小但确实的提升，且安全。 7 项 RCT（约 600 名绝经后女性）荟萃：肌酸在剂量足够、且配合抗阻训练时，瘦体重和腿部力量有小但确实的提升；剂量不足又不训练则无效。骨密度无明显变化；肾功能等安全指标与安慰剂一致、无害迹象。（具体剂量见原文，按需问医生。） 补剂 绝经后女性（约 600 名受试者）。 增益为「小但确实」，需剂量足够并配合抗阻训练，否则无效；骨密度无明显变化。具体剂量见原文，按需问医生。">

@@ -1,0 +1,21 @@
+{
+  "title": "成年人抑郁筛查需要有后续评估和支持承接",
+  "source": "USPSTF · Recommendation",
+  "source_url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/screening-depression-suicide-risk-adults",
+  "date": "2026-06-01",
+  "category": "心理",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "筛查不是做完问卷就结束；发现风险后，需要有进一步评估、治疗和随访的支持系统。 本条根据 USPSTF · Recommendation 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "uspstf-depression-screening-adults",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "筛查不是做完问卷就结束；发现风险后，需要有进一步评估、治疗和随访的支持系统。",
+  "population": "依据美国 USPSTF：成年人，包括孕产期人群，具体见原文。",
+  "caveats": "筛查工具不能自行确诊。出现自伤或自杀想法时应立即寻求紧急帮助。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/screening-depression-suicide-risk-adults"
+  ]
+}

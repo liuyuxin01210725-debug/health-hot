@@ -1,0 +1,21 @@
+{
+  "title": "针灸是否有帮助，要按具体问题分别看证据",
+  "source": "NIH NCCIH · Health Fact Sheet",
+  "source_url": "https://www.nccih.nih.gov/health/acupuncture-effectiveness-and-safety",
+  "date": "2026-06-01",
+  "category": "其他",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "针灸对不同问题的研究结果不同，不能用一个笼统结论概括所有用途。 本条根据 NIH NCCIH · Health Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "nccih-acupuncture-condition-specific",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "针灸对不同问题的研究结果不同，不能用一个笼统结论概括所有用途。",
+  "population": "考虑接受针灸的人群。",
+  "caveats": "应选择合格从业者并注意卫生与安全。针灸不能替代必要的诊断和治疗。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.nccih.nih.gov/health/acupuncture-effectiveness-and-safety"
+  ]
+}

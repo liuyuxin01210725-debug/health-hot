@@ -1,0 +1,21 @@
+{
+  "title": "吃得健康，也要先保证食物安全",
+  "source": "WHO · Fact Sheet",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/food-safety",
+  "date": "2026-06-01",
+  "category": "营养",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "不安全食品会导致疾病，储存、处理和烹饪卫生是健康饮食的基础。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "who-food-safety",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "不安全食品会导致疾病，储存、处理和烹饪卫生是健康饮食的基础。",
+  "population": "一般人群，尤其是儿童、老年人、孕产期和免疫功能较弱者。",
+  "caveats": "出现严重腹泻、脱水、高热或其他危险症状时应及时就医。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/food-safety"
+  ]
+}

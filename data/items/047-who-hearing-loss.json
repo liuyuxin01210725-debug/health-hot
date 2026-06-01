@@ -1,0 +1,21 @@
+{
+  "title": "听力下降不应只当作“老了正常”",
+  "source": "WHO · Fact Sheet",
+  "source_url": "https://www.who.int/news-room/fact-sheets/detail/deafness-and-hearing-loss",
+  "date": "2026-06-01",
+  "category": "其他",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "听力问题会影响沟通和生活质量，部分原因可以预防或干预，值得尽早评估。 本条根据 WHO · Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "who-hearing-loss",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "听力问题会影响沟通和生活质量，部分原因可以预防或干预，值得尽早评估。",
+  "population": "出现听力下降、耳鸣或沟通困难的人群，以及长期噪声暴露者。",
+  "caveats": "突然听力下降需要及时就医。具体原因和干预方式应由专业人员判断。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news-room/fact-sheets/detail/deafness-and-hearing-loss"
+  ]
+}

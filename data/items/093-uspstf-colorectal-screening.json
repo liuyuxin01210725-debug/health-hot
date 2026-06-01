@@ -1,0 +1,21 @@
+{
+  "title": "结直肠癌筛查不能等到有症状再开始",
+  "source": "USPSTF · Recommendation",
+  "source_url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/colorectal-cancer-screening",
+  "date": "2026-06-01",
+  "category": "其他",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "对适龄成年人，结直肠癌筛查的价值在于症状出现前发现风险，而不是等不舒服再检查。 本条根据 USPSTF · Recommendation 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "uspstf-colorectal-screening",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "对适龄成年人，结直肠癌筛查的价值在于症状出现前发现风险，而不是等不舒服再检查。",
+  "population": "依据美国 USPSTF：45 至 75 岁成年人；更高年龄段需个体化决策。",
+  "caveats": "筛查方式不止一种。该条依据美国建议，其他地区应结合本地指南和个人风险。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/colorectal-cancer-screening"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "title": "胆碱重要，但先看整体饮食来源",
+  "source": "NIH ODS · Consumer Fact Sheet",
+  "source_url": "https://ods.od.nih.gov/factsheets/Choline-Consumer/",
+  "date": "2026-06-01",
+  "category": "补剂",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "胆碱参与细胞和神经功能，关注整体饮食来源比盲目跟风补充更可靠。 本条根据 NIH ODS · Consumer Fact Sheet 整理，用于说明公共健康基线和适用边界，不替代个体诊疗。",
+  "slug": "ods-choline-baseline",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-01",
+  "conclusion": "胆碱参与细胞和神经功能，关注整体饮食来源比盲目跟风补充更可靠。",
+  "population": "一般人群，孕产期和饮食结构受限者更值得关注。",
+  "caveats": "具体需求因人而异。补充剂不能替代整体饮食评估。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://ods.od.nih.gov/factsheets/Choline-Consumer/"
+  ]
+}
