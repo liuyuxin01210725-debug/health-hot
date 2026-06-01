@@ -37,7 +37,23 @@ MON = {'jan':'01','feb':'02','mar':'03','apr':'04','may':'05','jun':'06',
 def fetch(url):
     req = urllib.request.Request(url, headers=UA)
     with urllib.request.urlopen(req, timeout=25) as r:
+        # 跟随重定向后，确认最终 URL 仍是 http(s)——挡 file:// 等伪协议跳转（SSRF 纵深防御，codex 审出）。
+        # 注：内网 IP（169.254/localhost）重定向不在此简易防护内；本地手动采集已知信源，风险极低。
+        final = r.geturl()
+        if not isinstance(final, str) or not re.match(r'^https?://', final, re.I):
+            raise ValueError(f"最终 URL 非 http(s)，已拒绝（防 SSRF）：{final!r}")
         return r.read(8 * 1024 * 1024)  # 8MB 上限，防超大 feed 撑爆内存
+
+
+def safe_fromstring(raw):
+    """解析不可信 XML：拒绝含 DOCTYPE / ENTITY 的文档——挡 billion-laughs 实体膨胀与 XXE。
+    必须全量扫描：只扫前 N 字节会被「长前导注释把 DOCTYPE 推到后面」绕过（codex 审出的 bypass）。
+    expat 默认不取外部实体，但内部实体膨胀仍能拖垮 CPU/内存。纯标准库零依赖。"""
+    if isinstance(raw, (bytes, bytearray)):
+        low = raw.replace(b'\x00', b'').lower()  # 去 NUL：连 UTF-16/32 编码的 <!DOCTYPE 也能识别（codex 审出的编码绕过）
+        if b'<!doctype' in low or b'<!entity' in low:
+            raise ValueError("XML 含 DOCTYPE/ENTITY，已拒绝（防实体膨胀/XXE）")
+    return ET.fromstring(raw)
 
 
 def t(el):
@@ -46,6 +62,8 @@ def t(el):
 
 def clean_text(s):
     s = s or ''
+    if len(s) > 100_000:  # 防回溯型正则 ReDoS：feed 摘要不该有 100KB，超长先截断（codex 实测 560KB 卡 27 秒）
+        s = s[:100_000]
     s = re.sub(r'(?is)<(script|style)[^>]*>.*?</\1>', ' ', s)
     s = re.sub(r'(?s)<[^>]+>', ' ', s)
     s = html.unescape(s)
@@ -76,7 +94,7 @@ def mon(m):
 
 def parse_feed(raw):
     out = []
-    root = ET.fromstring(raw)
+    root = safe_fromstring(raw)
     entries = root.findall(f'.//{ATOM}entry')
     if entries:
         for e in entries:
@@ -105,16 +123,18 @@ def fetch_pubmed(query, n=PER_SOURCE):
     es = (f"{EUTILS}/esearch.fcgi?db=pubmed&retmode=json&sort=date&retmax={n}"
           f"&tool=health-hot&email=liuyuxin01210725-debug@users.noreply.github.com&term=" + urllib.parse.quote(query))
     ids = [i for i in json.loads(fetch(es).decode()).get('esearchresult', {}).get('idlist', [])
-           if isinstance(i, str) and i.isdigit()]
+           if isinstance(i, str) and i.isascii() and i.isdigit()]  # ASCII 数字才收（全角数字 isdigit 也为真）
     if not ids:
         return []
     time.sleep(0.4)
     ef = (f"{EUTILS}/efetch.fcgi?db=pubmed&retmode=xml&rettype=abstract"
           f"&tool=health-hot&email=liuyuxin01210725-debug@users.noreply.github.com&id=" + ",".join(ids))
-    root = ET.fromstring(fetch(ef))
+    root = safe_fromstring(fetch(ef))
     out = []
     for art in root.findall('.//PubmedArticle'):
         pmid = art.findtext('.//MedlineCitation/PMID') or ''
+        if not (pmid.isascii() and pmid.isdigit()):  # 只接受 ASCII 数字 PMID，再拼进 URL
+            continue
         a = art.find('.//Article')
         if a is None:
             continue
@@ -203,7 +223,7 @@ def main():
         group = s.get('group', '')
         for e in entries[:PER_SOURCE]:
             url = e.get('url', '')
-            if not url or url in seen:
+            if not url or not re.match(r'^https?://', url) or url in seen:  # 采集层即拒非 http(s) 链接
                 continue
             doi = e.get('doi', '')
             if doi and doi in seen_doi:          # 跨源同一篇论文（DOI）只收一次

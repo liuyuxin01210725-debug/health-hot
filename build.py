@@ -12,7 +12,7 @@
 发布闸门：构建前校验，未来日期 / 缺来源 / 缺必填 / 未审核 的条目**不发布**并报警。
 纯标准库，无依赖。用法：python3 build.py
 """
-import json, glob, os, re, html, shutil, datetime
+import json, glob, os, re, html, shutil, datetime, sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(ROOT, "data", "items")
@@ -45,7 +45,7 @@ EV_DESC = {
 }
 REQUIRED = ["title", "source_url", "slug", "category", "evidence", "summary", "source", "date", "reviewed_at"]
 EVIDENCE_OK = {"rct", "meta", "guideline", "observational", "expert", "blogger", "anecdote"}
-SLUG_RE = re.compile(r'^[a-z0-9]+(?:-[a-z0-9]+)*$')  # 防路径穿越 / 注入
+SLUG_RE = re.compile(r'^[a-z0-9]+(?:-[a-z0-9]+)*\Z')  # 防路径穿越/注入；\Z 不放过结尾换行（$ 会）
 
 
 def _isodate(s):
@@ -56,12 +56,37 @@ def _isodate(s):
 
 
 def _norm_url(u):
-    """归一化用于去重：去 fragment、host 小写。"""
+    """归一化用于去重：去 fragment、host 小写、去末尾斜杠、剥掉 utm_*/fbclid/gclid 等跟踪参数——
+    避免同一来源因 ?utm=… 或结尾 / 的差异被当成两条而漏过去重。"""
     if not isinstance(u, str):
         return ""
     u = re.sub(r'#.*$', '', u.strip())
-    m = re.match(r'^(https?://)([^/]+)(.*)$', u)
-    return (m.group(1) + m.group(2).lower() + m.group(3)) if m else u
+    m = re.match(r'^(https?://)([^/?]+)([^?]*)(\?.*)?$', u)
+    if not m:
+        return u
+    scheme, path, query = m.group(1), m.group(3), (m.group(4) or "")
+    host = re.sub(r':(80|443)$', '', m.group(2).lower())  # host 小写 + 去默认端口
+    path = re.sub(r'/+$', '', path)  # 去末尾斜杠
+    if query:
+        def _track(kv):  # 按「键名」判断跟踪参数（原写法要求 utm_ 紧贴 =，漏掉 utm_source=… ）
+            key = kv.split('=', 1)[0].lower()
+            return key.startswith('utm_') or key in ('fbclid', 'gclid', 'ref', 'source')
+        keep = [kv for kv in query[1:].split('&') if kv and not _track(kv)]
+        query = ('?' + '&'.join(sorted(keep))) if keep else ''
+    return scheme + host + path + query
+
+
+def _is_http_url(u):
+    """合法 http(s) URL：须有协议+主机、且无控制字符。比裸 ^https?:// 严——
+    挡掉 'https://'（无主机）和含 \\n / \\x00 的伪 URL（codex 审出）。"""
+    return (isinstance(u, str) and bool(re.match(r'^https?://[^\s/]+', u))
+            and not re.search(r'[\x00-\x1f]', u))
+
+
+def _safe_href(u):
+    """渲染层再确认 URL（纵深防御）：非合法 http(s) 一律降级为 #。
+    闸门已挡 javascript:/data:，这里是第二道，即便数据绕过闸门也不会渲出伪协议链接。"""
+    return u if _is_http_url(u) else "#"
 
 
 def _link_label(u):
@@ -74,17 +99,20 @@ def _link_label(u):
 
 
 def load_items():
-    items = []
+    items, errors = [], 0
     for f in sorted(glob.glob(os.path.join(DATA, "*.json"))):
         try:
             with open(f, encoding="utf-8") as fh:
                 it = json.load(fh)
         except Exception as ex:
-            print(f"  ✗ JSON 解析失败 {os.path.basename(f)}: {ex}")
+            print(f"  ✗ JSON 解析失败 {os.path.basename(f)}: {ex}"); errors += 1
+            continue
+        if not isinstance(it, dict):  # 顶层必须是对象，否则下面 it['_file']= 会崩（codex 审出）
+            print(f"  ✗ 顶层非对象，跳过 {os.path.basename(f)}"); errors += 1
             continue
         it["_file"] = os.path.basename(f)
         items.append(it)
-    return items
+    return items, errors
 
 
 def validate(items):
@@ -100,6 +128,10 @@ def validate(items):
             v = it.get(k)
             if not isinstance(v, str) or not v.strip():
                 errs.append(f"缺/非字符串字段 {k}")
+        # 可选富文本字段若存在必须是字符串，否则 fmt()/.replace() 在渲染/导出时崩（codex 审出）
+        for k in ("conclusion", "population", "caveats"):
+            if it.get(k) is not None and not isinstance(it.get(k), str):
+                errs.append(f"{k} 非字符串")
         # 类型校验
         if not isinstance(it.get("featured", False), bool):
             errs.append("featured 非布尔")
@@ -113,8 +145,8 @@ def validate(items):
             errs.append(f"slug 非法（仅 a-z0-9-）：{s!r}")
         # source_url 必须 http(s)（防 javascript:/data: 伪协议）
         u = it.get("source_url", "")
-        if not (isinstance(u, str) and re.match(r'^https?://', u)):
-            errs.append(f"source_url 非 http(s)：{u!r}")
+        if not _is_http_url(u):
+            errs.append(f"source_url 非合法 http(s)（须含主机、无控制符）：{u!r}")
         # status 严格 reviewed（缺失 / published 都不放行）
         if it.get("status") != "reviewed":
             errs.append(f"status 非 reviewed：{it.get('status')!r}")
@@ -131,11 +163,12 @@ def validate(items):
             errs.append(f"source_published_at 非 ISO 日期：{sp!r}")
         # 双链接字段类型校验
         ds = it.get("discovery_source_url")
-        if ds and (not isinstance(ds, str) or not re.match(r'^https?://', ds)):
+        if ds is not None and not isinstance(ds, str):
+            errs.append("discovery_source_url 非字符串")
+        elif isinstance(ds, str) and ds and not _is_http_url(ds):
             errs.append("discovery_source_url 非 http(s)")
         evl = it.get("evidence_source_urls")
-        if evl is not None and (not isinstance(evl, list)
-                                or any(not isinstance(x, str) or not re.match(r'^https?://', x) for x in evl)):
+        if evl is not None and (not isinstance(evl, list) or any(not _is_http_url(x) for x in evl)):
             errs.append("evidence_source_urls 须为 http(s) 列表")
         # 去重（slug 精确；url 归一化）
         nu = _norm_url(u)
@@ -218,6 +251,13 @@ def shell(title, active, inner, base="", extra_js="", desc="", canon=""):
 <meta property="og:title" content="{e(title)} · {e(SITE_TITLE)}">
 <meta property="og:description" content="{e(desc)}">
 <meta property="og:url" content="{e(SITE_URL + canon)}">
+<meta property="og:image" content="{e(SITE_URL)}og.png">
+<meta property="og:site_name" content="{e(SITE_TITLE)}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{e(title)} · {e(SITE_TITLE)}">
+<meta name="twitter:description" content="{e(desc)}">
+<meta name="twitter:image" content="{e(SITE_URL)}og.png">
+<link rel="icon" href="{base}favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="{base}styles.css">
 </head>
 <body>
@@ -242,9 +282,36 @@ def shell(title, active, inner, base="", extra_js="", desc="", canon=""):
 </html>'''
 
 
+def ld_json(it):
+    """详情页结构化数据（schema.org MedicalWebPage）：助力搜索引擎理解+富结果。
+    用 MedicalWebPage 而非 ClaimReview——后者强制真/假评分，会把"证据分级+标注不确定"的结论
+    压成非黑即白，违背 7 铁律。json.dumps 安全编码，并转义 </ 防 <script> 逃逸。"""
+    slug = it.get("slug", "")
+    data = {
+        "@context": "https://schema.org",
+        "@type": "MedicalWebPage",
+        "name": it.get("title", ""),
+        "url": SITE_URL + "claims/" + slug + ".html",
+        "description": (it.get("conclusion") or it.get("summary") or "").replace("**", ""),
+        "inLanguage": "zh-CN",
+        "datePublished": it.get("source_published_at") or it.get("date", ""),
+        "dateModified": it.get("reviewed_at") or it.get("date", ""),
+        "author": {"@type": "Organization", "name": SITE_TITLE, "url": SITE_URL},
+        "publisher": {"@type": "Organization", "name": SITE_TITLE, "url": SITE_URL},
+    }
+    cites, seen = [], set()
+    for u in [it.get("source_url", "")] + (it.get("evidence_source_urls") or []):
+        if isinstance(u, str) and re.match(r'^https?://', u) and u not in seen:
+            seen.add(u); cites.append(u)
+    if cites:
+        data["citation"] = cites
+    j = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
+    return f'<script type="application/ld+json">{j}</script>'
+
+
 def detail_page(it, related):
     slug = it.get("slug", "")
-    url = e(it.get("source_url", ""))
+    url = e(_safe_href(it.get("source_url", "")))
     ev = it.get("evidence", "")
     fields = []
     fields.append(f'<dt>证据强度</dt><dd>{ev_badge(it)} {e(EV_DESC.get(ev,""))}</dd>')
@@ -267,10 +334,10 @@ def detail_page(it, related):
     dual = '<div class="dual">'
     if disc:
         dual += (f'<div class="dl-row"><span class="dl-k">🎧 你可能在哪听到</span>'
-                 f'<a href="{e(disc)}" target="_blank" rel="noopener">{e(_link_label(disc))} ↗</a></div>')
+                 f'<a href="{e(_safe_href(disc))}" target="_blank" rel="noopener">{e(_link_label(disc))} ↗</a></div>')
     if evs:
         dual += ('<div class="dl-row"><span class="dl-k">🔬 核验依据</span><span class="dl-v">'
-                 + " ".join(f'<a href="{e(u)}" target="_blank" rel="noopener">{e(_link_label(u))} ↗</a>' for u in evs)
+                 + " ".join(f'<a href="{e(_safe_href(u))}" target="_blank" rel="noopener">{e(_link_label(u))} ↗</a>' for u in evs)
                  + '</span></div>')
     else:
         dual += ('<div class="dl-row"><span class="dl-k">🔬 核验依据</span>'
@@ -288,7 +355,7 @@ def detail_page(it, related):
              f'{(" · 原文日期 " + src_lbl) if src_date else ""}'
              f' · 本站复核 {e(it.get("reviewed_at") or TODAY)}</p>\n'
              f'</article>\n{rel}')
-    return shell(it.get("title", ""), "", inner, base="../",
+    return shell(it.get("title", ""), "", inner + ld_json(it), base="../",
                  desc=(it.get("conclusion") or it.get("summary", "")),
                  canon="claims/" + it.get("slug", "") + ".html")
 
@@ -410,8 +477,8 @@ def claims_feed(items):
 CSS = '''
 :root{
   --bg:#f6f9f7; --panel:#ffffff; --ink:#16302a; --muted:#5f726c; --line:#e3ece8;
-  --accent:#0f8a72; --accent-soft:#e6f4f0; --accent-ink:#0a5d4d;
-  --rct:#1f9d5c; --meta:#0e9488; --obs:#7c8a86; --exp:#3f73c4; --blog:#9aa39f;
+  --accent:#0c7560; --accent-soft:#e6f4f0; --accent-ink:#0a5d4d;
+  --rct:#146b3f; --meta:#0c7d73; --obs:#54605c; --exp:#34619f; --blog:#5f6863;
   --warn:#b06a2c;
 }
 *{box-sizing:border-box}
@@ -458,7 +525,7 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .cat{background:var(--accent-soft);color:var(--accent-ink);border-radius:7px;padding:2px 9px;font-weight:700}
 .ev{border-radius:7px;padding:2px 8px;color:#fff;font-size:11.5px;font-weight:600}
 .ev-rct{background:var(--rct)}.ev-meta{background:var(--meta)}.ev-observational{background:var(--obs)}
-.ev-guideline{background:#6b4fbb}
+.ev-guideline{background:#5e45a4}
 .ev-expert{background:var(--exp)}.ev-blogger,.ev-anecdote{background:var(--blog)}
 .badge{margin-left:auto;background:#fff5e9;color:var(--warn);border:1px solid #f0d9bf;border-radius:7px;padding:2px 9px;font-size:11.5px;font-weight:800}
 .ev-legend{display:flex;flex-wrap:wrap;align-items:center;gap:7px 13px;margin:0 0 16px;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;font-size:12.5px;color:var(--muted)}
@@ -504,7 +571,7 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 
 
 def main():
-    items = load_items()
+    items, load_errors = load_items()
     good, blocked = validate(items)
     # 先全部写进临时目录，成功后再原子替换 docs/——渲染中途崩溃不会删掉已上线的站
     tmp = OUT + ".tmp"
@@ -526,6 +593,26 @@ def main():
     skill_src = os.path.join(ROOT, "skill")
     if os.path.isdir(skill_src):
         shutil.copytree(skill_src, os.path.join(tmp, "skill"))
+    # favicon（SVG：品牌绿底 + 白十字）+ sitemap.xml + robots.txt —— SEO 基础设施
+    with open(os.path.join(tmp, "favicon.svg"), "w", encoding="utf-8") as f:
+        f.write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">'
+                '<rect width="32" height="32" rx="8" fill="#0c7560"/>'
+                '<rect x="14" y="7" width="4" height="18" rx="1.5" fill="#fff"/>'
+                '<rect x="7" y="14" width="18" height="4" rx="1.5" fill="#fff"/></svg>')
+    pages = ["index.html", "all.html", "about.html"] + ["claims/" + it["slug"] + ".html" for it in good]
+    sm = ['<?xml version="1.0" encoding="UTF-8"?>',
+          '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for p in pages:
+        sm.append(f"  <url><loc>{SITE_URL}{p}</loc><lastmod>{TODAY}</lastmod></url>")
+    sm.append("</urlset>")
+    with open(os.path.join(tmp, "sitemap.xml"), "w", encoding="utf-8") as f:
+        f.write("\n".join(sm) + "\n")
+    with open(os.path.join(tmp, "robots.txt"), "w", encoding="utf-8") as f:
+        f.write(f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}sitemap.xml\n")
+    # og:image 社交分享卡（由 make_og.py 预生成，构建只拷贝——保持零依赖）
+    og_src = os.path.join(ROOT, "assets", "og.png")
+    if os.path.isfile(og_src):
+        shutil.copy(og_src, os.path.join(tmp, "og.png"))
     for it in good:
         related = [r for r in good if r.get("category") == it.get("category")
                    and r.get("slug") != it.get("slug")][:4]
@@ -546,6 +633,11 @@ def main():
             print(f"   ✗ {fn}: {'; '.join(errs)}")
     else:
         print("✓ 发布闸门：全部通过，无未来日期/缺来源/未审核条目")
+    # 有拦截或读取失败 → 退出码 1：让 `build && push` 链中断，避免坏数据静默挤掉已上线内容（codex 审出 fail-open）
+    if blocked or load_errors:
+        print(f"\n⛔ 退出码 1：拦下 {len(blocked)} 条 + 读取失败 {load_errors} 个。docs/ 已用合格内容重建，"
+              f"但请修好上述问题再 push。")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

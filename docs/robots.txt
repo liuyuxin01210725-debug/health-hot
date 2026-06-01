@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://liuyuxin01210725-debug.github.io/health-hot/sitemap.xml
