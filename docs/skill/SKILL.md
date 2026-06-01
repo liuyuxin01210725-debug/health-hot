@@ -21,15 +21,19 @@ https://liuyuxin01210725-debug.github.io/health-hot/claims.json
 
 ```jsonc
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "site_url": "https://liuyuxin01210725-debug.github.io/health-hot/",
   "disclaimer": "...",        // 医疗免责，回答时必须随附
+  "usage_note": "...",        // 信任分层用法，务必遵守
   "generated_at": "2026-05-31",
   "count": 22,
+  "verified_count": 14,
   "claims": [
     {
       "slug": "creatine-lipids",
       "title": "说法标题",
+      "verification_status": "verified | curated_pending_evidence",  // ★ 信任分层，见下
+      "verification_label": "已核验 | 专家梳理 · 证据链待补",
       "conclusion": "一句话结论",
       "evidence": "rct|meta|guideline|observational|expert|blogger|anecdote",
       "evidence_label": "RCT|Meta|指南|观察|专家|博主|个例",
@@ -37,14 +41,22 @@ https://liuyuxin01210725-debug.github.io/health-hot/claims.json
       "caveats": "局限 / 需要注意",
       "summary": "详情",
       "category": "运动|营养|睡眠|补剂|心理|…",
-      "source_urls": ["原始来源链接（PubMed / 指南等，至少 1 条）"],
+      "evidence_source_urls": ["真研究链接 PubMed/DOI/Cochrane（可能为空）"],
       "discovery_source_url": "你可能在哪听到（播客等，非证据，可能为空）",
+      "source_urls": ["全部来源（兼容旧字段）"],
       "detail_url": "网站详情页 URL",
       "reviewed_at": "本站复核日期"
     }
   ]
 }
 ```
+
+## ★ 信任分层（最重要，决定能不能说「已核验」）
+
+每条 claim 带 `verification_status`：
+
+- **`verified`** —— 有独立的 PubMed / 指南 / Cochrane 研究支撑（见 `evidence_source_urls`）。**只有这类**才能对用户称「『查过再信』已核验」。
+- **`curated_pending_evidence`** —— 来自专家 / 播客的梳理，**原文证据链尚未链接**。这类**绝不可**说成「已核验」，必须标明「⚠️ 专家梳理、原始证据待补，可信度低于已核验结论」。它的 `discovery_source_url`（如 YouTube）是「在哪听到」，**不是**证据，不能当原文引用让用户以为有研究背书。
 
 匹配用户问题时，在 `claims` 里按 `title` / `conclusion` / `summary` / `category` 做关键词匹配。
 

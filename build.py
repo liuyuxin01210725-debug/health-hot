@@ -12,7 +12,7 @@
 发布闸门：构建前校验，未来日期 / 缺来源 / 缺必填 / 未审核 的条目**不发布**并报警。
 纯标准库，无依赖。用法：python3 build.py
 """
-import json, glob, os, re, html, shutil, datetime, sys
+import json, glob, os, re, html, shutil, datetime, sys, urllib.parse
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(ROOT, "data", "items")
@@ -77,16 +77,44 @@ def _norm_url(u):
 
 
 def _is_http_url(u):
-    """合法 http(s) URL：须有协议+主机、且无控制字符。比裸 ^https?:// 严——
-    挡掉 'https://'（无主机）和含 \\n / \\x00 的伪 URL（codex 审出）。"""
-    return (isinstance(u, str) and bool(re.match(r'^https?://[^\s/]+', u))
-            and not re.search(r'[\x00-\x1f]', u))
+    """合法 http(s) URL：scheme 为 http/https + 有真实主机名 + 主机含「.」+ 无控制字符。
+    用 urlsplit 解析真 hostname，挡掉 'https://?q=x' / 'https://#x'（看似有内容实则无主机，codex 审出）
+    与含 \\n/\\x00 的伪 URL。"""
+    if not isinstance(u, str) or re.search(r'[\x00-\x1f]', u):
+        return False
+    try:
+        p = urllib.parse.urlsplit(u)
+    except Exception:
+        return False
+    return p.scheme in ("http", "https") and bool(p.hostname) and "." in p.hostname
 
 
 def _safe_href(u):
     """渲染层再确认 URL（纵深防御）：非合法 http(s) 一律降级为 #。
     闸门已挡 javascript:/data:，这里是第二道，即便数据绕过闸门也不会渲出伪协议链接。"""
     return u if _is_http_url(u) else "#"
+
+
+def _has_study(it):
+    """是否有独立的研究/指南级证据链接（PubMed / DOI / Cochrane）。
+    判定信任分层的依据：源或证据链里有真研究 = 可称『已核验』。"""
+    pool = [it.get("source_url", "")] + [x for x in (it.get("evidence_source_urls") or []) if isinstance(x, str)]
+    return any(("pubmed.ncbi.nlm.nih.gov" in u or "doi.org" in u or "cochrane" in u.lower())
+               for u in pool if isinstance(u, str))
+
+
+def verification_status(it):
+    """信任分层（P0）：把『专家梳理』和『循证已核验』在数据层分开，不靠文字补丁。
+      verified                  —— 有独立 PubMed/指南/Cochrane 支撑，可称『已核验』
+      curated_pending_evidence  —— 专家/播客梳理，原文证据链待补，**不可**称『已核验』
+    显式写在条目里时以条目为准（便于人工降级有疑问的条），否则按证据链自动判定。"""
+    vs = it.get("verification_status")
+    if vs in ("verified", "curated_pending_evidence"):
+        return vs
+    return "verified" if _has_study(it) else "curated_pending_evidence"
+
+
+VS_LABEL = {"verified": "已核验", "curated_pending_evidence": "专家梳理 · 证据链待补"}
 
 
 def _link_label(u):
@@ -213,9 +241,17 @@ def ev_legend():
     return f'<div class="ev-legend"><span class="lg-lead">证据强度（强 → 弱）</span>{chips}</div>'
 
 
+def vs_badge(it):
+    """信任分层徽章：verified=已核验（绿）/ curated=专家梳理待补（琥珀），让访客一眼分清。"""
+    vs = verification_status(it)
+    if vs == "verified":
+        return '<span class="vs vs-ok" title="有独立研究/指南支撑">✓ 已核验</span>'
+    return '<span class="vs vs-pend" title="专家或播客梳理，原文证据链待补">◔ 专家梳理·证据待补</span>'
+
+
 def meta_row(it):
     return (f'<div class="meta"><span class="cat">{e(it.get("category",""))}</span>'
-            f'{ev_badge(it)}<span class="src">{e(it.get("source",""))}</span>'
+            f'{vs_badge(it)}{ev_badge(it)}<span class="src">{e(it.get("source",""))}</span>'
             f'<span class="date">复核 {e(it.get("reviewed_at") or it.get("date",""))}</span>'
             f'{("<span class=badge>✦ 精选</span>") if it.get("featured") else ""}</div>')
 
@@ -294,7 +330,8 @@ def ld_json(it):
         "url": SITE_URL + "claims/" + slug + ".html",
         "description": (it.get("conclusion") or it.get("summary") or "").replace("**", ""),
         "inLanguage": "zh-CN",
-        "datePublished": it.get("source_published_at") or it.get("date", ""),
+        # datePublished = 本站收录日（绝不未来）；不用 source_published_at（可能是期刊预排未来日，会让 JSON-LD 出现未来日期）
+        "datePublished": it.get("date", ""),
         "dateModified": it.get("reviewed_at") or it.get("date", ""),
         "author": {"@type": "Organization", "name": SITE_TITLE, "url": SITE_URL},
         "publisher": {"@type": "Organization", "name": SITE_TITLE, "url": SITE_URL},
@@ -321,6 +358,12 @@ def detail_page(it, related):
         fields.append(f'<dt>需要注意</dt><dd>{fmt(it["caveats"])}</dd>')
     if it.get("summary"):
         fields.append(f'<dt>详情</dt><dd>{fmt(it["summary"])}</dd>')
+    # 信任分层横幅：专家梳理待补证据的条目，明确告诉访客「这不是已核验结论」
+    banner = ""
+    if verification_status(it) == "curated_pending_evidence":
+        banner = ('<div class="pend-banner"><b>◔ 专家梳理 · 证据链待补</b>　'
+                  '这条来自播客 / 研究者的梳理，<b>尚未链接到独立的原始研究</b>，'
+                  '不等于「已核验」结论。请结合下方来源自行判断，我们会持续补上原文证据。</div>')
     rel = ""
     if related:
         links = "".join(f'<li><a href="{e(r.get("slug",""))}.html">{e(r.get("title",""))}</a>'
@@ -347,6 +390,7 @@ def detail_page(it, related):
              f'<article class="claim">\n'
              f'  {meta_row(it)}\n'
              f'  <h1>{e(it.get("title",""))}</h1>\n'
+             f'  {banner}\n'
              f'  <p class="claim-concl"><span class="lbl">一句话结论</span>{fmt(it.get("conclusion") or it.get("summary",""))}</p>\n'
              f'  <dl class="fields">{"".join(fields)}</dl>\n'
              f'  {dual}\n'
@@ -371,7 +415,19 @@ def render_index(items):
             f'<button type="submit">查证据</button></form></section>')
     head = (f'<div class="sec-head"><h2>重点核验</h2>'
             f'<a class="more" href="all.html">看全部 →</a></div>')
-    return shell("精选", "精选", hero + head + ev_legend() + '<section class="cards">' + cards + '</section>',
+    agent = (f'<section class="agent-cta">'
+             f'<h2>🤖 让 AI 助手直接查本站</h2>'
+             f'<p>本站提供公开机读接口，你的 AI 助手（Claude 等）可以直接查询已核验的健康说法，'
+             f'回答时带上证据强度和原文链接。</p>'
+             f'<div class="agent-grid">'
+             f'<div class="agent-box"><h3>数据接口</h3>'
+             f'<p>任何人可匿名抓取的 JSON feed：</p>'
+             f'<code class="agent-url">{e(SITE_URL)}claims.json</code></div>'
+             f'<div class="agent-box"><h3>一键安装 Skill</h3>'
+             f'<p>装进 Claude，之后直接问「肌酸伤肾吗」：</p>'
+             f'<code class="agent-url">mkdir -p ~/.claude/skills/health-hot &amp;&amp; curl -s {e(SITE_URL)}skill/SKILL.md -o ~/.claude/skills/health-hot/SKILL.md</code></div>'
+             f'</div></section>')
+    return shell("精选", "精选", hero + head + ev_legend() + '<section class="cards">' + cards + '</section>' + agent,
                  desc=HERO_SUB, canon="index.html")
 
 
@@ -443,11 +499,17 @@ def claims_feed(items):
         for u in [it.get("source_url", "")] + [x for x in (it.get("evidence_source_urls") or []) if isinstance(x, str)]:
             if isinstance(u, str) and u and re.match(r'^https?://', u) and u not in srcs:
                 srcs.append(u)
+        vs = verification_status(it)
+        # 证据链 = 只含真研究链接（PubMed/DOI/Cochrane）；发现链 = 播客/YT「在哪听到」，单列、不混入。
+        evidence_urls = [u for u in srcs
+                         if "pubmed.ncbi.nlm.nih.gov" in u or "doi.org" in u or "cochrane" in u.lower()]
         out.append({
             "slug": slug,
             "title": it.get("title", ""),
             "detail_url": SITE_URL + "claims/" + slug + ".html",
             "category": it.get("category", ""),
+            "verification_status": vs,                     # verified | curated_pending_evidence
+            "verification_label": VS_LABEL[vs],
             "evidence": it.get("evidence", ""),
             "evidence_label": EV_LABEL.get(it.get("evidence", ""), it.get("evidence", "")),
             "conclusion": (it.get("conclusion") or it.get("summary") or "").replace("**", ""),
@@ -455,21 +517,29 @@ def claims_feed(items):
             "caveats": (it.get("caveats") or "").replace("**", ""),
             "summary": (it.get("summary") or "").replace("**", ""),
             "source": it.get("source", ""),
-            "source_urls": srcs,
-            "discovery_source_url": it.get("discovery_source_url", ""),
+            "evidence_source_urls": evidence_urls,         # 真研究链接（可能为空）
+            "discovery_source_url": it.get("discovery_source_url", "")
+                                    or (srcs[0] if srcs and not evidence_urls else ""),  # 没研究时把源当「发现链」
+            "source_urls": srcs,                           # 兼容旧字段：全部来源
             "featured": bool(it.get("featured", False)),
             "date": it.get("date", ""),
             "reviewed_at": it.get("reviewed_at", ""),
         })
+    n_verified = sum(1 for c in out if c["verification_status"] == "verified")
     return {
-        "schema_version": "1.0",
+        "schema_version": "1.1",  # 1.1: 新增 verification_status 信任分层 + evidence/discovery 分离
         "site": SITE_TITLE,
         "site_url": SITE_URL,
         "description": "中文循证健康说法核验库——每条结论标注证据强度、适用人群与原始出处。",
         "disclaimer": "本数据为科普整理，非医疗建议；不提供具体剂量与个体化诊疗。"
-                      "每条结论的证据强度见 evidence 字段；请点击 detail_url / source_urls 回原文核对。",
+                      "请点击 detail_url / evidence_source_urls 回原文核对。",
+        "usage_note": "verification_status=verified 的条目有独立研究/指南支撑，可称『已核验』；"
+                      "=curated_pending_evidence 的是专家/播客梳理、原文证据链待补，"
+                      "**不可**冒充『已核验』，须标明『专家梳理·证据待补』。evidence_source_urls 为真研究链接，"
+                      "discovery_source_url 是『在哪听到』（非证据）。",
         "generated_at": TODAY,
         "count": len(out),
+        "verified_count": n_verified,
         "claims": out,
     }
 
@@ -531,6 +601,19 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .ev-legend{display:flex;flex-wrap:wrap;align-items:center;gap:7px 13px;margin:0 0 16px;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;font-size:12.5px;color:var(--muted)}
 .ev-legend .lg-lead{font-weight:700;color:var(--accent-ink)}
 .ev-legend .lg-item{display:inline-flex;align-items:center;gap:5px}
+.vs{border-radius:7px;padding:2px 8px;font-size:11.5px;font-weight:700}
+.vs-ok{background:var(--accent-soft);color:var(--accent-ink)}
+.vs-pend{background:#fff5e9;color:#9a5a1f;border:1px solid #f0d9bf}
+.pend-banner{background:#fff5e9;border:1px solid #f0d9bf;color:#7a4a18;border-radius:12px;padding:12px 16px;margin:0 0 16px;font-size:14px}
+.pend-banner b{color:#9a5a1f}
+.agent-cta{margin:32px 0 0;padding:22px 24px;background:var(--accent-soft);border:1px solid #cfe3db;border-radius:16px}
+.agent-cta h2{margin:0 0 6px;font-size:19px;color:var(--accent-ink)}
+.agent-cta>p{margin:0 0 16px;color:var(--muted);font-size:14px}
+.agent-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.agent-box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.agent-box h3{margin:0 0 4px;font-size:15px;color:var(--ink)}
+.agent-box p{margin:0 0 8px;color:var(--muted);font-size:13px}
+.agent-url{display:block;background:#0f201c;color:#7fe3c4;border-radius:8px;padding:10px 12px;font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all;line-height:1.5}
 .title{margin:0 0 7px;font-size:18px;line-height:1.45}
 .title a{color:var(--ink)}.title a:hover{color:var(--accent)}
 .concl{margin:0;font-size:14.5px;color:#3a4742}
@@ -599,11 +682,14 @@ def main():
                 '<rect width="32" height="32" rx="8" fill="#0c7560"/>'
                 '<rect x="14" y="7" width="4" height="18" rx="1.5" fill="#fff"/>'
                 '<rect x="7" y="14" width="18" height="4" rx="1.5" fill="#fff"/></svg>')
-    pages = ["index.html", "all.html", "about.html"] + ["claims/" + it["slug"] + ".html" for it in good]
+    # sitemap：详情页用各自的复核日做 lastmod（不再全部盖今天，避免每次构建都谎称「全站今天更新」，codex 审出）
+    newest = max((it.get("reviewed_at") or it.get("date") or TODAY) for it in good) if good else TODAY
+    pages = [("index.html", newest), ("all.html", newest), ("about.html", newest)]
+    pages += [("claims/" + it["slug"] + ".html", it.get("reviewed_at") or it.get("date") or TODAY) for it in good]
     sm = ['<?xml version="1.0" encoding="UTF-8"?>',
           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
-    for p in pages:
-        sm.append(f"  <url><loc>{SITE_URL}{p}</loc><lastmod>{TODAY}</lastmod></url>")
+    for p, lm in pages:
+        sm.append(f"  <url><loc>{SITE_URL}{p}</loc><lastmod>{lm}</lastmod></url>")
     sm.append("</urlset>")
     with open(os.path.join(tmp, "sitemap.xml"), "w", encoding="utf-8") as f:
         f.write("\n".join(sm) + "\n")
@@ -621,23 +707,26 @@ def main():
         if os.path.abspath(dest).startswith(os.path.abspath(tmp_claims) + os.sep):
             with open(dest, "w", encoding="utf-8") as f:
                 f.write(detail_page(it, related))
-    # 原子替换
+    feat = sum(1 for it in good if it.get("featured"))
+    # 发布闸门（fail-safe）：有拦截/读取失败时，**先不替换 docs/**，保留已上线旧站，只报告。
+    # 此前是「先 rename 再 exit 1」=假闸门：坏数据已经覆盖了旧站才报错（codex 审出）。
+    if (blocked or load_errors) and "--force" not in sys.argv:
+        shutil.rmtree(tmp, ignore_errors=True)  # 丢弃临时产物，docs/ 原封不动
+        print(f"⛔ 发布闸门：拦下 {len(blocked)} 条 + 读取失败 {load_errors} 个——docs/ **未改动**，旧站保留。")
+        for fn, errs in blocked:
+            print(f"   ✗ {fn}: {'; '.join(errs)}")
+        print("   修好后重跑；确需用合格内容强制重建请加 --force。")
+        sys.exit(1)
+    # 原子替换：渲染中途崩溃不会删掉已上线的站
     shutil.rmtree(OUT, ignore_errors=True)
     os.rename(tmp, OUT)
-    # 报告
-    feat = sum(1 for it in good if it.get("featured"))
     print(f"✓ 发布 {len(good)} 条（精选 {feat}）+ {len(good)} 个详情页 + claims.json（机读 feed）→ docs/")
-    if blocked:
-        print(f"\n⚠️  发布闸门拦下 {len(blocked)} 条（未上线）：")
+    if blocked:  # 仅 --force 时会走到这
+        print(f"\n⚠️  --force 强制发布，已忽略 {len(blocked)} 条被拦条目：")
         for fn, errs in blocked:
             print(f"   ✗ {fn}: {'; '.join(errs)}")
     else:
         print("✓ 发布闸门：全部通过，无未来日期/缺来源/未审核条目")
-    # 有拦截或读取失败 → 退出码 1：让 `build && push` 链中断，避免坏数据静默挤掉已上线内容（codex 审出 fail-open）
-    if blocked or load_errors:
-        print(f"\n⛔ 退出码 1：拦下 {len(blocked)} 条 + 读取失败 {load_errors} 个。docs/ 已用合格内容重建，"
-              f"但请修好上述问题再 push。")
-        sys.exit(1)
 
 
 if __name__ == "__main__":

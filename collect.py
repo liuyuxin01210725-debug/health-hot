@@ -34,7 +34,14 @@ MON = {'jan':'01','feb':'02','mar':'03','apr':'04','may':'05','jun':'06',
        'jul':'07','aug':'08','sep':'09','oct':'10','nov':'11','dec':'12'}
 
 
+_last_fetch = [0.0]  # 全局限速：NCBI 无 API key 建议 ≤3 req/s，这里统一 ≥0.35s 一次
+
+
 def fetch(url):
+    wait = 0.35 - (time.monotonic() - _last_fetch[0])
+    if wait > 0:
+        time.sleep(wait)
+    _last_fetch[0] = time.monotonic()
     req = urllib.request.Request(url, headers=UA)
     with urllib.request.urlopen(req, timeout=25) as r:
         # 跟随重定向后，确认最终 URL 仍是 http(s)——挡 file:// 等伪协议跳转（SSRF 纵深防御，codex 审出）。
@@ -171,8 +178,11 @@ def fetch_pubmed(query, n=PER_SOURCE):
             ev = 'meta'
         elif any('guideline' in p for p in pts):
             ev = 'guideline'
-        else:
+        elif any(('observational' in p or 'cohort' in p or 'case-control' in p
+                  or 'cross-sectional' in p or 'comparative study' in p) for p in pts):
             ev = 'observational'
+        else:
+            ev = 'unknown'  # 无法从 PublicationType 判定的，标 unknown 待人工定级（不默认塞成 observational，codex 审出）
         doi = ''
         for el in a.findall('.//ELocationID'):
             if el.get('EIdType') == 'doi' and el.text:
@@ -202,7 +212,7 @@ def main():
             raise ValueError("sources 不是数组")
     except Exception as ex:
         print(f"[!] 读取 sources.json 失败：{ex}")
-        return
+        sys.exit(1)  # 配置坏 → 退出码 1，让自动化能察觉失败（此前 return=退出码0，会被误判成功，codex 审出）
     if filt:
         sources = [s for s in sources if isinstance(s, dict) and any(f in s.get('name', '').lower() for f in filt)]
     seen = seen_urls()
