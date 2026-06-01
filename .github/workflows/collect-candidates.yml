@@ -134,6 +134,16 @@ jobs:
               summary.write(report)
           PY
 
+      - name: 审计已发布馆藏
+        if: always()
+        run: |
+          set -o pipefail
+          audit_status=0
+          python3 audit_library.py --check-links 2>&1 | tee /tmp/health_library_audit.log || audit_status=$?
+          cat /tmp/health_library_audit_report.md >> /tmp/health_candidates_report.md
+          cat /tmp/health_library_audit_report.md >> "$GITHUB_STEP_SUMMARY"
+          exit "$audit_status"
+
       - name: 保存候选与采集日志
         if: always()
         uses: actions/upload-artifact@v7
@@ -143,6 +153,9 @@ jobs:
             /tmp/health_candidates.json
             /tmp/health_candidates.log
             /tmp/health_candidates_report.md
+            /tmp/health_library_audit.json
+            /tmp/health_library_audit.log
+            /tmp/health_library_audit_report.md
           if-no-files-found: warn
           retention-days: 30
 

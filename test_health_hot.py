@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import contextlib
+import datetime
 import io
 import json
 import os
@@ -12,6 +13,7 @@ from unittest import mock
 
 import build
 import collect
+import audit_library
 
 
 def valid_item():
@@ -215,6 +217,39 @@ class BuildFailSafeTests(unittest.TestCase):
             self.assertEqual(ex.exception.code, 1)
             self.assertEqual((docs / "SENTINEL.txt").read_text(), "keep-old-site\n")
             self.assertFalse(Path(os.fspath(docs) + ".tmp").exists())
+
+
+class LibraryAuditTests(unittest.TestCase):
+    def test_audit_reports_pending_official_and_review_due(self):
+        item = valid_item()
+        item["reviewed_at"] = "2026-01-01"
+        pending = valid_item()
+        pending.update({
+            "slug": "pending",
+            "title": "pending",
+            "source_url": "https://example.com/article",
+            "evidence_source_urls": [],
+            "reviewed_at": "2026-06-01",
+        })
+        audit = audit_library.audit_items(
+            [item, pending],
+            today=datetime.date(2026, 8, 1),
+            stale_days=180,
+        )
+        self.assertEqual(audit["counts"]["items"], 2)
+        self.assertEqual(audit["counts"]["verified"], 1)
+        self.assertEqual(audit["counts"]["pending_evidence"], 1)
+        self.assertEqual(audit["counts"]["official_source_items"], 0)
+        self.assertEqual(audit["counts"]["review_due"], 1)
+
+    def test_audit_counts_official_guideline_item(self):
+        item = valid_item()
+        item.update({
+            "source_url": "https://www.who.int/news-room/fact-sheets/detail/healthy-diet",
+            "evidence_source_urls": ["https://www.who.int/news-room/fact-sheets/detail/healthy-diet"],
+        })
+        audit = audit_library.audit_items([item], today=datetime.date(2026, 6, 1))
+        self.assertEqual(audit["counts"]["official_source_items"], 1)
 
 
 if __name__ == "__main__":

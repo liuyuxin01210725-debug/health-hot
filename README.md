@@ -11,6 +11,7 @@
 - `data/sources.json` — 信源清单（官方精选目录 / PubMed 主题；RSS / YouTube 仅为可选发现层）
 - `data/items/*.json` — 收集到的条目（每条 = 一张卡片 / 一条核验）
 - `collect.py` — 从信源抓取候选、去重（纯标准库）
+- `audit_library.py` — 审计已发布馆藏：复核到期、证据待补、来源分布和链接可达性（纯标准库）
 - `build.py` — 生成静态站到 `docs/`（精选 + 全部 + 关于 + 各条详情页 + `claims.json` 机读 feed；纯标准库）
 - `make_og.py` — 生成社交分享卡 `assets/og.png`（需 Pillow，单独运行，不进构建）
 - `skill/SKILL.md` — 公开 health-hot Skill，构建时拷进 `docs/skill/`
@@ -39,12 +40,20 @@ python3 collect.py 'PubMed·肌酸'         # 只抓名字匹配的信源
 指南页。`collect.py` 在代码中再次校验域名，不能只靠配置文件把任意网站标成官方锚点。
 
 GitHub Actions 工作流位于 `.github/workflows/collect-candidates.yml`。它也支持在 Actions 页面手动触发。
-每次运行会保存 `health-candidates` Artifact（候选 JSON、采集日志、审核摘要），并新建或刷新
+每次运行会保存 `health-candidates` Artifact（候选 JSON、采集日志、审核摘要、馆藏审计），并新建或刷新
 标题为「每周健康候选采集」的 issue。健康内容仍需人工或 AI 复核后写入 `data/items/*.json`，
 再运行 `build.py`；定时采集不会自动发布未经核验的说法。
 审核 issue 会先列未来日期、标题弱相关、摘要为空等风险项，再按「官方事实页 / 指南常青候选」、
 「PubMed 研究 / 指南锚点」、「PubMed 趋势雷达」、「可选发现来源」分组。`anchor` 表示可作证据依据，
-不表示选题自动相关；仍需人工或 AI 判断是否值得入库。
+不表示选题自动相关；仍需人工或 AI 判断是否值得入库。末尾的「已发布馆藏健康审计」还会提醒超过
+180 天未复核的条目、证据待补条目和疑似失效链接；这些提醒不会自动改写或自动发布内容。
+
+本地也可以单独运行馆藏审计：
+
+```bash
+python3 audit_library.py
+python3 audit_library.py --check-links
+```
 
 ## Agent 接入
 
