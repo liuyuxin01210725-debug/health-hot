@@ -138,7 +138,6 @@ def fetch_pubmed(query, n=PER_SOURCE):
            if isinstance(i, str) and i.isascii() and i.isdigit()]  # ASCII 数字才收（全角数字 isdigit 也为真）
     if not ids:
         return []
-    time.sleep(0.4)
     ef = (f"{EUTILS}/efetch.fcgi?db=pubmed&retmode=xml&rettype=abstract"
           f"&tool=health-hot&email=liuyuxin01210725-debug@users.noreply.github.com&id=" + ",".join(ids))
     root = safe_fromstring(fetch(ef))
@@ -195,14 +194,43 @@ def fetch_pubmed(query, n=PER_SOURCE):
     return out
 
 
-def seen_urls():
-    s = set()
+def norm_title(s):
+    return re.sub(r'\W+', '', (s or '').lower())
+
+
+def canonical_id(entry, group=''):
+    """跨次采集去重键：优先 PMID / DOI；节目 feed 用 group+标题。
+    候选转正式条目时保留 canonical_id，下一轮才能识别 YouTube/RSS 的同一期节目。"""
+    url = entry.get('url', '') or ''
+    m = re.search(r'pubmed\.ncbi\.nlm\.nih\.gov/(\d+)', url)
+    if m:
+        return 'pmid:' + m.group(1)
+    if entry.get('doi'):
+        return 'doi:' + entry['doi'].strip().lower()
+    title = norm_title(entry.get('title', ''))
+    return f'group:{group}:{title}' if group and title else ''
+
+
+def relevance_hint(source, entry):
+    """窄主题雷达的轻量相关性提示：不武断过滤，只提醒人工/AI 优先复核标题未命中的候选。"""
+    terms = source.get('title_terms') or []
+    if not isinstance(terms, list) or not terms:
+        return 'not_configured'
+    title = (entry.get('title') or '').lower()
+    return 'title_match' if any(isinstance(term, str) and term.lower() in title for term in terms) else 'query_match_only'
+
+
+def seen_records():
+    urls, keys = set(), set()
     for f in glob.glob(os.path.join(ITEMS, '*.json')):
         try:
-            s.add(json.load(open(f, encoding='utf-8')).get('source_url', ''))
+            item = json.load(open(f, encoding='utf-8'))
+            urls.add(item.get('source_url', ''))
+            if item.get('canonical_id'):
+                keys.add(item['canonical_id'])
         except Exception:
             pass
-    return s
+    return urls, keys
 
 
 def main():
@@ -217,9 +245,12 @@ def main():
         sys.exit(1)  # 配置坏 → 退出码 1，让自动化能察觉失败（此前 return=退出码0，会被误判成功，codex 审出）
     if filt:
         sources = [s for s in sources if isinstance(s, dict) and any(f in s.get('name', '').lower() for f in filt)]
-    seen = seen_urls()
+    if not sources:
+        print("[!] 没有匹配的信源，请检查筛选参数或 sources.json")
+        sys.exit(1)
+    seen, seen_canonical = seen_records()
     seen_doi, seen_title = set(), set()
-    cands = []
+    cands, succeeded, failed = [], 0, 0
     for s in sources:
         name = s.get('name', '<未命名>') if isinstance(s, dict) else '<非对象>'
         try:
@@ -227,13 +258,17 @@ def main():
                 raise ValueError("source 缺 type 字段")
             if s['type'] == 'pubmed':
                 entries = fetch_pubmed(s['query'])
-            else:
+            elif s['type'] in ('youtube', 'rss'):
                 url = (f"https://www.youtube.com/feeds/videos.xml?channel_id={s['channel_id']}"
                        if s['type'] == 'youtube' else s['url'])
                 entries = parse_feed(fetch(url))
+            else:
+                raise ValueError(f"不支持的 source type：{s['type']!r}")
         except Exception as ex:
             print(f"[!] {name}: 失败 — {ex}")
+            failed += 1
             continue
+        succeeded += 1
         new = 0
         group = s.get('group', '')
         for e in entries[:PER_SOURCE]:
@@ -243,26 +278,42 @@ def main():
             doi = e.get('doi', '')
             if doi and doi in seen_doi:          # 跨源同一篇论文（DOI）只收一次
                 continue
-            tkey = (group, re.sub(r'\W+', '', (e.get('title', '') or '').lower())) if group else None
+            cid = canonical_id(e, group)
+            if cid and cid in seen_canonical:    # 跨次采集：候选提升为正式条目后仍能去重
+                continue
+            tkey = (group, norm_title(e.get('title', ''))) if group else None
             if tkey and tkey in seen_title:      # 同节目 YouTube+Podcast 同一期只收一次
                 continue
             src = (e['journal'] + " · PubMed") if e.get('journal') else name
+            rel = relevance_hint(s, e)
             cands.append({'source': src, 'category': s.get('category', ''),
                           'role': s.get('role', ''),
                           'evidence': e.get('evidence') or s.get('evidence', 'expert'),
                           'title': e['title'], 'source_url': url,
-                          'published': e['published'], 'desc': e['desc'][:DESC_CHARS]})
+                          'published': e['published'], 'desc': e['desc'][:DESC_CHARS],
+                          'doi': doi, 'canonical_id': cid,
+                          'collection_source': name, 'collection_query': s.get('query', ''),
+                          'relevance_hint': rel})
             seen.add(url)
             if doi:
                 seen_doi.add(doi)
             if tkey:
                 seen_title.add(tkey)
+            if cid:
+                seen_canonical.add(cid)
             new += 1
         print(f"[✓] {name}（{s.get('role', '?')}）: 共 {len(entries)} 条，新增候选 {new} 条")
+    if not succeeded:
+        print("\n⛔ 全部选中信源采集失败：未覆盖旧候选文件。")
+        sys.exit(1)
     json.dump(cands, open(OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
     print(f"\n共 {len(cands)} 条候选 → {OUT}")
     for c in cands:
-        print(f"  · [{c['source'][:28]} | {c['published']}] {c['title'][:42]}  （{len(c['desc'])}字）")
+        flag = " · ⚠ 标题未命中窄主题，需人工判断" if c.get('relevance_hint') == 'query_match_only' else ""
+        print(f"  · [{c['source'][:28]} | {c['published']}] {c['title'][:42]}  （{len(c['desc'])}字）{flag}")
+    if failed:
+        print(f"\n⛔ 有 {failed} 个信源采集失败：候选已保留，但退出码为 1，请检查后再进入发布流程。")
+        sys.exit(1)
 
 
 if __name__ == '__main__':

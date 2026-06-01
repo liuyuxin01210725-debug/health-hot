@@ -2,16 +2,17 @@
   "_说明": "健康信源清单。type: youtube(channel_id)/rss(url)/pubmed(query)。",
   "_role": "anchor=核验锚点(系统综述/指南/Cochrane，可定结论) | discovery=选题雷达(播客，只生成待核验问题) | radar=趋势雷达(博主/泛主题，不直接定结论)。",
   "_group": "同一节目的多个 feed 标同一 group，collect.py 按 group+标题去重，避免一期内容收两次。",
-  "_pubmed_evidence": "PubMed 条目的 evidence 由 collect.py 读 PublicationType 结果级判定(rct/meta/guideline/observational)，源里的 evidence 仅占位 unknown。",
+  "_pubmed_evidence": "PubMed 条目的 evidence 由 collect.py 读 PublicationType 结果级判定(rct/meta/guideline/observational/unknown)，无法确定时必须保留 unknown 等人工复核。",
+  "_title_terms": "窄主题 PubMed 雷达可配置 title_terms。未命中标题时仍保留候选，但 relevance_hint=query_match_only，必须人工/AI 再判断相关性。",
   "sources": [
     {"name": "PubMed·Cochrane系统综述", "type": "pubmed", "role": "anchor", "query": "Cochrane Database Syst Rev[jour] AND (exercise OR nutrition OR diet OR sleep OR supplement OR longevity OR vitamin)", "category": "综述", "evidence": "unknown"},
     {"name": "PubMed·健康指南", "type": "pubmed", "role": "anchor", "query": "guideline[pt] AND humans[mh] AND (exercise OR nutrition OR diet OR sleep OR obesity OR hypertension OR diabetes)", "category": "指南", "evidence": "unknown"},
     {"name": "PubMed·系统综述", "type": "pubmed", "role": "anchor", "query": "systematic review[pt] AND humans[mh] AND (creatine OR \"omega-3\" OR \"intermittent fasting\" OR \"resistance training\" OR longevity)", "category": "综述", "evidence": "unknown"},
 
-    {"name": "PubMed·间歇禁食RCT", "type": "pubmed", "role": "radar", "query": "intermittent fasting AND randomized controlled trial[pt] AND humans[mh]", "category": "营养", "evidence": "unknown"},
-    {"name": "PubMed·肌酸", "type": "pubmed", "role": "radar", "query": "creatine supplementation AND humans[mh]", "category": "补剂", "evidence": "unknown"},
-    {"name": "PubMed·Omega-3 RCT", "type": "pubmed", "role": "radar", "query": "omega-3 fatty acids AND randomized controlled trial[pt] AND humans[mh]", "category": "补剂", "evidence": "unknown"},
-    {"name": "PubMed·心肺功能与死亡率", "type": "pubmed", "role": "radar", "query": "cardiorespiratory fitness AND mortality AND humans[mh]", "category": "运动", "evidence": "unknown"},
+    {"name": "PubMed·间歇禁食RCT", "type": "pubmed", "role": "radar", "query": "intermittent fasting AND randomized controlled trial[pt] AND humans[mh]", "title_terms": ["intermittent fasting", "time-restricted"], "category": "营养", "evidence": "unknown"},
+    {"name": "PubMed·肌酸", "type": "pubmed", "role": "radar", "query": "creatine supplementation AND humans[mh]", "title_terms": ["creatine"], "category": "补剂", "evidence": "unknown"},
+    {"name": "PubMed·Omega-3 RCT", "type": "pubmed", "role": "radar", "query": "omega-3 fatty acids AND randomized controlled trial[pt] AND humans[mh]", "title_terms": ["omega-3", "n-3 pufa", "n-3 fatty"], "category": "补剂", "evidence": "unknown"},
+    {"name": "PubMed·心肺功能与死亡率", "type": "pubmed", "role": "radar", "query": "cardiorespiratory fitness AND mortality AND humans[mh]", "title_terms": ["cardiorespiratory fitness", "cardiorespiratory", "fitness"], "category": "运动", "evidence": "unknown"},
 
     {"name": "Peter Attia MD", "type": "youtube", "role": "discovery", "group": "attia", "channel_id": "UC8kGsMa0LygSX9nkBcBH1Sg", "category": "长寿", "evidence": "expert"},
     {"name": "Huberman Lab", "type": "youtube", "role": "discovery", "group": "huberman", "channel_id": "UC2D2CMWXMOVWx7giW1n3LIg", "category": "睡眠", "evidence": "expert"},
@@ -31,7 +32,6 @@
     "中文解释层(丁香医生/卓正/果壳)——只作通俗解释，不替代原始依据"
   ],
   "_未来": [
-    "卡片双链接：discovery_source_url(在哪听到) + evidence_source_urls(凭什么核验)——下一专项",
     "ScienceDaily(科学新闻稿)仅作选题雷达，不进正式发布链路"
   ]
 }

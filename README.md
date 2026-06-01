@@ -16,6 +16,38 @@
 - `skill/SKILL.md` — 公开 health-hot Skill，构建时拷进 `docs/skill/`
 - 部署：GitHub Pages 从 `main` 分支 `/docs` 目录 serve，推送即更新（当前未用 GitHub Actions；如需每周自动化再加 workflow，需 `workflow` 授权）
 
+## 信任分层
+
+- `verified`：存在独立研究 / 指南锚点，Agent 可以称「已核验」。
+- `curated_pending_evidence`：来自专家、播客或媒体梳理，但原始证据链尚未补齐；只能称「专家梳理·证据待补」。
+- `evidence_source_urls` 只放研究 / 指南锚点；播客、视频、文章入口放 `discovery_source_url`。
+- `source_urls` 仅为 feed 兼容字段，包含全部来源，不能当作研究原文列表。
+
+## 候选采集
+
+```bash
+python3 collect.py                 # 抓全部信源
+python3 collect.py 'PubMed·肌酸'   # 只抓名字匹配的信源
+```
+
+候选写入 `/tmp/health_candidates.json`。PubMed 窄主题雷达会附带 `relevance_hint`：
+`title_match` 可优先看，`query_match_only` 表示查询命中但标题未命中主题词，必须人工/AI 再判断。
+候选提升为正式条目时应保留 `canonical_id`，用于跨次采集去重。
+
+## Agent 接入
+
+```bash
+# Claude Code
+mkdir -p ~/.claude/skills/health-hot
+curl -fsSL https://liuyuxin01210725-debug.github.io/health-hot/skill/SKILL.md \
+  -o ~/.claude/skills/health-hot/SKILL.md
+
+# Codex
+mkdir -p ~/.codex/skills/health-hot
+curl -fsSL https://liuyuxin01210725-debug.github.io/health-hot/skill/SKILL.md \
+  -o ~/.codex/skills/health-hot/SKILL.md
+```
+
 ## 本地预览
 
 ```bash

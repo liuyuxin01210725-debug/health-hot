@@ -29,7 +29,7 @@ HERO_Q = "听到一个健康说法？先查一下证据。"
 #                         但当原文为"预排/未来日期"时取收录日，确保 feed 不出现未来日期。
 #   source_published_at = 原文/源的真实发布日期（可为期刊预排的未来日期，仅作元数据展示，不参与闸门）。
 #   reviewed_at         = 本站复核日期。
-HERO_SUB = "每条结论都标注证据强度、适用人群和原始出处——把「听来的」和「有据的」分开。"
+HERO_SUB = "每条说法都标注证据强度、适用人群和来源状态——把「听来的」和「有据的」分开。"
 REPO = "https://github.com/liuyuxin01210725-debug/health-hot"
 
 EV_LABEL = {"rct": "RCT", "meta": "Meta", "guideline": "指南", "observational": "观察",
@@ -43,8 +43,11 @@ EV_DESC = {
     "blogger": "个人观点 / 方案——非临床证据，仅供参考。",
     "anecdote": "个例 / 经验——证据级别最低，谨慎对待。",
 }
-REQUIRED = ["title", "source_url", "slug", "category", "evidence", "summary", "source", "date", "reviewed_at"]
+REQUIRED = ["title", "source_url", "slug", "category", "evidence", "summary", "source", "date", "reviewed_at",
+            "conclusion", "population", "caveats"]
 EVIDENCE_OK = {"rct", "meta", "guideline", "observational", "expert", "blogger", "anecdote"}
+CATEGORY_OK = {"运动", "关节", "心理", "营养", "补剂", "长寿", "骨骼", "代谢", "心肺", "睡眠", "其他"}
+VERIFICATION_OK = {"verified", "curated_pending_evidence"}
 SLUG_RE = re.compile(r'^[a-z0-9]+(?:-[a-z0-9]+)*\Z')  # 防路径穿越/注入；\Z 不放过结尾换行（$ 会）
 
 
@@ -80,13 +83,15 @@ def _is_http_url(u):
     """合法 http(s) URL：scheme 为 http/https + 有真实主机名 + 主机含「.」+ 无控制字符。
     用 urlsplit 解析真 hostname，挡掉 'https://?q=x' / 'https://#x'（看似有内容实则无主机，codex 审出）
     与含 \\n/\\x00 的伪 URL。"""
-    if not isinstance(u, str) or re.search(r'[\x00-\x1f\x7f-\x9f\s]', u):
+    if not isinstance(u, str) or "\\" in u or re.search(r'[\x00-\x1f\x7f-\x9f\s]', u):
         return False  # 拒所有 C0/C1 控制字符 + 空白（含 DEL\x7f、NEL\x85，codex 边界探测）
     try:
         p = urllib.parse.urlsplit(u)
+        p.port  # 触发非法端口校验
     except Exception:
         return False
-    return p.scheme in ("http", "https") and bool(p.hostname) and "." in p.hostname
+    return (p.scheme in ("http", "https") and bool(p.hostname) and "." in p.hostname
+            and p.username is None and p.password is None)
 
 
 def _safe_href(u):
@@ -97,20 +102,26 @@ def _safe_href(u):
 
 _STUDY_HOSTS = ("pubmed.ncbi.nlm.nih.gov", "ncbi.nlm.nih.gov", "doi.org",
                 "cochranelibrary.com", "www.cochranelibrary.com")
+_GUIDELINE_HOSTS = ("who.int", "www.who.int", "uspreventiveservicestaskforce.org",
+                    "www.uspreventiveservicestaskforce.org", "ods.od.nih.gov",
+                    "nccih.nih.gov", "www.nccih.nih.gov", "cdc.gov", "www.cdc.gov",
+                    "nhc.gov.cn", "www.nhc.gov.cn")
 
 
 def _is_study_url(u):
-    """是否为真研究链接：① 主机名在研究站白名单（按真实 hostname，不用子串——子串会被
+    """是否为可核验的研究 / 指南锚点：① 主机名在白名单（按真实 hostname，不用子串——子串会被
     'https://evil.com/?x=pubmed.ncbi.nlm.nih.gov' 骗过）② 且**路径指向具体条目**（非裸域名）——
     'https://doi.org/' / 'https://ncbi.nlm.nih.gov/' 这种没有文章 ID 的不算研究（codex 二次审出）。"""
     if not _is_http_url(u):
         return False
     p = urllib.parse.urlsplit(u)
     host = (p.hostname or "").lower()
-    if not (host in _STUDY_HOSTS or host.endswith(".cochranelibrary.com")):
-        return False
     path = p.path.strip("/")
-    return len(path) >= 2 and any(c.isdigit() for c in path)  # 须有具体条目（PMID/DOI 都含数字），裸域名不算
+    if host in _STUDY_HOSTS or host.endswith(".cochranelibrary.com"):
+        return len(path) >= 2 and any(c.isdigit() for c in path)  # PMID/DOI/Cochrane 须指向具体条目
+    if host in _GUIDELINE_HOSTS:
+        return len(path) >= 2  # 官方指南 / factsheet 须指向具体页面，裸域名不算
+    return False
 
 
 def _has_study(it):
@@ -185,6 +196,10 @@ def validate(items):
             errs.append("rank 非整数")
         if it.get("evidence") not in EVIDENCE_OK:
             errs.append(f"evidence 非法：{it.get('evidence')!r}")
+        if it.get("category") not in CATEGORY_OK:
+            errs.append(f"category 非法：{it.get('category')!r}")
+        if it.get("verification_status") is not None and it.get("verification_status") not in VERIFICATION_OK:
+            errs.append(f"verification_status 非法：{it.get('verification_status')!r}")
         # slug 白名单（防 ../ 路径穿越 与 属性注入）
         s = it.get("slug", "")
         if not (isinstance(s, str) and SLUG_RE.match(s)):
@@ -216,6 +231,8 @@ def validate(items):
         evl = it.get("evidence_source_urls")
         if evl is not None and (not isinstance(evl, list) or any(not _is_http_url(x) for x in evl)):
             errs.append("evidence_source_urls 须为 http(s) 列表")
+        elif isinstance(evl, list) and any(not _is_study_url(x) for x in evl):
+            errs.append("evidence_source_urls 只能放研究 / 指南锚点；播客、视频等请放 discovery_source_url")
         # 去重（slug 精确；url 归一化）
         nu = _norm_url(u)
         if isinstance(s, str) and s in seen_slug:
@@ -328,7 +345,7 @@ def shell(title, active, inner, base="", extra_js="", desc="", canon=""):
 {inner}
 </main>
 <footer class="foot"><div class="bar">
-  <span>本站为科普整理，<strong>非医疗建议</strong>；每条结论标注证据等级，点击可回原文核对。</span>
+  <span>本站为科普整理，<strong>非医疗建议</strong>；每条说法标注证据等级与来源状态，点击可回来源核对。</span>
   <span class="muted">{e(SITE_TITLE)} · 持续收集与查证</span>
 </div></footer>
 {extra_js}
@@ -367,6 +384,7 @@ def ld_json(it):
 def detail_page(it, related):
     slug = it.get("slug", "")
     url = e(_safe_href(it.get("source_url", "")))
+    source_btn = "查看核验依据 ↗" if _is_study_url(it.get("source_url", "")) else "查看发现来源 ↗"
     ev = it.get("evidence", "")
     fields = []
     fields.append(f'<dt>证据强度</dt><dd>{ev_badge(it)} {e(EV_DESC.get(ev,""))}</dd>')
@@ -415,7 +433,7 @@ def detail_page(it, related):
              f'  <p class="claim-concl"><span class="lbl">一句话结论</span>{fmt(it.get("conclusion") or it.get("summary",""))}</p>\n'
              f'  <dl class="fields">{"".join(fields)}</dl>\n'
              f'  {dual}\n'
-             f'  <a class="src-btn" href="{url}" target="_blank" rel="noopener">查看原始来源 ↗</a>\n'
+             f'  <a class="src-btn" href="{url}" target="_blank" rel="noopener">{source_btn}</a>\n'
              f'  <p class="prov">来源：{e(it.get("source",""))}'
              f'{(" · 原文日期 " + src_lbl) if src_date else ""}'
              f' · 本站复核 {e(it.get("reviewed_at") or TODAY)}</p>\n'
@@ -438,15 +456,18 @@ def render_index(items):
             f'<a class="more" href="all.html">看全部 →</a></div>')
     agent = (f'<section class="agent-cta">'
              f'<h2>🤖 让 AI 助手直接查本站</h2>'
-             f'<p>本站提供公开机读接口，你的 AI 助手（Claude 等）可以直接查询已核验的健康说法，'
-             f'回答时带上证据强度和原文链接。</p>'
+             f'<p>本站提供公开机读接口，你的 AI 助手可以区分「已核验」与「专家梳理·证据待补」，'
+             f'回答时带上证据强度和对应来源。</p>'
              f'<div class="agent-grid">'
              f'<div class="agent-box"><h3>数据接口</h3>'
              f'<p>任何人可匿名抓取的 JSON feed：</p>'
              f'<code class="agent-url">{e(SITE_URL)}claims.json</code></div>'
-             f'<div class="agent-box"><h3>一键安装 Skill</h3>'
-             f'<p>装进 Claude，之后直接问「肌酸伤肾吗」：</p>'
-             f'<code class="agent-url">mkdir -p ~/.claude/skills/health-hot &amp;&amp; curl -s {e(SITE_URL)}skill/SKILL.md -o ~/.claude/skills/health-hot/SKILL.md</code></div>'
+             f'<div class="agent-box"><h3>安装 Skill</h3>'
+             f'<p>Claude Code：</p>'
+             f'<code class="agent-url">mkdir -p ~/.claude/skills/health-hot &amp;&amp; curl -fsSL {e(SITE_URL)}skill/SKILL.md -o ~/.claude/skills/health-hot/SKILL.md</code>'
+             f'<p>Codex：</p>'
+             f'<code class="agent-url">mkdir -p ~/.codex/skills/health-hot &amp;&amp; curl -fsSL {e(SITE_URL)}skill/SKILL.md -o ~/.codex/skills/health-hot/SKILL.md</code>'
+             f'<p><a href="skill/SKILL.md">阅读 Skill 规则 →</a></p></div>'
              f'</div></section>')
     return shell("精选", "精选", hero + head + ev_legend() + '<section class="cards">' + cards + '</section>' + agent,
                  desc=HERO_SUB, canon="index.html")
@@ -494,9 +515,10 @@ apply();
 
 def render_about():
     inner = f'''<section class="hero slim"><h1>关于本站</h1>
-<p class="lead">「{e(SITE_TITLE)}」是一个<strong>健康说法核验库</strong>：把流行的健康说法，一条条查到原始证据、标出强度、写清适用人群和注意事项。资讯流只是入口，核心是帮你分清「听来的」和「有据的」。</p></section>
+<p class="lead">「{e(SITE_TITLE)}」是一个<strong>健康说法核验库</strong>：把流行的健康说法逐条标出证据强度、适用人群、注意事项和来源状态。资讯流只是入口，核心是帮你分清「听来的」和「有据的」。</p></section>
 <section class="values">
 <div class="val"><h3>怎么审核</h3><p>从权威信源（健康播客 / 研究者 / PubMed）抓取 → 提炼要点 → 按 7 条规则人工/AI 复核 → 标 <code>reviewed</code> 才发布。构建前有自动闸门：未来日期、缺来源、未审核的条目不会上线。</p></div>
+<div class="val"><h3>两层信任</h3><p>有独立研究 / 指南锚点的条目标为「✓ 已核验」；播客与专家梳理若还没补齐原始证据，只标为「◔ 专家梳理·证据待补」，不能冒充定论。</p></div>
 <div class="val"><h3>证据分级</h3><p>每条标清 RCT / 荟萃 / 观察 / 专家 / 博主，不混为一谈。点进详情页能看到这条结论"凭什么"。</p></div>
 <div class="val"><h3>何时复核</h3><p>每条带「复核日期」，按约半年的节奏回头审；健康结论会过时，过时的会标出或更新。</p></div>
 <div class="val"><h3>不开处方</h3><p>涉及剂量、治疗的只讲原则、不写具体克数，不暗示治疗任何疾病。具体执行请咨询持证医生或注册营养师。</p></div>
@@ -514,11 +536,11 @@ def claims_feed(items):
     out = []
     for it in items:
         slug = it.get("slug", "")
-        # source_urls = 主源在前 + 证据链，去重，仅 http(s)；至少含 1 条（主源已过闸门校验）。
-        # discovery_source_url（"在哪听到"）不是证据，单列、不并入 source_urls。
+        # source_urls 是兼容旧消费者的「全部来源」；新消费者必须用 evidence_source_urls /
+        # discovery_source_url 分辨证据链与发现链，不能把 source_urls 当成原文研究列表。
         srcs = []
         for u in [it.get("source_url", "")] + [x for x in (it.get("evidence_source_urls") or []) if isinstance(x, str)]:
-            if isinstance(u, str) and u and re.match(r'^https?://', u) and u not in srcs:
+            if _is_http_url(u) and u not in srcs:
                 srcs.append(u)
         vs = verification_status(it)
         # 证据链 = 只含真研究链接（按主机名判定，不用子串——见 _is_study_url）；发现链 = 播客/YT「在哪听到」，单列。
@@ -543,11 +565,12 @@ def claims_feed(items):
             "source_urls": srcs,                           # 兼容旧字段：全部来源
             "featured": bool(it.get("featured", False)),
             "date": it.get("date", ""),
+            "source_published_at": it.get("source_published_at", ""),
             "reviewed_at": it.get("reviewed_at", ""),
         })
     n_verified = sum(1 for c in out if c["verification_status"] == "verified")
     return {
-        "schema_version": "1.1",  # 1.1: 新增 verification_status 信任分层 + evidence/discovery 分离
+        "schema_version": "1.2",  # 1.2: 信任分层 + evidence/discovery 分离 + 原始来源日期
         "site": SITE_TITLE,
         "site_url": SITE_URL,
         "description": "中文循证健康说法核验库——每条结论标注证据强度、适用人群与原始出处。",

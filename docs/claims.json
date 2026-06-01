@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "site": "查过再信",
   "site_url": "https://liuyuxin01210725-debug.github.io/health-hot/",
   "description": "中文循证健康说法核验库——每条结论标注证据强度、适用人群与原始出处。",
@@ -32,6 +32,7 @@
       ],
       "featured": true,
       "date": "2026-05-31",
+      "source_published_at": "2026-05-16",
       "reviewed_at": "2026-05-31"
     },
     {
@@ -57,6 +58,7 @@
       ],
       "featured": true,
       "date": "2026-05-29",
+      "source_published_at": "2025-06-30",
       "reviewed_at": "2026-06-01"
     },
     {
@@ -82,6 +84,7 @@
       ],
       "featured": true,
       "date": "2026-05-29",
+      "source_published_at": "2014-09-16",
       "reviewed_at": "2026-05-31"
     },
     {
@@ -107,6 +110,7 @@
       ],
       "featured": true,
       "date": "2026-05-29",
+      "source_published_at": "2015-04-15",
       "reviewed_at": "2026-06-01"
     },
     {
@@ -133,6 +137,7 @@
       ],
       "featured": true,
       "date": "2026-05-29",
+      "source_published_at": "2012-12-13",
       "reviewed_at": "2026-05-31"
     },
     {
@@ -158,6 +163,7 @@
       ],
       "featured": false,
       "date": "2026-05-29",
+      "source_published_at": "2021-09-16",
       "reviewed_at": "2026-05-31"
     },
     {
@@ -183,6 +189,7 @@
       ],
       "featured": false,
       "date": "2026-05-29",
+      "source_published_at": "2021-02-06",
       "reviewed_at": "2026-05-31"
     },
     {
@@ -206,6 +213,7 @@
       ],
       "featured": false,
       "date": "2026-05-28",
+      "source_published_at": "2026-05-28",
       "reviewed_at": "2026-05-31"
     },
     {
@@ -229,6 +237,7 @@
       ],
       "featured": false,
       "date": "2026-05-25",
+      "source_published_at": "2026-05-25",
       "reviewed_at": "2026-05-31"
     },
     {
@@ -252,6 +261,7 @@
       ],
       "featured": false,
       "date": "2026-05-18",
+      "source_published_at": "2026-05-18",
       "reviewed_at": "2026-05-31"
     },
     {
@@ -277,6 +287,7 @@
       ],
       "featured": true,
       "date": "2026-05-01",
+      "source_published_at": "2026-05-08",
       "reviewed_at": "2026-05-31"
     },
     {
@@ -302,6 +313,7 @@
       ],
       "featured": false,
       "date": "2026-05-01",
+      "source_published_at": "2026-02-27",
       "reviewed_at": "2026-05-31"
     },
     {
@@ -325,6 +337,7 @@
       ],
       "featured": true,
       "date": "2026-04-24",
+      "source_published_at": "2026-04-24",
       "reviewed_at": "2026-05-31"
     },
     {
@@ -350,6 +363,7 @@
       ],
       "featured": true,
       "date": "2026-04-01",
+      "source_published_at": "2026-03-20",
       "reviewed_at": "2026-05-31"
     },
     {
@@ -373,6 +387,7 @@
       ],
       "featured": false,
       "date": "2026-03-24",
+      "source_published_at": "2026-03-24",
       "reviewed_at": "2026-05-31"
     },
     {
@@ -396,6 +411,7 @@
       ],
       "featured": false,
       "date": "2026-02-09",
+      "source_published_at": "2026-02-09",
       "reviewed_at": "2026-05-31"
     },
     {
@@ -419,6 +435,7 @@
       ],
       "featured": true,
       "date": "2026-01-21",
+      "source_published_at": "2026-01-21",
       "reviewed_at": "2026-05-31"
     },
     {
@@ -444,6 +461,7 @@
       ],
       "featured": false,
       "date": "2026-01-01",
+      "source_published_at": "2026-05-08",
       "reviewed_at": "2026-05-31"
     },
     {
@@ -470,6 +488,7 @@
       ],
       "featured": true,
       "date": "2025-12-07",
+      "source_published_at": "2022-12-08",
       "reviewed_at": "2026-05-31"
     },
     {
@@ -496,6 +515,7 @@
       ],
       "featured": false,
       "date": "2025-10-02",
+      "source_published_at": "2025-10-02",
       "reviewed_at": "2026-05-31"
     },
     {
@@ -522,6 +542,7 @@
       ],
       "featured": false,
       "date": "2022-11-08",
+      "source_published_at": "2022-01-14",
       "reviewed_at": "2026-05-31"
     },
     {
@@ -545,6 +566,7 @@
       ],
       "featured": false,
       "date": "2022-10-07",
+      "source_published_at": "2022-10-07",
       "reviewed_at": "2026-05-31"
     }
   ]
