@@ -45,6 +45,7 @@ jobs:
           from pathlib import Path
 
           candidates_file = Path("/tmp/health_candidates.json")
+          meta_file = Path("/tmp/health_collection_meta.json")
           report_file = Path("/tmp/health_candidates_report.md")
           outcome = os.environ["COLLECTION_OUTCOME"]
           run_url = os.environ["RUN_URL"]
@@ -54,6 +55,11 @@ jobs:
               candidates = json.loads(candidates_file.read_text(encoding="utf-8"))
           else:
               candidates = []
+          if meta_file.exists():
+              collection_meta = json.loads(meta_file.read_text(encoding="utf-8"))
+          else:
+              collection_meta = {}
+          source_failures = collection_meta.get("failures") or []
 
           def clean(value):
               return str(value or "").replace("\n", " ").strip()
@@ -85,32 +91,50 @@ jobs:
                   published = clean(item.get("published")) or "日期待核"
                   role = clean(item.get("role")) or "角色待核"
                   evidence = clean(item.get("evidence")) or "证据待核"
+                  tier = clean(item.get("discovery_tier"))
                   url = clean(item.get("source_url"))
+                  citations = [clean(value) for value in (item.get("citation_urls_to_review") or []) if clean(value)]
+                  context_urls = [clean(value) for value in (item.get("context_urls_to_review") or []) if clean(value)]
+                  reference_page = clean(item.get("reference_page_url"))
+                  enrichment_error = clean(item.get("reference_enrichment_error"))
                   flags = warning_flags(item)
                   flag_text = f" · {' · '.join(flags)}" if flags else ""
                   lines.append(f"{index}. **{title}**{flag_text}")
-                  lines.append(f"   `{source}` · `{published}` · `{role}` · `{evidence}`")
+                  tier_text = f" · `{tier}`" if tier else ""
+                  lines.append(f"   `{source}` · `{published}` · `{role}` · `{evidence}`{tier_text}")
                   if url:
                       lines.append(f"   原文：{url}")
+                  if reference_page:
+                      lines.append(f"   专家详情页：{reference_page}")
+                  for citation in citations[:5]:
+                      lines.append(f"   待核引用：{citation}")
+                  if len(citations) > 5:
+                      lines.append(f"   待核引用：其余 {len(citations) - 5} 个见 Artifact JSON")
+                  if context_urls:
+                      lines.append(f"   简介上下文链接：{len(context_urls)} 个（可能含内部导航或赞助，见 Artifact JSON）")
+                  if enrichment_error:
+                      lines.append(f"   引用深挖告警：{enrichment_error}")
 
           official = [item for item in candidates if is_official(item)]
           anchors = [item for item in candidates if item.get("role") == "anchor" and item not in official]
           pubmed_radar = [item for item in candidates if item.get("role") == "radar" and is_pubmed(item)]
-          discovery = [item for item in candidates if item.get("role") in {"discovery", "radar"} and not is_pubmed(item)]
+          discovery = [item for item in candidates if item.get("discovery_tier") == "trusted_expert"]
+          experimental = [item for item in candidates if item.get("discovery_tier") == "experimental_self_report"]
           warnings = [item for item in candidates if warning_flags(item)]
-          ungrouped = [item for item in candidates if item not in official and item not in anchors and item not in pubmed_radar and item not in discovery]
+          ungrouped = [item for item in candidates if item not in official and item not in anchors and item not in pubmed_radar and item not in discovery and item not in experimental]
           status = "成功" if outcome == "success" else "失败：请先查看日志，不要进入发布流程"
           lines = [
               "# 每周健康候选采集",
               "",
               f"- 状态：**{status}**",
               f"- 新候选：**{len(candidates)} 条**",
-              f"- 官方事实页 / 指南：**{len(official)} 条** · PubMed 锚点：**{len(anchors)} 条** · PubMed 趋势雷达：**{len(pubmed_radar)} 条** · 可选发现来源：**{len(discovery)} 条**",
+              f"- 官方事实页 / 指南：**{len(official)} 条** · PubMed 锚点：**{len(anchors)} 条** · PubMed 趋势雷达：**{len(pubmed_radar)} 条** · 专家解释 / 前沿发现：**{len(discovery)} 条** · 实验型个人方案：**{len(experimental)} 条**",
+              f"- 发现层抓取告警：**{len(source_failures)} 个**",
               f"- 需重点人工检查：**{len(warnings)} 条**",
               f"- Actions 运行记录：[打开本次运行]({run_url})",
               "- 完整文件：在本次运行页面下载 `health-candidates` Artifact",
               "",
-              "> 这是审核收件箱，不是发布清单。默认只采集官方机构和 PubMed；创作者发现层需手动启用。先处理风险提醒，再从各组选择值得入库的说法。anchor 代表可作证据依据，不代表选题自动相关。",
+              "> 这是审核收件箱，不是发布清单。默认采集官方机构、PubMed 和可信专家解释层。专家节目能更早提出值得追踪的问题，但不能自动冒充研究结论；简介里提取的链接也只是待核引用。先处理风险提醒，再补齐证据链。",
               "",
               "## 0. 风险提醒",
               "",
@@ -122,8 +146,14 @@ jobs:
           append_items(lines, anchors)
           lines.extend(["", "## C. PubMed 趋势雷达", ""])
           append_items(lines, pubmed_radar)
-          lines.extend(["", "## D. 可选发现来源（播客 / 视频 / 博客，不参与定结论）", ""])
+          lines.extend(["", "## D. 专家解释 / 前沿发现层（播客 / 视频 / 博客，不直接定结论）", ""])
           append_items(lines, discovery)
+          lines.extend(["", "## D1. 实验型个人方案雷达（单独标注，不直接定结论）", ""])
+          append_items(lines, experimental)
+          if source_failures:
+              lines.extend(["", "## D2. 发现层抓取告警（不阻断官方 / PubMed 主流程）", ""])
+              for item in source_failures:
+                  lines.append(f"- `{clean(item.get('source')) or '来源待核'}` · `{clean(item.get('role')) or '角色待核'}` · {clean(item.get('error')) or '错误待核'}")
           if ungrouped:
               lines.extend(["", "## E. 未分组候选", ""])
               append_items(lines, ungrouped)
@@ -151,6 +181,7 @@ jobs:
           name: health-candidates
           path: |
             /tmp/health_candidates.json
+            /tmp/health_collection_meta.json
             /tmp/health_candidates.log
             /tmp/health_candidates_report.md
             /tmp/health_library_audit.json

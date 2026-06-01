@@ -28,8 +28,8 @@
 ## 候选采集
 
 ```bash
-python3 collect.py                       # 默认：只抓官方目录与 PubMed
-python3 collect.py --include-discovery   # 可选：额外抓创作者发现层
+python3 collect.py                       # 默认：官方 + PubMed + 专家解释层 + 已配置实验型雷达
+python3 collect.py --include-discovery   # 可选：再加入未来配置的额外发现源
 python3 collect.py 'PubMed·肌酸'         # 只抓名字匹配的信源
 ```
 
@@ -40,9 +40,13 @@ python3 collect.py 'PubMed·肌酸'         # 只抓名字匹配的信源
 白名单官方域名下的具体事实页或指南页。`collect.py` 在代码中再次校验域名，不能只靠配置文件把任意
 网站标成官方锚点。
 
-创作者播客、YouTube 和博客默认关闭，但保留为可选发现层。原因不是否定它们的选题价值，而是它们的
-更新频率高、重复与观点性内容多，不能自动作为证据依据。需要扩展选题时可运行
-`python3 collect.py --include-discovery`；进入正式条目前仍必须回到研究、指南或官方原文补齐证据链。
+可信专家的播客、YouTube 和博客默认进入每周候选，但与证据锚点分层展示。它们的价值是更早发现问题、
+提供解释框架和访谈线索；局限是更新频率高、重复与观点性内容多，不能自动作为证据依据。采集器会从
+节目简介或博客摘要提取 `citation_urls_to_review`，供人工或 AI 优先回溯；这些链接仍需确认是否真是
+论文、指南或官方原文。完整链接还会保存在 `context_urls_to_review`，其中可能混有内部导航和赞助链接，
+不能当作引用。对配置过的专家官方详情页，采集器还会额外跟随一跳，继续寻找 PubMed、DOI、政府机构、
+临床试验注册和 Cochrane 链接。自我实验 / 个人方案雷达也会采集，但在审核清单中单独分组，不与专家
+访谈或研究锚点混在一起。`python3 collect.py --include-discovery` 保留给未来新增的额外发现源。
 
 GitHub Actions 工作流位于 `.github/workflows/collect-candidates.yml`。它也支持在 Actions 页面手动触发。
 每次运行会保存 `health-candidates` Artifact（候选 JSON、采集日志、审核摘要、馆藏审计），并新建或刷新

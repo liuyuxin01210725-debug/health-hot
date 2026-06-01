@@ -136,6 +136,36 @@ class CollectTests(unittest.TestCase):
         entry = {"url": "https://pubmed.ncbi.nlm.nih.gov/42197030/"}
         self.assertEqual(collect.canonical_id(entry), "pmid:42197030")
 
+    def test_feed_extracts_citation_urls_for_review(self):
+        raw = b"""<rss><channel><item><title>fixture</title><link>https://example.com/post</link>
+        <description><![CDATA[Read <a href="https://pubmed.ncbi.nlm.nih.gov/123/">study</a>
+        and https://doi.org/10.1000/example.]]></description></item></channel></rss>"""
+        item = collect.parse_feed(raw)[0]
+        self.assertEqual(item["citation_urls"], [
+            "https://pubmed.ncbi.nlm.nih.gov/123/",
+            "https://doi.org/10.1000/example",
+        ])
+        self.assertTrue(collect.likely_reference_url("https://pubmed.ncbi.nlm.nih.gov/123/"))
+        self.assertTrue(collect.likely_reference_url("https://doi.org/10.1000/example"))
+        self.assertFalse(collect.likely_reference_url("https://drinkag1.com/huberman"))
+
+    def test_expert_page_enrichment_only_keeps_likely_references(self):
+        source = {"reference_page_hosts": ["expert.example"]}
+        entry = {"url": "https://youtube.example/watch", "citation_urls": ["https://expert.example/episode/1"]}
+        page = b"""<a href="https://pubmed.ncbi.nlm.nih.gov/123/">study</a>
+        <a href="https://sponsor.example/sale">sponsor</a>"""
+        with mock.patch.object(collect, "fetch", return_value=page) as fetch:
+            detail, citations, error = collect.enrich_reference_urls(source, entry)
+        self.assertEqual(detail, "https://expert.example/episode/1")
+        self.assertEqual(citations, ["https://pubmed.ncbi.nlm.nih.gov/123/"])
+        self.assertEqual(error, "")
+        fetch.assert_called_once_with(
+            "https://expert.example/episode/1",
+            attempts=1,
+            timeout=12,
+            allowed_final_hosts={"expert.example"},
+        )
+
     def test_official_catalog_accepts_whitelisted_specific_page(self):
         entries = collect.official_catalog_entries({
             "role": "anchor",
@@ -180,15 +210,21 @@ class CollectTests(unittest.TestCase):
             with self.subTest(source=source.get("name")):
                 self.assertTrue(collect.official_catalog_entries(source))
 
-    def test_default_collection_excludes_opt_in_discovery_sources(self):
+    def test_default_collection_includes_trusted_experts_but_excludes_opt_in_radar(self):
         sources = [
             {"name": "WHO", "type": "official_catalog"},
-            {"name": "Huberman", "type": "youtube", "default_enabled": False},
+            {"name": "Huberman", "type": "youtube", "role": "discovery", "default_enabled": True},
+            {"name": "Bryan", "type": "youtube", "role": "radar", "default_enabled": False},
         ]
-        self.assertEqual([s["name"] for s in collect.select_sources(sources, [])], ["WHO"])
+        self.assertEqual([s["name"] for s in collect.select_sources(sources, [])], ["WHO", "Huberman"])
         self.assertEqual([s["name"] for s in collect.select_sources(sources, ["--include-discovery"])],
-                         ["WHO", "Huberman"])
+                         ["WHO", "Huberman", "Bryan"])
         self.assertEqual([s["name"] for s in collect.select_sources(sources, ["Huberman"])], ["Huberman"])
+
+    def test_only_discovery_and_radar_failures_can_be_non_blocking(self):
+        self.assertTrue(collect.failure_is_warning({"role": "discovery", "failure_policy": "warn"}))
+        self.assertTrue(collect.failure_is_warning({"role": "radar", "failure_policy": "warn"}))
+        self.assertFalse(collect.failure_is_warning({"role": "anchor", "failure_policy": "warn"}))
 
     def test_fetch_retries_transient_rate_limit(self):
         rate_limit = urllib.error.HTTPError(

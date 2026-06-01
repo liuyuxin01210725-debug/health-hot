@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-收集引擎 v4：从 data/sources.json 抓官方精选目录 / RSS / YouTube / PubMed，去重，产出"候选条目"。
+收集引擎 v5：从 data/sources.json 抓官方精选目录 / RSS / YouTube / PubMed，去重，产出"候选条目"。
+
+v5 默认纳入可信专家发现层，并从节目简介 / 博客摘要提取 citation_urls_to_review：
+  这些链接只是待核引用，不能自动升级成证据锚点。发现层临时失败只告警，不阻断官方 / PubMed 主流程。
 
 v4 新增官方精选目录（type: official_catalog）：
   仅接受白名单政府 / 官方机构域名下的具体事实页或指南页，作为 anchor 候选。
@@ -25,6 +28,7 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(ROOT, "data", "sources.json")
 ITEMS = os.path.join(ROOT, "data", "items")
 OUT = "/tmp/health_candidates.json"
+META_OUT = "/tmp/health_collection_meta.json"
 UA = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36'}
 PER_SOURCE = 5
 DESC_CHARS = 2500
@@ -38,6 +42,11 @@ OFFICIAL_HOSTS = {
     "cdc.gov", "www.cdc.gov",
     "nhc.gov.cn", "www.nhc.gov.cn",
     "chinacdc.cn", "www.chinacdc.cn", "en.chinacdc.cn",
+}
+REFERENCE_HOSTS = OFFICIAL_HOSTS | {
+    "pubmed.ncbi.nlm.nih.gov", "ncbi.nlm.nih.gov", "www.ncbi.nlm.nih.gov",
+    "doi.org", "www.doi.org", "clinicaltrials.gov", "www.clinicaltrials.gov",
+    "cochranelibrary.com", "www.cochranelibrary.com",
 }
 
 ATOM = '{http://www.w3.org/2005/Atom}'
@@ -61,37 +70,41 @@ def _retry_delay(ex, attempt):
     return min(30.0, max(retry_after, 2.0 ** (attempt + 1)))
 
 
-def fetch(url):
-    for attempt in range(FETCH_ATTEMPTS):
+def fetch(url, attempts=FETCH_ATTEMPTS, timeout=25, allowed_final_hosts=None):
+    for attempt in range(attempts):
         try:
-            return _fetch_once(url)
+            return _fetch_once(url, timeout=timeout, allowed_final_hosts=allowed_final_hosts)
         except urllib.error.HTTPError as ex:
-            if ex.code not in TRANSIENT_HTTP_CODES or attempt == FETCH_ATTEMPTS - 1:
+            if ex.code not in TRANSIENT_HTTP_CODES or attempt == attempts - 1:
                 raise
             delay = _retry_delay(ex, attempt)
-            print(f"[~] {ex.code} 临时响应，{delay:g}s 后重试 {attempt + 2}/{FETCH_ATTEMPTS}：{urllib.parse.urlsplit(url).netloc}")
+            print(f"[~] {ex.code} 临时响应，{delay:g}s 后重试 {attempt + 2}/{attempts}：{urllib.parse.urlsplit(url).netloc}")
             time.sleep(delay)
         except (urllib.error.URLError, TimeoutError) as ex:
-            if attempt == FETCH_ATTEMPTS - 1:
+            if attempt == attempts - 1:
                 raise
             delay = 2.0 ** (attempt + 1)
-            print(f"[~] 临时网络错误 {ex!s}，{delay:g}s 后重试 {attempt + 2}/{FETCH_ATTEMPTS}：{urllib.parse.urlsplit(url).netloc}")
+            print(f"[~] 临时网络错误 {ex!s}，{delay:g}s 后重试 {attempt + 2}/{attempts}：{urllib.parse.urlsplit(url).netloc}")
             time.sleep(delay)
 
 
-def _fetch_once(url):
+def _fetch_once(url, timeout=25, allowed_final_hosts=None):
     with _fetch_lock:  # 串行节流：即使将来并发调用，间隔也真正 ≥0.35s
         wait = 0.35 - (time.monotonic() - _last_fetch[0])
         if wait > 0:
             time.sleep(wait)
         _last_fetch[0] = time.monotonic()
     req = urllib.request.Request(url, headers=UA)
-    with urllib.request.urlopen(req, timeout=25) as r:
+    with urllib.request.urlopen(req, timeout=timeout) as r:
         # 跟随重定向后，确认最终 URL 仍是 http(s)——挡 file:// 等伪协议跳转（SSRF 纵深防御，codex 审出）。
         # 注：内网 IP（169.254/localhost）重定向不在此简易防护内；本地手动采集已知信源，风险极低。
         final = r.geturl()
         if not isinstance(final, str) or not re.match(r'^https?://', final, re.I):
             raise ValueError(f"最终 URL 非 http(s)，已拒绝（防 SSRF）：{final!r}")
+        if allowed_final_hosts:
+            host = (urllib.parse.urlsplit(final).hostname or '').lower()
+            if host not in allowed_final_hosts:
+                raise ValueError(f"最终 URL 不在允许域名中，已拒绝：{host!r}")
         return r.read(8 * 1024 * 1024)  # 8MB 上限，防超大 feed 撑爆内存
 
 
@@ -121,6 +134,81 @@ def clean_text(s):
     s = re.sub(r'(?s)<[^>]+>', ' ', s)
     s = html.unescape(s)
     return re.sub(r'\s+', ' ', s).strip()
+
+
+def extract_urls(s, limit=20):
+    """从 feed 简介提取上下文链接。只做发现，不把链接自动当作研究证据。"""
+    raw = html.unescape(html.unescape(s or ''))  # 部分 RSS 把查询参数二次转义为 &amp;amp;
+    found = re.findall(r'''(?i)href\s*=\s*["'](https?://[^"'<>]+)''', raw)
+    found.extend(re.findall(r'''(?i)\bhttps?://[^\s<>"']+''', raw))
+    out = []
+    for url in found:
+        url = url.rstrip('.,;:!?)]}\'"')
+        try:
+            p = urllib.parse.urlsplit(url)
+        except Exception:
+            continue
+        if p.scheme not in ('http', 'https') or not p.hostname or p.username is not None or p.password is not None:
+            continue
+        if url not in out:
+            out.append(url)
+        if len(out) >= limit:
+            break
+    return out
+
+
+def likely_reference_url(url):
+    """轻量标记疑似原始引用；只能帮助排序，不能自动把链接升级成证据。"""
+    try:
+        p = urllib.parse.urlsplit(url)
+    except Exception:
+        return False
+    host = (p.hostname or '').lower()
+    path = p.path.lower()
+    return (host in REFERENCE_HOSTS or host.endswith('.cochranelibrary.com')
+            or '/doi/' in path or path.startswith('/doi/'))
+
+
+def _host(url):
+    try:
+        return (urllib.parse.urlsplit(url).hostname or '').lower()
+    except Exception:
+        return ''
+
+
+def enrich_reference_urls(source, entry):
+    """对可信专家 feed 跟随至多一个配置过的官方详情页，提取疑似原始依据。
+
+    这是审核辅助，不是证据升级：页面链接仍要人工 / AI 判断是否真能支撑说法。
+    """
+    context_urls = entry.get('citation_urls', []) or []
+    citations = [url for url in context_urls if likely_reference_url(url)]
+    allowed_hosts = {host.lower() for host in (source.get('reference_page_hosts') or [])
+                     if isinstance(host, str) and host.strip()}
+    if not allowed_hosts:
+        return '', citations[:20], ''
+    detail_url = ''
+    for url in [entry.get('url', '')] + context_urls:
+        try:
+            path = urllib.parse.urlsplit(url).path.strip('/').lower()
+        except Exception:
+            continue
+        if _host(url) in allowed_hosts and len(path) >= 2 and not path.startswith(
+                ('newsletter', 'subscribe', 'terms-of-use', 'members')
+        ):
+            detail_url = url
+            break
+    if not detail_url:
+        return '', citations[:20], ''
+    try:
+        raw = fetch(detail_url, attempts=1, timeout=12, allowed_final_hosts=allowed_hosts)
+        page_links = extract_urls(raw.decode('utf-8', 'ignore'), limit=200)
+    except Exception as ex:
+        return detail_url, citations[:20], str(ex)
+    for url in page_links:
+        if likely_reference_url(url) and url not in citations:
+            citations.append(url)
+    return detail_url, citations[:20], ''
 
 
 def norm_date(s):
@@ -162,12 +250,13 @@ def parse_feed(raw):
             out.append({'title': t(e.find(f'{ATOM}title')),
                         'url': href,
                         'published': norm_date(t(e.find(f'{ATOM}published')) or t(e.find(f'{ATOM}updated'))),
-                        'desc': clean_text(desc)})
+                        'desc': clean_text(desc), 'citation_urls': extract_urls(desc)})
     else:
         for it in root.findall('.//item'):
             body = t(it.find(CONTENT)) or t(it.find('description'))
             out.append({'title': t(it.find('title')), 'url': t(it.find('link')),
-                        'published': norm_date(t(it.find('pubDate'))), 'desc': clean_text(body)})
+                        'published': norm_date(t(it.find('pubDate'))), 'desc': clean_text(body),
+                        'citation_urls': extract_urls(body)})
     return out
 
 
@@ -311,7 +400,7 @@ def seen_records():
 
 
 def select_sources(sources, args):
-    """默认只跑权威层；发现层必须显式开启，或按名称单独采集。"""
+    """默认跑权威层与可信专家发现层；--include-discovery 再加入实验型雷达。"""
     include_discovery = '--include-discovery' in args
     filt = [x.lower() for x in args if x != '--include-discovery']
     if filt:
@@ -320,6 +409,12 @@ def select_sources(sources, args):
     if include_discovery:
         return [s for s in sources if isinstance(s, dict)]
     return [s for s in sources if isinstance(s, dict) and s.get('default_enabled', True) is not False]
+
+
+def failure_is_warning(source):
+    """发现层波动不应阻断权威主流程；anchor 失败始终阻断，配置不能绕过。"""
+    return (source.get('failure_policy') == 'warn'
+            and source.get('role') in {'discovery', 'radar'})
 
 
 def main():
@@ -337,7 +432,7 @@ def main():
         sys.exit(1)
     seen, seen_canonical = seen_records()
     seen_doi, seen_title = set(), set()
-    cands, succeeded, failed = [], 0, 0
+    cands, succeeded, failed, warnings, failures = [], 0, 0, 0, []
     for s in sources:
         name = s.get('name', '<未命名>') if isinstance(s, dict) else '<非对象>'
         try:
@@ -350,12 +445,18 @@ def main():
             elif s['type'] in ('youtube', 'rss'):
                 url = (f"https://www.youtube.com/feeds/videos.xml?channel_id={s['channel_id']}"
                        if s['type'] == 'youtube' else s['url'])
-                entries = parse_feed(fetch(url))
+                entries = parse_feed(fetch(url, attempts=1, timeout=12) if failure_is_warning(s) else fetch(url))
             else:
                 raise ValueError(f"不支持的 source type：{s['type']!r}")
         except Exception as ex:
-            print(f"[!] {name}: 失败 — {ex}")
-            failed += 1
+            optional = failure_is_warning(s)
+            prefix = "[~]" if optional else "[!]"
+            print(f"{prefix} {name}: 失败 — {ex}" + ("（发现层告警，不阻断主流程）" if optional else ""))
+            failures.append({'source': name, 'role': s.get('role', ''), 'optional': optional, 'error': str(ex)})
+            if optional:
+                warnings += 1
+            else:
+                failed += 1
             continue
         succeeded += 1
         new = 0
@@ -380,6 +481,7 @@ def main():
                 continue
             src = (e['journal'] + " · PubMed") if e.get('journal') else name
             rel = relevance_hint(s, e)
+            detail_url, citation_urls, enrichment_error = enrich_reference_urls(s, e)
             cands.append({'source': src, 'category': e.get('category') or s.get('category', ''),
                           'role': s.get('role', ''),
                           'evidence': e.get('evidence') or s.get('evidence', 'expert'),
@@ -388,6 +490,11 @@ def main():
                           'doi': doi, 'canonical_id': cid,
                           'collection_source': name, 'collection_query': s.get('query', ''),
                           'authority_level': s.get('authority_level', ''),
+                          'discovery_tier': s.get('discovery_tier', ''),
+                          'context_urls_to_review': [x for x in e.get('citation_urls', []) if x != url][:20],
+                          'reference_page_url': detail_url,
+                          'citation_urls_to_review': [x for x in citation_urls if x != url][:20],
+                          'reference_enrichment_error': enrichment_error,
                           'relevance_hint': rel})
             seen.add(url)
             if doi:
@@ -402,6 +509,7 @@ def main():
         print("\n⛔ 全部选中信源采集失败：未覆盖旧候选文件。")
         sys.exit(1)
     json.dump(cands, open(OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+    json.dump({'failures': failures}, open(META_OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
     print(f"\n共 {len(cands)} 条候选 → {OUT}")
     for c in cands:
         flag = " · ⚠ 标题未命中窄主题，需人工判断" if c.get('relevance_hint') == 'query_match_only' else ""
@@ -409,6 +517,8 @@ def main():
     if failed:
         print(f"\n⛔ 有 {failed} 个信源采集失败：候选已保留，但退出码为 1，请检查后再进入发布流程。")
         sys.exit(1)
+    if warnings:
+        print(f"\n⚠ 有 {warnings} 个发现层信源临时失败：已记录告警，官方 / PubMed 主流程继续。")
 
 
 if __name__ == '__main__':

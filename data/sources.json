@@ -1,6 +1,7 @@
 {
-  "_说明": "健康信源清单。默认采集只跑权威来源：official_catalog(entries) / pubmed(query)。youtube / rss 发现层需显式加 --include-discovery 或按名称手动采集。",
-  "_role": "anchor=核验锚点(系统综述/指南/Cochrane，可定结论) | discovery=选题雷达(播客，只生成待核验问题) | radar=趋势雷达(博主/泛主题，不直接定结论)。",
+  "_说明": "健康信源清单。默认采集 official_catalog / pubmed，并纳入可信专家 RSS / YouTube 与显式配置的实验型个人方案雷达。额外发现源可显式加 --include-discovery 或按名称手动采集。",
+  "_role": "anchor=核验锚点(系统综述/指南/Cochrane，可定结论) | discovery=可信专家解释与前沿发现(只生成待核验问题) | radar=实验型趋势雷达(不直接定结论)。",
+  "_discovery_tier": "trusted_expert=可信专家解释层，默认采集 | experimental_self_report=自我实验/个人方案雷达，默认采集但单独标注。feed 简介中的引用只进 citation_urls_to_review，不能自动升级为证据。",
   "_official_catalog": "官方精选目录只放政府或官方机构的具体事实页/指南页。collect.py 还有硬编码域名白名单，配置文件不能把任意网站伪装成官方锚点。",
   "_group": "同一节目的多个 feed 标同一 group，collect.py 按 group+标题去重，避免一期内容收两次。",
   "_pubmed_evidence": "PubMed 条目的 evidence 由 collect.py 读 PublicationType 结果级判定(rct/meta/guideline/observational/unknown)，无法确定时必须保留 unknown 等人工复核。",
@@ -110,14 +111,15 @@
     {"name": "PubMed·Omega-3 RCT", "type": "pubmed", "role": "radar", "query": "omega-3 fatty acids AND randomized controlled trial[pt] AND humans[mh]", "title_terms": ["omega-3", "n-3 pufa", "n-3 fatty"], "category": "补剂", "evidence": "unknown"},
     {"name": "PubMed·心肺功能与死亡率", "type": "pubmed", "role": "radar", "query": "cardiorespiratory fitness AND mortality AND humans[mh]", "title_terms": ["cardiorespiratory fitness", "cardiorespiratory", "fitness"], "category": "运动", "evidence": "unknown"},
 
-    {"name": "Peter Attia MD", "type": "youtube", "role": "discovery", "default_enabled": false, "group": "attia", "channel_id": "UC8kGsMa0LygSX9nkBcBH1Sg", "category": "长寿", "evidence": "expert"},
-    {"name": "Huberman Lab", "type": "youtube", "role": "discovery", "default_enabled": false, "group": "huberman", "channel_id": "UC2D2CMWXMOVWx7giW1n3LIg", "category": "睡眠", "evidence": "expert"},
-    {"name": "Huberman Lab Podcast", "type": "rss", "role": "discovery", "default_enabled": false, "group": "huberman", "url": "https://feeds.megaphone.fm/hubermanlab", "category": "睡眠", "evidence": "expert"},
-    {"name": "FoundMyFitness", "type": "youtube", "role": "discovery", "default_enabled": false, "group": "fmf", "channel_id": "UC5fdyC4LxyyYv8Am6nDrkmg", "category": "营养", "evidence": "expert"},
-    {"name": "FoundMyFitness Podcast", "type": "rss", "role": "discovery", "default_enabled": false, "group": "fmf", "url": "https://podcast.foundmyfitness.com/rss.xml", "category": "营养", "evidence": "expert"},
+    {"name": "Peter Attia MD", "type": "youtube", "role": "discovery", "default_enabled": true, "failure_policy": "warn", "discovery_tier": "trusted_expert", "reference_page_hosts": ["peterattiamd.com", "www.peterattiamd.com"], "limit": 3, "group": "attia", "channel_id": "UC8kGsMa0LygSX9nkBcBH1Sg", "category": "长寿", "evidence": "expert"},
+    {"name": "Peter Attia · The Drive Podcast", "type": "rss", "role": "discovery", "default_enabled": true, "failure_policy": "warn", "discovery_tier": "trusted_expert", "reference_page_hosts": ["peterattiamd.com", "www.peterattiamd.com"], "limit": 3, "group": "attia", "url": "https://feeds.libsyn.com/121729/rss", "category": "长寿", "evidence": "expert"},
+    {"name": "Huberman Lab", "type": "youtube", "role": "discovery", "default_enabled": true, "failure_policy": "warn", "discovery_tier": "trusted_expert", "reference_page_hosts": ["go.hubermanlab.com", "hubermanlab.com", "www.hubermanlab.com"], "limit": 3, "group": "huberman", "channel_id": "UC2D2CMWXMOVWx7giW1n3LIg", "category": "睡眠", "evidence": "expert"},
+    {"name": "Huberman Lab Podcast", "type": "rss", "role": "discovery", "default_enabled": true, "failure_policy": "warn", "discovery_tier": "trusted_expert", "reference_page_hosts": ["go.hubermanlab.com", "hubermanlab.com", "www.hubermanlab.com"], "limit": 3, "group": "huberman", "url": "https://feeds.megaphone.fm/hubermanlab", "category": "睡眠", "evidence": "expert"},
+    {"name": "FoundMyFitness", "type": "youtube", "role": "discovery", "default_enabled": true, "failure_policy": "warn", "discovery_tier": "trusted_expert", "limit": 3, "group": "fmf", "channel_id": "UC5fdyC4LxyyYv8Am6nDrkmg", "category": "营养", "evidence": "expert"},
+    {"name": "FoundMyFitness Podcast", "type": "rss", "role": "discovery", "default_enabled": true, "failure_policy": "warn", "discovery_tier": "trusted_expert", "limit": 3, "group": "fmf", "url": "https://podcast.foundmyfitness.com/rss.xml", "category": "营养", "evidence": "expert"},
 
-    {"name": "Bryan Johnson", "type": "youtube", "role": "radar", "default_enabled": false, "group": "bryan", "channel_id": "UCnRVL1-HJnXWB_Xi2dAoTcg", "category": "长寿", "evidence": "blogger"},
-    {"name": "Bryan Johnson (Medium)", "type": "rss", "role": "radar", "default_enabled": false, "group": "bryan", "url": "https://bryan-johnson.medium.com/feed", "category": "长寿", "evidence": "blogger"}
+    {"name": "Bryan Johnson", "type": "youtube", "role": "radar", "default_enabled": true, "failure_policy": "warn", "discovery_tier": "experimental_self_report", "limit": 3, "group": "bryan", "channel_id": "UCnRVL1-HJnXWB_Xi2dAoTcg", "category": "长寿", "evidence": "blogger"},
+    {"name": "Bryan Johnson (Medium)", "type": "rss", "role": "radar", "default_enabled": true, "failure_policy": "warn", "discovery_tier": "experimental_self_report", "limit": 3, "group": "bryan", "url": "https://bryan-johnson.medium.com/feed", "category": "长寿", "evidence": "blogger"}
   ],
   "_仅作核验依据_不自动抓_在evidence_source_urls按需引用": [
     "NIH ODS 补剂资料库: https://ods.od.nih.gov/factsheets/list-all/",
