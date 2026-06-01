@@ -14,7 +14,7 @@ data/items/*.json，再跑 build.py 上站。
     python3 collect.py                 # 抓全部信源
     python3 collect.py PubMed Attia    # 只抓名字匹配的
 """
-import json, os, sys, glob, re, html, time, threading, urllib.request, urllib.parse
+import json, os, sys, glob, re, html, time, threading, urllib.request, urllib.parse, urllib.error
 import xml.etree.ElementTree as ET
 from email.utils import parsedate_to_datetime
 
@@ -25,6 +25,8 @@ OUT = "/tmp/health_candidates.json"
 UA = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36'}
 PER_SOURCE = 5
 DESC_CHARS = 2500
+FETCH_ATTEMPTS = 3
+TRANSIENT_HTTP_CODES = {429, 500, 502, 503, 504}
 
 ATOM = '{http://www.w3.org/2005/Atom}'
 MEDIA = '{http://search.yahoo.com/mrss/}'
@@ -38,7 +40,34 @@ _last_fetch = [0.0]  # 全局限速：NCBI 无 API key 建议 ≤3 req/s，这�
 _fetch_lock = threading.Lock()  # 加锁串行化 wait+update，否则并发调用者会一起醒来（codex 审出）
 
 
+def _retry_delay(ex, attempt):
+    retry_after = ex.headers.get('Retry-After') if getattr(ex, 'headers', None) else None
+    try:
+        retry_after = float(retry_after)
+    except (TypeError, ValueError):
+        retry_after = 0.0
+    return min(30.0, max(retry_after, 2.0 ** (attempt + 1)))
+
+
 def fetch(url):
+    for attempt in range(FETCH_ATTEMPTS):
+        try:
+            return _fetch_once(url)
+        except urllib.error.HTTPError as ex:
+            if ex.code not in TRANSIENT_HTTP_CODES or attempt == FETCH_ATTEMPTS - 1:
+                raise
+            delay = _retry_delay(ex, attempt)
+            print(f"[~] {ex.code} 临时响应，{delay:g}s 后重试 {attempt + 2}/{FETCH_ATTEMPTS}：{urllib.parse.urlsplit(url).netloc}")
+            time.sleep(delay)
+        except (urllib.error.URLError, TimeoutError) as ex:
+            if attempt == FETCH_ATTEMPTS - 1:
+                raise
+            delay = 2.0 ** (attempt + 1)
+            print(f"[~] 临时网络错误 {ex!s}，{delay:g}s 后重试 {attempt + 2}/{FETCH_ATTEMPTS}：{urllib.parse.urlsplit(url).netloc}")
+            time.sleep(delay)
+
+
+def _fetch_once(url):
     with _fetch_lock:  # 串行节流：即使将来并发调用，间隔也真正 ≥0.35s
         wait = 0.35 - (time.monotonic() - _last_fetch[0])
         if wait > 0:

@@ -6,6 +6,7 @@ import os
 import sys
 import tempfile
 import unittest
+import urllib.error
 from pathlib import Path
 from unittest import mock
 
@@ -102,6 +103,19 @@ class RenderDesignTests(unittest.TestCase):
 
 
 class CollectTests(unittest.TestCase):
+    class _Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_):
+            return False
+
+        def geturl(self):
+            return "https://example.com/feed"
+
+        def read(self, _):
+            return b"ok"
+
     def test_title_relevance_hint(self):
         source = {"title_terms": ["creatine"]}
         self.assertEqual(collect.relevance_hint(source, {"title": "Creatine supplementation review"}), "title_match")
@@ -110,6 +124,18 @@ class CollectTests(unittest.TestCase):
     def test_canonical_pubmed_key(self):
         entry = {"url": "https://pubmed.ncbi.nlm.nih.gov/42197030/"}
         self.assertEqual(collect.canonical_id(entry), "pmid:42197030")
+
+    def test_fetch_retries_transient_rate_limit(self):
+        rate_limit = urllib.error.HTTPError(
+            "https://example.com/feed", 429, "Too Many Requests", {"Retry-After": "0"}, None
+        )
+        with mock.patch.object(collect, "_last_fetch", [-10.0]), \
+             mock.patch.object(collect.time, "monotonic", side_effect=[0.0, 0.0, 10.0, 10.0]), \
+             mock.patch.object(collect.time, "sleep") as sleep, \
+             mock.patch.object(collect.urllib.request, "urlopen", side_effect=[rate_limit, self._Response()]) as urlopen:
+            self.assertEqual(collect.fetch("https://example.com/feed"), b"ok")
+        self.assertEqual(urlopen.call_count, 2)
+        sleep.assert_called_once_with(2.0)
 
 
 class BuildFailSafeTests(unittest.TestCase):
