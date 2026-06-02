@@ -1,7 +1,7 @@
 # 查过再信 · 健康说法核验库
 
 一个持续收集、查证的中文循证健康说法核验库。每条说法都查到原始证据、标出强度、写清适用人群，
-附可点击原文，并区分「✓ 已核验」（有独立 PubMed/指南/Cochrane 支撑）与「◔ 专家梳理·证据待补」。
+附可点击原文，并区分「✓ 研究支持」「◎ 官方依据」与「◔ 前沿待核」。
 把"听来的"和"有据的"分开。
 
 也提供公开机读接口（`docs/claims.json`）和零配置 Skill（`skill/SKILL.md`），可被 AI 助手直接调用。
@@ -18,12 +18,14 @@
 - 部署：GitHub Pages 从 `main` 分支 `/docs` 目录 serve，推送即更新
 - 自动采集：GitHub Actions 每周一北京时间 08:00 抓取候选，并刷新 GitHub issue 审核收件箱；不会绕过人工核验直接发布
 
-## 信任分层
+## 依据状态
 
-- `verified`：存在独立研究 / 指南锚点，Agent 可以称「已核验」。
-- `curated_pending_evidence`：来自专家、播客或媒体梳理，但原始证据链尚未补齐；只能称「专家梳理·证据待补」。
-- `evidence_source_urls` 只放研究 / 指南锚点；播客、视频、文章入口放 `discovery_source_url`。
+- `study_supported`：存在 PubMed / DOI / Cochrane 研究锚点；对用户显示「研究支持」。
+- `official_basis`：存在 WHO、NIH、卫健委、中国疾控等白名单机构的具体页面；显示「官方依据」。
+- `frontier_pending`：来自专家、播客或趋势线索，但核验依据尚未补齐；只能称「前沿待核」。
+- `evidence_source_urls` 放研究锚点或白名单官方页面；播客、视频、文章入口放 `discovery_source_url`。
 - `source_urls` 仅为 feed 兼容字段，包含全部来源，不能当作研究原文列表。
+- `verification_status` 是旧版二元兼容字段；新消费者应优先读取 `verification_basis`。
 
 ## 候选采集
 

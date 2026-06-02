@@ -109,10 +109,8 @@ _GUIDELINE_HOSTS = ("who.int", "www.who.int", "uspreventiveservicestaskforce.org
                     "en.chinacdc.cn")
 
 
-def _is_study_url(u):
-    """是否为可核验的研究 / 指南锚点：① 主机名在白名单（按真实 hostname，不用子串——子串会被
-    'https://evil.com/?x=pubmed.ncbi.nlm.nih.gov' 骗过）② 且**路径指向具体条目**（非裸域名）——
-    'https://doi.org/' / 'https://ncbi.nlm.nih.gov/' 这种没有文章 ID 的不算研究（codex 二次审出）。"""
+def _is_research_url(u):
+    """是否为可回溯的研究锚点：主机在白名单，且路径指向具体文章。"""
     if not _is_http_url(u):
         return False
     p = urllib.parse.urlsplit(u)
@@ -120,31 +118,58 @@ def _is_study_url(u):
     path = p.path.strip("/")
     if host in _STUDY_HOSTS or host.endswith(".cochranelibrary.com"):
         return len(path) >= 2 and any(c.isdigit() for c in path)  # PMID/DOI/Cochrane 须指向具体条目
+    return False
+
+
+def _is_official_url(u):
+    """是否为可回溯的官方依据：白名单机构域名下的具体页面，裸域名不算。"""
+    if not _is_http_url(u):
+        return False
+    p = urllib.parse.urlsplit(u)
+    host = (p.hostname or "").lower()
+    path = p.path.strip("/")
     if host in _GUIDELINE_HOSTS:
         return len(path) >= 2  # 官方指南 / factsheet 须指向具体页面，裸域名不算
     return False
 
 
-def _has_study(it):
-    """是否有独立的研究/指南级证据链接（PubMed / DOI / Cochrane）——判定信任分层。"""
+def _is_evidence_url(u):
+    """是否为可作为核验依据的链接：研究锚点或白名单官方页面。"""
+    return _is_research_url(u) or _is_official_url(u)
+
+
+def _evidence_pool(it):
+    """收集条目的核验依据候选，兼容旧数据中把主链接直接作为依据的写法。"""
     pool = [it.get("source_url", "")] + [x for x in (it.get("evidence_source_urls") or []) if isinstance(x, str)]
-    return any(_is_study_url(u) for u in pool if isinstance(u, str))
+    return [u for u in pool if isinstance(u, str)]
 
 
 def verification_status(it):
-    """信任分层（P0）：把『专家梳理』和『循证已核验』在数据层分开，不靠文字补丁。
-      verified                  —— 有独立 PubMed/指南/Cochrane 支撑，可称『已核验』
-      curated_pending_evidence  —— 专家/播客梳理，原文证据链待补，**不可**称『已核验』
-    规则：『verified』必须有真研究 URL 兜底——**不允许**手动把无研究的条目标成 verified
-    （codex 审出：显式字段曾可绕过研究要求）。只允许显式**降级**为 curated。"""
-    if not _has_study(it):
-        return "curated_pending_evidence"          # 无真研究 → 一律 curated，显式字段不能强升
+    """兼容旧消费者的二元状态。新消费者应优先使用 verification_basis。"""
+    if not any(_is_evidence_url(u) for u in _evidence_pool(it)):
+        return "curated_pending_evidence"          # 无核验依据 → 一律 curated，显式字段不能强升
     if it.get("verification_status") == "curated_pending_evidence":
-        return "curated_pending_evidence"          # 有研究但人工选择降级（如对结论有疑），尊重
+        return "curated_pending_evidence"          # 有依据但人工选择降级（如对结论有疑），尊重
     return "verified"
 
 
 VS_LABEL = {"verified": "已核验", "curated_pending_evidence": "专家梳理 · 证据链待补"}
+VB_LABEL = {"study_supported": "研究支持", "official_basis": "官方依据", "frontier_pending": "前沿待核"}
+
+
+def verification_basis(it):
+    """面向用户的三类依据状态：研究支持 / 官方依据 / 前沿待核。
+
+    研究锚点优先于官方页面；人工降级始终优先，避免有链接就自动抬高可信度。
+    """
+    if verification_status(it) == "curated_pending_evidence":
+        return "frontier_pending"
+    pool = _evidence_pool(it)
+    if any(_is_research_url(u) for u in pool):
+        return "study_supported"
+    if any(_is_official_url(u) for u in pool):
+        return "official_basis"
+    return "frontier_pending"
 
 
 def _link_label(u):
@@ -232,7 +257,7 @@ def validate(items):
         evl = it.get("evidence_source_urls")
         if evl is not None and (not isinstance(evl, list) or any(not _is_http_url(x) for x in evl)):
             errs.append("evidence_source_urls 须为 http(s) 列表")
-        elif isinstance(evl, list) and any(not _is_study_url(x) for x in evl):
+        elif isinstance(evl, list) and any(not _is_evidence_url(x) for x in evl):
             errs.append("evidence_source_urls 只能放研究 / 指南锚点；播客、视频等请放 discovery_source_url")
         # 去重（slug 精确；url 归一化）
         nu = _norm_url(u)
@@ -269,15 +294,17 @@ EVIDENCE_ABOUT = {"rct": "随机对照试验", "meta": "荟萃 / 系统综述", 
                   "blogger": "科普博主", "anecdote": "个案 / 轶事"}
 
 
-def trust_badge(status):
-    """维度 A：二元信任分层。待补是诚实的不确定，不渲染成错误或警告。"""
-    if status == "verified":
-        return '<span class="trust verified"><span class="seal">✓</span>已核验</span>'
-    return '<span class="trust pending"><span class="seal"></span>专家梳理 · 证据待补</span>'
+def trust_badge(basis):
+    """维度 A：普通用户可理解的三类依据。待核是诚实的不确定，不渲染成错误。"""
+    if basis == "study_supported":
+        return '<span class="trust verified"><span class="seal">✓</span>研究支持</span>'
+    if basis == "official_basis":
+        return '<span class="trust official"><span class="seal">◎</span>官方依据</span>'
+    return '<span class="trust pending"><span class="seal"></span>前沿待核</span>'
 
 
 def strength_meter(evidence, show_label=True):
-    """维度 B：七级证据强度。视觉使用中性石墨，服从于信任徽章。"""
+    """维度 B：七级证据强度。视觉使用中性石墨，服从于依据状态徽章。"""
     n = EVIDENCE_SCORE.get(evidence, 0)
     bars = "".join('<i class="on"></i>' if i <= n else '<i></i>' for i in range(1, 8))
     label = (f'<span class="lab">证据 <b>{e(EV_LABEL.get(evidence, evidence))}</b></span>'
@@ -302,15 +329,15 @@ def legend_strip():
 
 
 def card(it):
-    """首页核验卡：信任分层为主信号，证据强度为副信号。"""
+    """首页核验卡：依据状态为主信号，证据强度为副信号。"""
     slug, cat = e(it.get("slug", "")), e(it.get("category", ""))
-    status = verification_status(it)
-    source_lead = "你可能在这听到" if status == "curated_pending_evidence" else "核验依据"
+    basis = verification_basis(it)
+    source_lead = "你可能在这听到" if basis == "frontier_pending" else "核验依据"
     feat = " feat" if it.get("featured") else ""
     star = '<span class="star">✦ 精选</span>' if it.get("featured") else ""
     return (f'<a class="card{feat}" href="claims/{slug}.html">\n'
             f'  <div class="card-top"><span class="cat">{cat}</span>{star}</div>\n'
-            f'  <div class="signal">{trust_badge(status)}{strength_meter(it.get("evidence", ""))}</div>\n'
+            f'  <div class="signal">{trust_badge(basis)}{strength_meter(it.get("evidence", ""))}</div>\n'
             f'  <h3>{e(it.get("title", ""))}</h3>\n'
             f'  <p class="verdict">{fmt(it.get("conclusion") or it.get("summary", ""))}</p>\n'
             f'  <div class="card-foot"><span class="src"><span class="lead">{source_lead}</span><br>'
@@ -325,7 +352,7 @@ def list_row(it):
     return (f'<a class="list-row" href="claims/{e(it.get("slug", ""))}.html" '
             f'data-cat="{cat}" data-search="{search_blob(it)}">\n'
             f'  <span class="lr-cat">{cat}</span>\n'
-            f'  <span class="lr-sig">{trust_badge(verification_status(it))}'
+            f'  <span class="lr-sig">{trust_badge(verification_basis(it))}'
             f'{strength_meter(it.get("evidence", ""), False)}</span>\n'
             f'  <span class="lr-claim"><span class="lc-t">{e(it.get("title", ""))}</span>'
             f'<span class="lc-v">{fmt(it.get("conclusion") or it.get("summary", ""))}</span></span>\n'
@@ -411,7 +438,7 @@ def ld_json(it):
     }
     cites, seen = [], set()
     for u in [it.get("source_url", "")] + (it.get("evidence_source_urls") or []):
-        if _is_study_url(u) and u not in seen:  # JSON-LD citation 只列真研究（与 feed/详情页同尺）
+        if _is_evidence_url(u) and u not in seen:  # JSON-LD citation 只列核验依据（与 feed/详情页同尺）
             seen.add(u); cites.append(u)
     if cites:
         data["citation"] = cites
@@ -421,8 +448,8 @@ def ld_json(it):
 
 def detail_page(it, related):
     ev = it.get("evidence", "")
-    status = verification_status(it)
-    pending = status == "curated_pending_evidence"
+    basis = verification_basis(it)
+    pending = basis == "frontier_pending"
     fields = [f'<div class="field"><div class="fk"><span class="ico">◎</span> 证据强度说明</div>'
               f'<p>{e(EV_DESC.get(ev, ""))}</p></div>']
     if it.get("population"):
@@ -445,15 +472,16 @@ def detail_page(it, related):
     src_lbl = e(src_date) + ("（期刊预排，未到见刊日）" if src_date and src_date > TODAY else "")
     date_meta = ("原文日期 " + src_lbl + " · " if src_date
                  else ("本站收录 " + e(collected) + " · " if collected else ""))
-    evs = [u for u in (it.get("evidence_source_urls") or []) if isinstance(u, str) and _is_study_url(u)]
-    nonstudy = [u for u in (it.get("evidence_source_urls") or []) if isinstance(u, str) and not _is_study_url(u)]
-    fallback_disc = it.get("source_url", "") if not _is_study_url(it.get("source_url", "")) else ""
+    evs = [u for u in (it.get("evidence_source_urls") or []) if isinstance(u, str) and _is_evidence_url(u)]
+    nonstudy = [u for u in (it.get("evidence_source_urls") or []) if isinstance(u, str) and not _is_evidence_url(u)]
+    fallback_disc = it.get("source_url", "") if not _is_evidence_url(it.get("source_url", "")) else ""
     disc = it.get("discovery_source_url", "") or (nonstudy[0] if nonstudy else "") or fallback_disc
     dual = ""
     if disc:
         proof = (f'<a href="{e(_safe_href(evs[0]))}" target="_blank" rel="noopener">'
-                 f'{e(_link_label(evs[0]))}</a>') if evs else "原始研究待补"
-        proof_note = "evidence · 回答问题" if evs else "尚未补齐，不当定论"
+                 f'{e(_link_label(evs[0]))}</a>') if evs else "核验依据待补"
+        proof_note = (("研究证据 · 回答问题" if basis == "study_supported" else "官方依据 · 回答问题")
+                      if evs else "尚未补齐，不当定论")
         proof_class = "" if evs else " 待补"
         proof_style = "" if evs else ' style="color:var(--pd-ink)"'
         dual = (f'<div class="dlink"><div class="dlink-head">把「听来的」和「有据的」分开</div>'
@@ -462,7 +490,7 @@ def detail_page(it, related):
                 f'<div class="dn-v"><a href="{e(_safe_href(disc))}" target="_blank" rel="noopener">'
                 f'{e(it.get("source", "") or _link_label(disc))}</a><small>discovery · 提出问题</small></div></div>'
                 f'<div class="dlink-mid"><span class="dots">····</span><span class="arrow">→</span></div>'
-                f'<div class="dnode proof{proof_class}"><div class="dn-k">🔬 支撑它的研究</div>'
+                f'<div class="dnode proof{proof_class}"><div class="dn-k">🔬 核验依据</div>'
                 f'<div class="dn-v"{proof_style}>{proof}<small>{proof_note}</small></div></div></div></div>')
     evidence_links = ""
     if evs:
@@ -477,7 +505,7 @@ def detail_page(it, related):
              f'<h1 class="d-title">{e(it.get("title", ""))}</h1>'
              f'<div class="d-verdict{" pend" if pending else ""}"><div class="vk">一句话结论</div>'
              f'<p>{fmt(it.get("conclusion") or it.get("summary", ""))}</p></div>'
-             f'<div class="d-signal"><div class="row"><span class="k">信任分层</span>{trust_badge(status)}</div>'
+             f'<div class="d-signal"><div class="row"><span class="k">依据状态</span>{trust_badge(basis)}</div>'
              f'<div class="row"><span class="k">证据强度</span>{strength_meter(ev)}</div></div>'
              f'{dual}{"".join(fields)}{evidence_links}'
              f'<div class="src-line">来源：{e(it.get("source", ""))}<br>'
@@ -508,7 +536,7 @@ def render_index(items):
                 f'<div class="grid">{cards}</div></div></section>')
     agent = (f'<section class="sec" id="ai" style="padding-top:0"><div class="wrap"><div class="ai-band">'
              f'<div class="ab-l"><div class="robot">🤖 第二形态 · 被 AI 调用</div><h3>让 AI 助手直接查本站</h3>'
-             f'<p>本站提供公开机读接口。你的 AI 助手可以区分「已核验」与「专家梳理·证据待补」，'
+             f'<p>本站提供公开机读接口。你的 AI 助手可以区分「研究支持」「官方依据」与「前沿待核」，'
              f'回答健康问题时带上证据强度和对应来源链接。</p></div><div class="ab-r">'
              f'<div class="codeblk"><div class="ck">公开数据接口 · 任何人可匿名抓取</div>'
              f'<code>{e(SITE_URL)}claims.json</code></div>'
@@ -534,14 +562,14 @@ def render_all(items):
         f'<button class="fchip" data-c="{e(c)}">{e(c)}<span class="ct">{len(by[c])}</span></button>' for c in cats)
     rows = "\n".join(list_row(it) for it in items)
     inner = (f'<header class="hero all-hero"><div class="wrap"><span class="eyebrow">ALL CLAIMS · 全部核验</span>'
-             f'<h1>全部核验</h1><p class="lede">一行一条，信任分层与证据强度在扫读时就能分辨。</p>'
+             f'<h1>全部核验</h1><p class="lede">一行一条，依据状态与证据强度在扫读时就能分辨。</p>'
              f'<form class="searchbox all-search" onsubmit="event.preventDefault();applyFilters()">'
              f'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '
              f'stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>'
              f'<input type="text" id="q" placeholder="搜索说法、结论或关键词…" oninput="applyFilters()">'
              f'</form></div></header><section class="sec all-sec"><div class="wrap"><div class="controls">'
              f'<div class="filterbar" id="filterbar">{pills}</div><span class="count" id="count"></span></div>'
-             f'<div class="listwrap"><div class="list-head"><span>主题</span><span>信任 / 强度</span>'
+             f'<div class="listwrap"><div class="list-head"><span>主题</span><span>依据 / 强度</span>'
              f'<span>说法 · 结论</span><span>复核</span></div><div id="list">{rows}</div>'
              f'<div class="empty" id="empty" hidden>没有找到匹配的核验，换个关键词或主题试试。</div>'
              f'</div></div></section>')
@@ -570,16 +598,16 @@ def render_about():
 <h1>我们怎么把「听来的」<br>变成「有据的」</h1>
 <p class="lede">这个库不生产观点，它核验说法。每一条结论怎么来、证据强弱怎么分、什么时候复核、发现错了怎么改——都写在这里。</p>
 </div></header><section class="method"><div class="wrap narrow">
-<div class="method-item"><div class="mi-n">01</div><div><h3>两层信任：先分「查实了没有」</h3>
-<p>每条说法先归入两种状态之一。<b>已核验</b>：有独立的 PubMed / 官方指南 / Cochrane 研究支撑，可点回原始研究。<b>专家梳理·证据待补</b>：来自播客或专家的梳理，方向有参考价值，但原始研究链接还没补齐。我们老实标注「还没查到」，<b>这不是错误，是诚实</b>。</p></div></div>
-<div class="method-item"><div class="mi-n">02</div><div><h3>证据分级：再标「支撑它的研究有多硬」</h3>
-<p>对有研究支撑的条目，再按证据强度分七级。两个维度组合出可信度光谱：一条可以是「已核验 + Meta」，也可以是「专家梳理待补 + 专家」。</p>
+<div class="method-item"><div class="mi-n">01</div><div><h3>三类依据：先看「凭什么相信」</h3>
+<p>每条说法先归入三类之一。<b>研究支持</b>：可点回 PubMed / DOI / Cochrane 等研究锚点。<b>官方依据</b>：可点回 WHO、NIH、卫健委、中国疾控等白名单机构的具体页面。<b>前沿待核</b>：来自专家、播客或趋势线索，但核验依据还没补齐。三类不互相冒充：官方建议不是原始研究，前沿观点也不是结论。</p></div></div>
+<div class="method-item"><div class="mi-n">02</div><div><h3>证据分级：再标「依据有多硬」</h3>
+<p>在依据状态之外，再按证据强度分七级。两个维度组合出可信度光谱：一条可以是「研究支持 + Meta」，也可以是「官方依据 + 指南」或「前沿待核 + 专家」。</p>
 <div class="src-table about-grade">{grades}</div></div></div>
 <div class="method-item"><div class="mi-n">03</div><div><h3>双链接：你在哪听到 ≠ 凭什么相信</h3>
-<p><b>发现来源（discovery）</b>是「你可能在某播客听到这个说法」，<b>核验依据（evidence）</b>是「支撑它的研究在哪里」。<b>播客负责提出问题，研究负责回答问题</b>。</p></div></div>
+<p><b>发现来源（discovery）</b>是「你可能在某播客听到这个说法」，<b>核验依据（evidence）</b>是「研究或官方原文在哪里」。<b>播客负责提出问题，研究与官方页面负责提供可回溯依据</b>。</p></div></div>
 <div class="method-item"><div class="mi-n">04</div><div><h3>信源体系：三种角色，各司其职</h3><div class="src-table">
 <div class="src-role"><span class="role-tag anchor">锚点 ANCHOR</span><div class="role-d"><strong>决定结论、做核验依据</strong><span>WHO / USPSTF / NIH 官方事实页与指南，PubMed 的 Cochrane 系统综述 / 指南 / 系统综述查询</span></div></div>
-<div class="src-role"><span class="role-tag discovery">发现 DISCOVERY</span><div class="role-d"><strong>只负责发现「大家在讨论什么」，不下结论</strong><span>播客 / YouTube 等创作者入口默认不采集，需要时手动启用</span></div></div>
+<div class="src-role"><span class="role-tag discovery">发现 DISCOVERY</span><div class="role-d"><strong>只负责发现「大家在讨论什么」，不下结论</strong><span>可信专家的播客 / YouTube / 博客进入候选池，但不能自动作为核验依据</span></div></div>
 <div class="src-role"><span class="role-tag radar">雷达 RADAR</span><div class="role-d"><strong>追踪新论文与趋势</strong><span>PubMed 窄主题查询；趋势不能直接冒充结论</span></div></div>
 </div></div></div>
 <div class="method-item"><div class="mi-n">05</div><div><h3>复核与纠错</h3>
@@ -605,8 +633,9 @@ def claims_feed(items):
             if _is_http_url(u) and u not in srcs:
                 srcs.append(u)
         vs = verification_status(it)
-        # 证据链 = 只含真研究链接（按主机名判定，不用子串——见 _is_study_url）；发现链 = 播客/YT「在哪听到」，单列。
-        evidence_urls = [u for u in srcs if _is_study_url(u)]
+        vb = verification_basis(it)
+        # 证据链 = 研究锚点或白名单官方页面；发现链 = 播客/YT「在哪听到」，单列。
+        evidence_urls = [u for u in srcs if _is_evidence_url(u)]
         out.append({
             "slug": slug,
             "title": it.get("title", ""),
@@ -614,6 +643,8 @@ def claims_feed(items):
             "category": it.get("category", ""),
             "verification_status": vs,                     # verified | curated_pending_evidence
             "verification_label": VS_LABEL[vs],
+            "verification_basis": vb,                      # study_supported | official_basis | frontier_pending
+            "verification_basis_label": VB_LABEL[vb],
             "evidence": it.get("evidence", ""),
             "evidence_label": EV_LABEL.get(it.get("evidence", ""), it.get("evidence", "")),
             "conclusion": (it.get("conclusion") or it.get("summary") or "").replace("**", ""),
@@ -621,7 +652,7 @@ def claims_feed(items):
             "caveats": (it.get("caveats") or "").replace("**", ""),
             "summary": (it.get("summary") or "").replace("**", ""),
             "source": it.get("source", ""),
-            "evidence_source_urls": evidence_urls,         # 真研究链接（可能为空）
+            "evidence_source_urls": evidence_urls,         # 核验依据链接：研究或官方页面（可能为空）
             "discovery_source_url": it.get("discovery_source_url", "")
                                     or (srcs[0] if srcs and not evidence_urls else ""),  # 没研究时把源当「发现链」
             "source_urls": srcs,                           # 兼容旧字段：全部来源
@@ -631,20 +662,25 @@ def claims_feed(items):
             "reviewed_at": it.get("reviewed_at", ""),
         })
     n_verified = sum(1 for c in out if c["verification_status"] == "verified")
+    basis_counts = {k: sum(1 for c in out if c["verification_basis"] == k) for k in VB_LABEL}
     return {
-        "schema_version": "1.2",  # 1.2: 信任分层 + evidence/discovery 分离 + 原始来源日期
+        "schema_version": "1.3",  # 1.3: 新增面向用户的三类 verification_basis；保留 verification_status 兼容旧消费者
         "site": SITE_TITLE,
         "site_url": SITE_URL,
         "description": "中文循证健康说法核验库——每条结论标注证据强度、适用人群与原始出处。",
         "disclaimer": "本数据为科普整理，非医疗建议；不提供具体剂量与个体化诊疗。"
                       "请点击 detail_url / evidence_source_urls 回原文核对。",
-        "usage_note": "verification_status=verified 的条目有独立研究/指南支撑，可称『已核验』；"
-                      "=curated_pending_evidence 的是专家/播客梳理、原文证据链待补，"
-                      "**不可**冒充『已核验』，须标明『专家梳理·证据待补』。evidence_source_urls 为真研究链接，"
+        "usage_note": "新消费者请优先使用 verification_basis：study_supported=『研究支持』，"
+                      "official_basis=『官方依据』，frontier_pending=『前沿待核』。"
+                      "verification_status 仅为兼容旧消费者保留，不应用它把官方页面称为原始研究。"
+                      "evidence_source_urls 为核验依据链接（研究或白名单官方页面），"
                       "discovery_source_url 是『在哪听到』（非证据）。",
         "generated_at": TODAY,
         "count": len(out),
         "verified_count": n_verified,
+        "study_supported_count": basis_counts["study_supported"],
+        "official_basis_count": basis_counts["official_basis"],
+        "frontier_pending_count": basis_counts["frontier_pending"],
         "claims": out,
     }
 

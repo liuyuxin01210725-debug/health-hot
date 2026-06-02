@@ -67,7 +67,9 @@ class BuildValidationTests(unittest.TestCase):
 
     def test_official_guideline_page_is_an_evidence_anchor(self):
         url = "https://www.who.int/news-room/fact-sheets/detail/healthy-diet"
-        self.assertTrue(build._is_study_url(url))
+        self.assertTrue(build._is_evidence_url(url))
+        self.assertTrue(build._is_official_url(url))
+        self.assertFalse(build._is_research_url(url))
 
 
 class FeedTrustTests(unittest.TestCase):
@@ -92,11 +94,38 @@ class FeedTrustTests(unittest.TestCase):
         })
         self.assertEqual(build.verification_status(item), "curated_pending_evidence")
 
+    def test_feed_distinguishes_research_official_and_frontier_basis(self):
+        research = build.claims_feed([valid_item()])["claims"][0]
+        self.assertEqual(research["verification_basis"], "study_supported")
+        self.assertEqual(research["verification_basis_label"], "研究支持")
+
+        official_item = valid_item()
+        official_item.update({
+            "source_url": "https://www.who.int/news-room/fact-sheets/detail/healthy-diet",
+            "evidence_source_urls": ["https://www.who.int/news-room/fact-sheets/detail/healthy-diet"],
+        })
+        official = build.claims_feed([official_item])["claims"][0]
+        self.assertEqual(official["verification_basis"], "official_basis")
+        self.assertEqual(official["verification_basis_label"], "官方依据")
+
+        frontier_item = valid_item()
+        frontier_item.update({
+            "source_url": "https://www.youtube.com/watch?v=1",
+            "evidence_source_urls": [],
+        })
+        frontier = build.claims_feed([frontier_item])["claims"][0]
+        self.assertEqual(frontier["verification_basis"], "frontier_pending")
+        self.assertEqual(frontier["verification_basis_label"], "前沿待核")
+
 
 class RenderDesignTests(unittest.TestCase):
-    def test_trust_badges_keep_verified_and_pending_distinct(self):
-        self.assertIn('class="trust verified"', build.trust_badge("verified"))
-        self.assertIn('class="trust pending"', build.trust_badge("curated_pending_evidence"))
+    def test_trust_badges_keep_three_basis_types_distinct(self):
+        self.assertIn('class="trust verified"', build.trust_badge("study_supported"))
+        self.assertIn("研究支持", build.trust_badge("study_supported"))
+        self.assertIn('class="trust official"', build.trust_badge("official_basis"))
+        self.assertIn("官方依据", build.trust_badge("official_basis"))
+        self.assertIn('class="trust pending"', build.trust_badge("frontier_pending"))
+        self.assertIn("前沿待核", build.trust_badge("frontier_pending"))
 
     def test_strength_meter_uses_seven_bars_and_expected_fill(self):
         meter = build.strength_meter("expert")
@@ -186,7 +215,8 @@ class CollectTests(unittest.TestCase):
             "entries": [{"title": "Dietary guidelines", "url": url, "desc": "China CDC guideline"}],
         })
         self.assertEqual(entries[0]["evidence"], "guideline")
-        self.assertTrue(build._is_study_url(url))
+        self.assertTrue(build._is_evidence_url(url))
+        self.assertTrue(build._is_official_url(url))
 
     def test_official_catalog_rejects_untrusted_or_spoofed_page(self):
         for url in (

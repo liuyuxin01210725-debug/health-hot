@@ -1,7 +1,7 @@
 /* ============================================================
    查过再信 — 设计语言样张（scoped under .vfy）
    "循证档案" : 暖纸底 · 证据青绿 · 诚实琥珀 · 衬线判定 · 等宽溯源
-   两个正交维度：A 信任分层(主) / B 证据强度(副)
+   两个正交维度：A 依据状态(主) / B 证据强度(副)
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap');
@@ -16,13 +16,18 @@
   --line:    oklch(91% 0.008 250);
   --hair:    oklch(94.5% 0.006 250);
 
-  /* —— A · 已核验 (confident evidence-teal) —— */
+  /* —— A · 研究支持 (confident evidence-teal) —— */
   --vf:        oklch(52% 0.10 178);
   --vf-solid:  oklch(46% 0.105 178);
   --vf-soft:   oklch(95.5% 0.035 178);
   --vf-line:   oklch(82% 0.06 178);
 
-  /* —— A · 证据待补 (honest warm amber — NOT red, NOT error) —— */
+  /* —— A · 官方依据 (restrained institution-blue) —— */
+  --of-solid:  oklch(48% 0.07 242);
+  --of-soft:   oklch(95.5% 0.025 242);
+  --of-line:   oklch(82% 0.045 242);
+
+  /* —— A · 前沿待核 (honest warm amber — NOT red, NOT error) —— */
   --pd:        oklch(62% 0.10 72);
   --pd-ink:    oklch(45% 0.09 62);
   --pd-soft:   oklch(96% 0.04 78);
@@ -47,7 +52,7 @@
 .vfy .mono  { font-family: "Space Mono", monospace; }
 
 /* ============================================================
-   信任徽章 (Dimension A — primary, binary)
+   依据状态徽章 (Dimension A — primary, three-way)
    ============================================================ */
 .vfy .trust {
   display: inline-flex; align-items: center; gap: 7px;
@@ -58,9 +63,12 @@
   width: 17px; height: 17px; border-radius: 50%; flex: none;
   display: grid; place-items: center; font-size: 11px; line-height: 1;
 }
-/* verified — solid confident seal */
+/* study-supported — solid confident seal */
 .vfy .trust.verified { background: var(--vf-soft); color: var(--vf-solid); }
 .vfy .trust.verified .seal { background: var(--vf-solid); color: #fff; }
+/* official-basis — distinct from primary research */
+.vfy .trust.official { background: var(--of-soft); color: var(--of-solid); border: 1px solid var(--of-line); padding: 4px 12px 4px 8px; }
+.vfy .trust.official .seal { background: var(--of-solid); color: #fff; }
 /* pending — honest, in-progress, dashed ring, warm */
 .vfy .trust.pending { background: var(--pd-soft); color: var(--pd-ink); border: 1px dashed var(--pd-line); padding: 4px 12px 4px 8px; }
 .vfy .trust.pending .seal {
