@@ -6,9 +6,9 @@
   "disclaimer": "本数据为科普整理，非医疗建议；不提供具体剂量与个体化诊疗。请点击 detail_url / evidence_source_urls 回原文核对。",
   "usage_note": "新消费者请优先使用 verification_basis：study_supported=『研究支持』，official_basis=『官方依据』，frontier_pending=『前沿待核』。verification_status 仅为兼容旧消费者保留，不应用它把官方页面称为原始研究。evidence_source_urls 为核验依据链接（研究或白名单官方页面），discovery_source_url 是『在哪听到』（非证据）。",
   "generated_at": "2026-06-03",
-  "count": 106,
-  "verified_count": 98,
-  "study_supported_count": 20,
+  "count": 108,
+  "verified_count": 100,
+  "study_supported_count": 22,
   "official_basis_count": 78,
   "frontier_pending_count": 8,
   "claims": [
@@ -178,6 +178,64 @@
       "featured": false,
       "date": "2026-06-02",
       "source_published_at": "2022-01-01",
+      "reviewed_at": "2026-06-02"
+    },
+    {
+      "slug": "skipping-breakfast-gallstone",
+      "title": "不吃早饭会得胆结石吗？机制上有道理，但「直接导致」缺乏强证据",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/skipping-breakfast-gallstone.html",
+      "category": "代谢",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "observational",
+      "evidence_label": "观察",
+      "conclusion": "长时间不进食在机制上可能促进胆汁淤积、增加胆结石风险，但「不吃早饭直接导致胆结石」缺乏强直接证据；真正高危因素是女性、年龄、肥胖、快速减重、家族史。",
+      "population": "一般人群；高危人群（女性、肥胖、快速减重者、有家族史者）更需注意。",
+      "caveats": "「跳过早餐→胆结石」直接人群证据弱，多为机制推断；所引队列研究只能显示相关、不能证因果，且咖啡那条关联仅在部分女性显著。已有结石／反复腹痛请就医。",
+      "summary": "「不吃早饭会得胆结石」流传很广。拆开看：① 机制上站得住——胆囊靠进食触发收缩排空胆汁，长时间不进食（含跳过早餐、整夜空腹过长）会让胆汁淤积浓缩，胆固醇更易析出结晶、形成胆泥乃至结石。② 但「跳过早餐」这个具体说法缺乏强的直接人群证据——很少有高质量队列直接证明「不吃早餐→胆结石」。倒是「整体生活方式」有近年大型队列证据：两项大型前瞻队列（2020）发现，健康生活方式模式（合理饮食 + 体重管理 + 运动等）与症状性胆结石风险下降相关，提示真正起作用的是整体模式，而非「吃不吃早饭」这一个动作。③ 真正确定的高危因素是女性、年龄增长、肥胖、快速减重、家族史；进食模式（含规律早餐）是可能的促进/保护因素之一，不是单一决定因素。结论：规律进食、不长时间空腹对胆囊有好处、也符合机制；但「不吃早饭＝一定得胆结石」属夸大。已有结石或反复右上腹痛请就医。",
+      "source": "Am J Clin Nutr · 两项大型前瞻队列（生活方式与症状性胆结石）",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/32614416/",
+        "https://pubmed.ncbi.nlm.nih.gov/25245628/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/32614416/",
+        "https://pubmed.ncbi.nlm.nih.gov/25245628/"
+      ],
+      "featured": false,
+      "date": "2026-06-02",
+      "source_published_at": "2015-06-01",
+      "reviewed_at": "2026-06-02"
+    },
+    {
+      "slug": "coffee-vinegar-gallstone",
+      "title": "起床一杯苹果醋或咖啡能防胆结石吗？咖啡有点线索，苹果醋基本没证据",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/coffee-vinegar-gallstone.html",
+      "category": "代谢",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "observational",
+      "evidence_label": "观察",
+      "conclusion": "咖啡与胆结石手术风险反向关联（仅部分女性显著、属观察性，不等于防石）；苹果醋防胆结石基本无人体证据。护胆囊靠规律进食和控重，不是某杯网红饮品。",
+      "population": "咖啡证据来自瑞典成年队列、关联仅在绝经前/用 HRT 女性显著；苹果醋无可靠人群证据。",
+      "caveats": "观察性研究只能显示相关、不能证因果；咖啡关联人群有限，不能外推到所有人，也未涉及「空腹喝」。苹果醋缺胆结石证据、空腹饮可能刺激肠胃/伤牙。已有结石／腹痛请就医。",
+      "summary": "把这两个晨间网红习惯分开看：\n【咖啡】有一点线索、但别夸大。一项约 7 万人的瑞典前瞻队列（2015）发现，咖啡摄入与胆囊切除（症状性胆结石的代理指标）呈反向关联，提示喝咖啡的人胆结石手术风险略低；但这个关联只在绝经前或使用激素替代的女性中显著，男性和其他女性没看到。机制上咖啡能刺激胆囊收缩、促进排空，方向合理。但这是观察性研究，只能显示相关、不能证明「喝咖啡防胆结石」，更没说要空腹喝。\n【苹果醋】基本没有针对胆结石的人体证据。检索不到苹果醋预防或溶解胆结石的高质量人体研究；「苹果醋排石/化石」属民间说法，缺乏循证支持。空腹喝醋还可能刺激肠胃、伤牙釉质。\n结论：想护胆囊，靠的是规律进食、控制体重、避免快速减重，而不是某一杯「网红饮品」。已有结石或腹痛请就医。",
+      "source": "Clin Gastroenterol Hepatol · 瑞典前瞻队列（约 7 万人）",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/25245628/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/25245628/"
+      ],
+      "featured": false,
+      "date": "2026-06-02",
+      "source_published_at": "2015-06-01",
       "reviewed_at": "2026-06-02"
     },
     {
