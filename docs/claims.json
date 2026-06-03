@@ -5,13 +5,153 @@
   "description": "中文循证健康说法核验库——每条结论标注证据强度、适用人群与原始出处。",
   "disclaimer": "本数据为科普整理，非医疗建议；不提供具体剂量与个体化诊疗。请点击 detail_url / evidence_source_urls 回原文核对。",
   "usage_note": "新消费者请优先使用 verification_basis：study_supported=『研究支持』，official_basis=『官方依据』，frontier_pending=『前沿待核』。verification_status 仅为兼容旧消费者保留，不应用它把官方页面称为原始研究。evidence_source_urls 为核验依据链接（研究或白名单官方页面），discovery_source_url 是『在哪听到』（非证据）。",
-  "generated_at": "2026-06-02",
-  "count": 100,
-  "verified_count": 92,
-  "study_supported_count": 14,
+  "generated_at": "2026-06-03",
+  "count": 105,
+  "verified_count": 97,
+  "study_supported_count": 19,
   "official_basis_count": 78,
   "frontier_pending_count": 8,
   "claims": [
+    {
+      "slug": "collagen-skin-beauty",
+      "title": "吃胶原蛋白能美容吗？有效果，但比广告说的小得多",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/collagen-skin-beauty.html",
+      "category": "营养",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "meta",
+      "evidence_label": "Meta",
+      "conclusion": "口服胶原蛋白/肽对皮肤保湿和亮度有真实改善，对皱纹只有小幅效果，弹性证据不一致——有用但远没广告说的神。",
+      "population": "19 项 RCT 共 1341 名受试者（多为关注皮肤衰老的成年人，以女性为主）；具体人群见原文。",
+      "caveats": "对皱纹的合并效应很小（MD=0.27）、刚过统计显著线，主要由口服多肽亚组驱动；对弹性/密度效果不一致；仍需更大、结局更标准化的 RCT 确认。不替代防晒等基础护肤。",
+      "summary": "针对「口服胶原蛋白/肽到底能不能改善皮肤」，一篇 2026 年系统综述荟萃了 19 项随机对照试验、1341 名受试者：口服肽确实让皮肤保湿和亮度有显著改善；对皱纹只有小幅效果（合并 MD=0.27，刚过显著线 p=0.04），且这点好处主要由「口服多肽」这一亚组撑起；对弹性和皮肤密度的效果则不一致、不稳定。安全性良好、几乎无不良反应。一句话：不是智商税，但也远没有广告说的「逆龄」「填平皱纹」那么神——是「小而真实」的改善，且需要更大、更标准化的试验进一步确认。",
+      "source": "Frontiers in Medicine · 19 项 RCT 系统综述与荟萃",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/41924746/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/41924746/"
+      ],
+      "featured": true,
+      "date": "2026-06-02",
+      "source_published_at": "2026-01-01",
+      "reviewed_at": "2026-06-02"
+    },
+    {
+      "slug": "collagen-skin-rct",
+      "title": "口服胶原蛋白真能改善皮肤吗？有 RCT 说有效，但别急着当定论",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/collagen-skin-rct.html",
+      "category": "营养",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "rct",
+      "evidence_label": "RCT",
+      "conclusion": "有 RCT 显示口服胶原蛋白肽可改善皮肤皱纹/保湿/弹性指标，但样本小、多有厂商资助，证据有限、勿当定论。",
+      "population": "原研究多为成年女性受试者，样本量偏小；具体见原文。",
+      "caveats": "RCT 样本小、周期短，部分研究有厂商资助利益冲突；「指标改善」≠ 显著肉眼可见效果。待用更大型独立 RCT 与系统综述复核。具体剂量见原文，按需问医生/皮肤科。",
+      "summary": "针对「口服胶原蛋白是不是智商税」：确实有随机对照试验显示，低分子量胶原蛋白肽在补充一段时间后，皮肤皱纹、保湿、弹性等指标有改善，且未见相关不良反应。但要泼几盆冷水：① 这类 RCT 普遍样本偏小、周期偏短；② 不少研究由相关产品厂商资助，存在利益冲突；③ 「指标改善」不等于「看起来年轻多少」这种主观感受。所以方向上「有证据支持」，但远没到「确定有效、人人该买」的程度。具体产品和剂量见原文，别照搬。",
+      "source": "J Cosmet Dermatol · 随机对照试验",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/37822045/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/37822045/"
+      ],
+      "featured": false,
+      "date": "2026-06-02",
+      "source_published_at": "2024-02-01",
+      "reviewed_at": "2026-06-02"
+    },
+    {
+      "slug": "fish-oil-cardiovascular-meta",
+      "title": "鱼油到底护不护心？一篇汇总 13 项试验的荟萃说：能小幅降风险",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/fish-oil-cardiovascular-meta.html",
+      "category": "补剂",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "meta",
+      "evidence_label": "Meta",
+      "conclusion": "13 项 RCT 荟萃：海洋 omega-3 补充与心血管事件风险小幅下降相关，但获益有限、并非人人适用。",
+      "population": "纳入多项 RCT 的混合人群（含心血管高风险者）；普通低风险人群绝对获益更小。",
+      "caveats": "为 2019 年荟萃，此后有新证据与争议；相对风险下降幅度不大，低风险人群获益有限；剂量人群差异大。待用更新的系统综述复核。不给具体剂量，按需问医生。",
+      "summary": "针对「鱼油是不是没用」的反复争论：这篇汇总 13 项随机对照试验的荟萃分析发现，海洋 omega-3 补充与心肌梗死、冠心病死亡、总冠心病及总心血管事件风险的小幅下降相关，且看起来与剂量大致呈线性关系。但要分清楚：① 「相对风险下降」幅度不大，对低风险普通人绝对获益有限；② 不同试验剂量、人群差异大；③ 这是 2019 年的汇总，此后仍有新试验和争议，不是盖棺定论。所以「鱼油完全没用」过于武断，但「人人都该吃、吃了就护心」也不成立。",
+      "source": "J Am Heart Assoc · 13 项 RCT 荟萃分析",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/31567003/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/31567003/"
+      ],
+      "featured": false,
+      "date": "2026-06-02",
+      "source_published_at": "2019-10-01",
+      "reviewed_at": "2026-06-02"
+    },
+    {
+      "slug": "vitamin-c-common-cold",
+      "title": "维生素 C 能预防感冒吗？Cochrane：普通人吃了基本不防，只是病程略短",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/vitamin-c-common-cold.html",
+      "category": "补剂",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "meta",
+      "evidence_label": "Meta",
+      "conclusion": "Cochrane：常规补维 C 不降低普通人感冒发生率，仅可能略缩短病程；极端体力消耗人群预防上或有意义。",
+      "population": "普通人群 vs 极端体力消耗人群（结论不同，见原文）。",
+      "caveats": "为 2013 年综述，结论稳定但非最新；「缩短病程」效果有限；不涉及大剂量治疗的个体化判断。不给具体剂量，按需问医生。",
+      "summary": "针对「感冒了赶紧吃维 C / 平时吃维 C 防感冒」这个超高频说法：Cochrane 系统综述的结论是——对普通人群，常规补充维生素 C 并不能降低感冒的发生率（也就是「防不住」）；但持续规律补充可能让感冒病程略微缩短、症状略轻。例外是极端体力消耗人群（如马拉松、严寒环境作业者），预防上可能有意义。所以「维 C 防感冒」对绝大多数人是个误解，「缩短病程」才是它有限的真实作用，而且效果不大。",
+      "source": "Cochrane 系统综述 · 荟萃分析",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/23440782/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/23440782/"
+      ],
+      "featured": false,
+      "date": "2026-06-02",
+      "source_published_at": "2013-01-01",
+      "reviewed_at": "2026-06-02"
+    },
+    {
+      "slug": "cranberry-uti-prevention",
+      "title": "蔓越莓能防尿路感染吗？Cochrane：对反复发作的女性和儿童有用，但不是人人有效",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/cranberry-uti-prevention.html",
+      "category": "营养",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "meta",
+      "evidence_label": "Meta",
+      "conclusion": "Cochrane：蔓越莓制品可降低反复发作尿路感染的女性和儿童的风险，但对老人、膀胱排空障碍者、孕妇证据不支持。",
+      "population": "有效证据集中在反复发作 UTI 的女性与儿童；老年人/膀胱排空障碍者/孕妇证据不支持。",
+      "caveats": "效果分人群，非通用；不替代抗感染治疗，已发作或反复感染请就医。具体剂型剂量见原文。",
+      "summary": "针对「喝蔓越莓汁/吃蔓越莓片防尿路感染」这个常见说法：Cochrane 系统综述（汇总大量随机对照试验）的结论是分人群的——蔓越莓制品含原花青素（PAC），能减少反复发作尿路感染的女性、儿童的发作风险，对这两类人「有用」是有证据支持的；但对老年人、有膀胱排空障碍的患者、孕妇等人群，现有证据并不支持它有效。所以「蔓越莓防尿感」不是一句话能下定论的——对反复发作的健康女性可能值得一试，对其他人群则别指望。",
+      "source": "Cochrane 系统综述",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/37068952/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/37068952/"
+      ],
+      "featured": false,
+      "date": "2026-06-02",
+      "source_published_at": "2023-04-01",
+      "reviewed_at": "2026-06-02"
+    },
     {
       "slug": "nccih-melatonin-sleep-boundaries",
       "title": "褪黑素不是万能助眠药：不同睡眠问题要分开看",

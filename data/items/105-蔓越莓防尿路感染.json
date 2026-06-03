@@ -1,0 +1,22 @@
+{
+  "title": "蔓越莓能防尿路感染吗？Cochrane：对反复发作的女性和儿童有用，但不是人人有效",
+  "source": "Cochrane 系统综述",
+  "source_url": "https://pubmed.ncbi.nlm.nih.gov/37068952/",
+  "date": "2026-06-02",
+  "category": "营养",
+  "featured": false,
+  "rank": 0,
+  "evidence": "meta",
+  "summary": "针对「喝蔓越莓汁/吃蔓越莓片防尿路感染」这个常见说法：Cochrane 系统综述（汇总大量随机对照试验）的结论是分人群的——蔓越莓制品含原花青素（PAC），能减少**反复发作尿路感染的女性、儿童**的发作风险，对这两类人「有用」是有证据支持的；但对**老年人、有膀胱排空障碍的患者、孕妇**等人群，现有证据**并不支持**它有效。所以「蔓越莓防尿感」不是一句话能下定论的——对反复发作的健康女性可能值得一试，对其他人群则别指望。",
+  "slug": "cranberry-uti-prevention",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-02",
+  "source_published_at": "2023-04-01",
+  "conclusion": "Cochrane：蔓越莓制品可降低反复发作尿路感染的女性和儿童的风险，但对老人、膀胱排空障碍者、孕妇证据不支持。",
+  "population": "有效证据集中在反复发作 UTI 的女性与儿童；老年人/膀胱排空障碍者/孕妇证据不支持。",
+  "caveats": "效果分人群，非通用；不替代抗感染治疗，已发作或反复感染请就医。具体剂型剂量见原文。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/37068952/"
+  ]
+}

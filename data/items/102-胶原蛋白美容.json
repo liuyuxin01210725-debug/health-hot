@@ -1,0 +1,22 @@
+{
+  "title": "口服胶原蛋白真能改善皮肤吗？有 RCT 说有效，但别急着当定论",
+  "source": "J Cosmet Dermatol · 随机对照试验",
+  "source_url": "https://pubmed.ncbi.nlm.nih.gov/37822045/",
+  "date": "2026-06-02",
+  "category": "营养",
+  "featured": false,
+  "rank": 0,
+  "evidence": "rct",
+  "summary": "针对「口服胶原蛋白是不是智商税」：确实有随机对照试验显示，低分子量胶原蛋白肽在补充一段时间后，皮肤皱纹、保湿、弹性等指标有改善，且未见相关不良反应。但要泼几盆冷水：① 这类 RCT 普遍样本偏小、周期偏短；② 不少研究由相关产品厂商资助，存在利益冲突；③ 「指标改善」不等于「看起来年轻多少」这种主观感受。所以方向上「有证据支持」，但远没到「确定有效、人人该买」的程度。具体产品和剂量见原文，别照搬。",
+  "slug": "collagen-skin-rct",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-02",
+  "source_published_at": "2024-02-01",
+  "conclusion": "有 RCT 显示口服胶原蛋白肽可改善皮肤皱纹/保湿/弹性指标，但样本小、多有厂商资助，证据有限、勿当定论。",
+  "population": "原研究多为成年女性受试者，样本量偏小；具体见原文。",
+  "caveats": "RCT 样本小、周期短，部分研究有厂商资助利益冲突；「指标改善」≠ 显著肉眼可见效果。待用更大型独立 RCT 与系统综述复核。具体剂量见原文，按需问医生/皮肤科。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/37822045/"
+  ]
+}

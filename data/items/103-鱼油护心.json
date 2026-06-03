@@ -1,0 +1,22 @@
+{
+  "title": "鱼油到底护不护心？一篇汇总 13 项试验的荟萃说：能小幅降风险",
+  "source": "J Am Heart Assoc · 13 项 RCT 荟萃分析",
+  "source_url": "https://pubmed.ncbi.nlm.nih.gov/31567003/",
+  "date": "2026-06-02",
+  "category": "补剂",
+  "featured": false,
+  "rank": 0,
+  "evidence": "meta",
+  "summary": "针对「鱼油是不是没用」的反复争论：这篇汇总 13 项随机对照试验的荟萃分析发现，海洋 omega-3 补充与心肌梗死、冠心病死亡、总冠心病及总心血管事件风险的小幅下降相关，且看起来与剂量大致呈线性关系。但要分清楚：① 「相对风险下降」幅度不大，对低风险普通人绝对获益有限；② 不同试验剂量、人群差异大；③ 这是 2019 年的汇总，此后仍有新试验和争议，不是盖棺定论。所以「鱼油完全没用」过于武断，但「人人都该吃、吃了就护心」也不成立。",
+  "slug": "fish-oil-cardiovascular-meta",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-02",
+  "source_published_at": "2019-10-01",
+  "conclusion": "13 项 RCT 荟萃：海洋 omega-3 补充与心血管事件风险小幅下降相关，但获益有限、并非人人适用。",
+  "population": "纳入多项 RCT 的混合人群（含心血管高风险者）；普通低风险人群绝对获益更小。",
+  "caveats": "为 2019 年荟萃，此后有新证据与争议；相对风险下降幅度不大，低风险人群获益有限；剂量人群差异大。待用更新的系统综述复核。不给具体剂量，按需问医生。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/31567003/"
+  ]
+}

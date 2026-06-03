@@ -1,0 +1,22 @@
+{
+  "title": "维生素 C 能预防感冒吗？Cochrane：普通人吃了基本不防，只是病程略短",
+  "source": "Cochrane 系统综述 · 荟萃分析",
+  "source_url": "https://pubmed.ncbi.nlm.nih.gov/23440782/",
+  "date": "2026-06-02",
+  "category": "补剂",
+  "featured": false,
+  "rank": 0,
+  "evidence": "meta",
+  "summary": "针对「感冒了赶紧吃维 C / 平时吃维 C 防感冒」这个超高频说法：Cochrane 系统综述的结论是——对普通人群，常规补充维生素 C 并不能降低感冒的发生率（也就是「防不住」）；但持续规律补充可能让感冒病程略微缩短、症状略轻。例外是极端体力消耗人群（如马拉松、严寒环境作业者），预防上可能有意义。所以「维 C 防感冒」对绝大多数人是个误解，「缩短病程」才是它有限的真实作用，而且效果不大。",
+  "slug": "vitamin-c-common-cold",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-02",
+  "source_published_at": "2013-01-01",
+  "conclusion": "Cochrane：常规补维 C 不降低普通人感冒发生率，仅可能略缩短病程；极端体力消耗人群预防上或有意义。",
+  "population": "普通人群 vs 极端体力消耗人群（结论不同，见原文）。",
+  "caveats": "为 2013 年综述，结论稳定但非最新；「缩短病程」效果有限；不涉及大剂量治疗的个体化判断。不给具体剂量，按需问医生。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/23440782/"
+  ]
+}
