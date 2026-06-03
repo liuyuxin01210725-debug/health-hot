@@ -6,9 +6,9 @@
   "disclaimer": "本数据为科普整理，非医疗建议；不提供具体剂量与个体化诊疗。请点击 detail_url / evidence_source_urls 回原文核对。",
   "usage_note": "新消费者请优先使用 verification_basis：study_supported=『研究支持』，official_basis=『官方依据』，frontier_pending=『前沿待核』。verification_status 仅为兼容旧消费者保留，不应用它把官方页面称为原始研究。evidence_source_urls 为核验依据链接（研究或白名单官方页面），discovery_source_url 是『在哪听到』（非证据）。",
   "generated_at": "2026-06-03",
-  "count": 105,
-  "verified_count": 97,
-  "study_supported_count": 19,
+  "count": 106,
+  "verified_count": 98,
+  "study_supported_count": 20,
   "official_basis_count": 78,
   "frontier_pending_count": 8,
   "claims": [
@@ -150,6 +150,34 @@
       "featured": false,
       "date": "2026-06-02",
       "source_published_at": "2023-04-01",
+      "reviewed_at": "2026-06-02"
+    },
+    {
+      "slug": "egg-consumption-mortality",
+      "title": "天天吃鸡蛋到底好不好？大型荟萃：适量没问题，过量证据有争议",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/egg-consumption-mortality.html",
+      "category": "营养",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "meta",
+      "evidence_label": "Meta",
+      "conclusion": "大型荟萃：适量吃鸡蛋未见明确增加死亡/心血管风险，高摄入量证据有争议且不一致；属观察性证据，看相关非因果。",
+      "population": "一般人群的前瞻性队列汇总；糖尿病/高胆固醇人群个体差异大，结论不可照搬。",
+      "caveats": "观察性研究只能显示相关、不能证明因果；高摄入量证据互相冲突；关键在整体饮食结构而非单一食物。特殊人群（糖尿病/血脂异常）请咨询医生。",
+      "summary": "针对「天天吃鸡蛋伤不伤身」这个反复上热搜的争论：这篇汇总多项前瞻性队列的剂量反应荟萃分析直接承认——鸡蛋摄入与死亡率的关联「极具争议」，不同研究结论互相打架。综合来看，适量吃鸡蛋（多数研究里约每天一个的范围）并未显示出明确增加总死亡或心血管死亡风险；但摄入量很高时，部分研究提示风险上升、部分不显著，证据并不一致。要点：① 这是观察性研究的汇总，只能看相关、不能证因果；② 鸡蛋本身富含蛋白和营养，问题从来不是「鸡蛋」而是「整体饮食结构」；③ 已有糖尿病或高胆固醇的人，个体情况不同，别照搬人群结论。所以「天天一个蛋」对多数健康人没证据说有害，但「吃越多越好/越多越坏」都站不住。",
+      "source": "Advances in Nutrition · 剂量反应系统综述与荟萃分析",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/35396834/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/35396834/"
+      ],
+      "featured": false,
+      "date": "2026-06-02",
+      "source_published_at": "2022-01-01",
       "reviewed_at": "2026-06-02"
     },
     {
