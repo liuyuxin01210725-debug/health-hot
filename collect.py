@@ -29,6 +29,7 @@ SRC = os.path.join(ROOT, "data", "sources.json")
 ITEMS = os.path.join(ROOT, "data", "items")
 OUT = "/tmp/health_candidates.json"
 META_OUT = "/tmp/health_collection_meta.json"
+HOT_OUT = "/tmp/health_hot_topics.json"
 UA = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36'}
 PER_SOURCE = 5
 DESC_CHARS = 2500
@@ -324,6 +325,41 @@ def fetch_pubmed(query, n=PER_SOURCE):
     return out
 
 
+# ── 热点反查：抓公开热榜（仅标题/热度，合规）→ 中文健康关键词粗筛 → 交 LLM 语义终筛 ──
+# 合规边界：只取公开的"大家在讨论什么"（标题），不抓任何付费正文；证据走 fetch_pubmed。
+HOT_API = "https://60s.viki.moe/v2"
+HOT_PLATFORMS = ["weibo", "zhihu", "toutiao", "douyin", "bili", "baidu"]
+HEALTH_KW = ("健康 养生 减肥 减脂 睡眠 失眠 维生素 蛋白 胶原 防癌 癌症 血糖 血压 血脂 心脏 肝 肾 肠胃 "
+             "感冒 发烧 疫苗 营养 饮食 咖啡 茶 饮酒 油 盐 糖尿 肥胖 健身 焦虑 抑郁 护肤 脱发 钙 "
+             "益生菌 排毒 体检 长寿 衰老 鸡蛋 牛奶 补剂 熬夜 近视 骨质 胆固醇 代谢 激素 过敏").split()
+
+
+def fetch_hot_topics():
+    """抓多平台公开热榜，按健康关键词粗筛。返回候选话题（含平台/标题/热度），
+    每条标 needs_semantic_filter——机器只粗筛，真伪与'是否可核验健康说法'由 LLM 终审。"""
+    topics, seen = [], set()
+    for plat in HOT_PLATFORMS:
+        try:
+            data = json.loads(fetch(f"{HOT_API}/{plat}", attempts=2, timeout=12))
+            items = data.get('data', [])
+            if isinstance(items, dict):
+                items = items.get('list') or items.get('data') or []
+        except Exception as ex:
+            print(f"  [热榜·{plat}] 失败：{str(ex)[:50]}")
+            continue
+        for it in items if isinstance(items, list) else []:
+            title = (it.get('title') or it.get('name') or it.get('word') or
+                     (it if isinstance(it, str) else '')) if isinstance(it, (dict, str)) else ''
+            title = str(title).strip()
+            if not title or title in seen:
+                continue
+            if any(k in title for k in HEALTH_KW):
+                seen.add(title)
+                topics.append({'platform': plat, 'title': title[:80],
+                               'needs_semantic_filter': True})
+    return topics
+
+
 def norm_title(s):
     return re.sub(r'\W+', '', (s or '').lower())
 
@@ -510,6 +546,17 @@ def main():
         sys.exit(1)
     json.dump(cands, open(OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
     json.dump({'failures': failures}, open(META_OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+    # 热点反查（非致命，失败不影响主流程）：抓公开热榜 → 健康粗筛 → 待 LLM 语义终审
+    if '--no-hot' not in sys.argv:
+        try:
+            topics = fetch_hot_topics()
+            json.dump(topics, open(HOT_OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+            print(f"\n🔥 热点粗筛 {len(topics)} 条（公开热榜，仅标题）→ {HOT_OUT}")
+            print("   注：机器仅按关键词粗筛，信噪比有限；真伪与'是否可核验健康说法'需 LLM 语义终审。")
+            for tp in topics[:12]:
+                print(f"   · [{tp['platform']}] {tp['title']}")
+        except Exception as ex:
+            print(f"\n⚠ 热点反查失败（不影响主候选）：{str(ex)[:60]}")
     print(f"\n共 {len(cands)} 条候选 → {OUT}")
     for c in cands:
         flag = " · ⚠ 标题未命中窄主题，需人工判断" if c.get('relevance_hint') == 'query_match_only' else ""
