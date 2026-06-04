@@ -141,6 +141,26 @@ class RenderDesignTests(unittest.TestCase):
         page = build.detail_page(item, [])
         self.assertIn("原文日期 2026-05-01", page)
 
+    def test_empty_search_can_use_real_submit_endpoint(self):
+        with mock.patch.object(build, "SUBMIT_ENDPOINT", "https://submit.example/submit"):
+            page = build.render_all([valid_item()])
+        self.assertIn('const SUBMIT_ENDPOINT="https://submit.example/submit";', page)
+        self.assertIn("提交这条说法待核", page)
+        self.assertIn("只有点击提交才会发送", page)
+
+    def test_empty_search_does_not_fake_local_submission(self):
+        with mock.patch.object(build, "SUBMIT_ENDPOINT", ""):
+            page = build.render_all([valid_item()])
+        self.assertNotIn("已记在本机", page)
+        self.assertNotIn("localStorage", page)
+        self.assertIn("未配置一键提交接收端", page)
+
+    def test_default_empty_search_uses_deployed_submit_endpoint(self):
+        page = build.render_all([valid_item()])
+        self.assertIn(build.DEFAULT_SUBMIT_ENDPOINT, page)
+        self.assertIn("提交这条说法待核", page)
+        self.assertNotIn("未配置一键提交接收端", page)
+
 
 class CollectTests(unittest.TestCase):
     class _Response:
@@ -267,6 +287,26 @@ class CollectTests(unittest.TestCase):
             self.assertEqual(collect.fetch("https://example.com/feed"), b"ok")
         self.assertEqual(urlopen.call_count, 2)
         sleep.assert_called_once_with(2.0)
+
+    def test_pending_claims_read_label_and_title_fallback(self):
+        def fake_run(command, **_):
+            if "--label" in command:
+                payload = [
+                    {"number": 1, "title": "待核说法：肌酸伤肾吗", "body": "from label", "url": "https://github.test/1"},
+                    {"number": 2, "title": "待核说法：酵素排毒吗", "body": "dupe", "url": "https://github.test/2"},
+                ]
+            else:
+                payload = [
+                    {"number": 2, "title": "待核说法：酵素排毒吗", "body": "dupe", "url": "https://github.test/2"},
+                    {"number": 3, "title": "待核说法：酸碱体质是真的吗", "body": "from title", "url": "https://github.test/3"},
+                ]
+            return mock.Mock(stdout=json.dumps(payload, ensure_ascii=False))
+
+        with mock.patch("shutil.which", return_value="/usr/bin/gh"), \
+             mock.patch("subprocess.run", side_effect=fake_run):
+            claims = collect.fetch_pending_claims()
+        self.assertEqual([claim["title"] for claim in claims], ["肌酸伤肾吗", "酵素排毒吗", "酸碱体质是真的吗"])
+        self.assertTrue(all(claim["needs_semantic_filter"] for claim in claims))
 
 
 class BuildFailSafeTests(unittest.TestCase):

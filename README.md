@@ -14,6 +14,7 @@
 - `audit_library.py` — 审计已发布馆藏：复核到期、证据待补、来源分布和链接可达性（纯标准库）
 - `build.py` — 生成静态站到 `docs/`（精选 + 全部 + 关于 + 各条详情页 + `claims.json` 机读 feed；纯标准库）
 - `make_og.py` — 生成社交分享卡 `assets/og.png`（需 Pillow，单独运行，不进构建）
+- `submit-worker/` — 可选的一键提交接收端：把搜索无结果时的用户提交创建成 GitHub issue
 - `skill/SKILL.md` — 公开 health-hot Skill，构建时拷进 `docs/skill/`
 - 部署：GitHub Pages 从 `main` 分支 `/docs` 目录 serve，推送即更新
 - 自动采集：GitHub Actions 每周一北京时间 08:00 抓取候选，并刷新 GitHub issue 审核收件箱；不会绕过人工核验直接发布
@@ -58,6 +59,21 @@ GitHub Actions 工作流位于 `.github/workflows/collect-candidates.yml`。它�
 「PubMed 研究 / 指南锚点」、「PubMed 趋势雷达」、「可选发现来源」分组。`anchor` 表示可作证据依据，
 不表示选题自动相关；仍需人工或 AI 判断是否值得入库。末尾的「已发布馆藏健康审计」还会提醒超过
 180 天未复核的条目、证据待补条目和疑似失效链接；这些提醒不会自动改写或自动发布内容。
+
+## 用户提交闭环
+
+GitHub Pages 是静态站，不能自己保存用户输入。公开站要做「没找到 → 一键提交待核」，需要一个极小接收端：
+`submit-worker/` 提供 Cloudflare Worker，把用户主动提交的健康说法创建为带 `待核说法` 标签的 GitHub issue。
+`collect.py` 每周会读取这些 issue，汇入候选清单；仍需人工或 AI 复核，不会自动发布。
+
+部署 Worker 后，用 endpoint 重新构建：
+
+```bash
+HEALTH_HOT_SUBMIT_ENDPOINT="https://health-hot-submit.liuyuxin-health-hot.workers.dev/submit" python3 build.py
+```
+
+当前默认接收端是 `https://health-hot-submit.liuyuxin-health-hot.workers.dev/submit`；未配置
+`HEALTH_HOT_SUBMIT_ENDPOINT` 且默认端点被清空时，页面会自动退回复制 / 分享，不会假装提交成功。
 
 本地也可以单独运行馆藏审计：
 

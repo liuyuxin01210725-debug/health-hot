@@ -375,11 +375,21 @@ def fetch_pending_claims():
     if not gh:
         return []
     try:
-        r = subprocess.run([gh, 'issue', 'list', '--repo', REPO_SLUG,
-                            '--label', '待核说法', '--state', 'open', '--limit', '50',
-                            '--json', 'number,title,body,url'],
-                           capture_output=True, text=True, timeout=25)
-        issues = json.loads(r.stdout or '[]')
+        commands = [
+            [gh, 'issue', 'list', '--repo', REPO_SLUG, '--label', '待核说法',
+             '--state', 'open', '--limit', '50', '--json', 'number,title,body,url'],
+            [gh, 'issue', 'list', '--repo', REPO_SLUG, '--search', '待核说法： in:title',
+             '--state', 'open', '--limit', '50', '--json', 'number,title,body,url'],
+        ]
+        issues, seen_numbers = [], set()
+        for command in commands:
+            r = subprocess.run(command, capture_output=True, text=True, timeout=25)
+            for issue in json.loads(r.stdout or '[]'):
+                number = issue.get('number')
+                if number in seen_numbers:
+                    continue
+                seen_numbers.add(number)
+                issues.append(issue)
     except Exception as ex:
         print(f"  [待核说法] 读取失败（不影响主流程）：{str(ex)[:50]}")
         return []

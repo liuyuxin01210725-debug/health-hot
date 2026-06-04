@@ -1,6 +1,1 @@
-__pycache__/
-*.pyc
-.DS_Store
-public/
-技术方案参考*.md
-项目快照*.md
+submit-worker/.wrangler/

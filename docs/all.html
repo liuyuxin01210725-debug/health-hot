@@ -675,7 +675,7 @@
   <span class="lr-sig"><span class="trust official"><span class="seal">◎</span>官方依据</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
   <span class="lr-claim"><span class="lc-t">一次血压高，不等于已经确诊高血压</span><span class="lc-v">一次诊室血压偏高不能直接等同于确诊；开始治疗前应通过诊室外测量确认。</span></span>
   <span class="lr-date">06-01</span>
-</a></div><div class="empty" id="empty" hidden><div id="ask-state"><p class="empty-t">本库还没有核验过 <b id="emptyq"></b></p><p class="empty-d">想让我们查这条？<b>把它发给作者</b>，就会进入待核清单——我们会去查原始研究，做成一条可追溯的核验。</p><button class="empty-cta" id="copyclaim" type="button">复制这条说法，发给作者待核</button><button class="empty-cta ghost" id="addtopic" type="button">先记在本机</button><p class="copy-tip" id="copytip" hidden>已复制 ✓ 发给作者（微信/私信）后才会进入待核清单。</p><p class="copy-tip" id="localtip" hidden>已记在本机 ✓ 仅存于你的浏览器，未发送——想真正提交请用上面的复制按钮发给作者。</p></div></div></div></div></section>
+</a></div><div class="empty" id="empty" hidden><div id="ask-state"><p class="empty-t">本库还没有核验过 <b id="emptyq"></b></p><p class="empty-d">想让我们查这条？点一下提交，它会进入待核清单；我们会去查原始研究，做成一条可追溯的核验。</p><button class="empty-cta" id="submitclaim" type="button">提交这条说法待核</button><button class="empty-cta ghost" id="copyclaim" type="button">复制给作者</button><p class="empty-note">只有点击提交才会发送；请只提交听到的健康说法，不要提交个人病史、症状或紧急医疗问题。</p><input id="website" class="hp-field" type="text" autocomplete="off" tabindex="-1" aria-hidden="true"><p class="copy-tip" id="submittip" hidden></p><p class="copy-tip" id="copytip" hidden></p></div></div></div></div></section>
 </main>
 <footer class="foot"><div class="wrap">
   <div class="foot-in">
@@ -691,6 +691,7 @@
   <div class="foot-bottom">本站为科普整理，<b>非医疗建议</b>；每条说法标注证据等级与来源状态，点击可回来源核对。 · 查过再信 · 持续收集与查证</div>
 </div></footer>
 <script>
+const SUBMIT_ENDPOINT="https://health-hot-submit.liuyuxin-health-hot.workers.dev/submit";
 let activeCat='all', activeBasis='all'; const rows=[...document.querySelectorAll('.list-row')];
 const input=document.getElementById('q'), count=document.getElementById('count'), empty=document.getElementById('empty');
 const qp=new URLSearchParams(location.search).get('q'); if(qp) input.value=qp;
@@ -703,26 +704,45 @@ function applyFilters(){const raw=(input.value||'').trim();const query=raw.toLow
   const show=(activeCat==='all'||r.dataset.cat===activeCat)&&matchBasis(r)&&(!query||r.dataset.search.toLowerCase().includes(query));
   r.style.display=show?'':'none';if(show)n++;});count.textContent=n+' 条 · 共 '+rows.length+' 条';empty.hidden=n!==0;
   if(n===0){lastQ=raw||'这个说法';emptyq.textContent='「'+lastQ+'」';
-    document.getElementById('copytip').hidden=true;document.getElementById('localtip').hidden=true;}}
+    document.getElementById('copytip').hidden=true;document.getElementById('submittip').hidden=true;}}
 document.getElementById('filterbar').addEventListener('click',e=>{const b=e.target.closest('.fchip');if(!b)return;
   activeCat=b.dataset.c;document.querySelectorAll('.fchip').forEach(x=>x.classList.toggle('on',x===b));applyFilters();});
 document.getElementById('basisbar').addEventListener('click',e=>{const b=e.target.closest('.bchip');if(!b)return;
   activeBasis=b.dataset.b;document.querySelectorAll('.bchip').forEach(x=>x.classList.toggle('on',x===b));applyFilters();});
-// 主按钮「复制发给作者」：唯一能让需求真正到作者手里的路径（无后端，不假装提交）
-document.getElementById('copyclaim').addEventListener('click',()=>{
-  const txt='我想查这个健康说法是真是假：'+lastQ+'（来自 查过再信 '+location.origin+location.pathname.replace(/all\.html$/,'')+'）';
-  const tip=document.getElementById('copytip'),lt=document.getElementById('localtip');
-  const ok=()=>{tip.hidden=false;lt.hidden=true;};
+function setTip(id,msg){const tip=document.getElementById(id);tip.textContent=msg;tip.hidden=false;return tip;}
+function claimText(){return '我想查这个健康说法是真是假：'+lastQ+'（来自 查过再信 '+location.origin+location.pathname.replace(/all\.html$/,'')+'）';}
+function copyClaim(){
+  const txt=claimText(),tip=document.getElementById('copytip');
+  const ok=()=>{tip.textContent='已复制 ✓ 发给作者后会进入待核清单。';tip.hidden=false;document.getElementById('submittip').hidden=true;};
+  if(navigator.share){navigator.share({title:'查过再信待核说法',text:txt}).then(ok).catch(()=>{});return;}
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok).catch(()=>{
     const t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();
     try{document.execCommand('copy')}catch(e){}t.remove();ok();});}
   else{const t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();
-    try{document.execCommand('copy')}catch(e){}t.remove();ok();}});
-// 次按钮「先记在本机」：诚实说明只存本地、未发送
-document.getElementById('addtopic').addEventListener('click',()=>{
-  try{const k='hh_pending';const arr=JSON.parse(localStorage.getItem(k)||'[]');
-    if(!arr.includes(lastQ)){arr.push(lastQ);localStorage.setItem(k,JSON.stringify(arr));}}catch(e){}
-  document.getElementById('localtip').hidden=false;document.getElementById('copytip').hidden=true;});
+    try{document.execCommand('copy')}catch(e){}t.remove();ok();}
+}
+const copyButton=document.getElementById('copyclaim');
+if(copyButton)copyButton.addEventListener('click',copyClaim);
+document.getElementById('submitclaim').addEventListener('click',async()=>{
+  if(!SUBMIT_ENDPOINT){copyClaim();return;}
+  const claim=(lastQ||'').trim(),btn=document.getElementById('submitclaim');
+  if(!claim||claim==='这个说法'){setTip('submittip','请先输入想核验的健康说法。');return;}
+  btn.disabled=true;btn.textContent='提交中…';document.getElementById('copytip').hidden=true;
+  try{
+    const res=await fetch(SUBMIT_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({claim:claim,page:location.href,source:'empty-search',website:document.getElementById('website').value||''})});
+    const data=await res.json().catch(()=>({}));
+    if(!res.ok)throw new Error(data.error||'提交失败');
+    setTip('submittip',data.status==='duplicate'?'已收到过这条，会合并处理。':'已提交 ✓ 已进入待核清单。');
+  }catch(e){
+    setTip('submittip','提交失败：已为你保留复制入口，可以先发给作者。');
+  }finally{
+    btn.disabled=false;btn.textContent=SUBMIT_ENDPOINT?'提交这条说法待核':'复制这条说法，发给作者待核';
+  }
+});
+if(!SUBMIT_ENDPOINT){
+  document.getElementById('submitclaim').textContent='复制这条说法，发给作者待核';
+}
 applyFilters();
 </script>
 </body>
