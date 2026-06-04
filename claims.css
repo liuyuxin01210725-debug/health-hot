@@ -340,10 +340,19 @@ body.vfy { background: var(--paper); min-height: 100vh; }
 .vfy .fchip:hover { color: var(--ink); border-color: var(--faint); }
 .vfy .fchip.on { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 .vfy .fchip .ct { opacity: .6; margin-left: 4px; font-family: "Space Mono", monospace; font-size: 11px; }
+.vfy .basisbar { margin-top: 8px; }
+.vfy .bchip { font-family: inherit; cursor: pointer; font-size: 12.5px; font-weight: 400; padding: 6px 13px; border-radius: 100px; border: 1px dashed var(--line); background: transparent; color: var(--muted); transition: all .2s var(--ease); }
+.vfy .bchip:hover { color: var(--ink); border-color: var(--faint); }
+.vfy .bchip.on { background: var(--accent-soft, #e6f0ec); border-color: var(--accent, #0c7560); border-style: solid; color: var(--accent-ink, #0a5d4d); font-weight: 500; }
+.vfy .bchip .ct { opacity: .6; margin-left: 4px; font-family: "Space Mono", monospace; font-size: 11px; }
 .vfy .count { font-size: 13px; color: var(--faint); font-family: "Space Mono", monospace; }
 .vfy .listwrap { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; }
 .vfy .list-row .lr-sig { display: flex; flex-direction: column; gap: 7px; align-items: flex-start; }
-.vfy .empty { padding: 60px 18px; text-align: center; color: var(--faint); font-size: 14px; }
+.vfy .empty { padding: 48px 18px 56px; text-align: center; color: var(--faint); font-size: 14px; }
+.vfy .empty .empty-t { font-size: 17px; color: var(--ink); margin: 0 0 8px; }
+.vfy .empty .empty-d { font-size: 14px; color: var(--muted); max-width: 440px; margin: 0 auto 20px; line-height: 1.6; }
+.vfy .empty .empty-cta { display: inline-block; padding: 11px 22px; border-radius: 100px; background: var(--ink); color: var(--paper); font-size: 14px; font-weight: 500; text-decoration: none; transition: opacity .2s var(--ease); }
+.vfy .empty .empty-cta:hover { opacity: .85; }
 @media (max-width: 680px){
   .vfy .list-head { display: none; }
   .vfy .list-row { grid-template-columns: 1fr; gap: 10px; padding: 16px; }

@@ -378,7 +378,8 @@ def list_row(it):
     cat = e(it.get("category", ""))
     reviewed = e((it.get("reviewed_at") or it.get("date", ""))[5:])
     return (f'<a class="list-row" href="claims/{e(it.get("slug", ""))}.html" '
-            f'data-cat="{cat}" data-search="{search_blob(it)}">\n'
+            f'data-cat="{cat}" data-basis="{e(verification_basis(it))}" '
+            f'data-ev="{e(it.get("evidence", ""))}" data-search="{search_blob(it)}">\n'
             f'  <span class="lr-cat">{cat}</span>\n'
             f'  <span class="lr-sig">{trust_badge(verification_basis(it))}'
             f'{strength_meter(it.get("evidence", ""), False)}</span>\n'
@@ -588,6 +589,16 @@ def render_all(items):
     cats.sort(key=lambda c: -len(by[c]))
     pills = f'<button class="fchip on" data-c="all">全部<span class="ct">{len(items)}</span></button>' + "".join(
         f'<button class="fchip" data-c="{e(c)}">{e(c)}<span class="ct">{len(by[c])}</span></button>' for c in cats)
+    # 第二行：按依据状态 / 证据强度筛（judge 第3条 — 判断可信度的核心动作）
+    n_study = sum(1 for it in items if verification_basis(it) == "study_supported")
+    n_off = sum(1 for it in items if verification_basis(it) == "official_basis")
+    n_front = sum(1 for it in items if verification_basis(it) == "frontier_pending")
+    n_strong = sum(1 for it in items if it.get("evidence") in ("rct", "meta"))
+    bchips = (f'<button class="bchip on" data-b="all">不限依据</button>'
+              f'<button class="bchip" data-b="study_supported">研究支持<span class="ct">{n_study}</span></button>'
+              f'<button class="bchip" data-b="official_basis">官方依据<span class="ct">{n_off}</span></button>'
+              f'<button class="bchip" data-b="frontier_pending">前沿待核<span class="ct">{n_front}</span></button>'
+              f'<button class="bchip" data-b="strong">仅 Meta/RCT<span class="ct">{n_strong}</span></button>')
     rows = "\n".join(list_row(it) for it in items)
     inner = (f'<header class="hero all-hero"><div class="wrap"><span class="eyebrow">ALL CLAIMS · 全部核验</span>'
              f'<h1>全部核验</h1><p class="lede">一行一条，依据状态与证据强度在扫读时就能分辨。</p>'
@@ -596,22 +607,40 @@ def render_all(items):
              f'stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>'
              f'<input type="text" id="q" placeholder="搜索说法、结论或关键词…" oninput="applyFilters()">'
              f'</form></div></header><section class="sec all-sec"><div class="wrap"><div class="controls">'
-             f'<div class="filterbar" id="filterbar">{pills}</div><span class="count" id="count"></span></div>'
+             f'<div class="filterbar" id="filterbar">{pills}</div>'
+             f'<div class="filterbar basisbar" id="basisbar">{bchips}</div>'
+             f'<span class="count" id="count"></span></div>'
              f'<div class="listwrap"><div class="list-head"><span>主题</span><span>依据 / 强度</span>'
              f'<span>说法 · 结论</span><span>复核</span></div><div id="list">{rows}</div>'
-             f'<div class="empty" id="empty" hidden>没有找到匹配的核验，换个关键词或主题试试。</div>'
+             f'<div class="empty" id="empty" hidden><p class="empty-t">本库还没有核验过 <b id="emptyq"></b></p>'
+             f'<p class="empty-d">这正是我们想收的——把你听到、拿不准真假的健康说法提交进「待核清单」，'
+             f'我们会去查原始研究，做成一条可追溯的核验。</p>'
+             f'<a class="empty-cta" id="submitclaim" href="{REPO}/issues/new" target="_blank" rel="noopener">'
+             f'＋ 提交这个说法，加入待核清单</a></div>'
              f'</div></div></section>')
     js = '''<script>
-let activeCat='all'; const rows=[...document.querySelectorAll('.list-row')];
+let activeCat='all', activeBasis='all'; const rows=[...document.querySelectorAll('.list-row')];
 const input=document.getElementById('q'), count=document.getElementById('count'), empty=document.getElementById('empty');
 const qp=new URLSearchParams(location.search).get('q'); if(qp) input.value=qp;
-function applyFilters(){const query=(input.value||'').trim().toLowerCase();let n=0;rows.forEach(r=>{
-  const show=(activeCat==='all'||r.dataset.cat===activeCat)&&(!query||r.dataset.search.toLowerCase().includes(query));
-  r.style.display=show?'':'none';if(show)n++;});count.textContent=n+' 条 · 共 '+rows.length+' 条';empty.hidden=n!==0;}
+function matchBasis(r){if(activeBasis==='all')return true;
+  if(activeBasis==='strong')return r.dataset.ev==='rct'||r.dataset.ev==='meta';
+  return r.dataset.basis===activeBasis;}
+const emptyq=document.getElementById('emptyq'), submit=document.getElementById('submitclaim');
+const REPO='%REPO%';
+function applyFilters(){const raw=(input.value||'').trim();const query=raw.toLowerCase();let n=0;rows.forEach(r=>{
+  const show=(activeCat==='all'||r.dataset.cat===activeCat)&&matchBasis(r)&&(!query||r.dataset.search.toLowerCase().includes(query));
+  r.style.display=show?'':'none';if(show)n++;});count.textContent=n+' 条 · 共 '+rows.length+' 条';empty.hidden=n!==0;
+  if(n===0){const q=raw||'这个说法';emptyq.textContent='「'+q+'」';
+    const t=encodeURIComponent('待核说法：'+q);
+    const b=encodeURIComponent('我听到一个健康说法，想求证真假：\\n\\n'+q+'\\n\\n（在哪听到的 / 为什么想查，可补充）');
+    submit.href=REPO+'/issues/new?title='+t+'&body='+b+'&labels=待核说法';}}
 document.getElementById('filterbar').addEventListener('click',e=>{const b=e.target.closest('.fchip');if(!b)return;
   activeCat=b.dataset.c;document.querySelectorAll('.fchip').forEach(x=>x.classList.toggle('on',x===b));applyFilters();});
+document.getElementById('basisbar').addEventListener('click',e=>{const b=e.target.closest('.bchip');if(!b)return;
+  activeBasis=b.dataset.b;document.querySelectorAll('.bchip').forEach(x=>x.classList.toggle('on',x===b));applyFilters();});
 applyFilters();
 </script>'''
+    js = js.replace('%REPO%', REPO)
     return shell("全部", "全部", inner, extra_js=js,
                  desc="全部健康说法核验，按主题分组，每条标注证据强度、适用人群与原始出处。", canon="all.html")
 
