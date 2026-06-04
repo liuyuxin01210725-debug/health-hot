@@ -6,9 +6,9 @@
   "disclaimer": "本数据为科普整理，非医疗建议；不提供具体剂量与个体化诊疗。请点击 detail_url / evidence_source_urls 回原文核对。",
   "usage_note": "新消费者请优先使用 verification_basis：study_supported=『研究支持』，official_basis=『官方依据』，frontier_pending=『前沿待核』。verification_status 仅为兼容旧消费者保留，不应用它把官方页面称为原始研究。evidence_source_urls 为核验依据链接（研究或白名单官方页面），discovery_source_url 是『在哪听到』（非证据）。",
   "generated_at": "2026-06-04",
-  "count": 112,
-  "verified_count": 104,
-  "study_supported_count": 26,
+  "count": 116,
+  "verified_count": 108,
+  "study_supported_count": 30,
   "official_basis_count": 78,
   "frontier_pending_count": 8,
   "claims": [
@@ -124,6 +124,118 @@
       "featured": false,
       "date": "2026-06-04",
       "source_published_at": "2014-01-01",
+      "reviewed_at": "2026-06-04"
+    },
+    {
+      "slug": "cold-water-immersion-hypertrophy",
+      "title": "练完就冰浴，可能让你白练？对增肌力量，冰水浴会拖后腿",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/cold-water-immersion-hypertrophy.html",
+      "category": "运动",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "rct",
+      "evidence_label": "RCT",
+      "conclusion": "RCT：力量训练后立即冷水浸泡会钝化合成代谢信号、削弱长期增肌增力；以增肌为目标时别急着练完冰浴，但缓解即时疲劳的场景另当别论。",
+      "population": "进行力量训练的健康成年男性（原 RCT 受试者）。",
+      "caveats": "针对以增肌/力量为目标的情形；以「尽快缓解疲劳保下一场」为目标时冰浴仍有价值，是时机权衡而非「冰浴有害」。个体方案咨询专业教练。",
+      "summary": "运动员练完泡冰水、洗冷水澡很流行，觉得是「促恢复」。但有个反直觉的机制：和「练后大剂量抗氧化剂」类似，冷水浸泡会抑制运动后的合成代谢信号——而那个信号正是「长肌肉、变强」需要的。一项发表在《生理学杂志》的随机对照试验发现：力量训练后立即冷水浸泡，钝化了急性合成代谢信号，并削弱了长期的肌肉量和力量增长（对比主动恢复组）。也就是说，如果你的目标是增肌增力，练完马上冰浴可能在帮倒忙。要分清场景：① 这说的是以增肌/力量为目标时；② 如果是赛季中、一天多练、需要尽快缓解疲劳「保证下一场表现」，冰浴缩短即时恢复的价值仍在——这又是「即时优化 vs 长期适应」的权衡。结论：增肌期别急着练完就冰浴，把冷水留到不冲突的时间。",
+      "source": "J Physiol · 力量训练后冷水浸泡 RCT（Roberts 2015）",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/26174323/"
+      ],
+      "discovery_source_url": "https://www.foundmyfitness.com/topics/cold-exposure",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/26174323/"
+      ],
+      "featured": false,
+      "date": "2026-06-04",
+      "source_published_at": "2015-01-01",
+      "reviewed_at": "2026-06-04"
+    },
+    {
+      "slug": "sauna-cardiovascular",
+      "title": "桑拿不只是放松：常蒸桑拿与更低的心血管和全因死亡风险相关",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/sauna-cardiovascular.html",
+      "category": "心肺",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "observational",
+      "evidence_label": "观察",
+      "conclusion": "约20年芬兰队列：桑拿频率/时长越高，心血管与全因死亡风险越低；但属观察性、不能证因果，且有人群禁忌，不能替代运动和治疗。",
+      "population": "芬兰中年男性队列（约 2300 人，干桑拿文化）；其他人群/桑拿形式外推需谨慎。",
+      "caveats": "观察性研究只能显示相关；常蒸桑拿者可能整体更健康（混杂）；低血压/孕期/心脏不稳/饮酒后有风险。不替代运动与正规治疗。",
+      "summary": "桑拿常被当成单纯放松，但芬兰一项追踪两千多名中年男性、长达约 20 年的前瞻队列（KIHD）发现：蒸桑拿的频率越高、单次时间越长，心源性猝死、致死性心血管事件和全因死亡的风险越低——每周 4–7 次组比每周 1 次组的风险显著更低。机制可能与改善血管功能、降血压、模拟温和的「热应激」有关（和运动有相通之处）。但要冷静看三点：① 这是观察性研究，只能显示相关、不能证明因果——常蒸桑拿的人可能整体更健康、更有闲；② 数据来自芬兰干桑拿文化，未必直接照搬到所有桑拿形式；③ 低血压、孕期、心脏病不稳定者、饮酒后蒸桑拿有风险。结论：作为生活方式它信号不错、值得关注，但别当成「桑拿治病」，更不能替代运动和正规治疗。",
+      "source": "JAMA Intern Med · 芬兰 KIHD 前瞻队列（Laukkanen 2015）",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/25705824/"
+      ],
+      "discovery_source_url": "https://www.foundmyfitness.com/topics/sauna",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/25705824/"
+      ],
+      "featured": false,
+      "date": "2026-06-04",
+      "source_published_at": "2015-02-01",
+      "reviewed_at": "2026-06-04"
+    },
+    {
+      "slug": "microplastics-atheroma",
+      "title": "微塑料真进了血管？NEJM 研究：斑块里检出微塑料的人，心血管事件更多",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/microplastics-atheroma.html",
+      "category": "其他",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "observational",
+      "evidence_label": "观察",
+      "conclusion": "NEJM：颈动脉斑块中检出微塑料的患者，后续心血管事件风险更高——是人体内微塑料与心血管关联的重要早期证据，但属观察性、不能证因果，单一研究勿过度外推。",
+      "population": "接受颈动脉内膜剥脱术的患者（已有颈动脉病变），非一般人群。",
+      "caveats": "观察性研究只能显示相关、不能证因果；检出微塑料或只是更广暴露/炎症的标志；单一研究特定人群勿外推；无证据支持任何「排微塑料」产品。",
+      "summary": "「微塑料进入人体」过去多是动物和体外研究，缺人体直接证据。2024 年《新英格兰医学杂志》一项研究往前推了一步：研究者检查了做颈动脉内膜剥脱术患者取出的斑块，在约六成患者的斑块中检出了微塑料和纳米塑料；而这些「检出微塑料」的患者，在随后约 34 个月里发生心梗、中风或死亡的风险，明显高于未检出的患者。这是目前把「人体内微塑料」和「实际心血管事件」联系起来的最受关注的直接证据之一。但必须克制解读：① 这是观察性研究，只能显示相关、不能证明是微塑料导致了这些事件——检出微塑料可能只是某种更广暴露或炎症状态的标志；② 单一研究、特定人群（已有颈动脉病变者），不能外推成「微塑料一定害心脏」；③ 目前没有证据说某种「排微塑料」产品有用。结论：这是一个值得严肃对待的早期信号、推动了更多研究，但还远不是定论，别因此恐慌或交智商税。",
+      "source": "N Engl J Med · 颈动脉斑块微塑料与心血管事件（Marfella 2024）",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/38446676/"
+      ],
+      "discovery_source_url": "https://www.foundmyfitness.com/topics/microplastics",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/38446676/"
+      ],
+      "featured": false,
+      "date": "2026-06-04",
+      "source_published_at": "2024-03-01",
+      "reviewed_at": "2026-06-04"
+    },
+    {
+      "slug": "antihistamine-exercise-adaptation",
+      "title": "运动当天吃抗过敏药，可能削弱锻炼带来的好处",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/antihistamine-exercise-adaptation.html",
+      "category": "运动",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "rct",
+      "evidence_label": "RCT",
+      "conclusion": "RCT：阻断组胺受体会钝化运动训练的血管与肌肉适应，提示长期大剂量抗组胺药或削弱锻炼收益；但属机制研究、大剂量探针，偶尔用药或有过敏需用药者不必恐慌或停药。",
+      "population": "健康成年人（原 RCT，用较大剂量受体阻断剂作机制探针）。",
+      "caveats": "机制研究、探针式大剂量，不等于偶尔吃抗过敏药毁锻炼；有过敏需用药者不应为此停药；未到指南级别。用药咨询医生。",
+      "summary": "又一个反直觉、且和「别急着练后抗炎」同源的发现：运动时身体会释放组胺，它不只跟过敏有关，还是「运动让血管和肌肉变好」这套适应反应的关键信使之一。一项发表在《科学·进展》的随机对照试验给受试者用常见的抗组胺药（H1+H2 受体阻断剂，也就是很多抗过敏/抗胃酸药的机理），结果发现：阻断组胺受体钝化了运动训练带来的多项适应——包括血流、血管和肌肉层面的改善。换句话说，如果你在规律锻炼期间长期大剂量吃这类药，理论上可能削弱锻炼的部分收益。但要务必克制：① 这是机制研究、用的是较大剂量来「探针式」阻断，不等于偶尔吃片抗过敏药就毁掉锻炼；② 真正有过敏、需要用药的人，不应为了这个停药——控制症状本身也让你能去运动；③ 属早期机制证据，没到「锻炼前禁用抗组胺」的指南级别。结论：知道有这么个机制即可，别过度反应，用药需求该咨询医生。",
+      "source": "Science Advances · 组胺受体阻断与运动适应 RCT（Van der Stede 2021）",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/33853781/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/33853781/"
+      ],
+      "featured": false,
+      "date": "2026-06-04",
+      "source_published_at": "2021-01-01",
       "reviewed_at": "2026-06-04"
     },
     {

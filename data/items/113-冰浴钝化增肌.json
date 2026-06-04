@@ -1,0 +1,23 @@
+{
+  "title": "练完就冰浴，可能让你白练？对增肌力量，冰水浴会拖后腿",
+  "source": "J Physiol · 力量训练后冷水浸泡 RCT（Roberts 2015）",
+  "source_url": "https://pubmed.ncbi.nlm.nih.gov/26174323/",
+  "date": "2026-06-04",
+  "category": "运动",
+  "featured": false,
+  "rank": 0,
+  "evidence": "rct",
+  "verification_status": "verified",
+  "summary": "运动员练完泡冰水、洗冷水澡很流行，觉得是「促恢复」。但有个反直觉的机制：和「练后大剂量抗氧化剂」类似，冷水浸泡会抑制运动后的合成代谢信号——而那个信号正是「长肌肉、变强」需要的。一项发表在《生理学杂志》的随机对照试验发现：力量训练后立即冷水浸泡，**钝化了急性合成代谢信号，并削弱了长期的肌肉量和力量增长**（对比主动恢复组）。也就是说，如果你的目标是增肌增力，练完马上冰浴可能在帮倒忙。要分清场景：① 这说的是**以增肌/力量为目标**时；② 如果是赛季中、一天多练、需要尽快缓解疲劳「保证下一场表现」，冰浴缩短即时恢复的价值仍在——这又是「即时优化 vs 长期适应」的权衡。结论：增肌期别急着练完就冰浴，把冷水留到不冲突的时间。",
+  "slug": "cold-water-immersion-hypertrophy",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-04",
+  "source_published_at": "2015-01-01",
+  "conclusion": "RCT：力量训练后立即冷水浸泡会钝化合成代谢信号、削弱长期增肌增力；以增肌为目标时别急着练完冰浴，但缓解即时疲劳的场景另当别论。",
+  "population": "进行力量训练的健康成年男性（原 RCT 受试者）。",
+  "caveats": "针对以增肌/力量为目标的情形；以「尽快缓解疲劳保下一场」为目标时冰浴仍有价值，是时机权衡而非「冰浴有害」。个体方案咨询专业教练。",
+  "discovery_source_url": "https://www.foundmyfitness.com/topics/cold-exposure",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/26174323/"
+  ]
+}

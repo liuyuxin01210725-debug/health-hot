@@ -1,0 +1,23 @@
+{
+  "title": "桑拿不只是放松：常蒸桑拿与更低的心血管和全因死亡风险相关",
+  "source": "JAMA Intern Med · 芬兰 KIHD 前瞻队列（Laukkanen 2015）",
+  "source_url": "https://pubmed.ncbi.nlm.nih.gov/25705824/",
+  "date": "2026-06-04",
+  "category": "心肺",
+  "featured": false,
+  "rank": 0,
+  "evidence": "observational",
+  "verification_status": "verified",
+  "summary": "桑拿常被当成单纯放松，但芬兰一项追踪两千多名中年男性、长达约 20 年的前瞻队列（KIHD）发现：蒸桑拿的**频率越高、单次时间越长，心源性猝死、致死性心血管事件和全因死亡的风险越低**——每周 4–7 次组比每周 1 次组的风险显著更低。机制可能与改善血管功能、降血压、模拟温和的「热应激」有关（和运动有相通之处）。但要冷静看三点：① 这是**观察性研究，只能显示相关、不能证明因果**——常蒸桑拿的人可能整体更健康、更有闲；② 数据来自芬兰干桑拿文化，未必直接照搬到所有桑拿形式；③ 低血压、孕期、心脏病不稳定者、饮酒后蒸桑拿有风险。结论：作为生活方式它信号不错、值得关注，但别当成「桑拿治病」，更不能替代运动和正规治疗。",
+  "slug": "sauna-cardiovascular",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-04",
+  "source_published_at": "2015-02-01",
+  "conclusion": "约20年芬兰队列：桑拿频率/时长越高，心血管与全因死亡风险越低；但属观察性、不能证因果，且有人群禁忌，不能替代运动和治疗。",
+  "population": "芬兰中年男性队列（约 2300 人，干桑拿文化）；其他人群/桑拿形式外推需谨慎。",
+  "caveats": "观察性研究只能显示相关；常蒸桑拿者可能整体更健康（混杂）；低血压/孕期/心脏不稳/饮酒后有风险。不替代运动与正规治疗。",
+  "discovery_source_url": "https://www.foundmyfitness.com/topics/sauna",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/25705824/"
+  ]
+}
