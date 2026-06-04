@@ -675,7 +675,7 @@
   <span class="lr-sig"><span class="trust official"><span class="seal">◎</span>官方依据</span><span class="strength"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span></span>
   <span class="lr-claim"><span class="lc-t">一次血压高，不等于已经确诊高血压</span><span class="lc-v">一次诊室血压偏高不能直接等同于确诊；开始治疗前应通过诊室外测量确认。</span></span>
   <span class="lr-date">06-01</span>
-</a></div><div class="empty" id="empty" hidden><div id="ask-state"><p class="empty-t">本库还没有核验过 <b id="emptyq"></b></p><p class="empty-d">这正是我们想收的——告诉我们你想查的健康说法，我们会去查原始研究，做成一条可追溯的核验。</p><button class="empty-cta" id="addtopic" type="button">＋ 我想查这个，加入待核</button></div><div id="done-state" hidden><p class="empty-t">✓ 已记下 <b id="doneq"></b></p><p class="empty-d">我们会去查它的原始研究。想更快看到结果？把它发给作者，下次更新时会优先核验。</p><button class="empty-cta ghost" id="copyclaim" type="button">复制说法，发给作者</button><span class="copy-tip" id="copytip" hidden>已复制 ✓ 粘贴到微信发我即可</span></div></div></div></div></section>
+</a></div><div class="empty" id="empty" hidden><div id="ask-state"><p class="empty-t">本库还没有核验过 <b id="emptyq"></b></p><p class="empty-d">想让我们查这条？<b>把它发给作者</b>，就会进入待核清单——我们会去查原始研究，做成一条可追溯的核验。</p><button class="empty-cta" id="copyclaim" type="button">复制这条说法，发给作者待核</button><button class="empty-cta ghost" id="addtopic" type="button">先记在本机</button><p class="copy-tip" id="copytip" hidden>已复制 ✓ 发给作者（微信/私信）后才会进入待核清单。</p><p class="copy-tip" id="localtip" hidden>已记在本机 ✓ 仅存于你的浏览器，未发送——想真正提交请用上面的复制按钮发给作者。</p></div></div></div></div></section>
 </main>
 <footer class="foot"><div class="wrap">
   <div class="foot-in">
@@ -697,33 +697,32 @@ const qp=new URLSearchParams(location.search).get('q'); if(qp) input.value=qp;
 function matchBasis(r){if(activeBasis==='all')return true;
   if(activeBasis==='strong')return r.dataset.ev==='rct'||r.dataset.ev==='meta';
   return r.dataset.basis===activeBasis;}
-const emptyq=document.getElementById('emptyq'),doneq=document.getElementById('doneq');
-const askState=document.getElementById('ask-state'),doneState=document.getElementById('done-state');
+const emptyq=document.getElementById('emptyq');
 let lastQ='这个说法';
 function applyFilters(){const raw=(input.value||'').trim();const query=raw.toLowerCase();let n=0;rows.forEach(r=>{
   const show=(activeCat==='all'||r.dataset.cat===activeCat)&&matchBasis(r)&&(!query||r.dataset.search.toLowerCase().includes(query));
   r.style.display=show?'':'none';if(show)n++;});count.textContent=n+' 条 · 共 '+rows.length+' 条';empty.hidden=n!==0;
   if(n===0){lastQ=raw||'这个说法';emptyq.textContent='「'+lastQ+'」';
-    askState.hidden=false;doneState.hidden=true;}}  // 每次新搜索都回到「添加」初始态
+    document.getElementById('copytip').hidden=true;document.getElementById('localtip').hidden=true;}}
 document.getElementById('filterbar').addEventListener('click',e=>{const b=e.target.closest('.fchip');if(!b)return;
   activeCat=b.dataset.c;document.querySelectorAll('.fchip').forEach(x=>x.classList.toggle('on',x===b));applyFilters();});
 document.getElementById('basisbar').addEventListener('click',e=>{const b=e.target.closest('.bchip');if(!b)return;
   activeBasis=b.dataset.b;document.querySelectorAll('.bchip').forEach(x=>x.classList.toggle('on',x===b));applyFilters();});
-// 「添加这个话题」：就地切到已记下状态，不跳转、不要求注册
-document.getElementById('addtopic').addEventListener('click',()=>{
-  doneq.textContent='「'+lastQ+'」';askState.hidden=true;doneState.hidden=false;
-  try{const k='hh_pending';const arr=JSON.parse(localStorage.getItem(k)||'[]');
-    if(!arr.includes(lastQ)){arr.push(lastQ);localStorage.setItem(k,JSON.stringify(arr));}}catch(e){}});
-// 「复制说法发给作者」：复制到剪贴板，用户自己粘到微信发我
+// 主按钮「复制发给作者」：唯一能让需求真正到作者手里的路径（无后端，不假装提交）
 document.getElementById('copyclaim').addEventListener('click',()=>{
-  const txt='我想查这个健康说法是真是假：'+lastQ+'（来自 查过再信）';
-  const tip=document.getElementById('copytip');
-  const ok=()=>{tip.hidden=false;setTimeout(()=>tip.hidden=true,4000);};
+  const txt='我想查这个健康说法是真是假：'+lastQ+'（来自 查过再信 '+location.origin+location.pathname.replace(/all\.html$/,'')+'）';
+  const tip=document.getElementById('copytip'),lt=document.getElementById('localtip');
+  const ok=()=>{tip.hidden=false;lt.hidden=true;};
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok).catch(()=>{
     const t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();
     try{document.execCommand('copy')}catch(e){}t.remove();ok();});}
   else{const t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();
     try{document.execCommand('copy')}catch(e){}t.remove();ok();}});
+// 次按钮「先记在本机」：诚实说明只存本地、未发送
+document.getElementById('addtopic').addEventListener('click',()=>{
+  try{const k='hh_pending';const arr=JSON.parse(localStorage.getItem(k)||'[]');
+    if(!arr.includes(lastQ)){arr.push(lastQ);localStorage.setItem(k,JSON.stringify(arr));}}catch(e){}
+  document.getElementById('localtip').hidden=false;document.getElementById('copytip').hidden=true;});
 applyFilters();
 </script>
 </body>
