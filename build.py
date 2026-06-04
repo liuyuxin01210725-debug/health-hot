@@ -23,7 +23,7 @@ TODAY = datetime.date.today().isoformat()
 SITE_TITLE = "查过再信"
 SITE_URL = "https://liuyuxin01210725-debug.github.io/health-hot/"
 HERO_Q = "听到一个健康说法？先查一下证据。"
-DEFAULT_SUBMIT_ENDPOINT = "https://health-hot-submit.liuyuxin-health-hot.workers.dev/submit"
+DEFAULT_SUBMIT_ENDPOINT = "https://health-hot-submit.pages.dev/submit"
 SUBMIT_ENDPOINT = os.environ.get("HEALTH_HOT_SUBMIT_ENDPOINT", DEFAULT_SUBMIT_ENDPOINT).strip()
 
 # 日期字段语义（避免把"期刊预排日期"与"本站收录日"混为一谈）：

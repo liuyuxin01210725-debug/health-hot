@@ -69,10 +69,10 @@ GitHub Pages 是静态站，不能自己保存用户输入。公开站要做「�
 部署 Worker 后，用 endpoint 重新构建：
 
 ```bash
-HEALTH_HOT_SUBMIT_ENDPOINT="https://health-hot-submit.liuyuxin-health-hot.workers.dev/submit" python3 build.py
+HEALTH_HOT_SUBMIT_ENDPOINT="https://health-hot-submit.pages.dev/submit" python3 build.py
 ```
 
-当前默认接收端是 `https://health-hot-submit.liuyuxin-health-hot.workers.dev/submit`；未配置
+当前默认接收端是 `https://health-hot-submit.pages.dev/submit`；未配置
 `HEALTH_HOT_SUBMIT_ENDPOINT` 且默认端点被清空时，页面会自动退回复制 / 分享，不会假装提交成功。
 
 本地也可以单独运行馆藏审计：

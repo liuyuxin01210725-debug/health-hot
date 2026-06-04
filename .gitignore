@@ -1,1 +1,4 @@
 submit-worker/.wrangler/
+.wrangler/
+__pycache__/
+.DS_Store

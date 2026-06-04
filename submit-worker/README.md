@@ -27,7 +27,7 @@ npx wrangler kv namespace create PENDING_KV
 拿到 Worker URL 后重新构建静态站：
 
 ```bash
-HEALTH_HOT_SUBMIT_ENDPOINT="https://health-hot-submit.liuyuxin-health-hot.workers.dev/submit" python3 build.py
+HEALTH_HOT_SUBMIT_ENDPOINT="https://health-hot-submit.pages.dev/submit" python3 build.py
 ```
 
 未配置 `HEALTH_HOT_SUBMIT_ENDPOINT` 时，网页会自动退回复制/分享，不会假装提交成功。

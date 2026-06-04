@@ -3,6 +3,11 @@ const MAX_BODY_CHARS = 1200;
 const DAILY_LIMIT_PER_IP = 10;
 const DUPLICATE_TTL_SECONDS = 60 * 60 * 24 * 90;
 const RATE_TTL_SECONDS = 60 * 60 * 48;
+const DEFAULT_ALLOWED_ORIGINS = [
+  "https://liuyuxin01210725-debug.github.io",
+  "http://localhost:8000",
+  "http://127.0.0.1:8000",
+];
 
 export default {
   async fetch(request, env) {
@@ -158,10 +163,11 @@ async function createIssueRequest(repo, label, claim, page, token) {
 }
 
 function allowedOrigins(env) {
-  return String(env.ALLOWED_ORIGINS || "")
+  const configured = String(env.ALLOWED_ORIGINS || "")
     .split(",")
     .map((value) => value.trim())
     .filter(Boolean);
+  return configured.length ? configured : DEFAULT_ALLOWED_ORIGINS;
 }
 
 function isAllowedOrigin(origin, env) {
