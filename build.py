@@ -328,11 +328,39 @@ def legend_strip():
             f'<span class="ls-item" style="margin-left:auto;color:var(--faint)">个例 →</span></div>')
 
 
+def _basis_origin(it):
+    """卡片底部「核验依据」要显示的真实出处——从证据/官方链接的主机名归纳，
+    而不是直接用 source 字段（source 可能写'XX播客'，会让 study_supported 卡显示
+    '核验依据：XX播客'，自相矛盾、误导信任，judge 审出）。"""
+    labels, seen = [], set()
+    for u in _evidence_pool(it):
+        if not _is_evidence_url(u):
+            continue
+        host = (urllib.parse.urlsplit(u).hostname or "").lower()
+        if "pubmed" in host: name = "PubMed"
+        elif "doi.org" in host: name = "DOI"
+        elif "cochrane" in host: name = "Cochrane"
+        elif "who.int" in host: name = "WHO"
+        elif "nih.gov" in host or "ods.od" in host or "nccih" in host: name = "NIH"
+        elif "uspreventive" in host: name = "USPSTF"
+        elif "cdc.gov" in host: name = "CDC"
+        elif "nhc.gov.cn" in host: name = "卫健委"
+        elif "chinacdc" in host: name = "中国CDC"
+        else: name = host
+        if name not in seen:
+            seen.add(name); labels.append(name)
+    return " / ".join(labels[:3])
+
+
 def card(it):
     """首页核验卡：依据状态为主信号，证据强度为副信号。"""
     slug, cat = e(it.get("slug", "")), e(it.get("category", ""))
     basis = verification_basis(it)
-    source_lead = "你可能在这听到" if basis == "frontier_pending" else "核验依据"
+    if basis == "frontier_pending":
+        lead, origin = "你可能在这听到", it.get("source", "")
+    else:
+        lead = "核验依据"
+        origin = _basis_origin(it) or it.get("source", "")  # 真研究出处；兜底才用 source
     feat = " feat" if it.get("featured") else ""
     star = '<span class="star">✦ 精选</span>' if it.get("featured") else ""
     return (f'<a class="card{feat}" href="claims/{slug}.html">\n'
@@ -340,8 +368,8 @@ def card(it):
             f'  <div class="signal">{trust_badge(basis)}{strength_meter(it.get("evidence", ""))}</div>\n'
             f'  <h3>{e(it.get("title", ""))}</h3>\n'
             f'  <p class="verdict">{fmt(it.get("conclusion") or it.get("summary", ""))}</p>\n'
-            f'  <div class="card-foot"><span class="src"><span class="lead">{source_lead}</span><br>'
-            f'{e(it.get("source", ""))}</span><span class="go">→</span></div>\n'
+            f'  <div class="card-foot"><span class="src"><span class="lead">{e(lead)}</span><br>'
+            f'{e(origin)}</span><span class="go">→</span></div>\n'
             f'</a>')
 
 
