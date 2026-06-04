@@ -360,6 +360,39 @@ def fetch_hot_topics():
     return topics
 
 
+REPO_SLUG = "liuyuxin01210725-debug/health-hot"
+PENDING_OUT = "/tmp/health_pending_claims.json"
+
+
+def fetch_pending_claims():
+    """读用户提交的「待核说法」issue（搜索无结果时提交的需求）→ 汇入候选。
+    需求驱动的第二来源。只收集、标 needs_semantic_filter，由 LLM 终审是否可核验、
+    查证据、写条目——不自动上线。
+    用 gh CLI（本地+CI，Actions 自带 gh），它自己处理中文标签编码（直拼 query string 不可靠）。
+    无 gh / 无权限时静默跳过、不报错。"""
+    import shutil, subprocess
+    gh = shutil.which('gh')
+    if not gh:
+        return []
+    try:
+        r = subprocess.run([gh, 'issue', 'list', '--repo', REPO_SLUG,
+                            '--label', '待核说法', '--state', 'open', '--limit', '50',
+                            '--json', 'number,title,body,url'],
+                           capture_output=True, text=True, timeout=25)
+        issues = json.loads(r.stdout or '[]')
+    except Exception as ex:
+        print(f"  [待核说法] 读取失败（不影响主流程）：{str(ex)[:50]}")
+        return []
+    out = []
+    for it in issues if isinstance(issues, list) else []:
+        title = (it.get('title') or '').replace('待核说法：', '').strip()
+        if title:
+            out.append({'source': '用户提交', 'issue_number': it.get('number'),
+                        'title': title[:80], 'body': (it.get('body') or '')[:500],
+                        'url': it.get('url', ''), 'needs_semantic_filter': True})
+    return out
+
+
 def norm_title(s):
     return re.sub(r'\W+', '', (s or '').lower())
 
@@ -557,6 +590,19 @@ def main():
                 print(f"   · [{tp['platform']}] {tp['title']}")
         except Exception as ex:
             print(f"\n⚠ 热点反查失败（不影响主候选）：{str(ex)[:60]}")
+    # 用户提交的「待核说法」issue（需求驱动的第二来源，非致命）
+    try:
+        pending = fetch_pending_claims()
+        json.dump(pending, open(PENDING_OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+        if pending:
+            print(f"\n📮 用户提交「待核说法」{len(pending)} 条 → {PENDING_OUT}")
+            print("   注：来自搜索无结果时的真实用户提交；需 LLM 终审是否可核验、查证据、写条目，不自动上线。")
+            for pc in pending[:10]:
+                print(f"   · #{pc.get('issue_number','?')} {pc['title']}")
+        else:
+            print("\n📮 暂无用户提交的「待核说法」issue（或无 token 跳过）")
+    except Exception as ex:
+        print(f"\n⚠ 读取用户提交失败（不影响主候选）：{str(ex)[:60]}")
     print(f"\n共 {len(cands)} 条候选 → {OUT}")
     for c in cands:
         flag = " · ⚠ 标题未命中窄主题，需人工判断" if c.get('relevance_hint') == 'query_match_only' else ""

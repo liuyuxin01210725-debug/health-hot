@@ -28,6 +28,8 @@ jobs:
       - name: 抓取官方目录与 PubMed 候选
         id: collect
         continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}   # 让 collect.py 的 gh issue list 能读「待核说法」用户提交
         run: |
           set -o pipefail
           python3 collect.py 2>&1 | tee /tmp/health_candidates.log
