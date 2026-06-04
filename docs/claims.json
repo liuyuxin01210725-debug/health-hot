@@ -6,9 +6,9 @@
   "disclaimer": "本数据为科普整理，非医疗建议；不提供具体剂量与个体化诊疗。请点击 detail_url / evidence_source_urls 回原文核对。",
   "usage_note": "新消费者请优先使用 verification_basis：study_supported=『研究支持』，official_basis=『官方依据』，frontier_pending=『前沿待核』。verification_status 仅为兼容旧消费者保留，不应用它把官方页面称为原始研究。evidence_source_urls 为核验依据链接（研究或白名单官方页面），discovery_source_url 是『在哪听到』（非证据）。",
   "generated_at": "2026-06-04",
-  "count": 111,
-  "verified_count": 103,
-  "study_supported_count": 25,
+  "count": 112,
+  "verified_count": 104,
+  "study_supported_count": 26,
   "official_basis_count": 78,
   "frontier_pending_count": 8,
   "claims": [
@@ -94,6 +94,36 @@
       "featured": false,
       "date": "2026-06-04",
       "source_published_at": "2019-11-01",
+      "reviewed_at": "2026-06-04"
+    },
+    {
+      "slug": "antioxidant-blunts-training-adaptation",
+      "title": "练后狂补维C/抗氧化剂，可能反而拖慢训练效果",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/antioxidant-blunts-training-adaptation.html",
+      "category": "运动",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "rct",
+      "evidence_label": "RCT",
+      "conclusion": "RCT：训练后补大剂量维C+E会钝化耐力训练的细胞适应信号（如线粒体生成），可能拖慢长期进步；日常膳食维C无碍，问题在「练后特意大剂量抗氧化」。",
+      "population": "进行耐力训练的健康成年人（原 RCT 受试者）。",
+      "caveats": "该研究中适应指标被钝化、但即时运动表现未见显著差异，属机制层面警示；说的是大剂量补剂的时机问题，非日常膳食维C有害。个体方案请咨询专业教练/营养师。",
+      "summary": "很多人健身后大剂量补维生素C、维生素E或各种「抗氧化」补剂，以为是帮恢复。但有个反直觉的机制：运动产生的活性氧（自由基）不只是「损伤」，它也是身体「该变强了」的信号——线粒体增多、耐力提升这些训练适应，正是被这个信号触发的。一项发表在《生理学杂志》的随机对照试验发现：补充维生素C+E 钝化了耐力训练带来的肌肉细胞层面适应（如线粒体生成相关标志物），研究者明确建议「把抗氧化补剂和耐力训练叠加时要谨慎」。这呼应一个更通用的原则——「即时优化 vs 长期适应的权衡」：冰浴、抗炎药、大剂量抗氧化剂能让你「今天感觉好」，但可能削弱「长期变强」的信号。要点：① 该研究中适应指标被钝化，但当时的运动表现测试未见显著差异，属机制层面警示；② 不是说维C有害，是「时机和剂量」问题——日常膳食的维C没问题，问题在「训练后特意大剂量抗氧化」。想提升训练效果的人，别盲目在练后猛补抗氧化剂。",
+      "source": "J Physiol · 维生素C+E 钝化运动适应 RCT（Wiig 2014）",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/24492839/",
+        "https://pubmed.ncbi.nlm.nih.gov/22777327/"
+      ],
+      "discovery_source_url": "https://www.foundmyfitness.com/topics/vitamin-c",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/24492839/",
+        "https://pubmed.ncbi.nlm.nih.gov/22777327/"
+      ],
+      "featured": false,
+      "date": "2026-06-04",
+      "source_published_at": "2014-01-01",
       "reviewed_at": "2026-06-04"
     },
     {

@@ -1,0 +1,24 @@
+{
+  "title": "练后狂补维C/抗氧化剂，可能反而拖慢训练效果",
+  "source": "J Physiol · 维生素C+E 钝化运动适应 RCT（Wiig 2014）",
+  "source_url": "https://pubmed.ncbi.nlm.nih.gov/24492839/",
+  "date": "2026-06-04",
+  "category": "运动",
+  "featured": false,
+  "rank": 0,
+  "evidence": "rct",
+  "verification_status": "verified",
+  "summary": "很多人健身后大剂量补维生素C、维生素E或各种「抗氧化」补剂，以为是帮恢复。但有个反直觉的机制：运动产生的活性氧（自由基）不只是「损伤」，它也是身体「该变强了」的信号——线粒体增多、耐力提升这些训练适应，正是被这个信号触发的。一项发表在《生理学杂志》的随机对照试验发现：补充维生素C+E **钝化了**耐力训练带来的肌肉细胞层面适应（如线粒体生成相关标志物），研究者明确建议「把抗氧化补剂和耐力训练叠加时要谨慎」。这呼应一个更通用的原则——「即时优化 vs 长期适应的权衡」：冰浴、抗炎药、大剂量抗氧化剂能让你「今天感觉好」，但可能削弱「长期变强」的信号。要点：① 该研究中适应指标被钝化，但当时的运动表现测试未见显著差异，属机制层面警示；② 不是说维C有害，是「时机和剂量」问题——日常膳食的维C没问题，问题在「训练后特意大剂量抗氧化」。想提升训练效果的人，别盲目在练后猛补抗氧化剂。",
+  "slug": "antioxidant-blunts-training-adaptation",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-04",
+  "source_published_at": "2014-01-01",
+  "conclusion": "RCT：训练后补大剂量维C+E会钝化耐力训练的细胞适应信号（如线粒体生成），可能拖慢长期进步；日常膳食维C无碍，问题在「练后特意大剂量抗氧化」。",
+  "population": "进行耐力训练的健康成年人（原 RCT 受试者）。",
+  "caveats": "该研究中适应指标被钝化、但即时运动表现未见显著差异，属机制层面警示；说的是大剂量补剂的时机问题，非日常膳食维C有害。个体方案请咨询专业教练/营养师。",
+  "discovery_source_url": "https://www.foundmyfitness.com/topics/vitamin-c",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/24492839/",
+    "https://pubmed.ncbi.nlm.nih.gov/22777327/"
+  ]
+}
