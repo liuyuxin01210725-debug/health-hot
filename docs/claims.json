@@ -6,9 +6,9 @@
   "disclaimer": "本数据为科普整理，非医疗建议；不提供具体剂量与个体化诊疗。请点击 detail_url / evidence_source_urls 回原文核对。",
   "usage_note": "新消费者请优先使用 verification_basis：study_supported=『研究支持』，official_basis=『官方依据』，frontier_pending=『前沿待核』。verification_status 仅为兼容旧消费者保留，不应用它把官方页面称为原始研究。evidence_source_urls 为核验依据链接（研究或白名单官方页面），discovery_source_url 是『在哪听到』（非证据）。",
   "generated_at": "2026-06-04",
-  "count": 109,
-  "verified_count": 101,
-  "study_supported_count": 23,
+  "count": 111,
+  "verified_count": 103,
+  "study_supported_count": 25,
   "official_basis_count": 78,
   "frontier_pending_count": 8,
   "claims": [
@@ -38,6 +38,62 @@
       "featured": false,
       "date": "2026-06-04",
       "source_published_at": "2014-04-01",
+      "reviewed_at": "2026-06-04"
+    },
+    {
+      "slug": "swimming-knee-joint",
+      "title": "游泳是不是最护膝的运动？对膝关节炎，水中运动确实有用",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/swimming-knee-joint.html",
+      "category": "运动",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "meta",
+      "evidence_label": "Meta",
+      "conclusion": "对膝骨关节炎人群，水中运动能改善疼痛与功能、安全性好（浮力降冲击）；但「比陆上更优/护健康人膝」证据没那么强，减肥仍看强度与热量缺口。",
+      "population": "证据主要来自膝骨关节炎患者；健康人群的「护膝」获益证据较弱。",
+      "caveats": "明确证据在已有膝关节问题人群的疼痛/功能改善；不等于比其他运动更优，也不等于自动减肥。有关节问题请咨询医生/康复师。",
+      "summary": "「游泳既不伤膝又能减肥，为啥没人选」这个话题最近在热议。先说证据扎实的那半：一篇 2023 年的系统综述+荟萃分析显示，对膝骨关节炎人群，水中运动（游泳、水中健身）能改善疼痛和身体功能，且安全性好——因为水的浮力大幅降低了关节冲击，这点是真的，对关节负担敏感的人很友好。但要说清楚两件常被夸大的：① 它的明确证据主要在「已有膝关节问题的人群的疼痛/功能改善」，「比陆上运动更优越」「能护住健康人的膝」这类没那么强的定论；② 减肥效果取决于强度和热量缺口，不是「游了就瘦」。所以游泳对护关节是个好选择、尤其膝盖不好的人，但别神化成万能。具体方案有关节问题者请咨询医生/康复师。",
+      "source": "Clin Rehabil · 2023 水中运动治膝骨关节炎系统综述与荟萃",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/36320162/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/36320162/"
+      ],
+      "featured": false,
+      "date": "2026-06-04",
+      "source_published_at": "2023-01-01",
+      "reviewed_at": "2026-06-04"
+    },
+    {
+      "slug": "red-processed-meat",
+      "title": "红肉到底要不要少吃？证据没你以为的那么硬，但加工肉更值得警惕",
+      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/red-processed-meat.html",
+      "category": "营养",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "meta",
+      "evidence_label": "Meta",
+      "conclusion": "把红肉/加工肉与死亡和疾病挂钩的证据确定性偏低、绝对风险降幅小；但这不等于可随便吃，且加工肉风险信号更一致、更该限制。",
+      "population": "一般成年人群（队列证据汇总）。",
+      "caveats": "「证据弱」不等于「无害」，主流指南仍建议适量；观察性证据只能显示相关、不能证因果。特殊疾病人群请遵医嘱。",
+      "summary": "「清淡饮食不等于不吃肉」上了热榜，正好捋一下红肉这事。2019 年《内科学年鉴》一组备受关注（也引发争议）的荟萃分析得出一个反直觉结论：现有把红肉/加工肉和死亡、心血管、癌症风险挂钩的证据，确定性其实偏低——也就是说「红肉有害」这个共识，背后的证据没大众以为的那么硬，少吃带来的绝对风险下降也很小。但要分两点别误读：① 这说的是「证据强度弱」，不等于「红肉随便吃没事」，主流膳食指南仍建议适量；② 加工肉（香肠、培根、火腿等）的风险信号比新鲜红肉更一致，被列为更该限制的对象。实用结论：不必为「吃了一块红肉」焦虑，但加工肉值得真正少吃；关键还是整体饮食结构，而非盯单一食物。",
+      "source": "Ann Intern Med · 2019 红肉与死亡/心血管/癌症风险系列荟萃",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/31569213/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/31569213/"
+      ],
+      "featured": false,
+      "date": "2026-06-04",
+      "source_published_at": "2019-11-01",
       "reviewed_at": "2026-06-04"
     },
     {
