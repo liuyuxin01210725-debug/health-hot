@@ -351,8 +351,10 @@ body.vfy { background: var(--paper); min-height: 100vh; }
 .vfy .empty { padding: 48px 18px 56px; text-align: center; color: var(--faint); font-size: 14px; }
 .vfy .empty .empty-t { font-size: 17px; color: var(--ink); margin: 0 0 8px; }
 .vfy .empty .empty-d { font-size: 14px; color: var(--muted); max-width: 440px; margin: 0 auto 20px; line-height: 1.6; }
-.vfy .empty .empty-cta { display: inline-block; padding: 11px 22px; border-radius: 100px; background: var(--ink); color: var(--paper); font-size: 14px; font-weight: 500; text-decoration: none; transition: opacity .2s var(--ease); }
+.vfy .empty .empty-cta { display: inline-block; padding: 11px 22px; border-radius: 100px; background: var(--ink); color: var(--paper); font-size: 14px; font-weight: 500; text-decoration: none; border: none; cursor: pointer; font-family: inherit; transition: opacity .2s var(--ease); }
 .vfy .empty .empty-cta:hover { opacity: .85; }
+.vfy .empty .empty-cta.ghost { background: transparent; color: var(--accent-ink, #0a5d4d); border: 1px solid var(--accent, #0c7560); }
+.vfy .empty .copy-tip { display: inline-block; margin-left: 12px; font-size: 13px; color: var(--accent-ink, #0a5d4d); }
 @media (max-width: 680px){
   .vfy .list-head { display: none; }
   .vfy .list-row { grid-template-columns: 1fr; gap: 10px; padding: 16px; }

@@ -612,11 +612,17 @@ def render_all(items):
              f'<span class="count" id="count"></span></div>'
              f'<div class="listwrap"><div class="list-head"><span>主题</span><span>依据 / 强度</span>'
              f'<span>说法 · 结论</span><span>复核</span></div><div id="list">{rows}</div>'
-             f'<div class="empty" id="empty" hidden><p class="empty-t">本库还没有核验过 <b id="emptyq"></b></p>'
-             f'<p class="empty-d">这正是我们想收的——把你听到、拿不准真假的健康说法提交进「待核清单」，'
-             f'我们会去查原始研究，做成一条可追溯的核验。</p>'
-             f'<a class="empty-cta" id="submitclaim" href="{REPO}/issues/new" target="_blank" rel="noopener">'
-             f'＋ 提交这个说法，加入待核清单</a></div>'
+             f'<div class="empty" id="empty" hidden>'
+             f'<div id="ask-state"><p class="empty-t">本库还没有核验过 <b id="emptyq"></b></p>'
+             f'<p class="empty-d">这正是我们想收的——告诉我们你想查的健康说法，我们会去查原始研究，'
+             f'做成一条可追溯的核验。</p>'
+             f'<button class="empty-cta" id="addtopic" type="button">＋ 我想查这个，加入待核</button></div>'
+             f'<div id="done-state" hidden><p class="empty-t">✓ 已记下 <b id="doneq"></b></p>'
+             f'<p class="empty-d">我们会去查它的原始研究。想更快看到结果？把它发给作者，'
+             f'下次更新时会优先核验。</p>'
+             f'<button class="empty-cta ghost" id="copyclaim" type="button">复制说法，发给作者</button>'
+             f'<span class="copy-tip" id="copytip" hidden>已复制 ✓ 粘贴到微信发我即可</span></div>'
+             f'</div>'
              f'</div></div></section>')
     js = '''<script>
 let activeCat='all', activeBasis='all'; const rows=[...document.querySelectorAll('.list-row')];
@@ -625,22 +631,35 @@ const qp=new URLSearchParams(location.search).get('q'); if(qp) input.value=qp;
 function matchBasis(r){if(activeBasis==='all')return true;
   if(activeBasis==='strong')return r.dataset.ev==='rct'||r.dataset.ev==='meta';
   return r.dataset.basis===activeBasis;}
-const emptyq=document.getElementById('emptyq'), submit=document.getElementById('submitclaim');
-const REPO='%REPO%';
+const emptyq=document.getElementById('emptyq'),doneq=document.getElementById('doneq');
+const askState=document.getElementById('ask-state'),doneState=document.getElementById('done-state');
+let lastQ='这个说法';
 function applyFilters(){const raw=(input.value||'').trim();const query=raw.toLowerCase();let n=0;rows.forEach(r=>{
   const show=(activeCat==='all'||r.dataset.cat===activeCat)&&matchBasis(r)&&(!query||r.dataset.search.toLowerCase().includes(query));
   r.style.display=show?'':'none';if(show)n++;});count.textContent=n+' 条 · 共 '+rows.length+' 条';empty.hidden=n!==0;
-  if(n===0){const q=raw||'这个说法';emptyq.textContent='「'+q+'」';
-    const t=encodeURIComponent('待核说法：'+q);
-    const b=encodeURIComponent('我听到一个健康说法，想求证真假：\\n\\n'+q+'\\n\\n（在哪听到的 / 为什么想查，可补充）');
-    submit.href=REPO+'/issues/new?title='+t+'&body='+b+'&labels=待核说法';}}
+  if(n===0){lastQ=raw||'这个说法';emptyq.textContent='「'+lastQ+'」';
+    askState.hidden=false;doneState.hidden=true;}}  // 每次新搜索都回到「添加」初始态
 document.getElementById('filterbar').addEventListener('click',e=>{const b=e.target.closest('.fchip');if(!b)return;
   activeCat=b.dataset.c;document.querySelectorAll('.fchip').forEach(x=>x.classList.toggle('on',x===b));applyFilters();});
 document.getElementById('basisbar').addEventListener('click',e=>{const b=e.target.closest('.bchip');if(!b)return;
   activeBasis=b.dataset.b;document.querySelectorAll('.bchip').forEach(x=>x.classList.toggle('on',x===b));applyFilters();});
+// 「添加这个话题」：就地切到已记下状态，不跳转、不要求注册
+document.getElementById('addtopic').addEventListener('click',()=>{
+  doneq.textContent='「'+lastQ+'」';askState.hidden=true;doneState.hidden=false;
+  try{const k='hh_pending';const arr=JSON.parse(localStorage.getItem(k)||'[]');
+    if(!arr.includes(lastQ)){arr.push(lastQ);localStorage.setItem(k,JSON.stringify(arr));}}catch(e){}});
+// 「复制说法发给作者」：复制到剪贴板，用户自己粘到微信发我
+document.getElementById('copyclaim').addEventListener('click',()=>{
+  const txt='我想查这个健康说法是真是假：'+lastQ+'（来自 查过再信）';
+  const tip=document.getElementById('copytip');
+  const ok=()=>{tip.hidden=false;setTimeout(()=>tip.hidden=true,4000);};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok).catch(()=>{
+    const t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();
+    try{document.execCommand('copy')}catch(e){}t.remove();ok();});}
+  else{const t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();
+    try{document.execCommand('copy')}catch(e){}t.remove();ok();}});
 applyFilters();
 </script>'''
-    js = js.replace('%REPO%', REPO)
     return shell("全部", "全部", inner, extra_js=js,
                  desc="全部健康说法核验，按主题分组，每条标注证据强度、适用人群与原始出处。", canon="all.html")
 
