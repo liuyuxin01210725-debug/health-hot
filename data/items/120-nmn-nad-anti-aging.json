@@ -1,0 +1,25 @@
+{
+  "title": "NMN/NAD 补剂抗衰老有没有用？升 NAD 和「延寿」是两件事",
+  "source": "Nat Commun · NR 长期补充升 NAD RCT（Martens 2018）",
+  "source_url": "https://pubmed.ncbi.nlm.nih.gov/29599478/",
+  "date": "2026-06-05",
+  "category": "补剂",
+  "featured": false,
+  "rank": 0,
+  "evidence": "rct",
+  "verification_status": "verified",
+  "summary": "NMN（烟酰胺单核苷酸）和 NR（烟酰胺核糖苷）是近年最火的「抗衰老补剂」，「升 NAD→激活长寿通路→延寿」是它们最常见的营销叙事。这个说法有多少是真的？把链条拆开看。\n\n**第一段：NR 升血 NAD，这件事有人体 RCT 锤实。** Martens 2018（Nat Commun，中老年人群，n 双盲交叉，1000 mg/d × 6 周）显示，NR 补充后血 NAD+ 升高约 60%，耐受良好。Nanga 2024（Penn，独立团队，7T MRS 测量，单次 900 mg）发现 4 小时后脑 NAD+ 升高约 16%。——「NR 确实升 NAD，包括脑子里的」，这是有独立证据的。\n\n**第二段：NR/NMN 在特定疾病人群有初步证据。** 外周动脉疾病（PAD）RCT（NICE trial）显示 NR 让 6 分钟步行距离多了约 18 米；COPD 患者用 NR 后痰液炎症标志物降低约 53%，停药 12 周后仍维持。——这是「有病理性 NAD 缺乏的人群可能从补充中获益」的方向，而非延寿。\n\n**第三段：「抗衰老/延寿」的人体硬终点证据，目前为零。** 动物（酵母、线虫、小鼠）里有寿命延长数据，但人体没有对应的随机对照延寿试验，也不可能有（需要几十年随访）。长新冠 NR RCT（Wu 2025，n=58）的主要认知终点，组间无显著差异（p=0.47-0.74）。\n\n两个额外注意点：① NMN 对比 NR 的争议——NR 发现者 Brenner 认为 NMN 进细胞前需先降解回 NR，且 NR 侧人体 RCT 更多；但这个判断来自 NR 厂商顾问，有利益冲突，NMN 也有自己的支持者和理论路径，争议未定论。② NMN 市售产品质量差异大，独立检测发现大量产品实际含量不达标。\n\n结论：NR 升 NAD 有人体 RCT 支撑；特定疾病人群（PAD、COPD）有初步获益信号；但「抗衰老/延寿」的人体硬终点证据目前为零，是动物外推到人的一步大跳跃。",
+  "slug": "nmn-nad-anti-aging",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-05",
+  "source_published_at": "2018-03-29",
+  "conclusion": "NR 升高血液和脑部 NAD 有人体 RCT 证实；特定疾病人群（PAD/COPD）有初步 RCT 获益信号；但「抗衰老/延寿」人体硬终点证据为零，是动物外推。NMN 证据整体更弱，且「优于/劣于 NR」的判断来自利益方。",
+  "population": "NR 升 NAD 证据来自中老年健康人群；PAD/COPD 获益证据来自相应疾病人群。健康年轻人的抗衰获益无直接 RCT。",
+  "caveats": "「抗衰老/延寿」无人体硬终点证据，是动物外推。NMN vs NR 的机制之争（转运体、降解路径）未有独立定论，且现有「NMN 不如 NR」论点来自 NR 利益方（ChromaDex/Brenner，有重大利益冲突）。NMN 产品质量参差不齐，抽检大量不达标。长新冠认知主终点阴性。不给具体剂量。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/29599478/",
+    "https://pubmed.ncbi.nlm.nih.gov/41357333/",
+    "https://pubmed.ncbi.nlm.nih.gov/39044608/"
+  ]
+}

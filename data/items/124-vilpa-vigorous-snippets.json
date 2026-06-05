@@ -1,0 +1,24 @@
+{
+  "title": "每天几次「剧烈一分钟」(VILPA) 真的能延寿吗？队列数据说能，但要讲清楚前提",
+  "source": "Int J Behav Nutr Phys Act · Koemel/Stamatakis et al. (NHANES 全国队列, 2026)",
+  "source_url": "https://pubmed.ncbi.nlm.nih.gov/41612409/",
+  "date": "2026-06-05",
+  "category": "运动",
+  "featured": false,
+  "rank": 0,
+  "evidence": "observational",
+  "verification_status": "verified",
+  "summary": "VILPA 是一个越来越多人讨论的概念：Vigorous Intermittent Lifestyle Physical Activity，即日常生活里嵌入的短时剧烈活动迸发——追公交、爬楼梯冲刺、跑着追小孩或宠物。它和「运动零食」（Exercise Snacks）最大的区别在于：不是计划好的训练，而是自然发生在生活里的爆发。2026 年 1 月，Stamatakis 团队在 NHANES 美国全国代表性队列（n=3293，自报**完全不做结构化运动**）发表了死亡率数据：佩戴加速度计测量，受试者每天中位约 **5.3 次** VILPA 迸发（总时长仅约 **1.1 分钟/天**），与全因死亡率降低约 **44%** 相关。剂量-反应曲线非线性——从零开始，加一点点收益最大。这也是把 VILPA 死亡率发现从英国 UK Biobank（绝大多数白人）**首次复现到多族裔美国人群**，增强了外推可信度。不过有几点必须说清楚：① **这是队列观察性研究，不是 RCT**——因果关系没有锁死，无法排除「本来更健康的人才能做 VILPA」的反向因果问题；② 暴露测量仅用单次加速度计窗口，不一定代表长期习惯；③ 该研究结论最适用于**完全不运动**的久坐人群（占成人 80% 以上），这本身是公共卫生意义最大的人群。对于已经有规律锻炼的人，VILPA 是额外加分项而非主要方案。好消息：门槛极低——楼梯冲刺、追公交、提着购物袋走快几步，全算在内。",
+  "slug": "vilpa-vigorous-snippets",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-05",
+  "source_published_at": "2026-01-30",
+  "conclusion": "美国全国队列显示，完全不运动的人每天约 5.3 次 VILPA（日常剧烈活动迸发，总仅 1.1 分钟）与全因死亡率降低 44% 相关；属观察性证据，非 RCT 因果，但门槛极低，对久坐者意义大",
+  "population": "完全不做结构化休闲运动的成年人（美国 NHANES，平均 50.7 岁，52% 女性）；对久坐人群意义最大",
+  "caveats": "观察性队列，非 RCT；无法完全排除反向因果（体弱者本就不能做 VILPA 且死亡率更高）；单次加速度计窗口可能不代表长期习惯；随访事件数和随访时长需全文确认；效应在已有规律锻炼者中不能直接套用；亚洲人群尚无复现数据",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/41612409/",
+    "https://doi.org/10.1186/s12966-026-01876-2"
+  ]
+}
