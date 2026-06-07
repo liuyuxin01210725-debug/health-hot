@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 接入 · 查过再信</title>
+<meta name="description" content="让你的 AI 助手直接调用查过再信核验库：一键提示词、公开 claims.json 接口、可装成 Skill。">
+<link rel="canonical" href="https://liuyuxin01210725-debug.github.io/health-hot/ai.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI 接入 · 查过再信">
+<meta property="og:description" content="让你的 AI 助手直接调用查过再信核验库：一键提示词、公开 claims.json 接口、可装成 Skill。">
+<meta property="og:url" content="https://liuyuxin01210725-debug.github.io/health-hot/ai.html">
+<meta property="og:image" content="https://liuyuxin01210725-debug.github.io/health-hot/og.png">
+<meta property="og:site_name" content="查过再信">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI 接入 · 查过再信">
+<meta name="twitter:description" content="让你的 AI 助手直接调用查过再信核验库：一键提示词、公开 claims.json 接口、可装成 Skill。">
+<meta name="twitter:image" content="https://liuyuxin01210725-debug.github.io/health-hot/og.png">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="claims.css">
+</head>
+<body class="vfy">
+<nav class="nav"><div class="wrap nav-in">
+  <a class="logo" href="index.html"><span class="x">✚</span>查过再信<small>· 健康说法核验库</small></a>
+  <div class="nav-links"><a class="" href="index.html">精选</a><a class="" href="all.html">全部</a><a class="" href="log.html">更新</a><a class="" href="about.html">关于</a><a href="ai.html" class="ai on">🤖 AI 接入</a></div>
+</div></nav>
+<main>
+<header class="about-h"><div class="wrap narrow"><span class="eyebrow">FOR AI · 被 AI 调用</span>
+<h1>让你的 AI 助手<br>直接查这个核验库</h1>
+<p class="lede">这个库的第二个用途，是被机器调用。它提供公开机读接口，你的 ChatGPT / Claude 可以区分「研究支持」「官方依据」与「前沿待核」，回答健康问题时带上证据强度和可回溯的来源——而不是张口就来。</p>
+</div></header><section class="method"><div class="wrap narrow">
+<div class="method-item"><div class="mi-n">01</div><div><h3>一键接入：把这段话贴给你的 AI</h3>
+<p>不用写代码。复制下面这段提示词，粘进 ChatGPT 或 Claude 的对话框，它就会在回答健康问题前先查本站数据、按证据强度作答。</p>
+<div class="ai-prompt-wrap"><textarea id="aiprompt" class="ai-prompt" readonly rows="14">你是循证健康助手。当我问你某个健康说法靠不靠谱时，请先抓取这个公开数据接口（任何人可匿名访问）：
+https://liuyuxin01210725-debug.github.io/health-hot/claims.json
+
+里面每条说法都带这些字段，请这样用：
+- verification_basis：研究支持 / 官方依据 / 前沿待核——务必区分，别把官方科普页说成原始研究。
+- evidence_label：证据强度（RCT / Meta / 指南 / 观察 / 专家 / 博主 / 个例）。
+- evidence_hint：一句现成的「该怎么信这条」，可以直接引用，但不要在它之上夸大。
+- conclusion / caveats：结论与注意事项。
+- detail_url / evidence_source_urls：详情页与原始研究 / 官方链接，回答时附上让我能回溯。
+
+回答规则：
+1. 库里有相关说法 → 引用它的 evidence_hint 和 conclusion，附 detail_url 和来源链接。
+2. 库里没有 → 明确说「本库未收录这条」，不要编造，可建议我去站内提交待核。
+3. 永远带上免责：这是科普整理、非医疗建议；不提供具体剂量或个体化诊疗。</textarea>
+<button class="empty-cta" id="copyprompt" type="button">复制这段提示词</button>
+<span class="copy-tip" id="copydone" hidden>已复制 ✓ 去粘给你的 AI 助手</span></div></div></div>
+<div class="method-item"><div class="mi-n">02</div><div><h3>公开数据接口（claims.json）</h3>
+<p>整库的机读版本，任何人可匿名抓取。带站点级医疗免责、字段说明（usage_note）与计数。适合接进自己的工具或 Agent。</p>
+<div class="codeblk"><div class="ck">GET · 无需鉴权</div><code>https://liuyuxin01210725-debug.github.io/health-hot/claims.json</code></div></div></div>
+<div class="method-item"><div class="mi-n">03</div><div><h3>装成 Skill（Claude Code / Codex）</h3>
+<p>如果你用 Claude Code 或 Codex，可以把本站装成一个 Skill，让它在本地就能调用这套核验逻辑。</p>
+<div class="codeblk"><div class="ck">Claude Code</div>
+<code>mkdir -p ~/.claude/skills/health-hot &amp;&amp; curl -fsSL https://liuyuxin01210725-debug.github.io/health-hot/skill/SKILL.md -o ~/.claude/skills/health-hot/SKILL.md</code></div>
+<div class="codeblk"><div class="ck">Codex</div>
+<code>mkdir -p ~/.codex/skills/health-hot &amp;&amp; curl -fsSL https://liuyuxin01210725-debug.github.io/health-hot/skill/SKILL.md -o ~/.codex/skills/health-hot/SKILL.md</code></div></div></div>
+<div class="method-item"><div class="mi-n">04</div><div><h3>怎么读这个 feed：证据提示（evidence_hint）</h3>
+<p>每条都带一个 <b>evidence_hint</b> 字段——它用「依据状态 + 证据强度」两个维度合成一句<b>可直接转述的解读</b>：先说有没有可追溯依据，再说证据有多硬。AI 拿到它就有现成、不夸大的「该怎么信这条」，不用自己揣测。</p>
+<div class="ai-sample"><div class="ck">feed 里一条的样子（节选）</div><div class="ais-row"><span class="ais-k">title</span><span class="ais-v">种子油有毒、会致炎症不能吃？最强证据说的不是这个</span></div><div class="ais-row"><span class="ais-k">verification_basis</span><span class="ais-v">study_supported · 研究支持</span></div><div class="ais-row"><span class="ais-k">evidence_label</span><span class="ais-v">Meta</span></div><div class="ais-row hl"><span class="ais-k">evidence_hint</span><span class="ais-v">有可追溯的原始研究支撑；证据强度较高，可作较可靠参考；仍要看样本量与是否被重复。</span></div></div>
+<p class="ai-note">注意：evidence_hint 是诚实的解读层，不是营销话术。它会直说「只能显示相关、不能证明因果」或「暂无可追溯依据，属前沿待核」——请连同这些限制一起呈现，别只摘对你结论有利的半句。</p></div></div>
+</div></section>
+</main>
+<footer class="foot"><div class="wrap narrow">
+  <div class="foot-in">
+    <div>
+      <div class="f-logo"><span class="x">✚</span>查过再信</div>
+      <p class="f-claim">把「听来的」和「有据的」分开。每条说法可追溯、可被机器调用。</p>
+    </div>
+    <div class="f-links">
+      <div class="f-col"><h5>浏览</h5><a href="index.html">精选</a><a href="all.html">全部核验</a><a href="about.html">关于方法论</a></div>
+      <div class="f-col"><h5>AI 接入</h5><a href="ai.html">一键接入</a><a href="ai.html">claims.json</a><a href="ai.html">安装 Skill</a></div>
+    </div>
+  </div>
+  <div class="foot-bottom">本站为科普整理，<b>非医疗建议</b>；每条说法标注证据等级与来源状态，点击可回来源核对。 · 查过再信 · 持续收集与查证</div>
+</div></footer>
+<script>
+(function(){
+  var btn=document.getElementById('copyprompt'),ta=document.getElementById('aiprompt'),done=document.getElementById('copydone');
+  if(!btn||!ta)return;
+  btn.addEventListener('click',function(){
+    var txt=ta.value;
+    function ok(){if(done){done.hidden=false;}btn.textContent='已复制 ✓';setTimeout(function(){btn.textContent='复制这段提示词';},2200);}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok,function(){ta.select();document.execCommand('copy');ok();});}
+    else{ta.select();document.execCommand('copy');ok();}
+  });
+})();
+</script>
+</body>
+</html>

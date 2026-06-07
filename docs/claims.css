@@ -332,6 +332,25 @@ body.vfy { background: var(--paper); min-height: 100vh; }
 .vfy .codeblk .ck { font-size: 11px; color: var(--faint); margin-bottom: 7px; font-family: "Space Mono", monospace; letter-spacing: .04em; }
 .vfy .codeblk code { font-family: "Space Mono", monospace; font-size: 11.5px; color: var(--vf-solid); word-break: break-all; line-height: 1.5; display: block; }
 @media (max-width: 720px){ .vfy .ai-band { grid-template-columns: 1fr; padding: 26px; } }
+.vfy .ab-cta { display: inline-block; margin-top: 16px; font-size: 13.5px; font-weight: 500; color: var(--vf-solid); text-decoration: none; }
+.vfy .ab-cta:hover { text-decoration: underline; }
+
+/* —— AI 接入页 —— */
+.vfy .ai-prompt-wrap { margin-top: 4px; }
+.vfy .ai-prompt { width: 100%; box-sizing: border-box; background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 14px 15px; font-family: "Space Mono", monospace; font-size: 12.5px; line-height: 1.72; color: var(--ink); resize: vertical; }
+.vfy .ai-prompt:focus { outline: 2px solid var(--vf-solid); outline-offset: 1px; }
+.vfy .ai-prompt-wrap .empty-cta { margin-top: 12px; }
+.vfy .ai-prompt-wrap .copy-tip { margin-left: 12px; color: var(--vf-solid); font-size: 13px; }
+.vfy .ai-sample { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 14px 16px; margin: 14px 0; }
+.vfy .ai-sample .ck { font-size: 11px; color: var(--faint); margin-bottom: 10px; font-family: "Space Mono", monospace; letter-spacing: .04em; }
+.vfy .ais-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; padding: 6px 0; border-top: 1px solid var(--line); font-size: 13.5px; line-height: 1.6; }
+.vfy .ais-row:first-of-type { border-top: none; }
+.vfy .ais-k { font-family: "Space Mono", monospace; font-size: 12px; color: var(--faint); }
+.vfy .ais-v { color: var(--ink); }
+.vfy .ais-row.hl { background: var(--vf-soft, #e6f0ec); margin: 4px -8px 0; padding: 8px; border-radius: 6px; border-top: none; }
+.vfy .ais-row.hl .ais-v { font-weight: 500; }
+.vfy .ai-note { font-size: 13.5px; color: var(--muted); background: var(--surface); border-left: 2px solid var(--line); padding: 12px 16px; margin-top: 14px; line-height: 1.7; }
+@media (max-width: 720px){ .vfy .ais-row { grid-template-columns: 1fr; gap: 2px; } }
 
 /* —— all page controls —— */
 .vfy .controls { display: flex; flex-direction: column; gap: 16px; margin: 24px 0 20px; }

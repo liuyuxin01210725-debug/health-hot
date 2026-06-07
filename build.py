@@ -314,6 +314,32 @@ def strength_meter(evidence, show_label=True):
     return f'<span class="strength"><span class="bars">{bars}</span>{label}</span>'
 
 
+def evidence_hint(it):
+    """证据提示：用两个现有维度（依据状态 + 证据强度）合成一句「该怎么信这条」。
+    纯派生、不新增数据字段——区别于 caveats（条目专属注意）与 EV_DESC（只讲强度）：
+    它把「有没有可追溯依据」和「证据多强」合成一句可直接转述的信任解读，主要服务
+    被 AI 调用的第二形态——下游助手拿到 feed 就有现成的、不夸大的解读层。"""
+    basis = verification_basis(it)
+    ev = it.get("evidence", "")
+    if basis == "study_supported":
+        head = "有可追溯的原始研究支撑"
+    elif basis == "official_basis":
+        head = "有官方 / 机构页面支撑，但本站未追溯到原始研究"
+    else:
+        head = "暂无可追溯的研究或官方依据，属前沿待核"
+    if ev in ("rct", "meta"):
+        tail = "证据强度较高，可作较可靠参考；仍要看样本量与是否被重复"
+    elif ev == "guideline":
+        tail = "属实践推荐级别，注意适用地区与更新时间"
+    elif ev == "observational":
+        tail = "只能显示相关、不能证明因果，勿据此改变重大决定"
+    elif ev in ("expert", "blogger"):
+        tail = "属观点性证据，待更强研究确认，仅供参考"
+    else:
+        tail = "证据级别最低，谨慎对待"
+    return head + "；" + tail + "。"
+
+
 def search_blob(it):
     return e(" ".join(str(it.get(k, "")) for k in
              ("title", "conclusion", "summary", "category", "population", "caveats")).replace("**", ""))
@@ -402,7 +428,7 @@ def footer(base="", narrow=False, detail=False):
     </div>
     <div class="f-links">
       <div class="f-col"><h5>浏览</h5><a href="{base}index.html">精选</a><a href="{base}all.html">全部核验</a><a href="{base}about.html">关于方法论</a></div>
-      <div class="f-col"><h5>AI 接入</h5><a href="{base}index.html#ai">claims.json</a><a href="{base}index.html#ai">安装 Skill</a></div>
+      <div class="f-col"><h5>AI 接入</h5><a href="{base}ai.html">一键接入</a><a href="{base}ai.html">claims.json</a><a href="{base}ai.html">安装 Skill</a></div>
     </div>
   </div>
   <div class="foot-bottom">本站为科普整理，<b>非医疗建议</b>；每条说法标注证据等级与来源状态，点击可回来源核对。 · {e(SITE_TITLE)} · 持续收集与查证</div>
@@ -438,7 +464,7 @@ def shell(title, active, inner, base="", extra_js="", desc="", canon="", narrow_
 <body class="vfy">
 <nav class="nav"><div class="wrap nav-in">
   <a class="logo" href="{base}index.html"><span class="x">✚</span>{e(SITE_TITLE)}<small>· 健康说法核验库</small></a>
-  <div class="nav-links">{nav}<a href="{base}index.html#ai" class="ai">🤖 AI 接入</a></div>
+  <div class="nav-links">{nav}<a href="{base}ai.html" class="ai{' on' if active == 'AI 接入' else ''}">🤖 AI 接入</a></div>
 </div></nav>
 <main>
 {inner}
@@ -568,7 +594,8 @@ def render_index(items):
     agent = (f'<section class="sec" id="ai" style="padding-top:0"><div class="wrap"><div class="ai-band">'
              f'<div class="ab-l"><div class="robot">🤖 第二形态 · 被 AI 调用</div><h3>让 AI 助手直接查本站</h3>'
              f'<p>本站提供公开机读接口。你的 AI 助手可以区分「研究支持」「官方依据」与「前沿待核」，'
-             f'回答健康问题时带上证据强度和对应来源链接。</p></div><div class="ab-r">'
+             f'回答健康问题时带上证据强度和对应来源链接。</p>'
+             f'<a class="ab-cta" href="ai.html">一键接入 · 复制提示词粘给你的 AI →</a></div><div class="ab-r">'
              f'<div class="codeblk"><div class="ck">公开数据接口 · 任何人可匿名抓取</div>'
              f'<code>{e(SITE_URL)}claims.json</code></div>'
              f'<div class="codeblk"><div class="ck">安装 Skill（Claude Code）</div>'
@@ -759,6 +786,81 @@ def render_changelog():
                  canon="log.html", narrow_footer=True)
 
 
+AI_PROMPT = """你是循证健康助手。当我问你某个健康说法靠不靠谱时，请先抓取这个公开数据接口（任何人可匿名访问）：
+{url}claims.json
+
+里面每条说法都带这些字段，请这样用：
+- verification_basis：研究支持 / 官方依据 / 前沿待核——务必区分，别把官方科普页说成原始研究。
+- evidence_label：证据强度（RCT / Meta / 指南 / 观察 / 专家 / 博主 / 个例）。
+- evidence_hint：一句现成的「该怎么信这条」，可以直接引用，但不要在它之上夸大。
+- conclusion / caveats：结论与注意事项。
+- detail_url / evidence_source_urls：详情页与原始研究 / 官方链接，回答时附上让我能回溯。
+
+回答规则：
+1. 库里有相关说法 → 引用它的 evidence_hint 和 conclusion，附 detail_url 和来源链接。
+2. 库里没有 → 明确说「本库未收录这条」，不要编造，可建议我去站内提交待核。
+3. 永远带上免责：这是科普整理、非医疗建议；不提供具体剂量或个体化诊疗。"""
+
+
+def render_ai(items):
+    """AI 接入页（第二形态）：把『被 AI 调用』从首页锚点升级成独立页。
+    最核心是『一键接入』——一段可复制的提示词，粘进任意 ChatGPT / Claude 就能用本站 feed。"""
+    prompt = AI_PROMPT.format(url=SITE_URL)
+    # 选一个真实的 study_supported + 强证据条目，展示 evidence_hint 实际长什么样
+    sample = next((it for it in items
+                   if verification_basis(it) == "study_supported"
+                   and it.get("evidence") in ("rct", "meta")), None) or (items[0] if items else None)
+    sample_block = ""
+    if sample:
+        sample_block = (
+            f'<div class="ai-sample"><div class="ck">feed 里一条的样子（节选）</div>'
+            f'<div class="ais-row"><span class="ais-k">title</span><span class="ais-v">{e(sample.get("title",""))}</span></div>'
+            f'<div class="ais-row"><span class="ais-k">verification_basis</span>'
+            f'<span class="ais-v">{e(verification_basis(sample))} · {e(VB_LABEL[verification_basis(sample)])}</span></div>'
+            f'<div class="ais-row"><span class="ais-k">evidence_label</span>'
+            f'<span class="ais-v">{e(EV_LABEL.get(sample.get("evidence",""), ""))}</span></div>'
+            f'<div class="ais-row hl"><span class="ais-k">evidence_hint</span>'
+            f'<span class="ais-v">{e(evidence_hint(sample))}</span></div></div>')
+    inner = f'''<header class="about-h"><div class="wrap narrow"><span class="eyebrow">FOR AI · 被 AI 调用</span>
+<h1>让你的 AI 助手<br>直接查这个核验库</h1>
+<p class="lede">这个库的第二个用途，是被机器调用。它提供公开机读接口，你的 ChatGPT / Claude 可以区分「研究支持」「官方依据」与「前沿待核」，回答健康问题时带上证据强度和可回溯的来源——而不是张口就来。</p>
+</div></header><section class="method"><div class="wrap narrow">
+<div class="method-item"><div class="mi-n">01</div><div><h3>一键接入：把这段话贴给你的 AI</h3>
+<p>不用写代码。复制下面这段提示词，粘进 ChatGPT 或 Claude 的对话框，它就会在回答健康问题前先查本站数据、按证据强度作答。</p>
+<div class="ai-prompt-wrap"><textarea id="aiprompt" class="ai-prompt" readonly rows="14">{e(prompt)}</textarea>
+<button class="empty-cta" id="copyprompt" type="button">复制这段提示词</button>
+<span class="copy-tip" id="copydone" hidden>已复制 ✓ 去粘给你的 AI 助手</span></div></div></div>
+<div class="method-item"><div class="mi-n">02</div><div><h3>公开数据接口（claims.json）</h3>
+<p>整库的机读版本，任何人可匿名抓取。带站点级医疗免责、字段说明（usage_note）与计数。适合接进自己的工具或 Agent。</p>
+<div class="codeblk"><div class="ck">GET · 无需鉴权</div><code>{e(SITE_URL)}claims.json</code></div></div></div>
+<div class="method-item"><div class="mi-n">03</div><div><h3>装成 Skill（Claude Code / Codex）</h3>
+<p>如果你用 Claude Code 或 Codex，可以把本站装成一个 Skill，让它在本地就能调用这套核验逻辑。</p>
+<div class="codeblk"><div class="ck">Claude Code</div>
+<code>mkdir -p ~/.claude/skills/health-hot &amp;&amp; curl -fsSL {e(SITE_URL)}skill/SKILL.md -o ~/.claude/skills/health-hot/SKILL.md</code></div>
+<div class="codeblk"><div class="ck">Codex</div>
+<code>mkdir -p ~/.codex/skills/health-hot &amp;&amp; curl -fsSL {e(SITE_URL)}skill/SKILL.md -o ~/.codex/skills/health-hot/SKILL.md</code></div></div></div>
+<div class="method-item"><div class="mi-n">04</div><div><h3>怎么读这个 feed：证据提示（evidence_hint）</h3>
+<p>每条都带一个 <b>evidence_hint</b> 字段——它用「依据状态 + 证据强度」两个维度合成一句<b>可直接转述的解读</b>：先说有没有可追溯依据，再说证据有多硬。AI 拿到它就有现成、不夸大的「该怎么信这条」，不用自己揣测。</p>
+{sample_block}
+<p class="ai-note">注意：evidence_hint 是诚实的解读层，不是营销话术。它会直说「只能显示相关、不能证明因果」或「暂无可追溯依据，属前沿待核」——请连同这些限制一起呈现，别只摘对你结论有利的半句。</p></div></div>
+</div></section>'''
+    js = '''<script>
+(function(){
+  var btn=document.getElementById('copyprompt'),ta=document.getElementById('aiprompt'),done=document.getElementById('copydone');
+  if(!btn||!ta)return;
+  btn.addEventListener('click',function(){
+    var txt=ta.value;
+    function ok(){if(done){done.hidden=false;}btn.textContent='已复制 ✓';setTimeout(function(){btn.textContent='复制这段提示词';},2200);}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok,function(){ta.select();document.execCommand('copy');ok();});}
+    else{ta.select();document.execCommand('copy');ok();}
+  });
+})();
+</script>'''
+    return shell("AI 接入", "AI 接入", inner,
+                 desc="让你的 AI 助手直接调用查过再信核验库：一键提示词、公开 claims.json 接口、可装成 Skill。",
+                 canon="ai.html", extra_js=js, narrow_footer=True)
+
+
 def claims_feed(items):
     """机读 feed：把已发布的核验导出成 JSON，供公开 Skill / Agent 直接调用（对标 AI HOT 的 public API）。
     只导出已过发布闸门的 good 条目；带站点级医疗免责（铁律④），让任何下游消费方都能带着它一起呈现。"""
@@ -786,6 +888,7 @@ def claims_feed(items):
             "verification_basis_label": VB_LABEL[vb],
             "evidence": it.get("evidence", ""),
             "evidence_label": EV_LABEL.get(it.get("evidence", ""), it.get("evidence", "")),
+            "evidence_hint": evidence_hint(it),            # 派生解读层：依据状态+证据强度合成的「该怎么信」，供下游 AI 直接转述
             "conclusion": (it.get("conclusion") or it.get("summary") or "").replace("**", ""),
             "population": (it.get("population") or "").replace("**", ""),
             "caveats": (it.get("caveats") or "").replace("**", ""),
@@ -803,7 +906,7 @@ def claims_feed(items):
     n_verified = sum(1 for c in out if c["verification_status"] == "verified")
     basis_counts = {k: sum(1 for c in out if c["verification_basis"] == k) for k in VB_LABEL}
     return {
-        "schema_version": "1.3",  # 1.3: 新增面向用户的三类 verification_basis；保留 verification_status 兼容旧消费者
+        "schema_version": "1.4",  # 1.4: 新增 evidence_hint 派生解读层；1.3 起有三类 verification_basis（兼容旧消费者）
         "site": SITE_TITLE,
         "site_url": SITE_URL,
         "description": "中文循证健康说法核验库——每条结论标注证据强度、适用人群与原始出处。",
@@ -813,7 +916,9 @@ def claims_feed(items):
                       "official_basis=『官方依据』，frontier_pending=『前沿待核』。"
                       "verification_status 仅为兼容旧消费者保留，不应用它把官方页面称为原始研究。"
                       "evidence_source_urls 为核验依据链接（研究或白名单官方页面），"
-                      "discovery_source_url 是『在哪听到』（非证据）。",
+                      "discovery_source_url 是『在哪听到』（非证据）。"
+                      "evidence_hint 是用依据状态+证据强度合成的可直接转述的解读，"
+                      "回答用户时可原样引用，但请勿在此基础上夸大或加上本站未给出的剂量/诊疗建议。",
         "generated_at": TODAY,
         "count": len(out),
         "verified_count": n_verified,
@@ -847,6 +952,8 @@ def main():
         f.write(render_about())
     with open(os.path.join(tmp, "log.html"), "w", encoding="utf-8") as f:
         f.write(render_changelog())
+    with open(os.path.join(tmp, "ai.html"), "w", encoding="utf-8") as f:
+        f.write(render_ai(good))
     with open(os.path.join(tmp, "claims.json"), "w", encoding="utf-8") as f:
         json.dump(claims_feed(good), f, ensure_ascii=False, indent=2)
     # 公开 Skill 源随站点发布：skill/ → docs/skill/（放在 tmp 里走原子替换，重建不丢）
