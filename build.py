@@ -700,6 +700,7 @@ def render_all(items):
              f'<div class="filterbar" id="filterbar">{pills}</div>'
              f'<div class="filterbar basisbar" id="basisbar">{bchips}</div>'
              f'<span class="count" id="count"></span></div>'
+             f'<p class="fuzzytip" id="fuzzytip" hidden></p>'
              f'<div class="listwrap"><div class="list-head"><span>主题</span><span>依据 / 强度</span>'
              f'<span>说法 · 结论</span><span>复核</span></div><div id="list">{rows}</div>'
              f'<div class="empty" id="empty" hidden>'
@@ -718,15 +719,41 @@ def render_all(items):
 const SUBMIT_ENDPOINT=__SUBMIT_ENDPOINT__;
 let activeCat='all', activeBasis='all'; const rows=[...document.querySelectorAll('.list-row')];
 const input=document.getElementById('q'), count=document.getElementById('count'), empty=document.getElementById('empty');
+const allSec=document.querySelector('.all-sec'), fuzzytip=document.getElementById('fuzzytip');
 const qp=new URLSearchParams(location.search).get('q'); if(qp) input.value=qp;
+// 问句/语气词：用户多半自然语言提问（"XX伤肾吗""有没有用"），先去掉这些再拆核心词
+const STOP=['是不是','是否','会不会','有没有','能不能','可不可以','可以吗','好不好','对不对','该不该','要不要','怎么样','怎么','如何','为什么','究竟','到底','真的吗','真的','是真是假','有用吗','有用','有效吗','有效','靠谱吗','靠谱','安全吗','管用吗','管用','到底','吗','呢','吧','啊','呀','嘛','哦','的','了'];
 function matchBasis(r){if(activeBasis==='all')return true;
   if(activeBasis==='strong')return r.dataset.ev==='rct'||r.dataset.ev==='meta';
   return r.dataset.basis===activeBasis;}
+function passFilter(r){return (activeCat==='all'||r.dataset.cat===activeCat)&&matchBasis(r);}
+function cleanQ(raw){let q=raw.toLowerCase();STOP.forEach(w=>{q=q.split(w).join(' ');});return q;}
+// 拆核心词：英文/数字整词 + CJK 词；CJK 长词再补二字 shingle 兜底（无分词器也能弱匹配）
+function coreTerms(clean){const parts=clean.split(/[^0-9a-z一-鿿]+/).filter(Boolean);const out=new Set();
+  parts.forEach(p=>{if(p.length>=2)out.add(p);
+    if(/[一-鿿]/.test(p)&&p.length>=3){for(let i=0;i<p.length-1;i++)out.add(p.substr(i,2));}});
+  return [...out];}
 const emptyq=document.getElementById('emptyq');
 let lastQ='这个说法';
-function applyFilters(){const raw=(input.value||'').trim();const query=raw.toLowerCase();let n=0;rows.forEach(r=>{
-  const show=(activeCat==='all'||r.dataset.cat===activeCat)&&matchBasis(r)&&(!query||r.dataset.search.toLowerCase().includes(query));
-  r.style.display=show?'':'none';if(show)n++;});count.textContent=n+' 条 · 共 '+rows.length+' 条';empty.hidden=n!==0;
+function applyFilters(){
+  const raw=(input.value||'').trim(), ql=raw.toLowerCase();
+  const cl=cleanQ(raw).replace(/\\s+/g,''), tms=coreTerms(cleanQ(raw));
+  let exact=[], fuzzy=[];
+  rows.forEach(r=>{ r.style.display='none'; if(!passFilter(r))return;
+    if(!raw){exact.push(r);return;}
+    const blob=r.dataset.search.toLowerCase();
+    if(blob.includes(ql)||(cl.length>=2&&blob.includes(cl))){exact.push(r);return;}   // 精确：整句 或 去问句词后的核心串
+    if(tms.some(t=>blob.includes(t)))fuzzy.push(r);                                    // 弱语义：命中任一核心词
+  });
+  let shown, isFuzzy=false;
+  if(!raw||exact.length){shown=exact;} else {shown=fuzzy;isFuzzy=fuzzy.length>0;}
+  shown.forEach(r=>r.style.display='');
+  const n=shown.length, filtersActive=activeCat!=='all'||activeBasis!=='all';
+  count.textContent=(isFuzzy?'可能相关 ':'')+n+' 条 · 共 '+rows.length+' 条';
+  if(isFuzzy&&raw){fuzzytip.textContent='没有与「'+raw+'」完全匹配的；以下为可能相关，点进去看是不是你想查的：';fuzzytip.hidden=false;}
+  else{fuzzytip.hidden=true;}
+  empty.hidden=n!==0;
+  allSec.classList.toggle('no-results', n===0 && !!raw && !filtersActive);   // 纯查询 0 结果：筛选器/表头收起、提交 CTA 顶到搜索框下
   if(n===0){lastQ=raw||'这个说法';emptyq.textContent='「'+lastQ+'」';
     document.getElementById('copytip').hidden=true;document.getElementById('submittip').hidden=true;}}
 document.getElementById('filterbar').addEventListener('click',e=>{const b=e.target.closest('.fchip');if(!b)return;

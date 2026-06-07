@@ -413,6 +413,14 @@ body.vfy { background: var(--paper); min-height: 100vh; }
 .vfy .empty .empty-d { font-size: 14px; color: var(--muted); max-width: 440px; margin: 0 auto 20px; line-height: 1.6; }
 .vfy .empty .empty-cta { display: inline-block; padding: 11px 22px; border-radius: 100px; background: var(--ink); color: var(--paper); font-size: 14px; font-weight: 500; text-decoration: none; border: none; cursor: pointer; font-family: inherit; transition: opacity .2s var(--ease); }
 .vfy .empty .empty-cta:hover { opacity: .85; }
+/* 蜜罐字段：人不可见、留在 DOM 给机器人填（之前漏了样式，会裸露成空框） */
+.vfy .hp-field { position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+/* 弱语义"可能相关"提示 */
+.vfy .fuzzytip { font-size: 13px; color: var(--muted); margin: 0 0 12px; padding: 9px 13px; background: var(--surface); border: 1px dashed var(--line); border-radius: var(--r-sm); line-height: 1.55; }
+/* 纯查询 0 结果：收起筛选器/表头，把提交 CTA 顶到搜索框正下方、首屏可见 */
+.vfy .no-results .controls, .vfy .no-results .list-head, .vfy .no-results .fuzzytip { display: none; }
+.vfy .no-results .listwrap { border: none; background: transparent; }
+.vfy .no-results .empty { padding: 30px 18px 44px; }
 .vfy .changelog { display: flex; flex-direction: column; gap: 22px; }
 .vfy .cl-entry { border-left: 2px solid var(--line); padding: 2px 0 2px 18px; }
 .vfy .cl-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
