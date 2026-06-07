@@ -417,6 +417,30 @@ def list_row(it):
             f'</a>')
 
 
+def recent_reviews_module(items, n=6):
+    """最近复核模块（P2）：刻意保持为「模块」而非主骨架——证明这库在持续维护，
+    但不让日期取代「依据状态」成为主信号。关键诚实点：日期标「本站复核日」，
+    不冒充研究发表日；原文日期单列，让「2015 的研究、2026 复核」一目了然。"""
+    rv = sorted([it for it in items if it.get("reviewed_at")],
+                key=lambda x: x.get("reviewed_at", ""), reverse=True)[:n]
+    if not rv:
+        return ""
+    rows = ""
+    for it in rv:
+        sp = it.get("source_published_at", "")
+        orig = f'<span class="rv-orig">原文 {e(sp)}</span>' if sp else '<span class="rv-orig dim">原文日期未标注</span>'
+        rows += (f'<a class="rv-item" href="claims/{e(it.get("slug",""))}.html">'
+                 f'<div class="rv-dates"><span class="rv-checked">本站复核 {e(it.get("reviewed_at",""))}</span>{orig}</div>'
+                 f'<div class="rv-body"><span class="rv-title">{e(it.get("title",""))}</span>'
+                 f'{trust_badge(verification_basis(it))}</div></a>')
+    return (f'<section class="sec recent-sec" style="padding-top:0"><div class="wrap">'
+            f'<div class="sec-head"><h2>最近复核</h2>'
+            f'<a class="more" href="all.html">看全部 →</a></div>'
+            f'<p class="rv-note">下面的日期是<b>本站复核日</b>，不是研究发表日——两个都标出来，'
+            f'让你看清「这条底层研究多新、我们什么时候核对过」。</p>'
+            f'<div class="rv-flow">{rows}</div></div></section>')
+
+
 def footer(base="", narrow=False, detail=False):
     wrap = "wrap narrow" if narrow else "wrap"
     extra = " detail-foot" if detail else ""
@@ -604,7 +628,8 @@ def render_index(items):
              f'<div class="codeblk"><div class="ck">安装 Skill（Codex）</div>'
              f'<code>mkdir -p ~/.codex/skills/health-hot &amp;&amp; curl -fsSL {e(SITE_URL)}skill/SKILL.md '
              f'-o ~/.codex/skills/health-hot/SKILL.md</code></div></div></div></div></section>')
-    return shell("精选", "精选", hero + featured + agent,
+    recent = recent_reviews_module(items)
+    return shell("精选", "精选", hero + featured + recent + agent,
                  desc=HERO_SUB, canon="index.html")
 
 
