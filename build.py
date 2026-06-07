@@ -410,7 +410,7 @@ def footer(base="", narrow=False, detail=False):
 
 
 def shell(title, active, inner, base="", extra_js="", desc="", canon="", narrow_footer=False, detail=False):
-    nav_items = [("精选", "index.html"), ("全部", "all.html"), ("关于", "about.html")]
+    nav_items = [("精选", "index.html"), ("全部", "all.html"), ("更新", "log.html"), ("关于", "about.html")]
     nav = "".join(
         f'<a class="{"on" if lbl == active else ""}" href="{base}{href}">{lbl}</a>'
         for lbl, href in nav_items)
@@ -731,6 +731,34 @@ def render_about():
                  canon="about.html", narrow_footer=True)
 
 
+CHANGELOG_TYPE_CLASS = {"新增核验": "cl-add", "重新复核": "cl-review",
+                        "结论更正 · 证据降级": "cl-fix"}
+
+
+def render_changelog():
+    """公开更新日志：刻意展示纠错（更正/降级），对核验库公开纠错=最强信任建设。"""
+    path = os.path.join(ROOT, "data", "changelog.json")
+    try:
+        with open(path, encoding="utf-8") as fh:
+            entries = json.load(fh)
+    except Exception:
+        entries = []
+    blocks = ""
+    for ent in entries:
+        cls = CHANGELOG_TYPE_CLASS.get(ent.get("type", ""), "cl-add")
+        lis = "".join(f"<li>{fmt(x)}</li>" for x in ent.get("items", []))
+        blocks += (f'<div class="cl-entry"><div class="cl-meta"><span class="cl-date">{e(ent.get("date",""))}</span>'
+                   f'<span class="cl-type {cls}">{e(ent.get("type",""))}</span></div>'
+                   f'<ul class="cl-list">{lis}</ul></div>')
+    inner = f'''<header class="about-h"><div class="wrap narrow"><span class="eyebrow">CHANGELOG · 更新日志</span>
+<h1>更新与纠错记录</h1>
+<p class="lede">这个库会出错，也会改正。新增了什么、重新复核了什么、把哪条结论更正或降级了——都公开记在这里。<b>会改正不可怕，藏着才可怕</b>，这正是「查过再信」的承诺。</p>
+</div></header><section class="method"><div class="wrap narrow"><div class="changelog">{blocks or '<p>暂无记录。</p>'}</div></div></section>'''
+    return shell("更新日志", "更新日志", inner,
+                 desc="查过再信的公开更新与纠错记录：新增核验、重新复核、结论更正与证据降级。",
+                 canon="log.html", narrow_footer=True)
+
+
 def claims_feed(items):
     """机读 feed：把已发布的核验导出成 JSON，供公开 Skill / Agent 直接调用（对标 AI HOT 的 public API）。
     只导出已过发布闸门的 good 条目；带站点级医疗免责（铁律④），让任何下游消费方都能带着它一起呈现。"""
@@ -817,6 +845,8 @@ def main():
         f.write(render_all(good))
     with open(os.path.join(tmp, "about.html"), "w", encoding="utf-8") as f:
         f.write(render_about())
+    with open(os.path.join(tmp, "log.html"), "w", encoding="utf-8") as f:
+        f.write(render_changelog())
     with open(os.path.join(tmp, "claims.json"), "w", encoding="utf-8") as f:
         json.dump(claims_feed(good), f, ensure_ascii=False, indent=2)
     # 公开 Skill 源随站点发布：skill/ → docs/skill/（放在 tmp 里走原子替换，重建不丢）

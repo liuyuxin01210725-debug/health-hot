@@ -353,6 +353,16 @@ body.vfy { background: var(--paper); min-height: 100vh; }
 .vfy .empty .empty-d { font-size: 14px; color: var(--muted); max-width: 440px; margin: 0 auto 20px; line-height: 1.6; }
 .vfy .empty .empty-cta { display: inline-block; padding: 11px 22px; border-radius: 100px; background: var(--ink); color: var(--paper); font-size: 14px; font-weight: 500; text-decoration: none; border: none; cursor: pointer; font-family: inherit; transition: opacity .2s var(--ease); }
 .vfy .empty .empty-cta:hover { opacity: .85; }
+.vfy .changelog { display: flex; flex-direction: column; gap: 22px; }
+.vfy .cl-entry { border-left: 2px solid var(--line); padding: 2px 0 2px 18px; }
+.vfy .cl-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.vfy .cl-date { font-family: "Space Mono", monospace; font-size: 13px; color: var(--faint); }
+.vfy .cl-type { font-size: 12px; font-weight: 500; padding: 2px 9px; border-radius: 100px; }
+.vfy .cl-type.cl-add { background: var(--vf-soft, #e6f0ec); color: var(--vf-ink, #0a5d4d); }
+.vfy .cl-type.cl-review { background: oklch(95.5% 0.025 242); color: oklch(45% 0.09 242); }
+.vfy .cl-type.cl-fix { background: var(--of-soft, #fdf0e3); color: var(--of-ink, #8a5012); }
+.vfy .cl-list { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+.vfy .cl-list li { font-size: 14.5px; line-height: 1.65; color: var(--ink); }
 .vfy .empty .empty-cta.ghost { background: transparent; color: var(--accent-ink, #0a5d4d); border: 1px solid var(--accent, #0c7560); }
 .vfy .empty .copy-tip { display: inline-block; margin-left: 12px; font-size: 13px; color: var(--accent-ink, #0a5d4d); }
 @media (max-width: 680px){
