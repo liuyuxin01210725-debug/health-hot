@@ -401,6 +401,27 @@ def card(it):
             f'</a>')
 
 
+_BASIS_ROW_CLASS = {"study_supported": "b-study", "official_basis": "b-official",
+                    "frontier_pending": "b-front pend"}
+
+
+def hrow(it):
+    """首页「重点核验」横向行（改动2 落地版）：左=信任徽章+证据强度(主信号)、
+    中=标题+结论+证据提示、右=分类+复核日期(次要弱化)。按重要性排、不按时间。
+    沿用线上三层信任系统(研究支持/官方依据/前沿待核)，不回退成二元。"""
+    basis = verification_basis(it)
+    rowcls = _BASIS_ROW_CLASS.get(basis, "b-front pend")
+    slug = e(it.get("slug", ""))
+    reviewed = e((it.get("reviewed_at") or it.get("date", ""))[5:])
+    return (f'<a class="hrow {rowcls}" href="claims/{slug}.html">'
+            f'<div class="hrow-sig">{trust_badge(basis)}{strength_meter(it.get("evidence",""))}</div>'
+            f'<div class="hrow-main"><h3>{e(it.get("title",""))}</h3>'
+            f'<p>{fmt(it.get("conclusion") or it.get("summary",""))}</p>'
+            f'<div class="hrow-hint">{e(evidence_hint(it))}</div></div>'
+            f'<div class="hrow-meta"><span class="hrow-cat">{e(it.get("category",""))}</span>'
+            f'<span class="hrow-date">本站复核 {reviewed}</span></div></a>')
+
+
 def list_row(it):
     """全部页可扫读列表行：静态渲染，JS 只负责筛选和搜索。"""
     cat = e(it.get("category", ""))
@@ -600,9 +621,11 @@ def detail_page(it, related):
 
 
 def render_index(items):
+    # 按重要性排，不按时间：① 已核验(有依据)在前、前沿待核沉底 ② 同档证据强度降序(RCT/Meta 顶上)
     feats = sorted([it for it in items if it.get("featured")],
-                   key=lambda x: x.get("rank", 0), reverse=True)
-    cards = "\n".join(card(it) for it in feats) or '<p class="empty">还没有核验条目。</p>'
+                   key=lambda x: (0 if verification_status(x) == "verified" else 1,
+                                  -EVIDENCE_SCORE.get(x.get("evidence", ""), 0)))
+    rows = "\n".join(hrow(it) for it in feats) or '<p class="empty">还没有核验条目。</p>'
     hero = (f'<header class="hero"><div class="wrap"><span class="eyebrow">EVIDENCE-CHECKED · 循证核验</span>'
             f'<h1>听到一个健康说法？<br>先查一下证据。</h1>'
             f'<p class="lede">每条说法都标注<b>证据强度</b>、<b>适用人群</b>和<b>来源状态</b>'
@@ -614,7 +637,7 @@ def render_index(items):
             f'<button type="submit">查证据</button></form>{legend_strip()}</div></header>')
     featured = (f'<section class="sec"><div class="wrap"><div class="sec-head"><h2>重点核验</h2>'
                 f'<a class="more" href="all.html">看全部 {len(items)} 条 →</a></div>'
-                f'<div class="grid">{cards}</div></div></section>')
+                f'<div class="hlist">{rows}</div></div></section>')
     agent = (f'<section class="sec" id="ai" style="padding-top:0"><div class="wrap"><div class="ai-band">'
              f'<div class="ab-l"><div class="robot">🤖 第二形态 · 被 AI 调用</div><h3>让 AI 助手直接查本站</h3>'
              f'<p>本站提供公开机读接口。你的 AI 助手可以区分「研究支持」「官方依据」与「前沿待核」，'

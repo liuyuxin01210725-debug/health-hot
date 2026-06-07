@@ -322,6 +322,29 @@ body.vfy { background: var(--paper); min-height: 100vh; }
 @media (max-width: 560px){ .vfy .grid { grid-template-columns: 1fr; } }
 .vfy .card { cursor: pointer; }
 
+/* —— 首页「重点核验」横向行列表（改动2 落地版：横向扫读、按重要性排、日期不当骨架）—— */
+.vfy .hlist { border-top: 1px solid var(--line); margin-top: 6px; }
+.vfy .hrow { display: grid; grid-template-columns: 190px 1fr 150px; gap: 26px; align-items: center; padding: 20px 8px; border-bottom: 1px solid var(--hair); text-decoration: none; transition: background .18s var(--ease); }
+.vfy .hrow:hover { background: var(--surface); }
+.vfy .hrow-sig { display: flex; flex-direction: column; gap: 9px; align-items: flex-start; }
+.vfy .hrow-main { min-width: 0; }
+.vfy .hrow-main h3 { font-family: "Noto Serif SC", serif; font-weight: 600; font-size: 18px; line-height: 1.4; letter-spacing: -.005em; transition: color .2s; }
+.vfy .hrow:hover .hrow-main h3 { color: var(--vf-solid); }
+.vfy .hrow-main p { font-size: 13.5px; color: var(--muted); margin-top: 5px; font-weight: 300; line-height: 1.55; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.vfy .hrow-hint { font-size: 12px; color: var(--faint); margin-top: 8px; display: flex; align-items: flex-start; gap: 7px; line-height: 1.5; }
+.vfy .hrow-hint::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--vf); flex: none; margin-top: 5px; }
+.vfy .hrow.b-official .hrow-hint::before { background: var(--of-solid); }
+.vfy .hrow.pend .hrow-hint::before { background: var(--pd); }
+.vfy .hrow-meta { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; text-align: right; }
+.vfy .hrow-cat { font-size: 12.5px; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
+.vfy .hrow-cat::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--line); }
+.vfy .hrow-date { font-family: "Space Mono", monospace; font-size: 10.5px; color: var(--faint); }
+@media (max-width: 760px) {
+  .vfy .hrow { grid-template-columns: 1fr; gap: 12px; padding: 18px 4px; }
+  .vfy .hrow-sig { flex-direction: row; align-items: center; gap: 12px; }
+  .vfy .hrow-meta { text-align: left; align-items: flex-start; flex-direction: row; gap: 14px; }
+}
+
 /* —— 最近复核模块（P2，刻意保持为模块、非主骨架）—— */
 .vfy .recent-sec .rv-note { font-size: 13px; color: var(--muted); margin: -10px 0 18px; line-height: 1.6; max-width: 640px; }
 .vfy .rv-flow { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
