@@ -234,6 +234,14 @@
 
 .vfy .disclaim { font-size: 11.5px; color: var(--faint); line-height: 1.6; margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--hair); }
 .vfy .disclaim b { color: var(--muted); font-weight: 500; }
+/* 详情页分享钩子(承接"看完满意"的一刻,旅程4) */
+.vfy .d-share { margin-top: 26px; padding: 16px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.vfy .d-share .ds-t { font-size: 14px; color: var(--ink); flex: 1; min-width: 200px; line-height: 1.5; }
+.vfy .d-share .ds-btn { font-family: inherit; cursor: pointer; padding: 9px 18px; border-radius: 100px; background: var(--vf-solid); color: #fff; font-size: 13.5px; font-weight: 500; border: none; white-space: nowrap; transition: opacity .2s var(--ease); }
+.vfy .d-share .ds-btn:hover { opacity: .88; }
+.vfy .d-share .ds-ok { font-size: 13px; color: var(--vf-solid); }
+/* 首页"公开更正N处"信任徽章(旅程3/4:把最强"不恰饭"信号浮到首页) */
+.vfy .fix-more { color: var(--of-solid) !important; font-weight: 500; }
 
 /* ============================================================
    可扫读列表行（桌面 / 全部页）

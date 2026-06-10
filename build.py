@@ -340,9 +340,44 @@ def evidence_hint(it):
     return head + "；" + tail + "。"
 
 
+# 同义词/别名组:换个常见叫法也能命中(旅程5——"氨糖↔氨基葡萄糖"互不相通的问题)
+ALIAS_GROUPS = [
+    ["氨糖", "氨基葡萄糖", "葡萄糖胺"],
+    ["乳清", "乳清蛋白", "蛋白粉", "whey"],
+    ["练后", "运动后", "训练后", "锻炼后"],
+    ["维生素c", "维c", "vc"],
+    ["欧米伽3", "omega3", "omega-3", "ω-3", "鱼油"],
+    ["增肌粉", "蛋白粉", "乳清"],
+    ["肌酸", "creatine"],
+]
+
+
+def _alias_extra(text):
+    """若条目文本里出现某别名组的任一成员,把整组别名拼进检索串——这样用户用任意叫法都能命中。"""
+    low = str(text).lower()
+    extra = []
+    for grp in ALIAS_GROUPS:
+        if any(a in low for a in grp):
+            extra.extend(grp)
+    return " ".join(dict.fromkeys(extra))  # 去重保序
+
+
+def _core_text(it):
+    """短检索串的原料:标题+结论(+别名)。二字 shingle 只在这上面匹配,避免正文泛字误命中。"""
+    base = " ".join(str(it.get(k, "")) for k in ("title", "conclusion")).replace("**", "")
+    return base + " " + _alias_extra(base + " " + str(it.get("summary", "")))
+
+
 def search_blob(it):
-    return e(" ".join(str(it.get(k, "")) for k in
-             ("title", "conclusion", "summary", "category", "population", "caveats")).replace("**", ""))
+    """整句精确匹配用的全文串(标题/结论/摘要/分类/人群/注意 + 别名)。"""
+    full = " ".join(str(it.get(k, "")) for k in
+                    ("title", "conclusion", "summary", "category", "population", "caveats")).replace("**", "")
+    return e(full + " " + _alias_extra(full))
+
+
+def fuzzy_blob(it):
+    """弱语义 shingle 匹配用的短串(仅标题+结论+别名)——收窄范围,去掉正文里'区别/能吃/东西'等泛字误命中。"""
+    return e(_core_text(it))
 
 
 def legend_strip():
@@ -428,7 +463,8 @@ def list_row(it):
     reviewed = e((it.get("reviewed_at") or it.get("date", ""))[5:])
     return (f'<a class="list-row" href="claims/{e(it.get("slug", ""))}.html" '
             f'data-cat="{cat}" data-basis="{e(verification_basis(it))}" '
-            f'data-ev="{e(it.get("evidence", ""))}" data-search="{search_blob(it)}">\n'
+            f'data-ev="{e(it.get("evidence", ""))}" data-search="{search_blob(it)}" '
+            f'data-fuzzy="{fuzzy_blob(it)}">\n'
             f'  <span class="lr-cat">{cat}</span>\n'
             f'  <span class="lr-sig">{trust_badge(verification_basis(it))}'
             f'{strength_meter(it.get("evidence", ""), False)}</span>\n'
@@ -436,6 +472,18 @@ def list_row(it):
             f'<span class="lc-v">{fmt(it.get("conclusion") or it.get("summary", ""))}</span></span>\n'
             f'  <span class="lr-date">{reviewed}</span>\n'
             f'</a>')
+
+
+def changelog_correction_count():
+    """统计公开"纠错"次数(重新复核 + 结论更正·证据降级 的条目),不含纯"新增核验"。
+    用作首页信任徽章:敢公开认错=最强的"不恰饭"信号(旅程3/4)。"""
+    try:
+        with open(os.path.join(ROOT, "data", "changelog.json"), encoding="utf-8") as fh:
+            entries = json.load(fh)
+    except Exception:
+        return 0
+    return sum(len(e.get("items", [])) for e in entries
+               if any(k in e.get("type", "") for k in ("更正", "降级", "复核")))
 
 
 def recent_reviews_module(items, n=6):
@@ -454,11 +502,13 @@ def recent_reviews_module(items, n=6):
                  f'<div class="rv-dates"><span class="rv-checked">本站复核 {e(it.get("reviewed_at",""))}</span>{orig}</div>'
                  f'<div class="rv-body"><span class="rv-title">{e(it.get("title",""))}</span>'
                  f'{trust_badge(verification_basis(it))}</div></a>')
+    nfix = changelog_correction_count()
+    fix_link = (f'<a class="more fix-more" href="log.html">我们公开更正过 {nfix} 处结论 →</a>'
+                if nfix else '<a class="more" href="log.html">更新与纠错记录 →</a>')
     return (f'<section class="sec recent-sec" style="padding-top:0"><div class="wrap">'
-            f'<div class="sec-head"><h2>最近复核</h2>'
-            f'<a class="more" href="all.html">看全部 →</a></div>'
+            f'<div class="sec-head"><h2>最近复核</h2>{fix_link}</div>'
             f'<p class="rv-note">下面的日期是<b>本站复核日</b>，不是研究发表日——两个都标出来，'
-            f'让你看清「这条底层研究多新、我们什么时候核对过」。</p>'
+            f'让你看清「这条底层研究多新、我们什么时候核对过」。这个库会出错，也会<b>公开认错</b>。</p>'
             f'<div class="rv-flow">{rows}</div></div></section>')
 
 
@@ -613,9 +663,23 @@ def detail_page(it, related):
              f'<div class="src-line">来源：{e(it.get("source", ""))}<br>'
              f'{date_meta}'
              f'本站复核 {e(it.get("reviewed_at") or TODAY)}</div>{rel}'
+             f'<div class="d-share"><span class="ds-t">觉得有用？把这条转给还在交智商税的训练搭子 👇</span>'
+             f'<button class="ds-btn" type="button" id="sharebtn">复制这条链接</button>'
+             f'<span class="ds-ok" id="shareok" hidden>已复制 ✓</span></div>'
              f'<div class="disclaim">本站为科普整理，<b>非医疗建议</b>；每条说法标注证据等级与来源状态，'
              f'点击可回来源核对。具体到个人，请咨询医生或专业人士。</div></div>')
-    return shell(it.get("title", ""), "", inner + ld_json(it), base="../",
+    share_js = '''<script>
+(function(){var b=document.getElementById('sharebtn'),ok=document.getElementById('shareok');if(!b)return;
+var u=location.href.split('#')[0],t=(document.title||'').split(' · ')[0],txt=t+' — 查过再信 '+u;
+function done(){if(ok)ok.hidden=false;b.textContent='已复制 ✓';setTimeout(function(){b.textContent='复制这条链接';if(ok)ok.hidden=true;},2200);}
+b.addEventListener('click',function(){
+  if(navigator.share){navigator.share({title:t,text:t,url:u}).then(done).catch(function(){});return;}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,function(){
+    var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(e){}ta.remove();done();});}
+  else{var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(e){}ta.remove();done();}
+});})();
+</script>'''
+    return shell(it.get("title", ""), "", inner + ld_json(it), base="../", extra_js=share_js,
                  desc=(it.get("conclusion") or it.get("summary", "")),
                  canon="claims/" + it.get("slug", "") + ".html", detail=True)
 
@@ -723,17 +787,18 @@ const input=document.getElementById('q'), count=document.getElementById('count')
 const allSec=document.querySelector('.all-sec'), fuzzytip=document.getElementById('fuzzytip');
 const qp=new URLSearchParams(location.search).get('q'); if(qp) input.value=qp;
 // 问句/语气词：用户多半自然语言提问（"XX伤肾吗""有没有用"），先去掉这些再拆核心词
-const STOP=['是不是','是否','会不会','有没有','能不能','可不可以','可以吗','好不好','对不对','该不该','要不要','怎么样','怎么','如何','为什么','究竟','到底','真的吗','真的','是真是假','有用吗','有用','有效吗','有效','靠谱吗','靠谱','安全吗','管用吗','管用','到底','吗','呢','吧','啊','呀','嘛','哦','的','了'];
+const STOP=['是不是','是否','会不会','有没有','能不能','可不可以','可以吗','好不好','对不对','该不该','要不要','怎么样','怎么','如何','为什么','究竟','到底','真的吗','真的','是真是假','有用吗','有用','有效吗','有效','靠谱吗','靠谱','安全吗','管用吗','管用','到底','区别','东西','吗','呢','吧','啊','呀','嘛','哦','的','了'];
 function matchBasis(r){if(activeBasis==='all')return true;
   if(activeBasis==='strong')return r.dataset.ev==='rct'||r.dataset.ev==='meta';
   return r.dataset.basis===activeBasis;}
 function passFilter(r){return (activeCat==='all'||r.dataset.cat===activeCat)&&matchBasis(r);}
 function cleanQ(raw){let q=raw.toLowerCase();STOP.forEach(w=>{q=q.split(w).join(' ');});return q;}
-// 拆核心词：英文/数字整词 + CJK 词；CJK 长词再补二字 shingle 兜底（无分词器也能弱匹配）
-function coreTerms(clean){const parts=clean.split(/[^0-9a-z一-鿿]+/).filter(Boolean);const out=new Set();
-  parts.forEach(p=>{if(p.length>=2)out.add(p);
-    if(/[一-鿿]/.test(p)&&p.length>=3){for(let i=0;i<p.length-1;i++)out.add(p.substr(i,2));}});
-  return [...out];}
+// 拆核心词:整词(英文/数字/CJK,较具体)走全文;二字 shingle(兜底)只走短blob,避免正文泛字误命中
+function coreTerms(clean){const parts=clean.split(/[^0-9a-z一-鿿]+/).filter(Boolean);
+  const words=new Set(), shingles=new Set();
+  parts.forEach(p=>{if(p.length>=2)words.add(p);
+    if(/[一-鿿]/.test(p)&&p.length>=3){for(let i=0;i<p.length-1;i++)shingles.add(p.substr(i,2));}});
+  return {words:[...words], shingles:[...shingles]};}
 const emptyq=document.getElementById('emptyq');
 let lastQ='这个说法';
 function applyFilters(){
@@ -742,9 +807,11 @@ function applyFilters(){
   let exact=[], fuzzy=[];
   rows.forEach(r=>{ r.style.display='none'; if(!passFilter(r))return;
     if(!raw){exact.push(r);return;}
-    const blob=r.dataset.search.toLowerCase();
-    if(blob.includes(ql)||(cl.length>=2&&blob.includes(cl))){exact.push(r);return;}   // 精确：整句 或 去问句词后的核心串
-    if(tms.some(t=>blob.includes(t)))fuzzy.push(r);                                    // 弱语义：命中任一核心词
+    const blob=r.dataset.search.toLowerCase();              // 全文:标题/结论/摘要/人群/注意+别名
+    const sblob=(r.dataset.fuzzy||blob).toLowerCase();      // 短blob:仅标题+结论+别名
+    if(blob.includes(ql)||(cl.length>=2&&blob.includes(cl))){exact.push(r);return;}   // 精确:整句 或 去问句词后核心串(全文)
+    // 弱语义:整词在全文命中,或二字shingle在短blob命中(shingle不碰正文,去泛字噪音)
+    if(tms.words.some(w=>blob.includes(w))||tms.shingles.some(s=>sblob.includes(s)))fuzzy.push(r);
   });
   let shown, isFuzzy=false;
   if(!raw||exact.length){shown=exact;} else {shown=fuzzy;isFuzzy=fuzzy.length>0;}
@@ -828,6 +895,8 @@ def render_about():
 <p>每条都带<b>复核日期</b>，随研究更新而重新审视。发布前有自动闸门：缺来源、未来日期、伪链接、未审核的条目一律进不了线上。发现错误？欢迎通过 <a href="{REPO}/issues" target="_blank" rel="noopener"><b>GitHub issue</b></a> 指出。</p></div></div>
 <div class="method-item"><div class="mi-n">06</div><div><h3>内容红线</h3>
 <p>这是健康产品，有刚性约束：<b>不是医疗建议</b>，不开处方、不给具体剂量、不暗示治疗任何疾病；不确定的、证据弱的，明确标注，绝不替它下定论。</p></div></div>
+<div class="method-item"><div class="mi-n">07</div><div><h3>谁做的、靠什么活（利益披露）</h3>
+<p>这个库由<b>个人维护</b>，<b>没有任何商业收入</b>：<b>不卖任何产品、不接补剂或品牌广告、不做带货、不收会员费</b>，页面上也不会出现联盟链接。做它的唯一目的，是把自己查过的健康/健身/补剂说法公开出来，让别人少交点智商税。正因为不靠卖东西赚钱，这个库才敢在结论里直说「这个没用」「这个被夸大了」——<b>没有任何产品需要我替它说好话</b>。</p></div></div>
 </div></section>'''
     return shell("关于", "关于", inner,
                  desc="查过再信的方法论：怎么审核、证据如何分级、何时复核、如何纠错。",
