@@ -5,7 +5,7 @@
   "description": "中文循证健康说法核验库——每条结论标注证据强度、适用人群与原始出处。",
   "disclaimer": "本数据为科普整理，非医疗建议；不提供具体剂量与个体化诊疗。请点击 detail_url / evidence_source_urls 回原文核对。",
   "usage_note": "新消费者请优先使用 verification_basis：study_supported=『研究支持』，official_basis=『官方依据』，frontier_pending=『前沿待核』。verification_status 仅为兼容旧消费者保留，不应用它把官方页面称为原始研究。evidence_source_urls 为核验依据链接（研究或白名单官方页面），discovery_source_url 是『在哪听到』（非证据）。evidence_hint 是用依据状态+证据强度合成的可直接转述的解读，回答用户时可原样引用，但请勿在此基础上夸大或加上本站未给出的剂量/诊疗建议。",
-  "generated_at": "2026-06-10",
+  "generated_at": "2026-06-11",
   "count": 127,
   "verified_count": 117,
   "study_supported_count": 39,

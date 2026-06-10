@@ -293,6 +293,7 @@ body.vfy { background: var(--paper); min-height: 100vh; }
 .vfy .hero .eyebrow::before { content: ""; width: 22px; height: 1px; background: var(--vf); }
 .vfy .hero h1 { font-family: "Noto Serif SC", serif; font-weight: 700; font-size: clamp(30px, 5.2vw, 52px); line-height: 1.18; letter-spacing: -.015em; margin: 18px 0 0; text-wrap: balance; }
 .vfy .hero .lede { font-size: clamp(15px, 1.5vw, 18px); color: var(--muted); max-width: 30em; margin-top: 18px; font-weight: 300; }
+.vfy .hero .trustline { margin-top: 12px; font-size: 13px; font-weight: 500; color: var(--vf-solid); letter-spacing: .01em; }
 
 /* search box */
 .vfy .searchbox { display: flex; align-items: center; gap: 10px; margin-top: 30px; max-width: 540px; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 6px 6px 18px; transition: border-color .2s, box-shadow .2s; }
@@ -343,6 +344,7 @@ body.vfy { background: var(--paper); min-height: 100vh; }
   .vfy .hrow { grid-template-columns: 1fr; gap: 12px; padding: 18px 4px; }
   .vfy .hrow-sig { flex-direction: row; align-items: center; gap: 12px; }
   .vfy .hrow-meta { text-align: left; align-items: flex-start; flex-direction: row; gap: 14px; }
+  .vfy .hrow-hint { display: none; }  /* 窄屏折叠重复的"依据提示"句:它在每条上逐字重复、占满行宽,拖慢扫读(旅程2) */
 }
 
 /* —— 最近复核模块（P2，刻意保持为模块、非主骨架）—— */
