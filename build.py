@@ -633,7 +633,7 @@ def render_index(items):
             f'<form class="searchbox" action="all.html" method="get">'
             f'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '
             f'stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>'
-            f'<input type="text" name="q" placeholder="比如：肌酸伤肾吗、种子油、限时进食…">'
+            f'<input type="text" name="q" placeholder="比如：肌酸伤血脂吗、练后冰浴、胶原蛋白有用吗…">'
             f'<button type="submit">查证据</button></form>{legend_strip()}</div></header>')
     featured = (f'<section class="sec"><div class="wrap"><div class="sec-head"><h2>重点核验</h2>'
                 f'<a class="more" href="all.html">看全部 {len(items)} 条 →</a></div>'

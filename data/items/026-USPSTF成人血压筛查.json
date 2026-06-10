@@ -4,7 +4,7 @@
   "source_url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/hypertension-in-adults-screening",
   "date": "2021-04-27",
   "category": "心肺",
-  "featured": true,
+  "featured": false,
   "rank": 9,
   "evidence": "guideline",
   "summary": "USPSTF 建议为没有已知高血压的成年人做血压筛查，并在开始治疗前通过诊室外血压测量确认诊断。一次测量异常值得重视，但不能脱离重复测量和实际场景直接下结论。",
