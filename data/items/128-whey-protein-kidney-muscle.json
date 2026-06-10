@@ -1,0 +1,24 @@
+{
+  "title": "蛋白粉到底要不要吃？会伤肾吗？两篇荟萃把话说清",
+  "source": "Br J Sports Med · 蛋白补充与抗阻训练增肌荟萃（Morton 2018）；J Nutr · 高蛋白与肾功能荟萃（Devries 2018）",
+  "source_url": "https://pubmed.ncbi.nlm.nih.gov/28698222/",
+  "date": "2026-06-11",
+  "source_published_at": "2018-03-01",
+  "category": "补剂",
+  "featured": true,
+  "rank": 0,
+  "evidence": "meta",
+  "verification_status": "verified",
+  "conclusion": "蛋白补充确实能小幅增强抗阻训练的增肌增力，但有上限、过了某个量收益就递减；而「高蛋白伤肾」在健康人身上，荟萃证据并不支持。一句话：吃够蛋白有用，但不是越多越好，也不必非靠蛋白粉——日常饮食蛋白够了，粉只是方便，不是必需。",
+  "population": "健康成年人、进行抗阻训练者（原研究人群）；已有肾脏疾病者不在此结论范围。",
+  "caveats": "增肌效应是「锦上添花」，训练量和每日总蛋白才是主因；「不伤肾」针对健康人，已有肾病者高蛋白须遵医嘱；本条不提供具体克数，按个人需要与医生/营养师沟通。",
+  "summary": "两篇高质量荟萃回答了健身人最常问的两件事。Morton 2018《Br J Sports Med》汇总数十项 RCT：补蛋白能进一步增强抗阻训练带来的瘦体重和力量，但效应不大，且每公斤体重的摄入超过一定量后基本不再增加收益。Devries 2018《J Nutr》比较健康成年人「较高蛋白」与「正常/较低蛋白」饮食，发现肾功能指标并无差异——即「高蛋白伤肾」在健康人身上没有荟萃证据支持。**反爆款角度**：蛋白粉广告常把它塑造成增肌必需品、并暗示多多益善；证据说的是「有用但有上限」，而且对健康人的肾没有显示出害处。粉与天然食物的蛋白没有高下之分，粉的价值是方便和达标，不是魔法。",
+  "slug": "whey-protein-kidney-muscle",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-11",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/28698222/",
+    "https://pubmed.ncbi.nlm.nih.gov/30383278/"
+  ]
+}

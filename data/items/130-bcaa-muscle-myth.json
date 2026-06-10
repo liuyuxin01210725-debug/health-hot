@@ -1,0 +1,23 @@
+{
+  "title": "BCAA（支链氨基酸）真能增肌吗？机制上就站不住",
+  "source": "J Int Soc Sports Nutr · BCAA 与人体肌肉蛋白合成：神话还是现实（Wolfe 2017）",
+  "source_url": "https://pubmed.ncbi.nlm.nih.gov/28852372/",
+  "date": "2026-06-11",
+  "source_published_at": "2017-08-22",
+  "category": "补剂",
+  "featured": true,
+  "rank": 0,
+  "evidence": "expert",
+  "verification_status": "verified",
+  "conclusion": "「单独补 BCAA 就能最大化增肌」的说法缺乏支撑：合成新的肌肉蛋白需要全部必需氨基酸，只补三种 BCAA 时，其余必需氨基酸只能靠分解你自身的肌肉来凑，理论和实测都达不到广告说的「促合成」效果。吃够完整蛋白质（或乳清），远比单买 BCAA 有意义。",
+  "population": "健康、进行训练的人群（综述讨论范围）。",
+  "caveats": "这是一篇机制性综述（专家梳理），非随机对照试验，但其论点与多数实测结果一致；BCAA 并非有害，只是相对「完整蛋白」性价比低；某些临床或特殊营养情形另当别论。",
+  "summary": "BCAA 是健身房里最经久不衰的智商税之一，被宣传为「促进肌肉合成、防止分解」。Wolfe 2017 发表在《J Int Soc Sports Nutr》的综述直接以「神话还是现实」发问：从生理机制讲，肌肉蛋白的合成需要全部九种必需氨基酸同时到位；当你只补充三种 BCAA、缺少其余必需氨基酸时，身体只能靠分解自身肌肉蛋白来提供缺口，因此理论上「单独补 BCAA」的合成刺激上限很低、且不可持续。**反爆款角度**：与其买一桶单独的 BCAA，不如把钱花在乳清或日常完整蛋白上——后者天然含全部必需氨基酸，BCAA 也都在里面。",
+  "slug": "bcaa-muscle-myth",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-11",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/28852372/"
+  ]
+}

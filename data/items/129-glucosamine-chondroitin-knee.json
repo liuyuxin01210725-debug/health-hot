@@ -1,0 +1,23 @@
+{
+  "title": "氨糖、软骨素真能救膝盖吗？最高质量的荟萃说：基本没用",
+  "source": "BMJ · 氨糖/软骨素治疗髋膝骨关节炎网络荟萃（Wandel 2010）",
+  "source_url": "https://pubmed.ncbi.nlm.nih.gov/20847017/",
+  "date": "2026-06-11",
+  "source_published_at": "2010-09-16",
+  "category": "补剂",
+  "featured": true,
+  "rank": 0,
+  "evidence": "meta",
+  "verification_status": "verified",
+  "conclusion": "针对髋/膝骨关节炎，一篇《BMJ》网络荟萃发现：氨糖、软骨素、或两者合用，相比安慰剂都没有带来「有临床意义」的疼痛缓解，也不延缓关节间隙变窄。对多数人，它更像心理安慰，而不是有效治疗。",
+  "population": "髋或膝骨关节炎患者（原研究人群）。",
+  "caveats": "不同制剂（硫酸盐 vs 盐酸盐）与人群存在异质性，个别研究有阳性信号但整体为阴性；它安全性尚可，想试无大害，但别指望它替代运动、减重和正规治疗；膝痛持续或加重应就医。",
+  "summary": "氨糖（氨基葡萄糖）和软骨素是膝盖保健领域的常青爆款，广告语常是「修复软骨、告别关节痛」。但 Wandel 2010《BMJ》的网络荟萃——把多项试验的直接与间接证据合并分析——结论很直白：相比安慰剂，单用氨糖、单用软骨素、或二者联用，都没有产生临床上有意义的止痛效果，对关节间隙变窄也无明显延缓。**反爆款角度**：这不是说它有毒，而是说大多数人花在它上面的钱，买到的主要是安慰。真正对膝骨关节炎有据的，是控制体重、合适的运动与肌力训练，以及必要时的正规医疗，而不是这两种补剂。",
+  "slug": "glucosamine-chondroitin-knee",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-11",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/20847017/"
+  ]
+}

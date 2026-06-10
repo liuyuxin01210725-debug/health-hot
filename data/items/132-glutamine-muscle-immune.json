@@ -1,0 +1,23 @@
+{
+  "title": "谷氨酰胺能增肌、防训练后生病吗？吃得好的人多半白花钱",
+  "source": "J Nutr · 谷氨酰胺在运动与训练中的剂量与效果综述（Gleeson 2008）",
+  "source_url": "https://pubmed.ncbi.nlm.nih.gov/18806122/",
+  "date": "2026-06-11",
+  "source_published_at": "2008-10-01",
+  "category": "补剂",
+  "featured": false,
+  "rank": 0,
+  "evidence": "expert",
+  "verification_status": "verified",
+  "conclusion": "谷氨酰胺常被宣传为增肌、护免疫、防训练后生病，但综述证据显示：在营养充足的运动员身上，补谷氨酰胺并不能阻止运动后免疫指标的变化，对增肌的支撑也很弱。对普通健身者，它大概率是花冤枉钱。",
+  "population": "营养充足的运动员/健身人群（综述讨论范围）。",
+  "caveats": "这是一篇综述（专家梳理）；谷氨酰胺在某些临床重症、肠道疾病等情形确有其医疗用途，但那与「健身增肌/防感冒」是两回事；营养不良或特殊医疗情形请遵医嘱。",
+  "summary": "剧烈运动后血浆谷氨酰胺浓度会短暂下降，有人据此推断「补谷氨酰胺能补上缺口、保护免疫、减少训练后感冒」，并把它和增肌一起卖。Gleeson 2008《J Nutr》的综述指出：多项干预研究即便把运动后的血浆谷氨酰胺维持住，也没能阻止运动后多项免疫功能指标的变化；对增肌的直接支撑同样薄弱。**反爆款角度**：对一个吃够蛋白、营养充足的健身者，单独补谷氨酰胺缺乏可见收益，是补剂货架上又一个被高估的项目。",
+  "slug": "glutamine-muscle-immune",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-11",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/18806122/"
+  ]
+}
