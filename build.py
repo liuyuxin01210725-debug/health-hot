@@ -21,7 +21,7 @@ CLAIMS = os.path.join(OUT, "claims")
 TODAY = datetime.date.today().isoformat()
 
 SITE_TITLE = "查过再信"
-SITE_URL = "https://liuyuxin01210725-debug.github.io/health-hot/"
+SITE_URL = os.environ.get("HEALTH_HOT_SITE_URL", "https://health-hot.vercel.app/").rstrip("/") + "/"
 HERO_Q = "听到一个健康说法？先查一下证据。"
 DEFAULT_SUBMIT_ENDPOINT = "https://health-hot-submit.pages.dev/submit"
 SUBMIT_ENDPOINT = os.environ.get("HEALTH_HOT_SUBMIT_ENDPOINT", DEFAULT_SUBMIT_ENDPOINT).strip()

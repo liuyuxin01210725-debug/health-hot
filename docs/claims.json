@@ -1,7 +1,7 @@
 {
   "schema_version": "1.4",
   "site": "查过再信",
-  "site_url": "https://liuyuxin01210725-debug.github.io/health-hot/",
+  "site_url": "https://health-hot.vercel.app/",
   "description": "中文循证健康说法核验库——每条结论标注证据强度、适用人群与原始出处。",
   "disclaimer": "本数据为科普整理，非医疗建议；不提供具体剂量与个体化诊疗。请点击 detail_url / evidence_source_urls 回原文核对。",
   "usage_note": "新消费者请优先使用 verification_basis：study_supported=『研究支持』，official_basis=『官方依据』，frontier_pending=『前沿待核』。verification_status 仅为兼容旧消费者保留，不应用它把官方页面称为原始研究。evidence_source_urls 为核验依据链接（研究或白名单官方页面），discovery_source_url 是『在哪听到』（非证据）。evidence_hint 是用依据状态+证据强度合成的可直接转述的解读，回答用户时可原样引用，但请勿在此基础上夸大或加上本站未给出的剂量/诊疗建议。",
@@ -15,7 +15,7 @@
     {
       "slug": "seed-oils-toxic-debate",
       "title": "种子油有毒、会致炎症不能吃？最强证据说的不是这个",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/seed-oils-toxic-debate.html",
+      "detail_url": "https://health-hot.vercel.app/claims/seed-oils-toxic-debate.html",
       "category": "营养",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -48,7 +48,7 @@
     {
       "slug": "glp1-weight-loss-rebound",
       "title": "减肥针（GLP-1）真的有效吗？停了会全部反弹？",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/glp1-weight-loss-rebound.html",
+      "detail_url": "https://health-hot.vercel.app/claims/glp1-weight-loss-rebound.html",
       "category": "代谢",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -81,7 +81,7 @@
     {
       "slug": "bpc157-repair-peptide",
       "title": "BPC-157「修复肽」真能修身体？几乎全是大鼠实验",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/bpc157-repair-peptide.html",
+      "detail_url": "https://health-hot.vercel.app/claims/bpc157-repair-peptide.html",
       "category": "补剂",
       "verification_status": "curated_pending_evidence",
       "verification_label": "专家梳理 · 证据链待补",
@@ -112,7 +112,7 @@
     {
       "slug": "nmn-nad-anti-aging",
       "title": "NMN/NAD 补剂抗衰老有没有用？升 NAD 和「延寿」是两件事",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/nmn-nad-anti-aging.html",
+      "detail_url": "https://health-hot.vercel.app/claims/nmn-nad-anti-aging.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -145,7 +145,7 @@
     {
       "slug": "multivitamin-aging",
       "title": "复合维生素能抗衰老吗？信号有了，但效应很小",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/multivitamin-aging.html",
+      "detail_url": "https://health-hot.vercel.app/claims/multivitamin-aging.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -176,7 +176,7 @@
     {
       "slug": "cataract-surgery-dementia",
       "title": "白内障手术能降低痴呆风险吗？大型 meta 显示关联约 25%",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/cataract-surgery-dementia.html",
+      "detail_url": "https://health-hot.vercel.app/claims/cataract-surgery-dementia.html",
       "category": "其他",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -207,7 +207,7 @@
     {
       "slug": "keto-cancer-adjuvant",
       "title": "生酮饮食能辅助治癌吗？理论有，临床证据还远远不够",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/keto-cancer-adjuvant.html",
+      "detail_url": "https://health-hot.vercel.app/claims/keto-cancer-adjuvant.html",
       "category": "营养",
       "verification_status": "curated_pending_evidence",
       "verification_label": "专家梳理 · 证据链待补",
@@ -238,7 +238,7 @@
     {
       "slug": "vilpa-vigorous-snippets",
       "title": "每天几次「剧烈一分钟」(VILPA) 真的能延寿吗？队列数据说能，但要讲清楚前提",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/vilpa-vigorous-snippets.html",
+      "detail_url": "https://health-hot.vercel.app/claims/vilpa-vigorous-snippets.html",
       "category": "运动",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -269,7 +269,7 @@
     {
       "slug": "upf-male-fertility",
       "title": "超加工食品会直接损害精子、降低男性性激素？证据没那么简单",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/upf-male-fertility.html",
+      "detail_url": "https://health-hot.vercel.app/claims/upf-male-fertility.html",
       "category": "营养",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -302,7 +302,7 @@
     {
       "slug": "rapamycin-anti-aging",
       "title": "雷帕霉素能让人长寿抗衰老？首个人体 RCT 结果令人失望",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/rapamycin-anti-aging.html",
+      "detail_url": "https://health-hot.vercel.app/claims/rapamycin-anti-aging.html",
       "category": "长寿",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -331,7 +331,7 @@
     {
       "slug": "creatine-brain-cognition",
       "title": "肌酸只是健身男的补剂？它对大脑/认知也有证据",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/creatine-brain-cognition.html",
+      "detail_url": "https://health-hot.vercel.app/claims/creatine-brain-cognition.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -360,7 +360,7 @@
     {
       "slug": "youth-resistance-training-height",
       "title": "青少年举重会影响长高吗？国际共识：规范督导下不会，反而有益",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/youth-resistance-training-height.html",
+      "detail_url": "https://health-hot.vercel.app/claims/youth-resistance-training-height.html",
       "category": "运动",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -389,7 +389,7 @@
     {
       "slug": "swimming-knee-joint",
       "title": "游泳是不是最护膝的运动？对膝关节炎，水中运动确实有用",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/swimming-knee-joint.html",
+      "detail_url": "https://health-hot.vercel.app/claims/swimming-knee-joint.html",
       "category": "运动",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -418,7 +418,7 @@
     {
       "slug": "red-processed-meat",
       "title": "红肉到底要不要少吃？证据没你以为的那么硬，但加工肉更值得警惕",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/red-processed-meat.html",
+      "detail_url": "https://health-hot.vercel.app/claims/red-processed-meat.html",
       "category": "营养",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -447,7 +447,7 @@
     {
       "slug": "antioxidant-blunts-training-adaptation",
       "title": "练后狂补维C/抗氧化剂，可能反而拖慢训练效果",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/antioxidant-blunts-training-adaptation.html",
+      "detail_url": "https://health-hot.vercel.app/claims/antioxidant-blunts-training-adaptation.html",
       "category": "运动",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -478,7 +478,7 @@
     {
       "slug": "cold-water-immersion-hypertrophy",
       "title": "练完就冰浴，可能让你白练？对增肌力量，冰水浴会拖后腿",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/cold-water-immersion-hypertrophy.html",
+      "detail_url": "https://health-hot.vercel.app/claims/cold-water-immersion-hypertrophy.html",
       "category": "运动",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -507,7 +507,7 @@
     {
       "slug": "sauna-cardiovascular",
       "title": "桑拿不只是放松：常蒸桑拿与更低的心血管和全因死亡风险相关",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/sauna-cardiovascular.html",
+      "detail_url": "https://health-hot.vercel.app/claims/sauna-cardiovascular.html",
       "category": "心肺",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -536,7 +536,7 @@
     {
       "slug": "microplastics-atheroma",
       "title": "微塑料真进了血管？NEJM 研究：斑块里检出微塑料的人，心血管事件更多",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/microplastics-atheroma.html",
+      "detail_url": "https://health-hot.vercel.app/claims/microplastics-atheroma.html",
       "category": "其他",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -565,7 +565,7 @@
     {
       "slug": "antihistamine-exercise-adaptation",
       "title": "运动当天吃抗过敏药，可能削弱锻炼带来的好处",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/antihistamine-exercise-adaptation.html",
+      "detail_url": "https://health-hot.vercel.app/claims/antihistamine-exercise-adaptation.html",
       "category": "运动",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -594,7 +594,7 @@
     {
       "slug": "collagen-skin-beauty",
       "title": "吃胶原蛋白能美容吗？有效果，但比广告说的小得多",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/collagen-skin-beauty.html",
+      "detail_url": "https://health-hot.vercel.app/claims/collagen-skin-beauty.html",
       "category": "营养",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -623,7 +623,7 @@
     {
       "slug": "collagen-skin-rct",
       "title": "口服胶原蛋白真能改善皮肤吗？有 RCT 说有效，但别急着当定论",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/collagen-skin-rct.html",
+      "detail_url": "https://health-hot.vercel.app/claims/collagen-skin-rct.html",
       "category": "营养",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -652,7 +652,7 @@
     {
       "slug": "fish-oil-cardiovascular-meta",
       "title": "鱼油到底护不护心？一篇汇总 13 项试验的荟萃说：能小幅降风险",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/fish-oil-cardiovascular-meta.html",
+      "detail_url": "https://health-hot.vercel.app/claims/fish-oil-cardiovascular-meta.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -681,7 +681,7 @@
     {
       "slug": "vitamin-c-common-cold",
       "title": "维生素 C 能预防感冒吗？Cochrane：普通人吃了基本不防，只是病程略短",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/vitamin-c-common-cold.html",
+      "detail_url": "https://health-hot.vercel.app/claims/vitamin-c-common-cold.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -710,7 +710,7 @@
     {
       "slug": "cranberry-uti-prevention",
       "title": "蔓越莓能防尿路感染吗？Cochrane：对反复发作的女性和儿童有用，但不是人人有效",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/cranberry-uti-prevention.html",
+      "detail_url": "https://health-hot.vercel.app/claims/cranberry-uti-prevention.html",
       "category": "营养",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -739,7 +739,7 @@
     {
       "slug": "egg-consumption-mortality",
       "title": "天天吃鸡蛋到底好不好？大型荟萃：适量没问题，过量证据有争议",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/egg-consumption-mortality.html",
+      "detail_url": "https://health-hot.vercel.app/claims/egg-consumption-mortality.html",
       "category": "营养",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -768,7 +768,7 @@
     {
       "slug": "skipping-breakfast-gallstone",
       "title": "不吃早饭会得胆结石吗？机制上有道理，但「直接导致」缺乏强证据",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/skipping-breakfast-gallstone.html",
+      "detail_url": "https://health-hot.vercel.app/claims/skipping-breakfast-gallstone.html",
       "category": "代谢",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -799,7 +799,7 @@
     {
       "slug": "coffee-vinegar-gallstone",
       "title": "起床一杯苹果醋或咖啡能防胆结石吗？咖啡有点线索，苹果醋基本没证据",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/coffee-vinegar-gallstone.html",
+      "detail_url": "https://health-hot.vercel.app/claims/coffee-vinegar-gallstone.html",
       "category": "代谢",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -828,7 +828,7 @@
     {
       "slug": "nccih-melatonin-sleep-boundaries",
       "title": "褪黑素不是万能助眠药：不同睡眠问题要分开看",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/nccih-melatonin-sleep-boundaries.html",
+      "detail_url": "https://health-hot.vercel.app/claims/nccih-melatonin-sleep-boundaries.html",
       "category": "睡眠",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -857,7 +857,7 @@
     {
       "slug": "who-tobacco-no-safe-form",
       "title": "烟草没有“更健康”的安全版本",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-tobacco-no-safe-form.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-tobacco-no-safe-form.html",
       "category": "其他",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -886,7 +886,7 @@
     {
       "slug": "who-antimicrobial-resistance",
       "title": "抗生素不是感冒的通用答案",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-antimicrobial-resistance.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-antimicrobial-resistance.html",
       "category": "其他",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -915,7 +915,7 @@
     {
       "slug": "nih-vitamin-d-supplement-boundaries",
       "title": "维生素 D 对骨骼重要，但不是所有人都需要盲目补充",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/nih-vitamin-d-supplement-boundaries.html",
+      "detail_url": "https://health-hot.vercel.app/claims/nih-vitamin-d-supplement-boundaries.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -944,7 +944,7 @@
     {
       "slug": "who-hypertension-baseline",
       "title": "高血压可能没有明显症状，测量才知道",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-hypertension-baseline.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-hypertension-baseline.html",
       "category": "心肺",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -973,7 +973,7 @@
     {
       "slug": "who-alcohol-health-risk",
       "title": "饮酒不能包装成保健建议",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-alcohol-health-risk.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-alcohol-health-risk.html",
       "category": "营养",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1002,7 +1002,7 @@
     {
       "slug": "who-diabetes-baseline",
       "title": "糖尿病管理不只是盯一次血糖",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-diabetes-baseline.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-diabetes-baseline.html",
       "category": "代谢",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1031,7 +1031,7 @@
     {
       "slug": "who-cardiovascular-risk-factors",
       "title": "心血管病风险不是只看胆固醇一个数字",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-cardiovascular-risk-factors.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-cardiovascular-risk-factors.html",
       "category": "心肺",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1060,7 +1060,7 @@
     {
       "slug": "who-cancer-prevention-baseline",
       "title": "癌症风险管理既包括预防，也包括早发现",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-cancer-prevention-baseline.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-cancer-prevention-baseline.html",
       "category": "其他",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1089,7 +1089,7 @@
     {
       "slug": "who-healthy-ageing",
       "title": "健康老龄化不等于完全没有疾病",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-healthy-ageing.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-healthy-ageing.html",
       "category": "长寿",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1118,7 +1118,7 @@
     {
       "slug": "who-falls-prevention",
       "title": "老年跌倒不是“年纪大了没办法”",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-falls-prevention.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-falls-prevention.html",
       "category": "骨骼",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1147,7 +1147,7 @@
     {
       "slug": "who-low-back-pain-baseline",
       "title": "腰痛不等于必须长期躺着不动",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-low-back-pain-baseline.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-low-back-pain-baseline.html",
       "category": "关节",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1176,7 +1176,7 @@
     {
       "slug": "who-osteoarthritis-baseline",
       "title": "骨关节炎不是只能硬扛的磨损",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-osteoarthritis-baseline.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-osteoarthritis-baseline.html",
       "category": "关节",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1205,7 +1205,7 @@
     {
       "slug": "who-fragility-fractures",
       "title": "轻微外力导致骨折，值得进一步评估骨骼风险",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-fragility-fractures.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-fragility-fractures.html",
       "category": "骨骼",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1234,7 +1234,7 @@
     {
       "slug": "who-depression-not-sadness",
       "title": "抑郁症不只是心情不好",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-depression-not-sadness.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-depression-not-sadness.html",
       "category": "心理",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1263,7 +1263,7 @@
     {
       "slug": "who-anxiety-disorders",
       "title": "焦虑障碍不是“想开点就好了”",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-anxiety-disorders.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-anxiety-disorders.html",
       "category": "心理",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1292,7 +1292,7 @@
     {
       "slug": "who-mental-health-baseline",
       "title": "心理健康不只是“没有诊断”",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-mental-health-baseline.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-mental-health-baseline.html",
       "category": "心理",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1321,7 +1321,7 @@
     {
       "slug": "who-mental-health-at-work",
       "title": "工作环境本身也会影响心理健康",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-mental-health-at-work.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-mental-health-at-work.html",
       "category": "心理",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1350,7 +1350,7 @@
     {
       "slug": "who-dementia-not-normal-ageing",
       "title": "痴呆不是正常衰老的必然结果",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-dementia-not-normal-ageing.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-dementia-not-normal-ageing.html",
       "category": "长寿",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1379,7 +1379,7 @@
     {
       "slug": "who-hearing-loss",
       "title": "听力下降不应只当作“老了正常”",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-hearing-loss.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-hearing-loss.html",
       "category": "其他",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1408,7 +1408,7 @@
     {
       "slug": "who-vision-impairment",
       "title": "视力问题不应等到严重影响生活才处理",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-vision-impairment.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-vision-impairment.html",
       "category": "其他",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1437,7 +1437,7 @@
     {
       "slug": "who-oral-health",
       "title": "口腔健康不是只在牙痛时才需要关注",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-oral-health.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-oral-health.html",
       "category": "其他",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1466,7 +1466,7 @@
     {
       "slug": "who-asthma-management",
       "title": "哮喘不是偶尔喘一下就不用管",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-asthma-management.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-asthma-management.html",
       "category": "心肺",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1495,7 +1495,7 @@
     {
       "slug": "who-copd-baseline",
       "title": "长期咳喘不一定只是年纪大或体力差",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-copd-baseline.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-copd-baseline.html",
       "category": "心肺",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1524,7 +1524,7 @@
     {
       "slug": "who-kidney-disease-baseline",
       "title": "肾脏问题可能在早期不明显",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-kidney-disease-baseline.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-kidney-disease-baseline.html",
       "category": "代谢",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1553,7 +1553,7 @@
     {
       "slug": "who-anaemia-causes",
       "title": "贫血不是补铁两个字就能概括",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-anaemia-causes.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-anaemia-causes.html",
       "category": "营养",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1582,7 +1582,7 @@
     {
       "slug": "who-food-safety",
       "title": "吃得健康，也要先保证食物安全",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-food-safety.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-food-safety.html",
       "category": "营养",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1611,7 +1611,7 @@
     {
       "slug": "who-drinking-water",
       "title": "饮水健康首先是安全，而不是追固定杯数",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-drinking-water.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-drinking-water.html",
       "category": "营养",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1640,7 +1640,7 @@
     {
       "slug": "who-infant-feeding",
       "title": "婴幼儿喂养不能照搬成人饮食逻辑",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-infant-feeding.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-infant-feeding.html",
       "category": "营养",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1669,7 +1669,7 @@
     {
       "slug": "who-menopause-baseline",
       "title": "绝经是生命阶段，不等于所有不适都只能忍",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-menopause-baseline.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-menopause-baseline.html",
       "category": "其他",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1698,7 +1698,7 @@
     {
       "slug": "who-pcos-baseline",
       "title": "多囊卵巢综合征不只是月经不规律",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-pcos-baseline.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-pcos-baseline.html",
       "category": "其他",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1727,7 +1727,7 @@
     {
       "slug": "who-endometriosis-baseline",
       "title": "严重痛经不应简单归为“忍一忍就好”",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-endometriosis-baseline.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-endometriosis-baseline.html",
       "category": "其他",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1756,7 +1756,7 @@
     {
       "slug": "who-headache-disorders",
       "title": "反复头痛不是都能用同一种办法处理",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-headache-disorders.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-headache-disorders.html",
       "category": "其他",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1785,7 +1785,7 @@
     {
       "slug": "who-air-pollution-health",
       "title": "空气污染不是只影响呼吸道",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-air-pollution-health.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-air-pollution-health.html",
       "category": "心肺",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1814,7 +1814,7 @@
     {
       "slug": "ods-vitamin-b12-boundaries",
       "title": "维生素 B12 很重要，但不是人人都缺",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/ods-vitamin-b12-boundaries.html",
+      "detail_url": "https://health-hot.vercel.app/claims/ods-vitamin-b12-boundaries.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1843,7 +1843,7 @@
     {
       "slug": "ods-calcium-boundaries",
       "title": "钙对骨骼重要，但不是补得越多越好",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/ods-calcium-boundaries.html",
+      "detail_url": "https://health-hot.vercel.app/claims/ods-calcium-boundaries.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1872,7 +1872,7 @@
     {
       "slug": "ods-magnesium-boundaries",
       "title": "镁补充剂不是所有不适的万能答案",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/ods-magnesium-boundaries.html",
+      "detail_url": "https://health-hot.vercel.app/claims/ods-magnesium-boundaries.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1901,7 +1901,7 @@
     {
       "slug": "ods-omega3-food-vs-supplement",
       "title": "吃鱼和吃 Omega-3 补充剂不是一回事",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/ods-omega3-food-vs-supplement.html",
+      "detail_url": "https://health-hot.vercel.app/claims/ods-omega3-food-vs-supplement.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1930,7 +1930,7 @@
     {
       "slug": "ods-iron-no-blind-supplement",
       "title": "缺铁需要重视，但补铁不应靠猜",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/ods-iron-no-blind-supplement.html",
+      "detail_url": "https://health-hot.vercel.app/claims/ods-iron-no-blind-supplement.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1959,7 +1959,7 @@
     {
       "slug": "ods-folate-boundaries",
       "title": "叶酸重要，尤其在备孕期，但不是越多越好",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/ods-folate-boundaries.html",
+      "detail_url": "https://health-hot.vercel.app/claims/ods-folate-boundaries.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -1988,7 +1988,7 @@
     {
       "slug": "ods-vitamin-c-boundaries",
       "title": "维生素 C 重要，但不能替代整体饮食",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/ods-vitamin-c-boundaries.html",
+      "detail_url": "https://health-hot.vercel.app/claims/ods-vitamin-c-boundaries.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2017,7 +2017,7 @@
     {
       "slug": "ods-vitamin-a-boundaries",
       "title": "维生素 A 不能因为重要就随意高剂量补",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/ods-vitamin-a-boundaries.html",
+      "detail_url": "https://health-hot.vercel.app/claims/ods-vitamin-a-boundaries.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2046,7 +2046,7 @@
     {
       "slug": "ods-vitamin-e-boundaries",
       "title": "抗氧化不等于维生素 E 补充剂越多越好",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/ods-vitamin-e-boundaries.html",
+      "detail_url": "https://health-hot.vercel.app/claims/ods-vitamin-e-boundaries.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2075,7 +2075,7 @@
     {
       "slug": "ods-vitamin-k-interactions",
       "title": "维生素 K 很重要，也需要留意药物相互作用",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/ods-vitamin-k-interactions.html",
+      "detail_url": "https://health-hot.vercel.app/claims/ods-vitamin-k-interactions.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2104,7 +2104,7 @@
     {
       "slug": "ods-zinc-boundaries",
       "title": "锌参与免疫功能，但长期高剂量补充也会出问题",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/ods-zinc-boundaries.html",
+      "detail_url": "https://health-hot.vercel.app/claims/ods-zinc-boundaries.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2133,7 +2133,7 @@
     {
       "slug": "ods-iodine-thyroid-balance",
       "title": "碘和甲状腺的关系不是越多越好",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/ods-iodine-thyroid-balance.html",
+      "detail_url": "https://health-hot.vercel.app/claims/ods-iodine-thyroid-balance.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2162,7 +2162,7 @@
     {
       "slug": "ods-potassium-boundaries",
       "title": "钾很重要，但补充剂和低钠盐并非人人适合",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/ods-potassium-boundaries.html",
+      "detail_url": "https://health-hot.vercel.app/claims/ods-potassium-boundaries.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2191,7 +2191,7 @@
     {
       "slug": "ods-selenium-boundaries",
       "title": "硒是必需营养素，但需要量并不大",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/ods-selenium-boundaries.html",
+      "detail_url": "https://health-hot.vercel.app/claims/ods-selenium-boundaries.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2220,7 +2220,7 @@
     {
       "slug": "ods-choline-baseline",
       "title": "胆碱重要，但先看整体饮食来源",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/ods-choline-baseline.html",
+      "detail_url": "https://health-hot.vercel.app/claims/ods-choline-baseline.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2249,7 +2249,7 @@
     {
       "slug": "ods-vitamin-b6-boundaries",
       "title": "维生素 B6 不是可以无限叠加的日常补充剂",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/ods-vitamin-b6-boundaries.html",
+      "detail_url": "https://health-hot.vercel.app/claims/ods-vitamin-b6-boundaries.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2278,7 +2278,7 @@
     {
       "slug": "ods-performance-supplements",
       "title": "运动补剂要逐个看证据和风险，不能一锅端",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/ods-performance-supplements.html",
+      "detail_url": "https://health-hot.vercel.app/claims/ods-performance-supplements.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2307,7 +2307,7 @@
     {
       "slug": "ods-weight-loss-supplements",
       "title": "减肥补充剂宣传很多，可靠证据通常有限",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/ods-weight-loss-supplements.html",
+      "detail_url": "https://health-hot.vercel.app/claims/ods-weight-loss-supplements.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2336,7 +2336,7 @@
     {
       "slug": "ods-multivitamin-boundaries",
       "title": "复合维生素不能替代均衡饮食",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/ods-multivitamin-boundaries.html",
+      "detail_url": "https://health-hot.vercel.app/claims/ods-multivitamin-boundaries.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2365,7 +2365,7 @@
     {
       "slug": "ods-thiamin-baseline",
       "title": "维生素 B1 很重要，但通常先看饮食和风险因素",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/ods-thiamin-baseline.html",
+      "detail_url": "https://health-hot.vercel.app/claims/ods-thiamin-baseline.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2394,7 +2394,7 @@
     {
       "slug": "nccih-probiotics-strain-specific",
       "title": "益生菌不是一个统一产品，效果要看具体菌株和场景",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/nccih-probiotics-strain-specific.html",
+      "detail_url": "https://health-hot.vercel.app/claims/nccih-probiotics-strain-specific.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2423,7 +2423,7 @@
     {
       "slug": "nccih-ashwagandha-boundaries",
       "title": "南非醉茄流行，不等于证据和安全边界已经清楚",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/nccih-ashwagandha-boundaries.html",
+      "detail_url": "https://health-hot.vercel.app/claims/nccih-ashwagandha-boundaries.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2452,7 +2452,7 @@
     {
       "slug": "nccih-turmeric-food-vs-extract",
       "title": "姜黄入菜和高浓度姜黄素补充剂不是一回事",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/nccih-turmeric-food-vs-extract.html",
+      "detail_url": "https://health-hot.vercel.app/claims/nccih-turmeric-food-vs-extract.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2481,7 +2481,7 @@
     {
       "slug": "nccih-omega3-outcome-specific",
       "title": "Omega-3 补充剂要按具体健康目标分别判断",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/nccih-omega3-outcome-specific.html",
+      "detail_url": "https://health-hot.vercel.app/claims/nccih-omega3-outcome-specific.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2510,7 +2510,7 @@
     {
       "slug": "nccih-yoga-safety",
       "title": "瑜伽可以是活动方式，但也需要适配身体状况",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/nccih-yoga-safety.html",
+      "detail_url": "https://health-hot.vercel.app/claims/nccih-yoga-safety.html",
       "category": "运动",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2539,7 +2539,7 @@
     {
       "slug": "nccih-meditation-boundaries",
       "title": "冥想可能有帮助，但不能替代需要的治疗",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/nccih-meditation-boundaries.html",
+      "detail_url": "https://health-hot.vercel.app/claims/nccih-meditation-boundaries.html",
       "category": "心理",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2568,7 +2568,7 @@
     {
       "slug": "nccih-acupuncture-condition-specific",
       "title": "针灸是否有帮助，要按具体问题分别看证据",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/nccih-acupuncture-condition-specific.html",
+      "detail_url": "https://health-hot.vercel.app/claims/nccih-acupuncture-condition-specific.html",
       "category": "其他",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2597,7 +2597,7 @@
     {
       "slug": "nccih-ginger-boundaries",
       "title": "姜和姜补充剂的效果与风险要分开看",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/nccih-ginger-boundaries.html",
+      "detail_url": "https://health-hot.vercel.app/claims/nccih-ginger-boundaries.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2626,7 +2626,7 @@
     {
       "slug": "nccih-green-tea-extract",
       "title": "喝茶和高浓度绿茶提取物不是同一件事",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/nccih-green-tea-extract.html",
+      "detail_url": "https://health-hot.vercel.app/claims/nccih-green-tea-extract.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2655,7 +2655,7 @@
     {
       "slug": "nccih-cannabis-product-specific",
       "title": "大麻和大麻素不能用一个笼统的“有用”或“无害”概括",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/nccih-cannabis-product-specific.html",
+      "detail_url": "https://health-hot.vercel.app/claims/nccih-cannabis-product-specific.html",
       "category": "其他",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2684,7 +2684,7 @@
     {
       "slug": "uspstf-colorectal-screening",
       "title": "结直肠癌筛查不能等到有症状再开始",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/uspstf-colorectal-screening.html",
+      "detail_url": "https://health-hot.vercel.app/claims/uspstf-colorectal-screening.html",
       "category": "其他",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2713,7 +2713,7 @@
     {
       "slug": "uspstf-breast-cancer-screening",
       "title": "乳腺癌筛查要按年龄和风险讨论，不是越频繁越好",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/uspstf-breast-cancer-screening.html",
+      "detail_url": "https://health-hot.vercel.app/claims/uspstf-breast-cancer-screening.html",
       "category": "其他",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2742,7 +2742,7 @@
     {
       "slug": "uspstf-obesity-behavioral-interventions",
       "title": "成人肥胖管理不是靠一个小技巧解决",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/uspstf-obesity-behavioral-interventions.html",
+      "detail_url": "https://health-hot.vercel.app/claims/uspstf-obesity-behavioral-interventions.html",
       "category": "代谢",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2771,7 +2771,7 @@
     {
       "slug": "uspstf-lung-cancer-screening",
       "title": "肺癌筛查不是所有人都做，而是面向特定高风险人群",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/uspstf-lung-cancer-screening.html",
+      "detail_url": "https://health-hot.vercel.app/claims/uspstf-lung-cancer-screening.html",
       "category": "其他",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2800,7 +2800,7 @@
     {
       "slug": "uspstf-cervical-cancer-screening",
       "title": "宫颈癌筛查是常规预防，不应等有症状才做",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/uspstf-cervical-cancer-screening.html",
+      "detail_url": "https://health-hot.vercel.app/claims/uspstf-cervical-cancer-screening.html",
       "category": "其他",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2829,7 +2829,7 @@
     {
       "slug": "uspstf-depression-screening-adults",
       "title": "成年人抑郁筛查需要有后续评估和支持承接",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/uspstf-depression-screening-adults.html",
+      "detail_url": "https://health-hot.vercel.app/claims/uspstf-depression-screening-adults.html",
       "category": "心理",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2858,7 +2858,7 @@
     {
       "slug": "uspstf-tobacco-cessation",
       "title": "戒烟值得获得系统支持，不必只靠硬扛",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/uspstf-tobacco-cessation.html",
+      "detail_url": "https://health-hot.vercel.app/claims/uspstf-tobacco-cessation.html",
       "category": "其他",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2887,7 +2887,7 @@
     {
       "slug": "uspstf-falls-prevention-exercise",
       "title": "高跌倒风险老年人值得讨论运动干预",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/uspstf-falls-prevention-exercise.html",
+      "detail_url": "https://health-hot.vercel.app/claims/uspstf-falls-prevention-exercise.html",
       "category": "骨骼",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2916,7 +2916,7 @@
     {
       "slug": "creatine-postmenopausal-muscle",
       "title": "绝经后女性补肌酸：小幅长肌力，且安全",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/creatine-postmenopausal-muscle.html",
+      "detail_url": "https://health-hot.vercel.app/claims/creatine-postmenopausal-muscle.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2945,7 +2945,7 @@
     {
       "slug": "jump-rope-bone-density",
       "title": "跳跃类运动增骨量：在儿童青少年中，可能优于举铁",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/jump-rope-bone-density.html",
+      "detail_url": "https://health-hot.vercel.app/claims/jump-rope-bone-density.html",
       "category": "骨骼",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -2974,7 +2974,7 @@
     {
       "slug": "exercise-kidney-stones",
       "title": "运动可能并不能\"独立\"预防肾结石",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/exercise-kidney-stones.html",
+      "detail_url": "https://health-hot.vercel.app/claims/exercise-kidney-stones.html",
       "category": "代谢",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -3005,7 +3005,7 @@
     {
       "slug": "training-bradycardia",
       "title": "训练后静息心率变慢：一派学者认为源于「高迷走神经张力」",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/training-bradycardia.html",
+      "detail_url": "https://health-hot.vercel.app/claims/training-bradycardia.html",
       "category": "心肺",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -3034,7 +3034,7 @@
     {
       "slug": "mobility-self-tests",
       "title": "总觉得身体僵？几个在家能做的活动度自测",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/mobility-self-tests.html",
+      "detail_url": "https://health-hot.vercel.app/claims/mobility-self-tests.html",
       "category": "关节",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -3064,7 +3064,7 @@
     {
       "slug": "jump-rope-diet-fat-loss",
       "title": "只跳绳、不改饮食，八周几乎不掉脂",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/jump-rope-diet-fat-loss.html",
+      "detail_url": "https://health-hot.vercel.app/claims/jump-rope-diet-fat-loss.html",
       "category": "运动",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -3093,7 +3093,7 @@
     {
       "slug": "jump-rope-knee-impact",
       "title": "单摇跳绳对膝、髋的冲击，其实低于跑步",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/jump-rope-knee-impact.html",
+      "detail_url": "https://health-hot.vercel.app/claims/jump-rope-knee-impact.html",
       "category": "关节",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -3122,7 +3122,7 @@
     {
       "slug": "grief-neuroscience",
       "title": "悲伤的科学：它和抑郁不是一回事",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/grief-neuroscience.html",
+      "detail_url": "https://health-hot.vercel.app/claims/grief-neuroscience.html",
       "category": "心理",
       "verification_status": "curated_pending_evidence",
       "verification_label": "专家梳理 · 证据链待补",
@@ -3149,7 +3149,7 @@
     {
       "slug": "overlooked-muscles-injury-free-training",
       "title": "被忽略的肌群与无伤训练",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/overlooked-muscles-injury-free-training.html",
+      "detail_url": "https://health-hot.vercel.app/claims/overlooked-muscles-injury-free-training.html",
       "category": "运动",
       "verification_status": "curated_pending_evidence",
       "verification_label": "专家梳理 · 证据链待补",
@@ -3176,7 +3176,7 @@
     {
       "slug": "social-anxiety-small-talk",
       "title": "降社交焦虑：和陌生人的小互动被低估了",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/social-anxiety-small-talk.html",
+      "detail_url": "https://health-hot.vercel.app/claims/social-anxiety-small-talk.html",
       "category": "心理",
       "verification_status": "curated_pending_evidence",
       "verification_label": "专家梳理 · 证据链待补",
@@ -3203,7 +3203,7 @@
     {
       "slug": "physical-activity-paradox",
       "title": "运动悖论：上班的体力活，可能不像休闲运动那样护心",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/physical-activity-paradox.html",
+      "detail_url": "https://health-hot.vercel.app/claims/physical-activity-paradox.html",
       "category": "运动",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -3232,7 +3232,7 @@
     {
       "slug": "exercise-any-age-cardiovascular",
       "title": "任何年纪开始运动都不晚（对心血管）",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/exercise-any-age-cardiovascular.html",
+      "detail_url": "https://health-hot.vercel.app/claims/exercise-any-age-cardiovascular.html",
       "category": "运动",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -3261,7 +3261,7 @@
     {
       "slug": "joint-mobility-aging",
       "title": "关节活动度，可以不随年龄必然下降",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/joint-mobility-aging.html",
+      "detail_url": "https://health-hot.vercel.app/claims/joint-mobility-aging.html",
       "category": "关节",
       "verification_status": "curated_pending_evidence",
       "verification_label": "专家梳理 · 证据链待补",
@@ -3288,7 +3288,7 @@
     {
       "slug": "intermittent-fasting-mi",
       "title": "限时进食能降心梗患者的炎症？一个小型 RCT",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/intermittent-fasting-mi.html",
+      "detail_url": "https://health-hot.vercel.app/claims/intermittent-fasting-mi.html",
       "category": "营养",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -3317,7 +3317,7 @@
     {
       "slug": "trainable-happiness-brooks",
       "title": "幸福不是追来的：几件可训练的事",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/trainable-happiness-brooks.html",
+      "detail_url": "https://health-hot.vercel.app/claims/trainable-happiness-brooks.html",
       "category": "心理",
       "verification_status": "curated_pending_evidence",
       "verification_label": "专家梳理 · 证据链待补",
@@ -3344,7 +3344,7 @@
     {
       "slug": "nad-aging-interventions",
       "title": "NAD 与衰老：哪些干预真有人体数据",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/nad-aging-interventions.html",
+      "detail_url": "https://health-hot.vercel.app/claims/nad-aging-interventions.html",
       "category": "长寿",
       "verification_status": "curated_pending_evidence",
       "verification_label": "专家梳理 · 证据链待补",
@@ -3371,7 +3371,7 @@
     {
       "slug": "who-healthy-diet-baseline",
       "title": "健康饮食不是追一种超级食物，而是看整体结构",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-healthy-diet-baseline.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-healthy-diet-baseline.html",
       "category": "营养",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -3400,7 +3400,7 @@
     {
       "slug": "seed-oils",
       "title": "种子油真有那么坏吗？一次把证据捋清",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/seed-oils.html",
+      "detail_url": "https://health-hot.vercel.app/claims/seed-oils.html",
       "category": "营养",
       "verification_status": "curated_pending_evidence",
       "verification_label": "专家梳理 · 证据链待补",
@@ -3427,7 +3427,7 @@
     {
       "slug": "creatine-lipids",
       "title": "补肌酸会搞坏血脂吗？荟萃说：不会",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/creatine-lipids.html",
+      "detail_url": "https://health-hot.vercel.app/claims/creatine-lipids.html",
       "category": "补剂",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -3456,7 +3456,7 @@
     {
       "slug": "who-adult-bmi-boundaries",
       "title": "BMI 能筛查超重和肥胖，但不能单独概括一个人的健康",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-adult-bmi-boundaries.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-adult-bmi-boundaries.html",
       "category": "代谢",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -3485,7 +3485,7 @@
     {
       "slug": "exercise-intensity-longevity",
       "title": "哪种运动对长寿最有用？",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/exercise-intensity-longevity.html",
+      "detail_url": "https://health-hot.vercel.app/claims/exercise-intensity-longevity.html",
       "category": "运动",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -3515,7 +3515,7 @@
     {
       "slug": "insomnia-cbt-i",
       "title": "失眠：不靠药能怎么改善",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/insomnia-cbt-i.html",
+      "detail_url": "https://health-hot.vercel.app/claims/insomnia-cbt-i.html",
       "category": "睡眠",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -3545,7 +3545,7 @@
     {
       "slug": "uspstf-osteoporosis-screening-women",
       "title": "骨质疏松筛查：65 岁以上女性应优先关注",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/uspstf-osteoporosis-screening-women.html",
+      "detail_url": "https://health-hot.vercel.app/claims/uspstf-osteoporosis-screening-women.html",
       "category": "骨骼",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -3574,7 +3574,7 @@
     {
       "slug": "who-physical-activity-baseline",
       "title": "运动不是非得练到很狠：动起来就比完全不动好",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/who-physical-activity-baseline.html",
+      "detail_url": "https://health-hot.vercel.app/claims/who-physical-activity-baseline.html",
       "category": "运动",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -3603,7 +3603,7 @@
     {
       "slug": "aging-pace-test",
       "title": "你的「衰老速度」其实能测",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/aging-pace-test.html",
+      "detail_url": "https://health-hot.vercel.app/claims/aging-pace-test.html",
       "category": "长寿",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -3633,7 +3633,7 @@
     {
       "slug": "eight-glasses-water-how-do-you-know",
       "title": "「每天八杯水」——你怎么知道这是对的？",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/eight-glasses-water-how-do-you-know.html",
+      "detail_url": "https://health-hot.vercel.app/claims/eight-glasses-water-how-do-you-know.html",
       "category": "营养",
       "verification_status": "curated_pending_evidence",
       "verification_label": "专家梳理 · 证据链待补",
@@ -3660,7 +3660,7 @@
     {
       "slug": "uspstf-prediabetes-type2-screening",
       "title": "没有症状，也可能值得筛查糖尿病前期和 2 型糖尿病",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/uspstf-prediabetes-type2-screening.html",
+      "detail_url": "https://health-hot.vercel.app/claims/uspstf-prediabetes-type2-screening.html",
       "category": "代谢",
       "verification_status": "verified",
       "verification_label": "已核验",
@@ -3689,7 +3689,7 @@
     {
       "slug": "uspstf-hypertension-screening-confirmation",
       "title": "一次血压高，不等于已经确诊高血压",
-      "detail_url": "https://liuyuxin01210725-debug.github.io/health-hot/claims/uspstf-hypertension-screening-confirmation.html",
+      "detail_url": "https://health-hot.vercel.app/claims/uspstf-hypertension-screening-confirmation.html",
       "category": "心肺",
       "verification_status": "verified",
       "verification_label": "已核验",

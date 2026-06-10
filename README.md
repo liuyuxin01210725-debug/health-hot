@@ -87,12 +87,12 @@ python3 audit_library.py --check-links
 ```bash
 # Claude Code
 mkdir -p ~/.claude/skills/health-hot
-curl -fsSL https://liuyuxin01210725-debug.github.io/health-hot/skill/SKILL.md \
+curl -fsSL https://health-hot.vercel.app/skill/SKILL.md \
   -o ~/.claude/skills/health-hot/SKILL.md
 
 # Codex
 mkdir -p ~/.codex/skills/health-hot
-curl -fsSL https://liuyuxin01210725-debug.github.io/health-hot/skill/SKILL.md \
+curl -fsSL https://health-hot.vercel.app/skill/SKILL.md \
   -o ~/.codex/skills/health-hot/SKILL.md
 ```
 
