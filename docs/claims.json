@@ -6,9 +6,9 @@
   "disclaimer": "本数据为科普整理，非医疗建议；不提供具体剂量与个体化诊疗。请点击 detail_url / evidence_source_urls 回原文核对。",
   "usage_note": "新消费者请优先使用 verification_basis：study_supported=『研究支持』，official_basis=『官方依据』，frontier_pending=『前沿待核』。verification_status 仅为兼容旧消费者保留，不应用它把官方页面称为原始研究。evidence_source_urls 为核验依据链接（研究或白名单官方页面），discovery_source_url 是『在哪听到』（非证据）。evidence_hint 是用依据状态+证据强度合成的可直接转述的解读，回答用户时可原样引用，但请勿在此基础上夸大或加上本站未给出的剂量/诊疗建议。",
   "generated_at": "2026-06-11",
-  "count": 133,
-  "verified_count": 123,
-  "study_supported_count": 45,
+  "count": 134,
+  "verified_count": 124,
+  "study_supported_count": 46,
   "official_basis_count": 78,
   "frontier_pending_count": 10,
   "claims": [
@@ -186,6 +186,37 @@
       "featured": false,
       "date": "2026-06-11",
       "source_published_at": "2017-04-01",
+      "reviewed_at": "2026-06-11"
+    },
+    {
+      "slug": "creatine-kidney-safety",
+      "title": "补肌酸会伤肾吗？肾正常的健康人不用怕，但有前提",
+      "detail_url": "https://health-hot.vercel.app/claims/creatine-kidney-safety.html",
+      "category": "补剂",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "expert",
+      "evidence_label": "专家",
+      "evidence_hint": "有可追溯的原始研究支撑；属观点性证据，待更强研究确认，仅供参考。",
+      "conclusion": "「补肌酸伤肾」是流传最广的健身误解之一。国际运动营养学会（ISSN）的立场声明梳理大量研究后认为：在肾功能正常的健康人身上，长期补肌酸是安全、耐受良好的，并不损害肾功能。它会让验血的「血肌酐」略升，但那是肌酸代谢的正常现象，不等于肾受损——只是容易被误读。",
+      "population": "肾功能正常的健康成年人（立场声明与综述覆盖范围）；已有肾脏疾病者不在此结论内。",
+      "caveats": "这是立场声明/综述（专家梳理），非单一 RCT；结论针对健康人，已有肾病或肾功能不全者补肌酸前应咨询医生；血肌酐轻度升高属肌酸正常代谢现象，但体检/验血前最好告知医生你在补肌酸，避免被误判为肾损伤；本条不涉及具体剂量。",
+      "summary": "「肌酸伤肾」几乎是健身房和长辈口中最顽固的担忧。Kreider 2017 代表国际运动营养学会（ISSN）发布的立场声明，综合了大量短期与长期研究，结论是：在健康人身上补肌酸安全、耐受良好，没有证据表明它损害肾功能；Antonio 2021 的「常见误解」综述更直接把「肌酸是否导致肾损伤」列为要破除的问题之一。这个谣言的一个常见来源：补肌酸会让验血时的「血肌酐」略微升高，而肌酐又是评估肾功能的常用指标——但这里的升高来自肌酸本身的代谢，不是肾出了问题。反爆款角度：把「指标动了」直接当成「器官坏了」，是这个谣言的根。肾正常的健康人不必害怕；但已有肾病的人是另一回事，且体检前最好主动告诉医生你在补肌酸。",
+      "source": "J Int Soc Sports Nutr · ISSN 肌酸安全性与有效性立场声明（Kreider 2017）；肌酸常见误解综述（Antonio 2021）",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/28615996/",
+        "https://pubmed.ncbi.nlm.nih.gov/33557850/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/28615996/",
+        "https://pubmed.ncbi.nlm.nih.gov/33557850/"
+      ],
+      "featured": true,
+      "date": "2026-06-11",
+      "source_published_at": "2017-06-13",
       "reviewed_at": "2026-06-11"
     },
     {
