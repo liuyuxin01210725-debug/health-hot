@@ -102,9 +102,57 @@
       ]
     },
 
+    {
+      "name": "EU·营养与健康声称裁定登记册",
+      "type": "official_catalog",
+      "role": "anchor",
+      "authority_level": "official",
+      "category": "补剂",
+      "evidence": "guideline",
+      "limit": 10,
+      "_独立性": "欧盟委员会基于 EFSA 独立科学评估，逐条裁定食品/补剂健康声称【获批】或【被拒】及理由。方法学与美国 NIH/ODS 完全独立，是反营销夸大、给补剂说法做第二意见的强力交叉源。注意：EFSA『声称未成立』=按欧盟监管证据门槛未达标，不等于『该成分无效』。",
+      "entries": [
+        {"title": "欧盟健康声称登记册：某成分宣称的功效，欧盟判『成立』还是『证据不足』", "url": "https://ec.europa.eu/food/food-feed-portal/screen/health-claims/eu-register", "category": "补剂", "desc": "欧盟委员会营养与健康声称登记册（基于 EFSA 评估）。核验：针对『XX 能增强免疫/护心/抗氧化』等高频宣称，查欧盟是否已授权或已拒绝，作为与美国口径独立的监管级第二意见。标注：欧盟监管口径，结论可能与美国不同。"}
+      ]
+    },
+    {
+      "name": "NHS·英国国民保健署 维生素与矿物质",
+      "type": "official_catalog",
+      "role": "anchor",
+      "authority_level": "official",
+      "category": "补剂",
+      "evidence": "guideline",
+      "limit": 10,
+      "_独立性": "英国官方循证健康信息，独立于美国 USPSTF/NIH，给同一补剂/营养结论补英国官方第二意见。引用时标注『英国 NHS 情境』。",
+      "entries": [
+        {"title": "维生素与矿物质：每种到底要不要补、补多少，英国官方怎么说", "url": "https://www.nhs.uk/conditions/vitamins-and-minerals/", "category": "补剂", "desc": "英国 NHS 维生素与矿物质总览。核验：各维生素/矿物质的作用、推荐摄入、过量风险与是否需要补充的英国官方口径，作为与美国 ODS 独立的交叉源。"}
+      ]
+    },
+    {
+      "name": "WHO eLENA·营养干预循证库",
+      "type": "official_catalog",
+      "role": "anchor",
+      "authority_level": "official",
+      "category": "营养",
+      "evidence": "guideline",
+      "limit": 10,
+      "_独立性": "WHO 营养行动循证库（100+ 条目），粒度比 WHO 常青事实页更细，对具体营养干预（补铁/补维A/补钙等）给超国家级循证裁定，可对补剂类结论做交叉印证。",
+      "entries": [
+        {"title": "孕期补铁：WHO 循证库怎么定适用人群与剂量边界", "url": "https://www.who.int/tools/elena/interventions/daily-iron-pregnancy", "category": "营养", "desc": "WHO eLENA 孕期每日补铁干预循证摘要。核验：孕期补铁的获益、适用人群与证据等级。"},
+        {"title": "孕期补钙：哪些情境下 WHO 推荐、证据多强", "url": "https://www.who.int/tools/elena/interventions/calcium-pregnancy", "category": "营养", "desc": "WHO eLENA 孕期补钙干预循证摘要。核验：孕期补钙降低子痫前期风险的证据与适用边界。"},
+        {"title": "儿童补维生素A：在什么人群有用、什么人群证据弱", "url": "https://www.who.int/tools/elena/interventions/vitamina-children", "category": "营养", "desc": "WHO eLENA 儿童补维生素A干预循证摘要。核验：维A补充对儿童的获益人群与证据局限。"},
+        {"title": "锌治疗儿童腹泻：WHO 循证库的推荐与证据", "url": "https://www.who.int/tools/elena/interventions/zinc-diarrhoea", "category": "营养", "desc": "WHO eLENA 锌治疗儿童腹泻干预循证摘要。核验：补锌对儿童急性腹泻的获益与适用人群。"}
+      ]
+    },
+
     {"name": "PubMed·Cochrane系统综述", "type": "pubmed", "role": "anchor", "query": "Cochrane Database Syst Rev[jour] AND (exercise[ti] OR nutrition[ti] OR diet[ti] OR sleep[ti] OR supplement*[ti] OR vitamin*[ti])", "title_terms": ["exercise", "nutrition", "diet", "sleep", "supplement", "vitamin"], "category": "综述", "evidence": "unknown"},
     {"name": "PubMed·健康指南", "type": "pubmed", "role": "anchor", "query": "guideline[pt] AND humans[mh] AND (exercise[ti] OR nutrition[ti] OR diet[ti] OR sleep[ti] OR obesity[ti] OR hypertension[ti] OR diabetes[ti])", "title_terms": ["exercise", "nutrition", "diet", "sleep", "obesity", "hypertension", "diabetes"], "category": "指南", "evidence": "unknown"},
     {"name": "PubMed·系统综述", "type": "pubmed", "role": "anchor", "query": "systematic review[pt] AND humans[mh] AND (creatine[tiab] OR \"omega-3\"[tiab] OR \"intermittent fasting\"[tiab] OR \"resistance training\"[tiab] OR sleep[tiab])", "title_terms": ["creatine", "omega-3", "intermittent fasting", "time-restricted", "resistance training", "sleep"], "category": "综述", "evidence": "unknown"},
+
+    {"name": "PubMed·ESC欧洲心脏病学会指南", "type": "pubmed", "role": "anchor", "query": "\"Eur Heart J\"[Journal] AND guideline[pt] AND (diet*[tiab] OR nutrition[tiab] OR \"physical activity\"[tiab] OR exercise[tiab] OR lifestyle[tiab] OR \"omega-3\"[tiab] OR supplement*[tiab])", "title_terms": ["diet", "nutrition", "physical activity", "exercise", "lifestyle", "omega", "supplement"], "category": "心肺", "evidence": "unknown", "_独立": "欧洲心脏病学会，独立于美国AHA/ACC，心血管生活方式/营养结论的欧洲第二意见"},
+    {"name": "PubMed·EAU欧洲泌尿外科学会·结石指南", "type": "pubmed", "role": "anchor", "query": "\"EAU Guidelines\"[Title] AND (urolithiasis[tiab] OR \"kidney stone*\"[tiab] OR nephrolithiasis[tiab])", "category": "其他", "evidence": "unknown", "_独立": "欧洲泌尿外科学会，结石领域权威，独立于美国AUA"},
+    {"name": "PubMed·BJSM运动医学共识", "type": "pubmed", "role": "anchor", "query": "\"Br J Sports Med\"[Journal] AND (\"consensus statement\"[Title] OR guideline[pt])", "category": "运动", "evidence": "unknown", "_独立": "英国运动医学杂志共识声明，运动健康领域独立交叉源"},
+    {"name": "PubMed·ADA糖尿病诊疗标准", "type": "pubmed", "role": "anchor", "query": "\"Diabetes Care\"[Journal] AND \"Standards of Care\"[Title]", "category": "代谢", "evidence": "unknown", "_独立": "美国糖尿病学会年度诊疗标准；与EASD/Lancet等并列做糖尿病结论交叉"},
 
     {"name": "PubMed·间歇禁食RCT", "type": "pubmed", "role": "radar", "query": "intermittent fasting AND randomized controlled trial[pt] AND humans[mh]", "title_terms": ["intermittent fasting", "time-restricted"], "category": "营养", "evidence": "unknown"},
     {"name": "PubMed·肌酸", "type": "pubmed", "role": "radar", "query": "creatine supplementation AND humans[mh]", "title_terms": ["creatine"], "category": "补剂", "evidence": "unknown"},
@@ -127,9 +175,26 @@
     "WHO Fact Sheets: https://www.who.int/news-room/fact-sheets",
     "USPSTF A/B 推荐(标注适用地区): https://www.uspreventiveservicestaskforce.org/",
     "国家卫健委 / 中国疾控中心本土基线已进入 official_catalog；后续继续扩充具体指南页",
-    "中文解释层(丁香医生/卓正/果壳)——只作通俗解释，不替代原始依据"
+    "中文解释层(丁香医生/卓正/果壳)——只作通俗解释，不替代原始依据",
+    "__以下为 2026-06 深度研究核验通过、但因合规/付费/无机读接口只能人工引用的独立交叉源__",
+    "Cochrane Library(系统综述金标准；摘要经 PubMed 可得，全文付费): https://www.cochranelibrary.com/ ——做结论级交叉印证首选",
+    "Epistemonikos(智利·循证综述聚合，非美第二方；robots.txt 禁 /search，仅人工查具体综述页): https://www.epistemonikos.org/",
+    "NICE(英国官方循证指南；UK Open Content Licence 明文排除 AI 用途，只人工引用具体 ng/ta 页、标注『英国NHS情境』): https://www.nice.org.uk/guidance/published",
+    "Examine.com(补剂逐结局证据分级，订阅付费，仅人工查证引用): https://examine.com/",
+    "theNNT(独立循证·把『有效』翻译成 NNT/NNH，常戳破夸大疗效): https://www.thennt.com/home-nnt/",
+    "Science-Based Medicine(执业医生解构爆款健康说法；robots 禁 feed，人工阅读): https://sciencebasedmedicine.org/",
+    "McGill OSS(加拿大大学官方科普打假，非美非播客): https://www.mcgill.ca/oss/our-articles",
+    "Health Feedback / Science Feedback(法国·第三方健康事实核查，RSS https://science.feedback.org/feed/ 混杂多领域，人工筛健康条目)",
+    "British Dietetic Association 食物事实页(英国注册营养师协会，面向公众): https://www.bda.uk.com/food-health/food-facts/all-food-fact-sheets.html",
+    "Heart Foundation Australia 营养证据综述(澳洲心血管营养): https://www.heartfoundation.org.au/for-professionals/nutrition-evidence-summaries-and-reviews",
+    "PROSPERO(英国CRD·系统综述前瞻注册库，雷达用：判断某结论是否有新综述在路上；注册≠完成≠发表，不作证据): https://www.crd.york.ac.uk/prospero/",
+    "WHO ICTRP 国际试验注册检索门户(20+国注册库，反查『有无完成试验/选择性发表』): https://trialsearch.who.int/",
+    "Health Canada 膳食参考摄入量(DRI)(加拿大官方；canada.ca 拦自动请求，URL 待人工核验后再决定是否进 official_catalog)"
   ],
-  "_未来": [
-    "ScienceDaily(科学新闻稿)仅作选题雷达，不进正式发布链路"
+  "_未来_需写代码的机读接口": [
+    "ScienceDaily(科学新闻稿)仅作选题雷达，不进正式发布链路",
+    "Europe PMC REST API(EMBL-EBI，英国/欧洲)：第二套独立机读检索引擎，可按 ISSN 直拉 Cochrane(1469-493X)/Campbell/JBI、捞 PubMed 漏掉的非英文综述。★关键：内容镜像 MEDLINE，必须按 PMID/DOI 与 PubMed 去重，否则同一篇 meta 双重计数、虚增证据强度；定位为检索发现层(index)而非独立证据源。endpoint: https://www.ebi.ac.uk/europepmc/webservices/rest/search",
+    "ClinicalTrials.gov API v2：反查『选择性发表』红旗——某说法宣称有效，但注册库里该终点的完成试验是否真存在/有无公布结果。endpoint: https://clinicaltrials.gov/api/v2/studies",
+    "openFDA drug/label API：为涉及具体成药/OTC 的说法补官方说明书级『警告/禁忌/相互作用』安全边界。endpoint: https://api.fda.gov/drug/label.json"
   ]
 }

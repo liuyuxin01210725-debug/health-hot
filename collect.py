@@ -43,6 +43,9 @@ OFFICIAL_HOSTS = {
     "cdc.gov", "www.cdc.gov",
     "nhc.gov.cn", "www.nhc.gov.cn",
     "chinacdc.cn", "www.chinacdc.cn", "en.chinacdc.cn",
+    # 独立交叉源（非美官方循证机构）：欧盟委员会健康声称登记册、英国 NHS
+    "ec.europa.eu", "food.ec.europa.eu",
+    "nhs.uk", "www.nhs.uk",
 }
 REFERENCE_HOSTS = OFFICIAL_HOSTS | {
     "pubmed.ncbi.nlm.nih.gov", "ncbi.nlm.nih.gov", "www.ncbi.nlm.nih.gov",
