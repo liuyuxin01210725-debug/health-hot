@@ -1,0 +1,68 @@
+{
+  "intermittent-fasting-lean-mass-ldl": {
+    "verdict": "PASS",
+    "content_sha": "c19aec0f0cb924efae56e5131b81e26cc08a3963890a7768628428c647068b76",
+    "reviewed_at": "2026-06-14",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3C4": true
+    },
+    "notes": "LDL口径从'是反的'校准为'随年龄分化未有定论',补2026年龄分层荟萃(Xing/42280443),两侧均不过度自信"
+  },
+  "vitamin-c-kidney-stone-risk": {
+    "verdict": "PASS",
+    "content_sha": "c22cef7b3913ac556f6e71d3acd7e6647bfcb941bfc61392fdd68f3f86e19f89",
+    "reviewed_at": "2026-06-14",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3C4": true
+    },
+    "notes": "深度复核+三关重审:7引用全真,ODS原话(renal disorders/hyperoxaluria)对应正确,Curhan1996反证可溯,Thomas快报来源已诚实标注"
+  },
+  "type-2-diabetes-remission-weight-loss": {
+    "verdict": "PASS",
+    "content_sha": "0ab6f908923220de30a8da589205f6f5fb11809b3a283a44bda8291429c38624",
+    "reviewed_at": "2026-06-14",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3C4": true
+    },
+    "notes": "作者署名改正为Kanbour;缓解定义改为ADA/EASD2021(停药≥3月HbA1c<6.5%);完全缓解阈值(<6.0%)已标清"
+  },
+  "reused-frying-oil-cardiovascular-risk": {
+    "verdict": "PASS",
+    "content_sha": "745d0f4a92fd79107c2c977c48fae52100241771fea62f6428e4a08fef914743",
+    "reviewed_at": "2026-06-14",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3C4": true
+    },
+    "notes": "首轮即PASS:煎炸食物摄入荟萃+反复加热油机制综述,严格区分总摄入量vs反复用油、关联非因果"
+  },
+  "vitamin-d-acute-respiratory-infection-no-effect": {
+    "verdict": "PASS",
+    "content_sha": "be5338f00b07cc42a1583159960c49c67cdafd7c217dd32ee4c3923174710c93",
+    "reviewed_at": "2026-06-14",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3C4": true
+    },
+    "notes": "已纳入缺乏者/每日剂量分歧并点名Martineau2017;临界不显著(OR0.94跨1.0)与发表偏倚已交代"
+  },
+  "astaxanthin-exercise-performance-recovery": {
+    "verdict": "PASS",
+    "content_sha": "b4d0ed358e0e06e2482d9ec245e197c87de54a3b3fa35956d55faaca6e5b079c",
+    "reviewed_at": "2026-06-14",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3C4": true
+    },
+    "notes": "首轮即PASS:24RCT荟萃,强抗氧化≠提升运动表现,恢复指标(CK降)与异质性如实标注"
+  }
+}
