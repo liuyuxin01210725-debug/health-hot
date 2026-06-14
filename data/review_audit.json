@@ -64,5 +64,44 @@
       "C3C4": true
     },
     "notes": "首轮即PASS:24RCT荟萃,强抗氧化≠提升运动表现,恢复指标(CK降)与异质性如实标注"
+  },
+  "zinc-childhood-diarrhoea-boundaries": {
+    "verdict": "PASS",
+    "content_sha": "17d915ff169519259d9e721622f35bc3ea752613010ff743a65fed1496debdd2",
+    "reviewed_at": "2026-06-14",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C7": true
+    },
+    "notes": "Cochrane27996088独立荟萃+WHO推荐流2条独立线;半天效应已标低确定性;<6月龄/营养良好边界忠实Cochrane;eLENA明示非独立第三方"
+  },
+  "blood-donor-iron-deficiency-supplementation": {
+    "verdict": "PASS",
+    "content_sha": "c4a73675ab4b3cd2983387febf90c5dfa842a842959b456731b6602cbaf38542",
+    "reviewed_at": "2026-06-14",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C7": true
+    },
+    "notes": "Cochrane42240175(已删2014旧版24990381双计)+AABB2条独立线;危害侧RR1.69三处标确定性很低;'开始补铁后首次献血时'忠实摘要;NHS降为同体系官方口径"
+  },
+  "vitamin-b12-children-growth-cognition": {
+    "verdict": "PASS",
+    "content_sha": "353912190ebc8b02ce1100baa89cc0f094aca66f7fda6379f50348b26b18e424",
+    "reviewed_at": "2026-06-14",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C7": true
+    },
+    "notes": "Cochrane42227307+ODS/NHS;缺才补、补不普遍增益;'可能几乎没差别'hedge保留;NHS仅支撑纯素者不外扩"
   }
 }

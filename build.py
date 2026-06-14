@@ -108,7 +108,11 @@ _GUIDELINE_HOSTS = ("who.int", "www.who.int", "uspreventiveservicestaskforce.org
                     "www.uspreventiveservicestaskforce.org", "ods.od.nih.gov",
                     "nccih.nih.gov", "www.nccih.nih.gov", "cdc.gov", "www.cdc.gov",
                     "nhc.gov.cn", "www.nhc.gov.cn", "chinacdc.cn", "www.chinacdc.cn",
-                    "en.chinacdc.cn")
+                    "en.chinacdc.cn",
+                    # 独立交叉源（非美官方循证机构，与 collect.py OFFICIAL_HOSTS 对齐）
+                    "nhs.uk", "www.nhs.uk",
+                    "ec.europa.eu", "food.ec.europa.eu",
+                    "efsa.europa.eu", "www.efsa.europa.eu")
 
 
 def _is_research_url(u):
@@ -409,6 +413,8 @@ def _basis_origin(it):
         elif "cdc.gov" in host: name = "CDC"
         elif "nhc.gov.cn" in host: name = "卫健委"
         elif "chinacdc" in host: name = "中国CDC"
+        elif "nhs.uk" in host: name = "NHS"
+        elif "europa.eu" in host: name = "EFSA/EU"
         else: name = host
         if name not in seen:
             seen.add(name); labels.append(name)

@@ -1,0 +1,25 @@
+{
+  "title": "孩子拉肚子补锌能好得更快？有用，但有人群边界，且要配合补液盐",
+  "source": "Cochrane Database of Systematic Reviews（PMID 27996088，独立荟萃）+ WHO 推荐流（WHO/UNICEF 联合声明；eLENA 据同一 Cochrane 评审与该声明给出推荐，非独立第三方）",
+  "source_url": "https://pubmed.ncbi.nlm.nih.gov/27996088/",
+  "date": "2026-06-14",
+  "source_published_at": "2016-12-20",
+  "category": "营养",
+  "featured": false,
+  "rank": 0,
+  "evidence": "meta",
+  "verification_status": "verified",
+  "conclusion": "补锌对儿童急性腹泻有循证依据，是配合口服补液盐(ORS)的\"辅助\"手段、不替代补液；但获益集中在6月龄以上、且处于缺锌或营养不良高风险地区的孩子。Cochrane荟萃(33项RCT、10841名儿童)显示：6月龄以上可能缩短病程约半天（低确定性）、营养不良儿获益更大（约缩短1天，高证据等级），而<6月龄、营养良好或低缺锌风险人群证据不支持常规补锌。WHO/UNICEF推荐锌+低渗ORS为标准方案；个体用药请遵医嘱。",
+  "population": "急性或迁延性腹泻的儿童；获益主要见于6月龄以上、且存在缺锌或营养不良风险（多为发展中国家）的孩子。",
+  "caveats": "①获益有明确人群边界：仅对6月龄以上、缺锌/营养不良高风险地区证据充分；<6月龄、营养良好、低缺锌风险地区证据不支持常规补锌(Cochrane明确不推荐)。②锌是补液的辅助而非替代,补液(ORS)仍是急性腹泻的核心。③补锌会增加呕吐风险(各年龄组RR约1.5,中等证据)。④对是否减少死亡/住院,证据等级极低,不能据此宣称救命。⑤多数纳入试验来自亚洲高缺锌风险地区,推广到低风险/发达地区人群需谨慎。⑥剂量(WHO:20mg/日,<6月龄10mg/日,共10–14天)及具体用药请遵儿科医生或注册营养师指导。",
+  "summary": "\"孩子拉肚子补锌能好得更快\"——方向对，但有边界。Cochrane 对 33 项随机对照试验、10841 名儿童的系统综述发现：在缺锌或营养不良高发的地区，6月龄以上儿童补锌可能把腹泻平均病程缩短约半天（低确定性），营养不良者缩短近一天（高确定性），并降低第7天仍腹泻的比例；这与 WHO 推荐口径一致（WHO/UNICEF 联合声明将\"锌 + 低渗口服补液盐(ORS)\"列为急性腹泻标准方案；WHO eLENA 据同一 Cochrane 评审与该声明给出推荐）——故本条实为 2 条独立证据线交叉：Cochrane 独立荟萃 + WHO 推荐流。但关键边界是：6月龄以下婴儿、营养良好、低缺锌风险的孩子，现有证据不支持常规补锌。本条仅说明证据边界与适用人群，不替代个体诊疗，不给具体剂量——剂量请遵医嘱。",
+  "slug": "zinc-childhood-diarrhoea-boundaries",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-14",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/27996088/",
+    "https://www.who.int/tools/elena/interventions/zinc-diarrhoea",
+    "https://www.who.int/publications/i/item/WHO_FCH_CAH_04.7"
+  ]
+}
