@@ -1,0 +1,24 @@
+{
+  "title": "间歇性断食会掉肌肉、还升高坏胆固醇(LDL)？掉瘦体重是真，升 LDL 是反的",
+  "source": "JAMA Netw Open · Patikorn 2021(11 项荟萃/130 项 RCT 伞状综述);Diabetes Obes Metab 2024(14 项 RCT 荟萃)",
+  "source_url": "https://pubmed.ncbi.nlm.nih.gov/34919135/",
+  "date": "2026-06-14",
+  "source_published_at": "2021-12-01",
+  "category": "营养",
+  "featured": false,
+  "rank": 0,
+  "evidence": "meta",
+  "verification_status": "verified",
+  "conclusion": "间歇性断食减重时确实会一并掉瘦体重(去脂体重/lean mass)——伞状综述明确发现 IF 与去脂体重下降相关;但「它升高 LDL-C」与高质量证据相反:多项荟萃显示 IF 总体降低或不改变 LDL-C(不是升高)。需注意:去脂体重不等于纯肌肉,且该\"掉瘦体重\"结论主要来自超重/肥胖人群的伞状综述,糖尿病人群专项荟萃未见显著瘦体重下降。",
+  "population": "超重/肥胖、糖尿病前期或2型糖尿病等成人(伞状综述各 RCT 中位样本约 38 人、中位随访约 3 个月)",
+  "caveats": "说法被部分讲反:①「掉瘦体重」有证据——但准确说是去脂体重(lean/fat-free mass)下降,并非专指肌肉;此结论主要来自超重/肥胖人群伞状综述(Patikorn 2021),糖尿病人群荟萃(Khalafi 2024)反而未见瘦体重显著下降。②「升高 LDL-C」与高质量荟萃方向相反——Patikorn 2021 把 LDL-C/总胆固醇/甘油三酯的下降列为 IF 的有益关联;糖尿病人群荟萃显示 IF 对 LDL 无显著影响、并降低总胆固醇和甘油三酯;另有专项血脂荟萃(Meng 2020)显示 IF 改善 LDL-C。目前没有可靠荟萃证据显示 IF 普遍升高 LDL。证据多来自短期(中位约 3 个月)、小样本 RCT(中位约 38 人),长期硬结局(心血管事件、死亡)证据不足;多数关联 GRADE 质量偏低(72% 极低、21% 低)。本条不针对个体,有基础病或在用药者的饮食方案应由持证医生/注册营养师评估。",
+  "summary": "一条流行说法称：16:8 等限时进食/间歇性断食(IF)减重的同时会掉肌肉、还在多个年龄段反而升高低密度脂蛋白(LDL-C)。反查高质量证据,这条说法一半对、一半被讲反了。一篇汇总 11 项荟萃、共 130 项 RCT 的伞状综述(JAMA Netw Open 2021,Patikorn 等,用 GRADE 评级)明确写道:IF 与「瘦体重(fat-free mass)下降」相关——掉肌肉这部分属实,所以减重期配合足量蛋白与抗阻训练很重要。但同一篇综述把 LDL-C、总胆固醇、甘油三酯的「下降」列为 IF 的有益结果之一,而非升高;另一篇针对糖尿病前期/2型糖尿病的荟萃(Diabetes Obes Metab 2024,14 项 RCT)也显示 IF 不损害血脂谱。换句话说,「IF 升高 LDL」与现有荟萃证据方向相反。反爆款角度:别被「断食既掉肌肉又升坏胆固醇」的双重恐吓带跑——掉瘦体重值得防(靠蛋白+力量训练),升 LDL 这条则证据不支持。",
+  "slug": "intermittent-fasting-lean-mass-ldl",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-14",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://pubmed.ncbi.nlm.nih.gov/34919135/",
+    "https://pubmed.ncbi.nlm.nih.gov/38956175/"
+  ]
+}
