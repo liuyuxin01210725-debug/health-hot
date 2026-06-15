@@ -7,7 +7,7 @@ preview_urls = false
 [vars]
 GITHUB_REPO = "liuyuxin01210725-debug/health-hot"
 GITHUB_LABEL = "待核说法"
-ALLOWED_ORIGINS = "https://liuyuxin01210725-debug.github.io,http://localhost:8000,http://127.0.0.1:8000"
+ALLOWED_ORIGINS = "https://health-hot.vercel.app,https://liuyuxin01210725-debug.github.io,http://localhost:8000,http://127.0.0.1:8000"
 
 # Optional but recommended for rate limiting and duplicate suppression:
 # [[kv_namespaces]]

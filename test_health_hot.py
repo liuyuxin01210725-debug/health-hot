@@ -447,5 +447,36 @@ class StrongReviewGateTests(unittest.TestCase):
         self.assertIn("已变更", why)
 
 
+class WorkerCorsConfigTests(unittest.TestCase):
+    """离线回归：提交端 CORS 白名单必须含正式站 Origin，
+    否则正式站（health-hot.vercel.app）的「搜索无结果→一键提交」会被浏览器 CORS 拦死。"""
+    PROD_ORIGIN = "https://health-hot.vercel.app"
+    ROOT = Path(__file__).resolve().parent
+
+    def test_wrangler_vars_allow_production_origin(self):
+        import tomllib
+        with open(self.ROOT / "submit-worker" / "wrangler.toml", "rb") as fh:
+            cfg = tomllib.load(fh)
+        origins = [o.strip() for o in cfg["vars"]["ALLOWED_ORIGINS"].split(",")]
+        self.assertIn(self.PROD_ORIGIN, origins,
+                      "wrangler.toml ALLOWED_ORIGINS 缺正式站，部署后正式站提交会被 CORS 拦")
+
+    def test_worker_default_allowlist_has_production_origin(self):
+        # DEFAULT_ALLOWED_ORIGINS 是 env 未设时的兜底，也必须含正式站
+        src = (self.ROOT / "submit-worker" / "src" / "worker.js").read_text(encoding="utf-8")
+        self.assertIn(self.PROD_ORIGIN, src)
+
+
+class SkillDataSourceTests(unittest.TestCase):
+    """Skill 数据源必须指向受 build.py 闸门保护的 Vercel，而非直接 serve docs/ 的 GitHub Pages。"""
+    ROOT = Path(__file__).resolve().parent
+
+    def test_skill_points_to_gated_vercel_feed(self):
+        text = (self.ROOT / "skill" / "SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("https://health-hot.vercel.app/claims.json", text)
+        self.assertNotIn("github.io/health-hot/claims.json", text,
+                         "Skill 仍指向 GitHub Pages（不过 build.py 闸门）")
+
+
 if __name__ == "__main__":
     unittest.main()

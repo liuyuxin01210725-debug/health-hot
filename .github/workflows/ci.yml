@@ -32,6 +32,15 @@ jobs:
       - name: 全库发布闸门构建（含强审硬锁，复刻 Vercel 部署）
         run: python3 build.py
 
+      - name: docs/claims.json 必须等于闸门构建产物（堵 Pages/静态旁路）
+        run: |
+          # AI/Skill 数据源 = 提交进仓库的 docs/claims.json，由 GitHub Pages 直接 serve（不跑 build.py）。
+          # 上一步已用 build.py 重建 docs/；这里断言提交版与闸门产物 byte 一致——手改 / 越过 build.py
+          # 提交的 claims.json 会让本步失败。generated_at 已改成 max(reviewed_at)，跨天确定不会假失败。
+          # 仅校验 claims.json：详情页 HTML 含「期刊预排未到见刊日」这类按当天变化的标签，故不做 byte 校验。
+          git diff --exit-code -- docs/claims.json \
+            || { echo "✗ docs/claims.json 与 build.py 产物不一致：要么没重建提交，要么被手改绕过闸门。本地跑 python3 build.py 后提交 docs/claims.json。"; exit 1; }
+
       - name: 单元测试
         run: python3 test_health_hot.py
 

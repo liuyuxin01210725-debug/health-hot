@@ -1127,6 +1127,10 @@ def claims_feed(items):
         })
     n_verified = sum(1 for c in out if c["verification_status"] == "verified")
     basis_counts = {k: sum(1 for c in out if c["verification_basis"] == k) for k in VB_LABEL}
+    # generated_at 用「最新复核日」而非构建当天 → 同样内容反复构建产出 byte 级一致，
+    # 让 docs/claims.json 可被 CI 的 git diff --exit-code 当成「必须等于闸门产物」来校验，
+    # 堵住 GitHub Pages 直接 serve 已提交 docs/ 的旁路。无条目时退回 TODAY。
+    generated_at = max((it.get("reviewed_at") or it.get("date") or TODAY) for it in items) if items else TODAY
     return {
         "schema_version": "1.4",  # 1.4: 新增 evidence_hint 派生解读层；1.3 起有三类 verification_basis（兼容旧消费者）
         "site": SITE_TITLE,
@@ -1141,7 +1145,7 @@ def claims_feed(items):
                       "discovery_source_url 是『在哪听到』（非证据）。"
                       "evidence_hint 是用依据状态+证据强度合成的可直接转述的解读，"
                       "回答用户时可原样引用，但请勿在此基础上夸大或加上本站未给出的剂量/诊疗建议。",
-        "generated_at": TODAY,
+        "generated_at": generated_at,
         "count": len(out),
         "verified_count": n_verified,
         "study_supported_count": basis_counts["study_supported"],
