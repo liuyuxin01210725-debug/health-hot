@@ -466,6 +466,14 @@ class WorkerCorsConfigTests(unittest.TestCase):
         src = (self.ROOT / "submit-worker" / "src" / "worker.js").read_text(encoding="utf-8")
         self.assertIn(self.PROD_ORIGIN, src)
 
+    def test_worker_env_allowlist_extends_defaults_not_replaces_them(self):
+        # 回归：Cloudflare Pages 面板里的旧 ALLOWED_ORIGINS 不应覆盖掉代码里的生产默认源。
+        # 允许 env 扩展白名单，但 DEFAULT_ALLOWED_ORIGINS 必须始终并入。
+        src = (self.ROOT / "submit-worker" / "src" / "worker.js").read_text(encoding="utf-8")
+        self.assertIn("...DEFAULT_ALLOWED_ORIGINS", src)
+        self.assertIn("...configured", src)
+        self.assertNotIn("return configured.length ? configured : DEFAULT_ALLOWED_ORIGINS;", src)
+
 
 class SkillDataSourceTests(unittest.TestCase):
     """Skill 数据源必须指向受 build.py 闸门保护的 Vercel，而非直接 serve docs/ 的 GitHub Pages。"""

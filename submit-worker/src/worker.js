@@ -168,7 +168,7 @@ function allowedOrigins(env) {
     .split(",")
     .map((value) => value.trim())
     .filter(Boolean);
-  return configured.length ? configured : DEFAULT_ALLOWED_ORIGINS;
+  return [...new Set([...DEFAULT_ALLOWED_ORIGINS, ...configured])];
 }
 
 function isAllowedOrigin(origin, env) {
