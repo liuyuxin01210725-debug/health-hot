@@ -17,7 +17,8 @@
 - `data/review_audit.json` — `/health-review` 强审账本，按 `content_sha` 绑定正文（正文一改记录即作废）
 - `data/strong_review_grandfather.json` — 待强审存量固化清单（与 `review_audit.json` 互斥，随强审瘦身；**勿手工重生成**）
 - `make_og.py` — 生成社交分享卡 `assets/og.png`（需 Pillow，单独运行，不进构建）
-- `submit-worker/` — 可选的一键提交接收端：把搜索无结果时的用户提交创建成 GitHub issue
+- `submit-worker/` — 一键提交接收端的共享 Worker 实现：把搜索无结果时的用户提交创建成 GitHub issue
+- `submit-pages/` — 生产提交端（Cloudflare Pages Functions），复用 `submit-worker/src/worker.js`，公开端点为 `https://health-hot-submit.pages.dev`
 - `skill/SKILL.md` — 公开 health-hot Skill，构建时拷进 `docs/skill/`
 - 部署：**Vercel** 以 `python3 build.py` 为 buildCommand 构建上线（见 `vercel.json`）；`docs/` 也提交入库。因此 build.py 的闸门就是线上站的部署硬锁。
 - 早警 CI：`.github/workflows/ci.yml` 在 push/PR 上跑构建 + 单测 + 审计 + 强审；自动采集：`.github/workflows/collect-candidates.yml` 每周一北京时间 08:00 抓候选并刷新 GitHub issue 收件箱；均不会绕过人工核验直接发布
@@ -84,11 +85,24 @@ GitHub Actions 工作流位于 `.github/workflows/collect-candidates.yml`。它�
 
 ## 用户提交闭环
 
-GitHub Pages 是静态站，不能自己保存用户输入。公开站要做「没找到 → 一键提交待核」，需要一个极小接收端：
-`submit-worker/` 提供 Cloudflare Worker，把用户主动提交的健康说法创建为带 `待核说法` 标签的 GitHub issue。
-`collect.py` 每周会读取这些 issue，汇入候选清单；仍需人工或 AI 复核，不会自动发布。
+静态主站不能自己保存用户输入。公开站的「没找到 → 一键提交待核」走一个极小接收端：
+生产端是 **Cloudflare Pages Functions** `https://health-hot-submit.pages.dev`，源码在 `submit-pages/`，
+并通过 `_worker.js` 复用 `submit-worker/src/worker.js`。它把用户主动提交的健康说法创建为带
+`待核说法` 标签的 GitHub issue。`collect.py` 每周会读取这些 issue，汇入候选清单；仍需人工或 AI
+复核，不会自动发布。
 
-部署 Worker 后，用 endpoint 重新构建：
+更新生产提交端：
+
+```bash
+npx wrangler --cwd submit-pages pages deploy . --project-name=health-hot-submit --branch=main
+submit-worker/smoke-cors.sh https://health-hot-submit.pages.dev https://health-hot.vercel.app
+```
+
+`submit-worker/src/worker.js` 的 CORS 白名单采用 `DEFAULT_ALLOWED_ORIGINS ∪ env.ALLOWED_ORIGINS`，
+避免 Cloudflare 面板旧环境变量覆盖掉代码里的生产默认源。直接 `wrangler deploy` 到 `workers.dev`
+不是生产路径；`workers.dev` 在部分真实网络不可达，不要把前端切过去。
+
+如需改 endpoint 后重新构建：
 
 ```bash
 HEALTH_HOT_SUBMIT_ENDPOINT="https://health-hot-submit.pages.dev/submit" python3 build.py
@@ -103,6 +117,20 @@ HEALTH_HOT_SUBMIT_ENDPOINT="https://health-hot-submit.pages.dev/submit" python3 
 python3 audit_library.py
 python3 audit_library.py --check-links
 ```
+
+### 待核管理面板（私有运营视图）
+
+把「待核说法」issue 堆变成可处理的选题池。`scripts/pending_dashboard.py` 用 `gh` 读取后，按归一化说法分组、统计「被提交 N 次」、解出用户「搜了但没命中」的原词，生成本地 HTML 面板（写到 `/tmp`，不进 `docs/`、不公开）。
+
+```bash
+python3 scripts/pending_dashboard.py                            # 看板（只读）→ 终端摘要 + /tmp/health_pending_dashboard.html
+python3 scripts/pending_dashboard.py --mark <issue#> ingested   # 标「已入库」并关闭
+python3 scripts/pending_dashboard.py --mark <issue#> rejected   # 标「已拒绝」并关闭
+```
+
+- **状态约定**：开放无状态标签 = 待处理；`已入库` / `已拒绝` 标签（首次 `--mark` 自动创建）+ 关闭 = 已处理；`collect.py` 只读 open issue，所以关闭即退出候选池。
+- **「被提交 N 次」**= 同一归一化说法各 issue 的提交次数之和；单条 = `1 + 提交端去重时追加的「🔁」评论数`。提交端是否开 KV 去重，口径都一致（去重前=多条 issue，去重后=1 条+🔁评论）。
+- **去重 / 限流 / 重复计数**需要给提交端绑 KV：`npx wrangler kv namespace create PENDING_KV`，把 id 填进 `submit-worker/wrangler.toml` 与 `submit-pages/wrangler.toml`，再用 `npx wrangler --cwd submit-pages pages deploy . …` 部署（见 `submit-worker/README.md`）。
 
 ## Agent 接入
 

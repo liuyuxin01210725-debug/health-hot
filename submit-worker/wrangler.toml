@@ -9,7 +9,9 @@ GITHUB_REPO = "liuyuxin01210725-debug/health-hot"
 GITHUB_LABEL = "待核说法"
 ALLOWED_ORIGINS = "https://health-hot.vercel.app,https://liuyuxin01210725-debug.github.io,http://localhost:8000,http://127.0.0.1:8000"
 
-# Optional but recommended for rate limiting and duplicate suppression:
-# [[kv_namespaces]]
-# binding = "PENDING_KV"
-# id = "replace-with-kv-namespace-id"
+# 去重 + 限流 + 重复计数所需。先建命名空间再填 id：
+#   npx wrangler kv namespace create PENDING_KV
+# 把返回的 id 填到下面（submit-pages/wrangler.toml 也要填同一个 id），再部署。
+[[kv_namespaces]]
+binding = "PENDING_KV"
+id = "bb924e36c923466a9a848d29c7236bc8"

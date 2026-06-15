@@ -486,5 +486,67 @@ class SkillDataSourceTests(unittest.TestCase):
                          "Skill 仍指向 GitHub Pages（不过 build.py 闸门）")
 
 
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts"))
+import pending_dashboard as pd  # noqa: E402
+
+
+class PendingDashboardTests(unittest.TestCase):
+    """待核管理面板的纯解析函数（不依赖 gh）。"""
+
+    BODY = ("用户在站内搜索无结果后主动提交了这条待核说法。\n"
+            "- 说法：维生素C 长结石吗\n"
+            "- 来源页面：https://health-hot.vercel.app/all.html?q=%E7%BB%B4%E7%94%9F%E7%B4%A0C\n"
+            "- 提交时间：2026-06-05T12:33:46.932Z\n"
+            "隐私边界：……")
+
+    def test_parse_body_extracts_fields(self):
+        p = pd.parse_body(self.BODY)
+        self.assertEqual(p["claim"], "维生素C 长结石吗")
+        self.assertEqual(p["submitted_at"], "2026-06-05T12:33:46.932Z")
+        self.assertIn("q=", p["source_page"])
+
+    def test_parse_body_tolerates_missing_source_page(self):
+        body = "用户……。\n- 说法：只有说法没有来源\n- 提交时间：2026-06-04T00:00:00Z\n隐私边界：…"
+        p = pd.parse_body(body)
+        self.assertEqual(p["claim"], "只有说法没有来源")
+        self.assertEqual(p["source_page"], "")
+
+    def test_missed_query_decodes_q_param(self):
+        self.assertEqual(pd.missed_query("https://x/all.html?q=Vc%E9%95%BF%E7%BB%93%E7%9F%B3"),
+                         "Vc长结石")
+        self.assertEqual(pd.missed_query(""), "")
+        self.assertEqual(pd.missed_query("https://x/all.html"), "")
+
+    def test_classify_status_label_beats_state(self):
+        self.assertEqual(pd.classify_status("OPEN", []), pd.STATUS_PENDING)
+        self.assertEqual(pd.classify_status("CLOSED", []), pd.STATUS_CLOSED_UNMARKED)
+        self.assertEqual(pd.classify_status("CLOSED", ["待核说法", "已入库"]), pd.STATUS_INGESTED)
+        self.assertEqual(pd.classify_status("OPEN", ["已拒绝"]), pd.STATUS_REJECTED)
+
+    def test_resubmit_count_only_marker_comments(self):
+        comments = [{"body": "🔁 同一说法再次提交 · 2026-…"}, {"body": "普通讨论"},
+                    {"body": " 🔁 又一次"}]
+        self.assertEqual(pd.resubmit_count(comments), 2)
+        self.assertEqual(pd.resubmit_count([]), 0)
+
+    def test_group_key_normalizes_variants(self):
+        self.assertEqual(pd.group_key("维生素C，长结石吗？"), pd.group_key("维生素c长结石吗"))
+        self.assertEqual(pd.group_key("Creatine  Safe?"), pd.group_key("creatinesafe"))
+
+    def test_build_groups_sums_count_across_regimes(self):
+        # 同一归一化说法的两条 issue：去重前的两条独立 + 其中一条带 1 个 🔁 → 合计 1 + (1+1) = 3
+        issues = [
+            {"number": 1, "title": "待核说法：钙片补钙", "body": "- 说法：钙片补钙",
+             "state": "OPEN", "labels": [], "comments": [], "url": "u1", "createdAt": "2026-06-01"},
+            {"number": 2, "title": "待核说法：钙片，补钙！", "body": "- 说法：钙片，补钙！",
+             "state": "OPEN", "labels": [], "comments": [{"body": "🔁 再次提交"}],
+             "url": "u2", "createdAt": "2026-06-02"},
+        ]
+        rows = pd.build_groups([pd.enrich(i) for i in issues])
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["count"], 3)
+        self.assertEqual(rows[0]["status"], pd.STATUS_PENDING)
+
+
 if __name__ == "__main__":
     unittest.main()

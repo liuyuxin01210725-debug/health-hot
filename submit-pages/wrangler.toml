@@ -1,0 +1,12 @@
+# Cloudflare Pages 生产端配置（health-hot-submit.pages.dev）。
+# pages_build_output_dir 标记这是 Pages 配置；本目录的 _worker.js 复用 ../submit-worker/src/worker.js。
+# KV 绑定让生产端开启去重 + 限流 + 重复计数（与 submit-worker/wrangler.toml 用同一个命名空间 id）。
+#   npx wrangler kv namespace create PENDING_KV   # 若还没建
+#   # 把同一个 id 填到下面
+#   npx wrangler --cwd submit-pages pages deploy . --project-name=health-hot-submit --branch=main
+name = "health-hot-submit"
+pages_build_output_dir = "."
+
+[[kv_namespaces]]
+binding = "PENDING_KV"
+id = "bb924e36c923466a9a848d29c7236bc8"

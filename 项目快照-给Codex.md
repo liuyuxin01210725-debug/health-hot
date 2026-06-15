@@ -1,5 +1,7 @@
 # 查过再信 / health-hot — 项目快照 v4
 
+> **历史快照，不是当前事实源。** 本文件生成于 2026-05-31，记录的是早期 22 条内容和 GitHub Pages 阶段的交接状态。当前项目事实、部署链路、提交端、强审闸门、AI Skill 数据源请以 `README.md`、`PRODUCT_BRIEF.md`、`DESIGN_BRIEF.md` 和源码为准。
+
 > 健康说法核验库：独立详情页 + 结构化字段 + 发布闸门 + 信源分层 + 双链接（在哪听到 / 凭什么核验）。
 > 纯 Python 标准库静态站，GitHub Pages。本文件 = 完整快照 + 续接锚点。
 
@@ -7,7 +9,7 @@
 
 ## 0. 当前状态 / 如何续上（RESUME — 新会话从这里接）
 
-**所有状态都在磁盘 + git，不依赖对话记忆。新开会话只要读本文件就能接上。**
+**所有状态都在磁盘 + git，不依赖对话记忆。新开会话不要只读本历史快照；先读 `README.md` / `PRODUCT_BRIEF.md` / `DESIGN_BRIEF.md` 和当前源码。**
 
 - 项目目录：`~/Documents/AI health/`；线上：https://liuyuxin01210725-debug.github.io/health-hot/ ；仓库 `liuyuxin01210725-debug/health-hot`（公开）。
 - 构建：`python3 build.py`（含发布闸门 → 输出 `docs/`）；本地预览：`python3 -m http.server 8000 --directory docs`。

@@ -70,7 +70,13 @@ export default {
       const duplicateKey = `claim:${await sha256(normalizeForHash(claim))}`;
       const existing = await env.PENDING_KV.get(duplicateKey);
       if (existing) {
-        return json({ ok: true, status: "duplicate", issue: Number(existing) || null }, 200, cors);
+        const issueNumber = Number(existing) || null;
+        // best-effort：去重命中时给原 issue 补一条「🔁」标记评论，供运营面板统计「被提交 N 次」。
+        // 失败不阻断去重响应（评论失败不应让用户看到错误）。
+        if (issueNumber) {
+          await addResubmitComment(repo, issueNumber, page, env.GITHUB_TOKEN).catch(() => {});
+        }
+        return json({ ok: true, status: "duplicate", issue: issueNumber }, 200, cors);
       }
       const issue = await createIssue(repo, label, claim, page, env.GITHUB_TOKEN).catch((error) => error);
       if (issue && issue.error) {
@@ -161,6 +167,25 @@ async function createIssueRequest(repo, label, claim, page, token) {
     };
   }
   return data;
+}
+
+async function addResubmitComment(repo, issueNumber, page, token) {
+  // 去重命中时在原 issue 上追加一条标记评论。运营面板按「🔁」开头的评论数统计重复提交次数。
+  const body = `🔁 同一说法再次提交 · ${new Date().toISOString()}` + (page ? ` · 来源 ${page}` : "");
+  const response = await fetch(`https://api.github.com/repos/${repo}/issues/${issueNumber}/comments`, {
+    method: "POST",
+    headers: {
+      "Accept": "application/vnd.github+json",
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "User-Agent": "health-hot-submit-worker",
+      "X-GitHub-Api-Version": "2022-11-28",
+    },
+    body: JSON.stringify({ body }),
+  });
+  if (!response.ok) {
+    throw new Error(`resubmit comment failed: ${response.status}`);
+  }
 }
 
 function allowedOrigins(env) {
