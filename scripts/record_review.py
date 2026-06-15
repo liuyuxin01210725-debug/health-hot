@@ -13,6 +13,7 @@ import json, os, sys, hashlib, datetime
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ITEMS_DIR = os.path.join(ROOT, "data", "items")
 AUDIT_PATH = os.path.join(ROOT, "data", "review_audit.json")
+GRANDFATHER_PATH = os.path.join(ROOT, "data", "strong_review_grandfather.json")
 
 
 def find_item(slug):
@@ -47,7 +48,8 @@ def main(argv):
 
     audit = {}
     if os.path.exists(AUDIT_PATH):
-        audit = json.load(open(AUDIT_PATH, encoding="utf-8"))
+        with open(AUDIT_PATH, encoding="utf-8") as f:
+            audit = json.load(f)
     audit[slug] = {
         "verdict": verdict,
         "content_sha": content_sha,
@@ -55,7 +57,25 @@ def main(argv):
         "checks": checks,
         "notes": notes,
     }
-    json.dump(audit, open(AUDIT_PATH, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+    with open(AUDIT_PATH, "w", encoding="utf-8") as f:
+        json.dump(audit, f, ensure_ascii=False, indent=2)
+
+    # 条目一旦进入强审账本（任何 verdict），就从 grandfather 固化清单移除：
+    # 此后它由 review_audit 权威判定，grandfather 只保留「从未强审过的存量」，
+    # 于是 len(grandfather) 就是真实的待强审欠债数，会随强审推进真正瘦身。
+    if os.path.exists(GRANDFATHER_PATH):
+        try:
+            with open(GRANDFATHER_PATH, encoding="utf-8") as f:
+                gf = json.load(f)
+        except Exception:
+            gf = None
+        if isinstance(gf, dict) and slug in gf:
+            gf.pop(slug, None)
+            with open(GRANDFATHER_PATH, "w", encoding="utf-8") as f:
+                json.dump(gf, f, ensure_ascii=False, indent=2, sort_keys=True)
+                f.write("\n")
+            print(f"  · 已从 grandfather 移除 {slug}（剩余固化 {len(gf)} 条）")
+
     mark = {"PASS": "✓", "FIX": "✎", "BLOCK": "✗"}[verdict]
     print(f"{mark} 记录强审: {slug} → {verdict}  (sha {content_sha[:12]})")
     return 0

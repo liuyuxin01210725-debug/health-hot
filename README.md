@@ -12,12 +12,15 @@
 - `data/items/*.json` — 收集到的条目（每条 = 一张卡片 / 一条核验）
 - `collect.py` — 从信源抓取候选、去重（纯标准库）
 - `audit_library.py` — 审计已发布馆藏：复核到期、证据待补、来源分布和链接可达性（纯标准库）
-- `build.py` — 生成静态站到 `docs/`（精选 + 全部 + 关于 + 各条详情页 + `claims.json` 机读 feed；纯标准库）
+- `build.py` — 生成静态站到 `docs/`（精选 + 全部 + 关于 + 各条详情页 + `claims.json` 机读 feed；纯标准库）。**自带发布闸门 + 强审硬锁**，详见「强审与发布闸门」。
+- `scripts/prepush_check.py` — 增量强审闸门：改动条目须有 PASS 强审记录才放行（本机 pre-push 钩子与 CI 都调它）
+- `data/review_audit.json` — `/health-review` 强审账本，按 `content_sha` 绑定正文（正文一改记录即作废）
+- `data/strong_review_grandfather.json` — 待强审存量固化清单（与 `review_audit.json` 互斥，随强审瘦身；**勿手工重生成**）
 - `make_og.py` — 生成社交分享卡 `assets/og.png`（需 Pillow，单独运行，不进构建）
 - `submit-worker/` — 可选的一键提交接收端：把搜索无结果时的用户提交创建成 GitHub issue
 - `skill/SKILL.md` — 公开 health-hot Skill，构建时拷进 `docs/skill/`
-- 部署：GitHub Pages 从 `main` 分支 `/docs` 目录 serve，推送即更新
-- 自动采集：GitHub Actions 每周一北京时间 08:00 抓取候选，并刷新 GitHub issue 审核收件箱；不会绕过人工核验直接发布
+- 部署：**Vercel** 以 `python3 build.py` 为 buildCommand 构建上线（见 `vercel.json`）；`docs/` 也提交入库。因此 build.py 的闸门就是线上站的部署硬锁。
+- 早警 CI：`.github/workflows/ci.yml` 在 push/PR 上跑构建 + 单测 + 审计 + 强审；自动采集：`.github/workflows/collect-candidates.yml` 每周一北京时间 08:00 抓候选并刷新 GitHub issue 收件箱；均不会绕过人工核验直接发布
 
 ## 依据状态
 
@@ -27,6 +30,25 @@
 - `evidence_source_urls` 放研究锚点或白名单官方页面；播客、视频、文章入口放 `discovery_source_url`。
 - `source_urls` 仅为 feed 兼容字段，包含全部来源，不能当作研究原文列表。
 - `verification_status` 是旧版二元兼容字段；新消费者应优先读取 `verification_basis`。
+
+## 强审与发布闸门
+
+两层把关，定位不同——别把「会报警的东西」当成「会拦截的东西」：
+
+1. **数据发布闸门**（`build.py`）：缺来源 / 未来日期 / 伪链接 / 字段缺失 / `status≠reviewed` 的条目一律拦下，构建退码 1、`docs/` 不替换（保留旧站）。
+2. **强审硬锁**（`build.py` 第二段）：任何**新增或被编辑过**的条目，必须先过 `/health-review` 对抗式强审、在 `data/review_audit.json` 留下 `verdict=PASS` 且 `content_sha` 与当前正文一致的记录，否则同样被拦、上不了线。
+
+**为什么这是真锁：** 部署走 Vercel，`buildCommand` 就是 `python3 build.py`（见 `vercel.json`）。上面两道闸门在每次部署时由 Vercel 强制执行，无需任何 GitHub 设置；构建失败 = 部署失败 = 线上保留上一个成功版本。
+
+**全库强审 vs 增量强审（诚实说明）：**
+
+- **增量强审已是硬锁**：从现在起，改动 / 新增条目不过 `/health-review` 就上不了线。
+- **audit 权威，grandfather 只兜底**：条目一旦在 `review_audit.json` 有记录就以它为准——`FIX` / `BLOCK`、或 `PASS` 但 `content_sha` 不符，一律拦，grandfather **不能**覆盖否决；grandfather 仅对【无 audit 记录】的条目按 `content_sha` 兜底放行。
+- **全库强审尚未完成**：当前 **9 条**有 PASS 记录（走 audit 权威路径），**134 条**仅由 `data/strong_review_grandfather.json` 固化兜底——**不代表已被强审**，只是冻结了当时正文、让硬锁上线当天不冻结全站。
+- **grandfather = 真实待审存量，会瘦身**：`record_review.py` 记任何 verdict 时即把该 slug 移出 grandfather，所以 `len(grandfather)` 就是「从未强审过」的条数（现 134），两个账本互斥。**编辑任一固化条目**（哪怕改错字）→ 哈希变 → 脱离兜底 → 必须强审。
+- **切勿手工重新生成** `strong_review_grandfather.json`——那等于把当前未审内容重新「洗白」。要消化存量，就逐条跑 `/health-review`（自动瘦身）。
+
+**早警 CI（`.github/workflows/ci.yml`，push / PR 触发）** 复刻 build.py 全库闸门 + 单测 + 馆藏审计 + 对改动条目跑 `scripts/prepush_check.py`（本机 pre-push 钩子的云端镜像）。它是**早警，不是合并硬门**：仓库若「直推 main + Vercel 自动部署」，CI 拦不住部署本身。要让它成为合并硬门，需在 GitHub 仓库设置开 **Branch protection**（要求本 workflow 通过 + 禁直推 main，改走 PR 流）。本机 `.git/hooks/pre-push` 不进版本库，仅本机有效。
 
 ## 候选采集
 

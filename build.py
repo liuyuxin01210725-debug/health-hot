@@ -12,12 +12,15 @@
 发布闸门：构建前校验，未来日期 / 缺来源 / 缺必填 / 未审核 的条目**不发布**并报警。
 纯标准库，无依赖。用法：python3 build.py
 """
-import json, glob, os, re, html, shutil, datetime, sys, urllib.parse
+import json, glob, os, re, html, shutil, datetime, sys, urllib.parse, hashlib
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(ROOT, "data", "items")
 OUT = os.path.join(ROOT, "docs")
 CLAIMS = os.path.join(OUT, "claims")
+# 强审硬锁的两个账本（部署闸门第二段会读，详见 strong_review_gate）：
+AUDIT_PATH = os.path.join(ROOT, "data", "review_audit.json")            # /health-review 强审记录
+GRANDFATHER_PATH = os.path.join(ROOT, "data", "strong_review_grandfather.json")  # 历史条目固化清单
 TODAY = datetime.date.today().isoformat()
 
 SITE_TITLE = "查过再信"
@@ -200,8 +203,76 @@ def load_items():
             print(f"  ✗ 顶层非对象，跳过 {os.path.basename(f)}"); errors += 1
             continue
         it["_file"] = os.path.basename(f)
+        # content_sha = 原始文件字节的 sha256，与 scripts/prepush_check.py 的 sha() 算法一致。
+        # 强审硬锁与 grandfather 固化都按它判断「正文是否变过」——改一个字节哈希就变。
+        with open(f, "rb") as fb:
+            it["_content_sha"] = hashlib.sha256(fb.read()).hexdigest()
         items.append(it)
     return items, errors
+
+
+def load_strong_review_state():
+    """读强审硬锁的两个账本，返回 (audit, grandfather)。
+
+    - review_audit.json：{slug: {verdict, content_sha, ...}}，/health-review 强审记录。
+    - strong_review_grandfather.json：{slug: content_sha}，固化引入硬锁之前已上线的历史条目，
+      使硬锁上线当天不冻结全站；条目正文一改 → sha 变 → 脱离 grandfather → 必须重过强审。
+
+    任一文件缺失/损坏都按「空」处理（fail closed）：依赖它放行的条目会被强审闸门拦下，
+    而不是被静默放行——宁可冻结也不让未审内容混上线。"""
+    def _load(path, label):
+        if not os.path.exists(path):
+            return {}
+        try:
+            with open(path, encoding="utf-8") as fh:
+                d = json.load(fh)
+            return d if isinstance(d, dict) else {}
+        except Exception as ex:
+            print(f"  ⚠ {label} 无法解析（按空处理，相关条目将被强审闸门拦下）：{ex}")
+            return {}
+    return _load(AUDIT_PATH, "review_audit.json"), _load(GRANDFATHER_PATH, "strong_review_grandfather.json")
+
+
+def strong_review_status(it, audit, grandfather):
+    """单条强审覆盖判定：返回 None=放行，否则返回拦截原因。
+
+    优先级——【audit 记录一旦存在即权威】，grandfather 只对「无 audit 记录」的条目兜底：
+      1. 有 audit 记录：
+         · verdict != PASS            → 拦（FIX/BLOCK 必须压过 grandfather，否则否决形同虚设）
+         · PASS 但 content_sha 不匹配   → 拦（强审后正文已改）
+         · PASS 且 content_sha 匹配     → 放行
+      2. 无 audit 记录：
+         · grandfather sha 匹配         → 放行（历史存量兜底）
+         · grandfather 有 slug 但 sha 不符 → 拦（固化后正文已改）
+         · 两边都没有                   → 拦（新增未审）"""
+    slug = it.get("slug", "")
+    cur = it.get("_content_sha", "")
+    rec = audit.get(slug) if isinstance(audit, dict) else None
+    if rec:  # audit 权威：先于 grandfather 判定，FIX/BLOCK 不可被固化清单洗白
+        if rec.get("verdict") != "PASS":
+            return f"强审判定={rec.get('verdict')!r}（非 PASS），需过 /health-review"
+        if rec.get("content_sha") != cur:
+            return "强审后正文已变更（哈希不符），需重过 /health-review"
+        return None
+    if cur and grandfather.get(slug) == cur:
+        return None
+    if slug in grandfather:
+        return "固化后正文已变更（哈希不符），需重过 /health-review"
+    return "未过强审（新增条目，无 PASS 记录、不在固化清单），需过 /health-review"
+
+
+def strong_review_gate(items, audit, grandfather):
+    """部署闸门第二段——强审硬锁。对【已过数据闸门】的条目逐条判定，
+    返回 [(file, [原因]), ...]，由 main() 并入 blocked，走同一个 fail-safe（不替换 docs/、退码 1）。
+
+    与 scripts/prepush_check.py 的区别：那个是本机/CI 的「增量」锁（只看改动条目，且不认 grandfather）；
+    这个是 Vercel 构建时的「全库」锁——线上站真正的强审硬锁就在这里。"""
+    failures = []
+    for it in items:
+        why = strong_review_status(it, audit, grandfather)
+        if why:
+            failures.append((it.get("_file", "?"), [why]))
+    return failures
 
 
 def validate(items):
@@ -1085,6 +1156,15 @@ def claims_feed(items):
 def main():
     items, load_errors = load_items()
     good, blocked = validate(items)
+    # 发布闸门第二段——强审硬锁（Vercel 构建跑的就是 build.py，所以这是线上站真正的强审锁）。
+    # 新增/改动条目不过 /health-review 就进 blocked → 与坏数据走同一 fail-safe：docs/ 不替换、退码 1。
+    # 存量条目由 grandfather 固化清单按 content_sha 兜底放行（已强审的走 review_audit 权威路径）。
+    audit, grandfather = load_strong_review_state()
+    sr_failures = strong_review_gate(good, audit, grandfather)
+    if sr_failures:
+        sr_files = {fn for fn, _ in sr_failures}
+        good = [it for it in good if it.get("_file") not in sr_files]
+        blocked.extend(sr_failures)
     # 先全部写进临时目录，成功后再原子替换 docs/——渲染中途崩溃不会删掉已上线的站
     tmp = OUT + ".tmp"
     tmp_claims = os.path.join(tmp, "claims")

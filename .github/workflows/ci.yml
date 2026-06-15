@@ -1,0 +1,71 @@
+name: 上线前硬检查 (build · test · 审计 · 强审)
+
+# 早警 CI（push + PR 触发）。注意定位：
+# - 线上站真正的硬锁是 build.py 自己的发布闸门（含强审）——Vercel 构建跑的就是 build.py，
+#   坏数据 / 未审条目会让构建退码 1、保留旧站。这一层无需 GitHub 设置即生效。
+# - 本 CI 是【早警】：在 push/PR 上复刻同一套检查 + 跑单测 + 馆藏审计 + 增量强审，
+#   让回归在合并/部署前就亮红。但若仓库是「直推 main + Vercel 自动部署」，CI 拦不住部署本身；
+#   要让 CI 成为合并硬门，需在 GitHub 仓库设置里开 Branch protection（要求本 workflow 通过 + 禁直推 main）。
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    name: 构建·测试·审计·强审
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: 检出（全历史，供 diff 改动条目）
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: 配置 Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: 全库发布闸门构建（含强审硬锁，复刻 Vercel 部署）
+        run: python3 build.py
+
+      - name: 单元测试
+        run: python3 test_health_hot.py
+
+      - name: 馆藏审计（不查链接，保持确定性；仅发布闸门异常会失败）
+        run: python3 audit_library.py
+
+      - name: 增量强审闸门（本机 pre-push 的云端镜像，只校验本次改动条目）
+        env:
+          EVENT: ${{ github.event_name }}
+          BEFORE: ${{ github.event.before }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT" = "pull_request" ]; then
+            base="$PR_BASE"
+          else
+            base="$BEFORE"
+          fi
+          zero="0000000000000000000000000000000000000000"
+          if [ -z "${base:-}" ] || [ "$base" = "$zero" ]; then
+            echo "无可比对基准（新分支 / 首推），增量强审跳过——全库强审硬锁已在 build.py 步骤执行。"
+            exit 0
+          fi
+          if ! git cat-file -e "${base}^{commit}" 2>/dev/null; then
+            echo "基准 commit $base 不在历史中（force-push / rebase？），增量强审跳过——全库硬锁已覆盖。"
+            exit 0
+          fi
+          changed="$(git diff --name-only "$base" "$HEAD_SHA" -- data/items || true)"
+          if [ -z "$changed" ]; then
+            echo "本次无 data/items 改动，放行。"
+            exit 0
+          fi
+          echo "本次改动条目："
+          echo "$changed"
+          # shellcheck disable=SC2086
+          python3 scripts/prepush_check.py $changed

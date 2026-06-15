@@ -376,5 +376,76 @@ class LibraryAuditTests(unittest.TestCase):
         self.assertEqual(audit["counts"]["official_source_items"], 1)
 
 
+class StrongReviewGateTests(unittest.TestCase):
+    """部署闸门第二段——强审硬锁（build.strong_review_gate）。
+    覆盖 = PASS 记录(sha 匹配) 或 grandfather 固化(sha 匹配)；其余一律拦下。"""
+
+    def item(self, slug="x", sha="sha-cur"):
+        it = valid_item()
+        it.update({"slug": slug, "_file": slug + ".json", "_content_sha": sha})
+        return it
+
+    def test_grandfathered_unchanged_passes(self):
+        it = self.item(sha="sha-cur")
+        self.assertIsNone(build.strong_review_status(it, {}, {"x": "sha-cur"}))
+        self.assertEqual(build.strong_review_gate([it], {}, {"x": "sha-cur"}), [])
+
+    def test_new_item_is_blocked(self):
+        it = self.item(slug="brand-new", sha="sha-cur")
+        self.assertIsNotNone(build.strong_review_status(it, {}, {}))
+        self.assertEqual(len(build.strong_review_gate([it], {}, {})), 1)
+
+    def test_edited_grandfathered_item_is_blocked(self):
+        # 固化时 sha 是 sha-old，正文改后变 sha-new → 脱离 grandfather → 必须重审
+        it = self.item(sha="sha-new")
+        why = build.strong_review_status(it, {}, {"x": "sha-old"})
+        self.assertIsNotNone(why)
+        self.assertIn("已变更", why)
+
+    def test_passed_review_with_matching_sha_passes(self):
+        it = self.item(sha="sha-cur")
+        audit = {"x": {"verdict": "PASS", "content_sha": "sha-cur"}}
+        self.assertIsNone(build.strong_review_status(it, audit, {}))
+
+    def test_passed_review_but_edited_afterwards_is_blocked(self):
+        it = self.item(sha="sha-new")
+        audit = {"x": {"verdict": "PASS", "content_sha": "sha-old"}}
+        why = build.strong_review_status(it, audit, {})
+        self.assertIsNotNone(why)
+        self.assertIn("已变更", why)
+
+    def test_non_pass_verdict_is_blocked(self):
+        it = self.item(sha="sha-cur")
+        audit = {"x": {"verdict": "FIX", "content_sha": "sha-cur"}}
+        why = build.strong_review_status(it, audit, {})
+        self.assertIsNotNone(why)
+        self.assertIn("FIX", why)
+
+    def test_empty_state_fails_closed(self):
+        # 两个账本都空（缺失/损坏）→ 不静默放行，全部拦下
+        items = [self.item(slug="a", sha="s1"), self.item(slug="b", sha="s2")]
+        self.assertEqual(len(build.strong_review_gate(items, {}, {})), 2)
+
+    def test_audit_verdict_overrides_grandfather(self):
+        # 回归：固化条目后来被标 FIX/BLOCK，即便正文没变，也必须拦——audit 权威，grandfather 不得洗白。
+        it = self.item(slug="x", sha="sha-cur")
+        gf = {"x": "sha-cur"}  # 固化命中（正文未变）
+        for verdict in ("FIX", "BLOCK"):
+            with self.subTest(verdict=verdict):
+                audit = {"x": {"verdict": verdict, "content_sha": "sha-cur"}}
+                why = build.strong_review_status(it, audit, gf)
+                self.assertIsNotNone(why, f"{verdict}+grandfather 命中竟被放行")
+                self.assertIn(verdict, why)
+
+    def test_stale_pass_not_laundered_by_grandfather(self):
+        # 回归：PASS 记录是旧 sha，正文已改成 grandfather 当前 sha——audit 先判定，必须拦。
+        it = self.item(slug="x", sha="sha-cur")
+        audit = {"x": {"verdict": "PASS", "content_sha": "sha-old"}}
+        gf = {"x": "sha-cur"}
+        why = build.strong_review_status(it, audit, gf)
+        self.assertIsNotNone(why)
+        self.assertIn("已变更", why)
+
+
 if __name__ == "__main__":
     unittest.main()
