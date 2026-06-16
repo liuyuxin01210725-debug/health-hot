@@ -161,6 +161,20 @@ class RenderDesignTests(unittest.TestCase):
         self.assertIn("提交这条说法待核", page)
         self.assertNotIn("未配置一键提交接收端", page)
 
+    def test_cloudflare_analytics_is_silent_without_token(self):
+        with mock.patch.object(build, "CF_ANALYTICS_TOKEN", ""):
+            self.assertEqual(build.cf_analytics_tag(), "")
+            page = build.shell("fixture", "精选", "<p>body</p>")
+        self.assertNotIn("cloudflareinsights.com", page)
+        self.assertNotIn("data-cf-beacon", page)
+
+    def test_cloudflare_analytics_escapes_token(self):
+        tag = build.cf_analytics_tag("abc'</script><b>")
+        self.assertIn("https://static.cloudflareinsights.com/beacon.min.js", tag)
+        self.assertIn("data-cf-beacon='", tag)
+        self.assertIn("abc&#39;<\\/script><b>", tag)
+        self.assertNotIn("abc'</script><b>", tag)
+
 
 class CollectTests(unittest.TestCase):
     class _Response:

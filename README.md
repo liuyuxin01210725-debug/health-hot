@@ -146,6 +146,21 @@ curl -fsSL https://health-hot.vercel.app/skill/SKILL.md \
   -o ~/.codex/skills/health-hot/SKILL.md
 ```
 
+## 访客统计（可选）
+
+构建脚本支持 Cloudflare Web Analytics。默认不注入任何统计脚本；只有设置
+`HEALTH_HOT_CF_ANALYTICS_TOKEN` 时，`build.py` 才会在所有 HTML 页面的 `</body>` 前注入
+Cloudflare beacon。`claims.json`、`sitemap.xml`、`robots.txt` 和 Skill 文件不会被注入。
+
+推荐把 token 只配置在 Vercel 项目的 Environment Variables 里，不写进仓库：
+
+```bash
+HEALTH_HOT_CF_ANALYTICS_TOKEN="cloudflare-token" python3 build.py
+```
+
+Cloudflare Web Analytics 适合看页面访问、来源和热门 URL；它不记录站内搜索词，也不支持自定义事件。
+如果以后要统计“搜了什么但没提交”，需要单独做事件端点。
+
 ## 本地预览
 
 ```bash

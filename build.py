@@ -25,6 +25,10 @@ TODAY = datetime.date.today().isoformat()
 
 SITE_TITLE = "查过再信"
 SITE_URL = os.environ.get("HEALTH_HOT_SITE_URL", "https://health-hot.vercel.app/").rstrip("/") + "/"
+# Cloudflare Web Analytics（可选）：设了 HEALTH_HOT_CF_ANALYTICS_TOKEN 才在每页注入 beacon；
+# 没设则一字不出——不写死 token、不影响本地构建产物。
+# Cloudflare Web Analytics 只看页面访问/来源/热门 URL，不记 query string、无自定义事件。
+CF_ANALYTICS_TOKEN = os.environ.get("HEALTH_HOT_CF_ANALYTICS_TOKEN", "").strip()
 HERO_Q = "听到一个健康说法？先查一下证据。"
 DEFAULT_SUBMIT_ENDPOINT = "https://health-hot-submit.pages.dev/submit"
 SUBMIT_ENDPOINT = os.environ.get("HEALTH_HOT_SUBMIT_ENDPOINT", DEFAULT_SUBMIT_ENDPOINT).strip()
@@ -607,11 +611,25 @@ def footer(base="", narrow=False, detail=False):
 </div></footer>'''
 
 
+def cf_analytics_tag(token=None):
+    """Cloudflare Web Analytics beacon（可选，全站统一注入点）。
+    token 缺省读 CF_ANALYTICS_TOKEN；为空返回 ""——调用方据此实现「没 token 一字不出」。
+    token 走 JSON 编码进单引号属性，并转义 ' 与 </，防属性逃逸 / <script> 截断。"""
+    token = (token if token is not None else CF_ANALYTICS_TOKEN) or ""
+    token = token.strip()
+    if not token:
+        return ""
+    cfg = json.dumps({"token": token}, ensure_ascii=False).replace("'", "&#39;").replace("</", "<\\/")
+    return f"<script defer src=\"https://static.cloudflareinsights.com/beacon.min.js\" data-cf-beacon='{cfg}'></script>"
+
+
 def shell(title, active, inner, base="", extra_js="", desc="", canon="", narrow_footer=False, detail=False):
     nav_items = [("精选", "index.html"), ("全部", "all.html"), ("更新", "log.html"), ("关于", "about.html")]
     nav = "".join(
         f'<a class="{"on" if lbl == active else ""}" href="{base}{href}">{lbl}</a>'
         for lbl, href in nav_items)
+    # </body> 前统一追加可选 analytics；无 token 时 cf_analytics_tag()=="" ⇒ tail==extra_js，产物逐字节不变。
+    tail = "\n".join(p for p in (extra_js, cf_analytics_tag()) if p)
     return f'''<!doctype html>
 <html lang="zh-CN">
 <head>
@@ -642,7 +660,7 @@ def shell(title, active, inner, base="", extra_js="", desc="", canon="", narrow_
 {inner}
 </main>
 {footer(base, narrow_footer, detail)}
-{extra_js}
+{tail}
 </body>
 </html>'''
 
