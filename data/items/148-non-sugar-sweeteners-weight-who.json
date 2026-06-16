@@ -1,0 +1,24 @@
+{
+  "title": "代糖能减肥吗？WHO 2023 不建议用非糖甜味剂控制体重",
+  "source": "WHO 2023《非糖甜味剂使用指南》（官方）+ J Endocrinol Invest RCT-Meta（19 项 RCT）+ WHO 证据解读综述",
+  "source_url": "https://www.who.int/news/item/15-05-2023-who-advises-not-to-use-non-sugar-sweeteners-for-weight-control-in-newly-released-guideline",
+  "date": "2026-06-16",
+  "category": "营养",
+  "featured": false,
+  "rank": 0,
+  "evidence": "guideline",
+  "summary": "0 卡的代糖（非糖甜味剂 NSS，如阿斯巴甜、三氯蔗糖等）常被当成减肥利器，但 WHO 2023 年指南给出一条反直觉的「有条件推荐」：**不建议用 NSS 来控制体重或降低非传染性疾病风险**。依据是：随机对照试验显示，用 NSS 替代糖能带来**短期、轻微**的体重下降——一篇汇总 19 项 RCT 的 Meta（J Endocrinol Invest 2026）算出平均 −0.79 kg，但在 >18 周的研究里效果变得很小、在肥胖人群中也不显著；而长期前瞻队列观察到 NSS 与 2 型糖尿病、心血管病和死亡风险升高相关（属观察性、因果未定，可能存在反向因果——本就超重/高风险的人更倾向喝代糖饮料）。一篇梳理 WHO 证据的综述（2023）总结：RCT 见短期获益、队列见长期风险，「长期危害不能排除」，建议减糖、也尽量限制代糖。",
+  "slug": "non-sugar-sweeteners-weight-who",
+  "status": "reviewed",
+  "reviewed_at": "2026-06-16",
+  "source_published_at": "2023-05-15",
+  "conclusion": "WHO 2023 不建议把非糖甜味剂（代糖）用于控制体重：用代糖替代糖在 RCT 中仅带来短期、轻微的减重（更长期 6–18 个月的 RCT 未见对体重的获益、肥胖人群也不显著），而长期前瞻队列观察到与 2 型糖尿病/心血管病/死亡风险升高相关（因果未定）。代糖既非「减肥神器」，也未证实「有害」。",
+  "population": "成人（以非糖尿病人群为主）。",
+  "caveats": "WHO 这是基于**低确定性证据**的「有条件推荐」，非铁律。短期内用代糖替代含糖饮料对部分人减重仍有小帮助。队列里的「长期风险」是观察性证据，存在反向因果与混杂，不能据此断言「代糖致病」。糖尿病患者控糖时如何使用代糖另有临床考量，请遵医嘱。适用范围：WHO 此建议针对阿斯巴甜、三氯蔗糖、甜菊糖苷等非糖甜味剂，不涵盖赤藓糖醇/木糖醇等糖醇，也不涉及牙膏等含甜味剂的护理品。该立场亦非普遍共识——部分机构认为，用于替代含糖饮料时，代糖对特定人群（如需控糖者）仍是有用工具。本条不构成饮食处方。",
+  "discovery_source_url": "",
+  "evidence_source_urls": [
+    "https://www.who.int/news/item/15-05-2023-who-advises-not-to-use-non-sugar-sweeteners-for-weight-control-in-newly-released-guideline",
+    "https://pubmed.ncbi.nlm.nih.gov/40913681/",
+    "https://pubmed.ncbi.nlm.nih.gov/37451112/"
+  ]
+}

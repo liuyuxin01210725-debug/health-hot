@@ -145,5 +145,47 @@
       "C6": true
     },
     "notes": "C2 3/3 PASS、C34 2/2 PASS、C1真(42280443真SR+MA);人群已修正28RCT/N=1833成人(原误标老年人);补入所引Meta自身LDL-C显著升高信号+FFM取决对照组量级小+2024 AHA初步摘要(观察性未同行评议有争议);诺奖机制事实归discovery_source_url、不冒充研究证据。"
+  },
+  "fish-oil-atrial-fibrillation-dose": {
+    "verdict": "PASS",
+    "content_sha": "7c114ef58e3b224c8592a51de2137270148c4a33edc3c38b7e43c8c5a0591b6d",
+    "reviewed_at": "2026-06-16",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "C2 3/3 PASS、C34 2/2 PASS;Gencer2021(34612056)房颤HR1.25剂量依赖+OMEMI亚分析HR1.90+2026meta(42144851)MACE无显著获益,HR/CI/N逐一核对一致;结论已软化为'高剂量(>1.5g)/高危信号最明确、低剂量不一致'、不超官方口径;evidence=meta由两篇真meta支撑,OMEMI如实标注为RCT佐证。"
+  },
+  "non-sugar-sweeteners-weight-who": {
+    "verdict": "PASS",
+    "content_sha": "6b30995552a942f739b7c87fe684a068545a7416e5df69ddc8d0953fbc7d191f",
+    "reviewed_at": "2026-06-16",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "C2 3/3 PASS、C34 2/2(一reviewer要求把'>18周减弱'对齐WHO长期口径,已改为'更长期6-18个月RCT未见减重获益');WHO2023官方页+19RCT meta(40913681:替糖-0.79kg短期、长期微弱、肥胖不显著)+WHO证据解读(37451112);已补WHO适用范围(不含赤藓糖醇/木糖醇糖醇、不涉护理品)与机构分歧;不比官方自信。"
+  },
+  "fisetin-anti-aging-frontier": {
+    "verdict": "PASS",
+    "content_sha": "dbadc6544eb9239e4adb6c1ab0edcc7e9769a2227070274bee463bdb868c6d09",
+    "reviewed_at": "2026-06-16",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "C2 修正后全过(删去所引摘要无依据的'体外'、改为衰老小鼠等动物)、C34 2/2 PASS;单一来源39269340(10人无对照先导研究,5/10生物年龄反升,端粒无变化,作者明确'不建议作抗衰剂')完整锚定全部分句;evidence=observational诚实标注弱证据;前沿待核纠偏条目,反证(生物利用度低/无对照/小样本)入caveats。"
   }
 }

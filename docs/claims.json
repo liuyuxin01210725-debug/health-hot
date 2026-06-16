@@ -6,9 +6,9 @@
   "disclaimer": "本数据为科普整理，非医疗建议；不提供具体剂量与个体化诊疗。请点击 detail_url / evidence_source_urls 回原文核对。",
   "usage_note": "新消费者请优先使用 verification_basis：study_supported=『研究支持』，official_basis=『官方依据』，frontier_pending=『前沿待核』。verification_status 仅为兼容旧消费者保留，不应用它把官方页面称为原始研究。evidence_source_urls 为核验依据链接（研究或白名单官方页面），discovery_source_url 是『在哪听到』（非证据）。evidence_hint 是用依据状态+证据强度合成的可直接转述的解读，回答用户时可原样引用，但请勿在此基础上夸大或加上本站未给出的剂量/诊疗建议。",
   "generated_at": "2026-06-16",
-  "count": 146,
-  "verified_count": 136,
-  "study_supported_count": 58,
+  "count": 149,
+  "verified_count": 139,
+  "study_supported_count": 61,
   "official_basis_count": 78,
   "frontier_pending_count": 10,
   "claims": [
@@ -103,6 +103,101 @@
       "featured": false,
       "date": "2026-06-16",
       "source_published_at": "2026-06-03",
+      "reviewed_at": "2026-06-16"
+    },
+    {
+      "slug": "fish-oil-atrial-fibrillation-dose",
+      "title": "鱼油纯护心、多多益善？长期补充与房颤风险升高相关，且剂量越高风险越大",
+      "detail_url": "https://health-hot.vercel.app/claims/fish-oil-atrial-fibrillation-dose.html",
+      "category": "补剂",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "meta",
+      "evidence_label": "Meta",
+      "evidence_hint": "有可追溯的原始研究支撑；证据强度较高，可作较可靠参考；仍要看样本量与是否被重复。",
+      "conclusion": "长期补充海洋 ω-3（鱼油）与房颤风险升高相关，且呈剂量依赖（高剂量、尤其 >1.5g/天与高危人群中信号最明确，较低剂量证据不一致）；同时对主要心血管事件的总体获益有限/不一致——不能简单认为「鱼油纯护心、多吃无害」。",
+      "population": "成人；证据主要来自已有心血管病或高危人群的补充剂 RCT，向健康人群外推有边界。",
+      "caveats": "这是「补充剂/鱼油」的证据，与「吃鱼」不能简单画等号。房颤的绝对风险增量不大（相对风险 HR 1.25），不必恐慌；对特定高危人群（如高甘油三酯）的处方级 ω-3 仍可能利大于弊，但要与房颤风险一起权衡。切勿自行停用医生开的处方鱼油/ω-3 药物。不同试验间剂量、剂型、人群差异大（异质性），2026 中等剂量 Meta 甚至未见房颤明确增加。显著升高信号主要见于高剂量（>1.5g/天）与高危人群，较低剂量/低危人群证据不一致；本条以大样本剂量分层证据（Gencer 2021）为主，确定性不高于官方系统综述口径。本条不构成用药建议。",
+      "summary": "把鱼油当成「纯护心、多多益善」并不准确。一篇汇总 7 项 RCT、8.1 万人的 Meta 分析（Gencer 等，Circulation 2021）发现：长期补充海洋 ω-3 与房颤（AF）风险升高相关，总体 HR 1.25（95%CI 1.07–1.46）；且剂量依赖——>1g/天 HR 1.49、≤1g/天 HR 1.12，每多 1g/天风险再升（HR 1.11）。一项 post-MI 老年人高剂量（1.8g/天）RCT 的亚分析（OMEMI）也显示房颤/微房颤 HR 1.90（1.16–3.11）。与此同时，对硬心血管终点的获益并不稳定——一篇 2026 年汇总 25 项 RCT（2.56 万人）的 Meta 未见主要不良心血管事件（MACE）显著降低。所以更准确的说法是：鱼油不是「吃了就护心、无害」，它会以剂量依赖方式小幅增加房颤风险，整体心血管获益也有限且人群依赖。",
+      "source": "Circulation 系统综述/Meta（7 项 RCT，81210 人）+ OMEMI RCT 亚分析 + 2026 心血管结局 Meta（25 RCT）",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/34612056/",
+        "https://pubmed.ncbi.nlm.nih.gov/37515843/",
+        "https://pubmed.ncbi.nlm.nih.gov/42144851/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/34612056/",
+        "https://pubmed.ncbi.nlm.nih.gov/37515843/",
+        "https://pubmed.ncbi.nlm.nih.gov/42144851/"
+      ],
+      "featured": false,
+      "date": "2026-06-16",
+      "source_published_at": "2021-12-21",
+      "reviewed_at": "2026-06-16"
+    },
+    {
+      "slug": "non-sugar-sweeteners-weight-who",
+      "title": "代糖能减肥吗？WHO 2023 不建议用非糖甜味剂控制体重",
+      "detail_url": "https://health-hot.vercel.app/claims/non-sugar-sweeteners-weight-who.html",
+      "category": "营养",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "guideline",
+      "evidence_label": "指南",
+      "evidence_hint": "有可追溯的原始研究支撑；属实践推荐级别，注意适用地区与更新时间。",
+      "conclusion": "WHO 2023 不建议把非糖甜味剂（代糖）用于控制体重：用代糖替代糖在 RCT 中仅带来短期、轻微的减重（更长期 6–18 个月的 RCT 未见对体重的获益、肥胖人群也不显著），而长期前瞻队列观察到与 2 型糖尿病/心血管病/死亡风险升高相关（因果未定）。代糖既非「减肥神器」，也未证实「有害」。",
+      "population": "成人（以非糖尿病人群为主）。",
+      "caveats": "WHO 这是基于低确定性证据的「有条件推荐」，非铁律。短期内用代糖替代含糖饮料对部分人减重仍有小帮助。队列里的「长期风险」是观察性证据，存在反向因果与混杂，不能据此断言「代糖致病」。糖尿病患者控糖时如何使用代糖另有临床考量，请遵医嘱。适用范围：WHO 此建议针对阿斯巴甜、三氯蔗糖、甜菊糖苷等非糖甜味剂，不涵盖赤藓糖醇/木糖醇等糖醇，也不涉及牙膏等含甜味剂的护理品。该立场亦非普遍共识——部分机构认为，用于替代含糖饮料时，代糖对特定人群（如需控糖者）仍是有用工具。本条不构成饮食处方。",
+      "summary": "0 卡的代糖（非糖甜味剂 NSS，如阿斯巴甜、三氯蔗糖等）常被当成减肥利器，但 WHO 2023 年指南给出一条反直觉的「有条件推荐」：不建议用 NSS 来控制体重或降低非传染性疾病风险。依据是：随机对照试验显示，用 NSS 替代糖能带来短期、轻微的体重下降——一篇汇总 19 项 RCT 的 Meta（J Endocrinol Invest 2026）算出平均 −0.79 kg，但在 >18 周的研究里效果变得很小、在肥胖人群中也不显著；而长期前瞻队列观察到 NSS 与 2 型糖尿病、心血管病和死亡风险升高相关（属观察性、因果未定，可能存在反向因果——本就超重/高风险的人更倾向喝代糖饮料）。一篇梳理 WHO 证据的综述（2023）总结：RCT 见短期获益、队列见长期风险，「长期危害不能排除」，建议减糖、也尽量限制代糖。",
+      "source": "WHO 2023《非糖甜味剂使用指南》（官方）+ J Endocrinol Invest RCT-Meta（19 项 RCT）+ WHO 证据解读综述",
+      "evidence_source_urls": [
+        "https://www.who.int/news/item/15-05-2023-who-advises-not-to-use-non-sugar-sweeteners-for-weight-control-in-newly-released-guideline",
+        "https://pubmed.ncbi.nlm.nih.gov/40913681/",
+        "https://pubmed.ncbi.nlm.nih.gov/37451112/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://www.who.int/news/item/15-05-2023-who-advises-not-to-use-non-sugar-sweeteners-for-weight-control-in-newly-released-guideline",
+        "https://pubmed.ncbi.nlm.nih.gov/40913681/",
+        "https://pubmed.ncbi.nlm.nih.gov/37451112/"
+      ],
+      "featured": false,
+      "date": "2026-06-16",
+      "source_published_at": "2023-05-15",
+      "reviewed_at": "2026-06-16"
+    },
+    {
+      "slug": "fisetin-anti-aging-frontier",
+      "title": "漆黄素（fisetin）抗衰？10 人先导研究里半数人生物年龄反而上升",
+      "detail_url": "https://health-hot.vercel.app/claims/fisetin-anti-aging-frontier.html",
+      "category": "长寿",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "observational",
+      "evidence_label": "观察",
+      "evidence_hint": "有可追溯的原始研究支撑；只能显示相关、不能证明因果，勿据此改变重大决定。",
+      "conclusion": "漆黄素（fisetin）作为热门 senolytic「抗衰」补剂，人体证据极弱：唯一直接测人体生物年龄的小型先导研究（10 人、无对照）中半数人生物年龄反而上升，作者明确「不建议作为抗衰剂服用」；延缓衰老的证据目前主要来自衰老小鼠等动物研究。属前沿假说，未在人体验证。",
+      "population": "10 名 50 岁以上健康成人（无对照先导研究）；延缓衰老的机制证据主要来自动物与体外。",
+      "caveats": "证据极弱：单臂、无对照、仅 10 人、用替代指标（TruAge 生物年龄）、且发表于较低层级期刊——既不能据此说有效，也不能说有害。漆黄素口服生物利用度低、代谢快，是公认的人体转化障碍，动物阳性数据未必能转移到人。senolytic 用于人体抗衰的有效性与长期安全均未确立、剂量无共识。不应据网红推荐自行服用，特殊人群（孕期、用药者等）尤需谨慎，请咨询医生。本条不构成用药/补剂建议。",
+      "summary": "漆黄素（fisetin）是被抗衰博主热推的 senolytic（清除衰老细胞）补剂，在衰老小鼠中显示过延长寿命的潜力。但要分清「动物机制」和「人体证据」：迄今直接测「人体生物年龄」的先导研究（Altern Ther Health Med 2024，10 名 50 岁以上健康成人，fisetin 500mg/天、每月连服 1 周、共 6 个月，用 TruAge 检测）结果参差——4/10 生物年龄下降、5/10 反而上升、1/10 无变化，端粒长度无统计学变化；作者明确结论：「在更充分的研究出来前，不建议把 fisetin 当抗衰剂服用」。这是一项无对照、仅 10 人的小型先导研究，连「有效」都谈不上，更非定论。「清除衰老细胞延缓衰老」的人体获益目前未被验证。",
+      "source": "Altern Ther Health Med 人体先导研究（10 名 50 岁以上成人，无对照）",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/39269340/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/39269340/"
+      ],
+      "featured": false,
+      "date": "2026-06-16",
+      "source_published_at": "2024-09-01",
       "reviewed_at": "2026-06-16"
     },
     {
