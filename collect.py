@@ -564,20 +564,24 @@ def main():
             src = (e['journal'] + " · PubMed") if e.get('journal') else name
             rel = relevance_hint(s, e)
             detail_url, citation_urls, enrichment_error = enrich_reference_urls(s, e)
-            cands.append({'source': src, 'category': e.get('category') or s.get('category', ''),
-                          'role': s.get('role', ''),
-                          'evidence': e.get('evidence') or s.get('evidence', 'expert'),
-                          'title': e['title'], 'source_url': url,
-                          'published': e['published'], 'desc': e['desc'][:DESC_CHARS],
-                          'doi': doi, 'canonical_id': cid,
-                          'collection_source': name, 'collection_query': s.get('query', ''),
-                          'authority_level': s.get('authority_level', ''),
-                          'discovery_tier': s.get('discovery_tier', ''),
-                          'context_urls_to_review': [x for x in e.get('citation_urls', []) if x != url][:20],
-                          'reference_page_url': detail_url,
-                          'citation_urls_to_review': [x for x in citation_urls if x != url][:20],
-                          'reference_enrichment_error': enrichment_error,
-                          'relevance_hint': rel})
+            cand = {'source': src, 'category': e.get('category') or s.get('category', ''),
+                    'role': s.get('role', ''),
+                    'evidence': e.get('evidence') or s.get('evidence', 'expert'),
+                    'title': e['title'], 'source_url': url,
+                    'published': e['published'], 'desc': e['desc'][:DESC_CHARS],
+                    'doi': doi, 'canonical_id': cid,
+                    'collection_source': name, 'collection_query': s.get('query', ''),
+                    'authority_level': s.get('authority_level', ''),
+                    'discovery_tier': s.get('discovery_tier', ''),
+                    'context_urls_to_review': [x for x in e.get('citation_urls', []) if x != url][:20],
+                    'reference_page_url': detail_url,
+                    'citation_urls_to_review': [x for x in citation_urls if x != url][:20],
+                    'reference_enrichment_error': enrichment_error,
+                    'relevance_hint': rel}
+            for note_key in ('coi_note', 'review_note'):
+                if s.get(note_key):
+                    cand[note_key] = s[note_key]
+            cands.append(cand)
             seen.add(url)
             if doi:
                 seen_doi.add(doi)

@@ -1,0 +1,144 @@
+{
+  "_说明": "排除名单（黑名单）。明显带货 / 伪科学 / 夸大疗效 / 有监管处罚记录的源。这些源【不接入 sources.json 自动采集】。",
+  "_status": "declarative-not-yet-enforced —— collect.py 目前不读本文件。要让黑名单真正生效（采集时按 domain/name 拦截或给候选打 blocked 标），需在 collect.py 增加拦截逻辑。详见 信源增补草案.md 第5节。",
+  "_第二用途": "小红书打假/祛魅选题库。每条带 xiaohongshu_angle 字段，可直接转成『为什么 X 不靠谱』类内容。但发布前仍走查过再信的强审：打假也要有据。",
+  "_locale": "zh=中文圈 | en=英文圈",
+  "blocklist": [
+    {
+      "name": "NMN 带货矩阵（莱特维健WrightLife / W+ / 奥本元 / PSSOPP / 高活GoHealth 等『抗衰之王』品牌及软广/测评号）",
+      "locale": "zh",
+      "category": "补剂",
+      "reason": "口服 NMN『抗衰/逆龄/不老药』概念带货；付费『全球十大NMN排名』软文；几十元成本卖上千。",
+      "regulatory_record": "亚马逊高份额22个NMN品牌约64%实测含量不足标示1%、部分不含NMN；2025 Q4第三方抽检21个跨境品牌仅9个达标、5个成分不符、3个检出重金属。大陆 NMN 不得作食品经营。",
+      "xiaohongshu_angle": "『NMN 为什么不能叫不老药』——人体硬终点近乎空白 + 含量造假抽检数据。"
+    },
+    {
+      "name": "基因港艾沐茵（GeneHarbor）NMN / 创始人王骏",
+      "locale": "zh",
+      "category": "补剂",
+      "reason": "最早把 NMN 炒成『长寿药』的代表品牌；创始人『威斯康辛博士/港中大教授』人设为核心卖点。",
+      "regulatory_record": "FDA GRAS『认证造假』指控（2020 多家财经媒体交叉）；创始人学术任职无法独立验证；『名人在吃』为销售话术非实证。",
+      "xiaohongshu_angle": "『补剂品牌的诺奖/名校人设是怎么搭起来的』——拆人设营销。"
+    },
+    {
+      "name": "五个女博士（胶原蛋白饮品牌；主体北京青颜博识；代言董璇/李若彤）",
+      "locale": "zh",
+      "category": "营养",
+      "reason": "焦虑营销→明星代言→直播带货卖胶原饮的卖货漏斗。",
+      "regulatory_record": "2023-06 北京朝阳区市监局因广告违背公序良俗罚40万；2024-04 上海罚20万；2025-07 山东淄博对经销商处罚；北大医学部两度声明否认关联。",
+      "xiaohongshu_angle": "『口服胶原蛋白到底能不能补到脸上』——消化分解机制 + 监管处罚。"
+    },
+    {
+      "name": "干细胞 / 外泌体抗衰『种草』博主群（小红书/抖音）",
+      "locale": "zh",
+      "category": "其他",
+      "reason": "『打干细胞/外泌体=婴儿肌、立竿见影』证言式种草，导流跨境打『不老针』，一针数万至数十万。",
+      "regulatory_record": "2025-08-20 东京某诊所赴日自体脂肪干细胞回输致一名50多岁女性心脏骤停死亡（日本2014《再生医疗安全确保法》施行以来首例）；国家市监总局2021《加强干细胞广告监管工作提示》明确干细胞不得作广告宣传。",
+      "xiaohongshu_angle": "『打干细胞抗衰的真实风险』——监管定性 + 死亡案例。"
+    },
+    {
+      "name": "酵素排毒 / 断食养生类 KOL（口服酵素・清肠洗肠・果蔬汁断食）",
+      "locale": "zh",
+      "category": "营养",
+      "reason": "把『排毒/酸碱/排宿便』包装成减肥养颜；卖酵素/断食套餐/课/微商分销。",
+      "regulatory_record": "央视曝光『套路养生馆』在洗肠液中掺酱油冒充『排出的毒素』骗老人，上百名老人被骗上千万、30余人被刑拘；多起保健品虚假宣传与微商涉传销处罚（宁波星康罚20万等）。",
+      "xiaohongshu_angle": "『身体根本不需要你花钱排毒』——肝肾才是排毒器官。"
+    },
+    {
+      "name": "林海峰式断食排毒（理论搬运者）",
+      "locale": "zh",
+      "category": "营养",
+      "reason": "『大米是毒药』『只喝果蔬汁5-7天治慢性病』『去医院没意义』。本人2019已故，理论被抖音/小红书养生号大量二次传播。",
+      "regulatory_record": "记录在案受害案例：湖南常德女性学员只喝果蔬汁致脸型不对称、严重失眠脱发；安利直销出身卖保健品+6880元/12800元付费课。",
+      "xiaohongshu_angle": "『大米是毒药？——拆解一个害死过人的养生理论』。"
+    },
+    {
+      "name": "酸碱体质理论（罗伯特·杨 Robert O. Young 的中文搬运/微商）",
+      "locale": "zh",
+      "category": "其他",
+      "reason": "『酸性体质致病、碱性水/碱性饮食抗衰防癌』，去中心化二手搬运卖碱性水与补剂。",
+      "regulatory_record": "Robert O. Young 在美无医学资质、被判向癌症患者赔偿1.05亿美元；『酸碱体质』理论已被广泛证伪。",
+      "xiaohongshu_angle": "『酸碱体质骗局：一个赔了1亿美金的伪科学』。"
+    },
+    {
+      "name": "张萌（『作家张萌/张萌萌姐』）",
+      "locale": "zh",
+      "category": "其他",
+      "reason": "时间管理畅销书作家转健康带货；『配药式』暗示疗效直播。",
+      "regulatory_record": "2025-10 新浪财经/澎湃起底其把普通食品/膳食补充剂暗示可治高血压、甲状腺病；9款主力77%为非『食健字』。",
+      "xiaohongshu_angle": "『把保健品说得像药——配药式带货话术拆解』。"
+    },
+    {
+      "name": "老陶说真话（陶某，已被无限期封禁）",
+      "locale": "zh",
+      "category": "其他",
+      "reason": "自导自演『急救英雄』虚假短视频涨百万粉。",
+      "regulatory_record": "2024-05 经抖音『无底线博流量』治理 + 卫健/网信调查认定虚假摆拍、自编自导，两账号被无限期封禁；光明网/中青报/澎湃跟进。",
+      "xiaohongshu_angle": "『网红医生造假引流——一个被封号的全国典型』。"
+    },
+    {
+      "name": "射频/微电流家用美容仪『抗衰神器』种草 KOL（群体）",
+      "locale": "zh",
+      "category": "其他",
+      "reason": "把家用射频/微电流仪包装成『抗衰逆龄黑科技/提拉紧致神器』种草带货。",
+      "regulatory_record": "ReFa 关联公司因2021『虚假抗衰老专家推荐广告』被罚约45万；央视《每周质量报告》指 ReFa 产品镍释放量超欧盟限值近150倍。",
+      "xiaohongshu_angle": "『家用美容仪能抗衰吗——把能量密度和临床证据说清楚』。"
+    },
+    {
+      "name": "『大号科普小号带货』医生（新华社/腾讯新闻点名乱象，匿名）",
+      "locale": "zh",
+      "category": "其他",
+      "reason": "主账号大粉做正经科普引流，另开小号打科普旗号带货（护肤/维生素/玻尿酸）。",
+      "regulatory_record": "腾讯新闻《『网红医生』背后的『流量经』》(2024-10)、新华社《变味的『网红医生』》(2024-09) 点名运营团队代持医生资质、30%-60% 抽佣、『或涉嫌违法』。",
+      "xiaohongshu_angle": "『怎么识别科普是真科普还是带货前戏』。"
+    },
+    {
+      "name": "Gary Brecka",
+      "locale": "en",
+      "category": "其他",
+      "reason": "『human biologist』自封头衔（无医学/临床资质），恐吓-变现模式，几乎每条主张导向卖货。",
+      "regulatory_record": "资质争议有据可查；典型 fear-sell-then-monetize 商业模式。",
+      "xiaohongshu_angle": "『海外抗衰网红的恐吓式带货套路』。"
+    },
+    {
+      "name": "Dave Asprey（防弹咖啡/Bulletproof）",
+      "locale": "en",
+      "category": "营养",
+      "reason": "无医学/营养训练（IT+MBA），健康主张与自营产品销售不可分。",
+      "regulatory_record": "Wikipedia 明载『无医学或营养学训练』。",
+      "xiaohongshu_angle": "『防弹咖啡的科学，到底有几分』。"
+    },
+    {
+      "name": "Ben Greenfield",
+      "locale": "en",
+      "category": "其他",
+      "reason": "biohacker，自营 Kion 补剂；传过已被驳的『疫苗致自闭症』。",
+      "regulatory_record": "疫苗-自闭症错误主张有 NBC/TechCrunch/Vice/Fortune 报道记录。",
+      "xiaohongshu_angle": "『biohacker 网红为什么不能照搬』。"
+    },
+    {
+      "name": "Liz Parrish（BioViva）",
+      "locale": "en",
+      "category": "其他",
+      "reason": "无科学/医学资质；核心主张是 n=1 单细胞型、非盲、自体境外基因疗法实验，被包装成『逆龄里程碑』。",
+      "regulatory_record": "实验违背其自身科学顾问判断（顾问 George Church 等）。",
+      "xiaohongshu_angle": "『拿自己做基因疗法实验的 CEO——前沿还是表演』。"
+    },
+    {
+      "name": "Tony Robbins（Lifeforce / Fountain Life）",
+      "locale": "en",
+      "category": "其他",
+      "reason": "无科学/医学资质；自营 Lifeforce 补剂/血检与 Fountain Life 诊所，合著者持有所荐干细胞公司股份。",
+      "regulatory_record": "结构性利益冲突有据可查。",
+      "xiaohongshu_angle": "『成功学大师卖长寿——利益链拆解』。"
+    },
+    {
+      "name": "Peter Diamandis（Fountain Life）",
+      "locale": "en",
+      "category": "其他",
+      "reason": "有真实 MIT/哈佛 MD 资质（非『出名即噱头』），但有股票推广处罚记录 + 自营 Fountain Life 长寿诊所，作为信息源不可靠。",
+      "regulatory_record": "股票推广相关处罚记录有据可查。",
+      "xiaohongshu_angle": "（可选）『有真学历也可能是坏信息源——资质≠可信』。"
+    }
+  ]
+}

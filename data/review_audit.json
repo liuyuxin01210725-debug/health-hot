@@ -103,5 +103,47 @@
       "C7": true
     },
     "notes": "Cochrane42227307+ODS/NHS;缺才补、补不普遍增益;'可能几乎没差别'hedge保留;NHS仅支撑纯素者不外扩"
+  },
+  "vitamin-c-kidney-stones": {
+    "verdict": "PASS",
+    "content_sha": "9d16d37ecd6d63773da796686a42b918691789c49ea4d80241acb598675952cd",
+    "reviewed_at": "2026-06-16",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "C2 3/3 PASS、C34 2/2 PASS(不比NIH ODS更自信、反证齐:尿草酸体外伪差/证据集中度/剂量非单调/HR诚实);主锚点30178451真meta+SR,26463139为如实标注的哈佛前瞻队列佐证(按C6最高级别=meta);OR1.62/HR1.43(总)/1.19(补剂)/19.7万人逐一核对一致。"
+  },
+  "seed-oils-inflammation-myth": {
+    "verdict": "PASS",
+    "content_sha": "86a4603c8820cb7c58f844a83fc22b0b6a7c3811484528f54973010523fe0125",
+    "reviewed_at": "2026-06-16",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "C2 3/3 PASS、C34 反证齐(癌种异质卵巢/子宫内膜反向、n=39且脂肪组织组织特异性促炎、Sydney Diet Heart反向死亡信号、Ramsden/Calder分歧、Cochrane CD011094低确定性对冲);炎症句已精确为n-6vs鱼油组间无差异+相比基线下降;主锚点40075437真meta+SR,40058591为如实标注RCT佐证。"
+  },
+  "intermittent-fasting-autophagy-nobel": {
+    "verdict": "PASS",
+    "content_sha": "9b547aa1fc38b18a21899c7275c35d3c3a027c221a13980a78b3bf9e94aabb72",
+    "reviewed_at": "2026-06-16",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "C2 3/3 PASS、C34 2/2 PASS、C1真(42280443真SR+MA);人群已修正28RCT/N=1833成人(原误标老年人);补入所引Meta自身LDL-C显著升高信号+FFM取决对照组量级小+2024 AHA初步摘要(观察性未同行评议有争议);诺奖机制事实归discovery_source_url、不冒充研究证据。"
   }
 }
