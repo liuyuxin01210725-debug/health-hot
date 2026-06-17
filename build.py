@@ -32,6 +32,9 @@ CF_ANALYTICS_TOKEN = os.environ.get("HEALTH_HOT_CF_ANALYTICS_TOKEN", "").strip()
 HERO_Q = "听到一个健康说法？先查一下证据。"
 DEFAULT_SUBMIT_ENDPOINT = "https://health-hot-submit.pages.dev/submit"
 SUBMIT_ENDPOINT = os.environ.get("HEALTH_HOT_SUBMIT_ENDPOINT", DEFAULT_SUBMIT_ENDPOINT).strip()
+# 站内搜索打点端点（精选"热点度"的需求信号）：前端在搜索停手后 fire-and-forget 发 {term,hit}。
+DEFAULT_EVENT_ENDPOINT = "https://health-hot-submit.pages.dev/event"
+EVENT_ENDPOINT = os.environ.get("HEALTH_HOT_EVENT_ENDPOINT", DEFAULT_EVENT_ENDPOINT).strip()
 
 # 日期字段语义（避免把"期刊预排日期"与"本站收录日"混为一谈）：
 #   date                = 本站 feed 日期，用于排序与发布闸门；通常等于原文日期，
@@ -875,8 +878,19 @@ def render_all(items):
              f'</div>'
              f'</div></div></section>')
     submit_endpoint_js = json.dumps(SUBMIT_ENDPOINT, ensure_ascii=False)
+    event_endpoint_js = json.dumps(EVENT_ENDPOINT, ensure_ascii=False)
     js = '''<script>
 const SUBMIT_ENDPOINT=__SUBMIT_ENDPOINT__;
+const EVENT_ENDPOINT=__EVENT_ENDPOINT__;
+// 站内搜索打点:停手~1s后才发一条 {term,hit},同词只发一次,绝不每键发。sendBeacon/text-plain 免CORS预检、fire-and-forget。
+let evtTimer=null,lastSentQ='';
+function sendSearchEvent(term,hit){if(!EVENT_ENDPOINT)return;
+  const body=JSON.stringify({term:term,hit:hit});
+  try{if(navigator.sendBeacon){navigator.sendBeacon(EVENT_ENDPOINT,new Blob([body],{type:'text/plain;charset=UTF-8'}));return;}}catch(e){}
+  try{fetch(EVENT_ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain'},body:body,keepalive:true}).catch(()=>{});}catch(e){}}
+function scheduleSearchEvent(term,hit){if(!EVENT_ENDPOINT||term.length<2||term===lastSentQ)return;
+  clearTimeout(evtTimer);
+  evtTimer=setTimeout(()=>{if(term===((input.value||'').trim())){lastSentQ=term;sendSearchEvent(term,hit);}},1000);}
 let activeCat='all', activeBasis='all'; const rows=[...document.querySelectorAll('.list-row')];
 const input=document.getElementById('q'), count=document.getElementById('count'), empty=document.getElementById('empty');
 const allSec=document.querySelector('.all-sec'), fuzzytip=document.getElementById('fuzzytip');
@@ -918,7 +932,8 @@ function applyFilters(){
   empty.hidden=n!==0;
   allSec.classList.toggle('no-results', n===0 && !!raw && !filtersActive);   // 纯查询 0 结果：筛选器/表头收起、提交 CTA 顶到搜索框下
   if(n===0){lastQ=raw||'这个说法';emptyq.textContent='「'+lastQ+'」';
-    document.getElementById('copytip').hidden=true;document.getElementById('submittip').hidden=true;}}
+    document.getElementById('copytip').hidden=true;document.getElementById('submittip').hidden=true;}
+  scheduleSearchEvent(raw, n>0);}
 document.getElementById('filterbar').addEventListener('click',e=>{const b=e.target.closest('.fchip');if(!b)return;
   activeCat=b.dataset.c;document.querySelectorAll('.fchip').forEach(x=>x.classList.toggle('on',x===b));applyFilters();});
 document.getElementById('basisbar').addEventListener('click',e=>{const b=e.target.closest('.bchip');if(!b)return;
@@ -959,7 +974,7 @@ if(!SUBMIT_ENDPOINT){
 }
 applyFilters();
 </script>'''
-    js = js.replace("__SUBMIT_ENDPOINT__", submit_endpoint_js)
+    js = js.replace("__SUBMIT_ENDPOINT__", submit_endpoint_js).replace("__EVENT_ENDPOINT__", event_endpoint_js)
     return shell("全部", "全部", inner, extra_js=js,
                  desc="全部健康说法核验，按主题分组，每条标注证据强度、适用人群与原始出处。", canon="all.html")
 

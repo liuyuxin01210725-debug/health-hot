@@ -8,6 +8,9 @@ preview_urls = false
 GITHUB_REPO = "liuyuxin01210725-debug/health-hot"
 GITHUB_LABEL = "待核说法"
 ALLOWED_ORIGINS = "https://health-hot.vercel.app,https://liuyuxin01210725-debug.github.io,http://localhost:8000,http://127.0.0.1:8000"
+EVENT_DAILY_LIMIT_PER_IP = "300"
+# EVENT_STATS_TOKEN 用于保护 GET /event/stats 读回；走 secret、不写进配置/仓库：
+#   npx wrangler secret put EVENT_STATS_TOKEN   （Pages 项目则在 Cloudflare 后台环境变量里设）
 
 # 去重 + 限流 + 重复计数所需。先建命名空间再填 id：
 #   npx wrangler kv namespace create PENDING_KV

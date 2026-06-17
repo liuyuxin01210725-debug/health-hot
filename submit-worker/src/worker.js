@@ -3,6 +3,10 @@ const MAX_BODY_CHARS = 1200;
 const DAILY_LIMIT_PER_IP = 10;
 const DUPLICATE_TTL_SECONDS = 60 * 60 * 24 * 90;
 const RATE_TTL_SECONDS = 60 * 60 * 48;
+const EVENT_TERM_MAX_CHARS = 60;
+const EVENT_TTL_SECONDS = 60 * 60 * 24 * 180; // 站内搜索词计数保留 180 天；"近期"由打分时按 ts 衰减，不在 KV 里做
+const DEFAULT_EVENT_DAILY_LIMIT_PER_IP = 300;
+const EVENT_STATS_DEFAULT_LIMIT = 200;
 const DEFAULT_ALLOWED_ORIGINS = [
   "https://health-hot.vercel.app",
   "https://liuyuxin01210725-debug.github.io",
@@ -20,6 +24,12 @@ export default {
     const url = new URL(request.url);
     if (request.method === "GET" && url.pathname === "/health") {
       return json({ ok: true }, 200, cors);
+    }
+    if (request.method === "POST" && url.pathname === "/event") {
+      return handleSearchEvent(request, env, cors);
+    }
+    if (request.method === "GET" && url.pathname === "/event/stats") {
+      return handleEventStats(request, env, cors);
     }
     if (request.method !== "POST" || url.pathname !== "/submit") {
       return json({ error: "not_found" }, 404, cors);
@@ -125,6 +135,78 @@ async function enforceRateLimit(kv, ip) {
   }
   await kv.put(key, String(count + 1), { expirationTtl: RATE_TTL_SECONDS });
   return true;
+}
+
+// 站内搜索计数端点。记录 {term, hit} 的命中/未命中次数，作为"精选热点度"的需求信号。
+// 隐私：只存规范化搜索词 + 计数 + 末次日期；不存 IP（仅哈希用于软限流，48h TTL）、不存用户、不记单条历史。
+// 全程 fire-and-forget：任何不合法/超限/出错都静默返回 204，前端无感。
+async function handleSearchEvent(request, env, cors) {
+  const noop = new Response(null, { status: 204, headers: cors });
+  const origin = request.headers.get("Origin") || "";
+  if (!isAllowedOrigin(origin, env) || !env.PENDING_KV) return noop;
+  const raw = await request.text();
+  if (raw.length > MAX_BODY_CHARS) return noop;
+  let payload;
+  try { payload = JSON.parse(raw || "{}"); } catch { return noop; }
+  const term = normalizeClaim(payload.term).slice(0, EVENT_TERM_MAX_CHARS);
+  if (normalizeForHash(term).length < 2) return noop; // 去掉过短/纯标点的噪声
+  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+  const limit = Number(env.EVENT_DAILY_LIMIT_PER_IP) || DEFAULT_EVENT_DAILY_LIMIT_PER_IP;
+  if (!(await enforceEventRateLimit(env.PENDING_KV, ip, limit))) return noop; // 防刷，静默丢弃
+  await recordSearchEvent(env.PENDING_KV, term, payload.hit === true).catch(() => {});
+  return noop;
+}
+
+async function enforceEventRateLimit(kv, ip, limit) {
+  // 与 /submit 限流分开计：单独 evtrate: 键，独立上限，互不消耗。
+  const day = new Date().toISOString().slice(0, 10);
+  const key = `evtrate:${await sha256(ip)}:${day}`;
+  const count = Number(await kv.get(key) || "0");
+  if (count >= limit) return false;
+  await kv.put(key, String(count + 1), { expirationTtl: RATE_TTL_SECONDS });
+  return true;
+}
+
+async function recordSearchEvent(kv, term, hit) {
+  // 键按"标点不敏感"的哈希分组（"维C 长结石" 与 "维C长结石" 归一条）；值存可读规范化词 + 命中/未命中计数 + 末次日期。
+  // 读-改-写自增，与现有 rate 计数器同款非原子；小流量可接受（偶发竞态只丢个别计数，不影响热度排序）。
+  const key = `evt:q:${await sha256(normalizeForHash(term))}`;
+  let rec = null;
+  try { rec = await kv.get(key, { type: "json" }); } catch { rec = null; }
+  if (!rec || typeof rec !== "object") rec = { t: term, h: 0, m: 0, ts: "" };
+  if (hit) rec.h = (Number(rec.h) || 0) + 1;
+  else rec.m = (Number(rec.m) || 0) + 1;
+  rec.t = term;
+  rec.ts = new Date().toISOString().slice(0, 10);
+  await kv.put(key, JSON.stringify(rec), { expirationTtl: EVENT_TTL_SECONDS });
+}
+
+// 读回聚合统计（给构建期/打分步用）。token 保护，不公开裸搜索词。
+// 注意：list + 逐键 get 是 N+1 读，词量达数千时会慢/触达子请求上限；当前小流量可接受。
+async function handleEventStats(request, env, cors) {
+  const url = new URL(request.url);
+  const token = url.searchParams.get("token")
+    || (request.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "").trim();
+  if (!env.EVENT_STATS_TOKEN || token !== env.EVENT_STATS_TOKEN) {
+    return json({ error: "forbidden" }, 403, cors);
+  }
+  if (!env.PENDING_KV) return json({ count: 0, terms: [] }, 200, cors);
+  const out = [];
+  let cursor;
+  do {
+    const res = await env.PENDING_KV.list({ prefix: "evt:q:", cursor, limit: 1000 });
+    for (const k of res.keys) {
+      let rec = null;
+      try { rec = await env.PENDING_KV.get(k.name, { type: "json" }); } catch { rec = null; }
+      if (rec && typeof rec === "object") {
+        out.push({ term: rec.t || "", h: Number(rec.h) || 0, m: Number(rec.m) || 0, ts: rec.ts || "" });
+      }
+    }
+    cursor = res.list_complete ? undefined : res.cursor;
+  } while (cursor);
+  out.sort((a, b) => (b.h + b.m) - (a.h + a.m));
+  const limit = Math.min(Number(url.searchParams.get("limit")) || EVENT_STATS_DEFAULT_LIMIT, 1000);
+  return json({ count: out.length, terms: out.slice(0, limit) }, 200, cors);
 }
 
 async function createIssue(repo, label, claim, page, token) {

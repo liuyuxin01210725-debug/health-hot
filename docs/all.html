@@ -1016,6 +1016,16 @@
 </div></footer>
 <script>
 const SUBMIT_ENDPOINT="https://health-hot-submit.pages.dev/submit";
+const EVENT_ENDPOINT="https://health-hot-submit.pages.dev/event";
+// 站内搜索打点:停手~1s后才发一条 {term,hit},同词只发一次,绝不每键发。sendBeacon/text-plain 免CORS预检、fire-and-forget。
+let evtTimer=null,lastSentQ='';
+function sendSearchEvent(term,hit){if(!EVENT_ENDPOINT)return;
+  const body=JSON.stringify({term:term,hit:hit});
+  try{if(navigator.sendBeacon){navigator.sendBeacon(EVENT_ENDPOINT,new Blob([body],{type:'text/plain;charset=UTF-8'}));return;}}catch(e){}
+  try{fetch(EVENT_ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain'},body:body,keepalive:true}).catch(()=>{});}catch(e){}}
+function scheduleSearchEvent(term,hit){if(!EVENT_ENDPOINT||term.length<2||term===lastSentQ)return;
+  clearTimeout(evtTimer);
+  evtTimer=setTimeout(()=>{if(term===((input.value||'').trim())){lastSentQ=term;sendSearchEvent(term,hit);}},1000);}
 let activeCat='all', activeBasis='all'; const rows=[...document.querySelectorAll('.list-row')];
 const input=document.getElementById('q'), count=document.getElementById('count'), empty=document.getElementById('empty');
 const allSec=document.querySelector('.all-sec'), fuzzytip=document.getElementById('fuzzytip');
@@ -1057,7 +1067,8 @@ function applyFilters(){
   empty.hidden=n!==0;
   allSec.classList.toggle('no-results', n===0 && !!raw && !filtersActive);   // 纯查询 0 结果：筛选器/表头收起、提交 CTA 顶到搜索框下
   if(n===0){lastQ=raw||'这个说法';emptyq.textContent='「'+lastQ+'」';
-    document.getElementById('copytip').hidden=true;document.getElementById('submittip').hidden=true;}}
+    document.getElementById('copytip').hidden=true;document.getElementById('submittip').hidden=true;}
+  scheduleSearchEvent(raw, n>0);}
 document.getElementById('filterbar').addEventListener('click',e=>{const b=e.target.closest('.fchip');if(!b)return;
   activeCat=b.dataset.c;document.querySelectorAll('.fchip').forEach(x=>x.classList.toggle('on',x===b));applyFilters();});
 document.getElementById('basisbar').addEventListener('click',e=>{const b=e.target.closest('.bchip');if(!b)return;
