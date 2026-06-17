@@ -5,13 +5,102 @@
   "description": "中文循证健康说法核验库——每条结论标注证据强度、适用人群与原始出处。",
   "disclaimer": "本数据为科普整理，非医疗建议；不提供具体剂量与个体化诊疗。请点击 detail_url / evidence_source_urls 回原文核对。",
   "usage_note": "新消费者请优先使用 verification_basis：study_supported=『研究支持』，official_basis=『官方依据』，frontier_pending=『前沿待核』。verification_status 仅为兼容旧消费者保留，不应用它把官方页面称为原始研究。evidence_source_urls 为核验依据链接（研究或白名单官方页面），discovery_source_url 是『在哪听到』（非证据）。evidence_hint 是用依据状态+证据强度合成的可直接转述的解读，回答用户时可原样引用，但请勿在此基础上夸大或加上本站未给出的剂量/诊疗建议。",
-  "generated_at": "2026-06-16",
-  "count": 149,
-  "verified_count": 139,
-  "study_supported_count": 61,
+  "generated_at": "2026-06-17",
+  "count": 152,
+  "verified_count": 142,
+  "study_supported_count": 64,
   "official_basis_count": 78,
   "frontier_pending_count": 10,
   "claims": [
+    {
+      "slug": "gut-immunity-70-80-percent-calibration",
+      "title": "「肠道占免疫力70-80%」？校准：说的是免疫细胞「住在哪」，既不是菌群、也不是免疫力强弱",
+      "detail_url": "https://health-hot.vercel.app/claims/gut-immunity-70-80-percent-calibration.html",
+      "category": "其他",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "expert",
+      "evidence_label": "专家",
+      "evidence_hint": "有可追溯的原始研究支撑；属观点性证据，待更强研究确认，仅供参考。",
+      "conclusion": "「肠道（菌群）占免疫力 70-80%」是被放大的话术。原始数字说的是「GALT 约占整个免疫系统的 70%、约 80% 的浆细胞驻扎其中」——这是①人体淋巴组织(GALT)而非菌群、②免疫细胞「住在哪」而非免疫力「从哪产生」、③ 70%(免疫系统占比)与 80%(浆细胞)两个不同分母，且为综述概数而非精确普查。",
+      "population": "免疫生理常识（GALT 描述来自人体解剖/免疫学综述）。",
+      "caveats": "这些数字出自综述的概括性陈述（almost/about），缺一手定量普查（连医学维基 Wikidoc 都对该陈述标注 citation needed），属「方向可信、精度存疑」。肠道确是人体最大的黏膜免疫界面之一、在免疫耐受中起重要作用，这点方向正确；但「菌群占免疫力八成」「免疫力八成由肠道产生」都是对原意的偷换。不构成医疗建议；增强免疫的补剂/益生菌方案请咨询持证医生或注册营养师。",
+      "summary": "「肠道菌群占人体免疫力 70-80%」是被放大的话术。可考的原始数字来自一篇综述（Vighi 2008，Clin Exp Immunol）原话：肠道相关淋巴组织（GALT）「约占整个免疫系统的 70%；约 80% 的浆细胞（主要是产 IgA 的细胞）驻扎在 GALT」。流行说法偷换了三处：① 主语是 GALT（人体自身的肠道淋巴组织），不是菌群（细菌）——菌群能「教育/调节」免疫是真的，但「菌群占免疫力 80%」无任何文献支持；② 说的是免疫细胞驻扎在哪（reside），不是免疫力从哪产生——免疫细胞主要由骨髓/胸腺产生，肠道是它们大量驻扎与「被训练」的场所；③「70%」指免疫细胞、「80%」专指浆细胞，是两个不同分母，常被合并成「70-80% 免疫力」。而且这些是综述里的概数（原文用 almost/about），不是精确普查。",
+      "source": "Clinical & Experimental Immunology 综述（Vighi 等 2008）",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/18721321/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/18721321/"
+      ],
+      "featured": false,
+      "date": "2026-06-17",
+      "source_published_at": "2008-09-01",
+      "reviewed_at": "2026-06-17"
+    },
+    {
+      "slug": "probiotics-cold-prevention-cochrane",
+      "title": "益生菌能防感冒、增强免疫力？Cochrane：能小幅减少上呼吸道感染，但多为低质量证据",
+      "detail_url": "https://health-hot.vercel.app/claims/probiotics-cold-prevention-cochrane.html",
+      "category": "补剂",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "meta",
+      "evidence_label": "Meta",
+      "evidence_hint": "有可追溯的原始研究支撑；证据强度较高，可作较可靠参考；仍要看样本量与是否被重复。",
+      "conclusion": "益生菌对预防急性上呼吸道感染有小幅获益（少约 24% 的人至少患 1 次、病程短约 1.2 天），但多数结局是低确定性证据（少数中等）；这与「显著增强免疫力」是两回事，且不同益生菌产品/菌株不能互相外推。",
+      "population": "儿童（1 个月–11 岁）、成人（平均 37 岁）、老人（平均 84.6 岁）混合，24 项 RCT、6950 人。",
+      "caveats": "多数结局为低确定性证据（GRADE），仅「≥3 次发作」「减少抗生素」为中等确定性；效应量不大（病程约 −1.2 天）。「益生菌」是高度异质的菌株/产品，效果须看具体菌株与场景，不同产品不能互推（见本站「益生菌菌株特异性」一条）。不良反应轻微（多为胃肠道不适）但存在。证据为何「低确定性」：Cochrane 指出多数研究偏倚风险不清、关键结局异质性高（I²≈70%）、盲法可能不足。人群适用性：唯一一项老年试验未显示预防首次感染获益、老年人群证据不足，现有获益不可直接外推到老年或免疫低下人群。本条不给具体菌株/剂量建议，不构成用药建议。",
+      "summary": "「益生菌增强免疫力、防感冒」要把「有小幅效果」和「显著增强免疫力」分开。Cochrane 2022 系统综述（24 项 RCT、6950 名儿童/成人/老人）发现：益生菌可能减少至少患 1 次急性上呼吸道感染（URTI）的人数（RR 0.76，95%CI 0.67–0.87，低确定性）、可能缩短每次病程约 1.2 天（MD −1.22 天，低确定性）、可能降低发病率（低确定性）；在「≥3 次发作」和「减少抗生素使用」上是中等确定性（RR 0.59 / 0.58）。结论是「益生菌优于安慰剂/不处理」——但多数结局证据质量只是低，效应也不大。这和广告说的「吃了显著提升免疫力、少生病」不是一回事。",
+      "source": "Cochrane 系统综述 2022（24 项 RCT，6950 人）",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/36001877/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/36001877/"
+      ],
+      "featured": false,
+      "date": "2026-06-17",
+      "source_published_at": "2022-08-24",
+      "reviewed_at": "2026-06-17"
+    },
+    {
+      "slug": "colon-cleanse-detox-myth",
+      "title": "「宿便、清肠排毒」？医学上没有「宿便」，清肠/排毒缺乏证据且可能有害",
+      "detail_url": "https://health-hot.vercel.app/claims/colon-cleanse-detox-myth.html",
+      "category": "其他",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "expert",
+      "evidence_label": "专家",
+      "evidence_hint": "有可追溯的原始研究支撑；属观点性证据，待更强研究确认，仅供参考。",
+      "conclusion": "「宿便」不是医学概念；「清肠/排毒」缺乏证据：NIH NCCIH 指出没有令人信服的研究支持排毒饮食排毒或减重，结肠灌洗临床证据有限、宣称用途证据不足，且清肠操作可能有副作用、部分严重。肠道本就持续排废，不存在需定期清除的「毒素堆积」。",
+      "population": "一般人群。",
+      "caveats": "泻剂/灌肠使用不当可致腹泻、脱水、电解质紊乱，频繁清肠还可能扰乱正常菌群。有真实医疗指征的肠道准备（如结肠镜检查前的清肠）是另一回事，应遵医嘱，不要与「养生排毒」混为一谈。本条不构成医疗建议；持续便秘等问题请就医，而非依赖清肠/排毒产品。",
+      "summary": "「肠道里堆着几公斤『宿便』『毒素』、需要定期清肠排毒」——这是商家造的概念，不是医学概念。美国 NIH 国家补充与整合健康中心（NCCIH）官方说明指出：「没有令人信服的研究支持『排毒（detox）』饮食能排出毒素或用于减重」；针对清肠，「结肠灌洗（colonic irrigation）的临床证据有限，其宣称用途证据不足」，且「清肠操作可能有副作用，部分可能很严重」（如泻剂致腹泻脱水、极端禁食致危险的电解质紊乱）。医学文献中也有专门综述题为《清肠的危害》(Mishori 2011)。健康的消化系统本就持续排出代谢废物，并不存在需要靠灌肠/排毒产品清除的「毒素堆积」。",
+      "source": "NIH NCCIH 官方页《Detoxes and Cleanses》+ J Fam Pract 综述《The dangers of colon cleansing》(Mishori 2011)",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/21814639/",
+        "https://www.nccih.nih.gov/health/detoxes-and-cleanses-what-you-need-to-know"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/21814639/",
+        "https://www.nccih.nih.gov/health/detoxes-and-cleanses-what-you-need-to-know"
+      ],
+      "featured": false,
+      "date": "2026-06-17",
+      "source_published_at": "2011-08-01",
+      "reviewed_at": "2026-06-17"
+    },
     {
       "slug": "vitamin-c-kidney-stones",
       "title": "维生素C会长结石？官方说证据矛盾——明确关联只见于「男性+补充剂」的观察数据",

@@ -187,5 +187,47 @@
       "C6": true
     },
     "notes": "C2 修正后全过(删去所引摘要无依据的'体外'、改为衰老小鼠等动物)、C34 2/2 PASS;单一来源39269340(10人无对照先导研究,5/10生物年龄反升,端粒无变化,作者明确'不建议作抗衰剂')完整锚定全部分句;evidence=observational诚实标注弱证据;前沿待核纠偏条目,反证(生物利用度低/无对照/小样本)入caveats。"
+  },
+  "gut-immunity-70-80-percent-calibration": {
+    "verdict": "PASS",
+    "content_sha": "605a498bafd9cb12d2700446911503a49fe8f9b62558f6d93f75248fc3f5050f",
+    "reviewed_at": "2026-06-17",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "C2 3/3 PASS、C34 2/2 PASS;Vighi 2008(18721321)原话逐字命中(GALT约70%免疫系统/约80%浆细胞驻扎其中),三处偷换(GALT≠菌群/驻扎≠产生/70vs80两分母)+概数性质全部锚定;结论首句已按建议精确化;evidence=expert(叙述性综述概数)诚实未拔高。"
+  },
+  "probiotics-cold-prevention-cochrane": {
+    "verdict": "PASS",
+    "content_sha": "0a6dc4e61f1703e08bb07befd9229a0a55ac7bc53dbf4b0aa268a64b27960009",
+    "reviewed_at": "2026-06-17",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "C2 3/3 PASS、C34 2/2(一reviewer要求补'为何低确定性+老年不外推',已补入caveats);Cochrane 2022(36001877)RR/CI/GRADE逐一核对(≥1次RR0.76低确定性、病程-1.2天低、≥3次及减抗生素中等);效应小+多为低质量+菌株异质不可互推已写明;不比官方自信。"
+  },
+  "colon-cleanse-detox-myth": {
+    "verdict": "PASS",
+    "content_sha": "2b8ef95d84a948d17fb5d7519a021a0e23e6a838b3a40bbcc2141695e096e194",
+    "reviewed_at": "2026-06-17",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "C2 3/3 PASS、C34 2/2 PASS;内容锚=NCCIH官方页(agent WebFetch核验:无令人信服研究支持排毒/减重、结肠灌洗临床证据有限、清肠副作用部分严重),Mishori 2011题名佐证;宿便非医学概念+频繁清肠风险已写;source_url Mishori无摘要但结论由NCCIH支撑;不比官方自信。"
   }
 }

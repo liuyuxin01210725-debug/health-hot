@@ -1,0 +1,426 @@
+{
+  "_说明": "常青选题清单。高价值、不分新旧、用户常搜的健康说法。每跑一批时从『新候选(/tmp/health_candidates.json) + 本清单』一起挑。常青话题做 PubMed 检索时按【相关性/最强证据】(系统综述/指南/官方,老的也要)搜,不按日期。做完一条把 status 改 done 并填 slug。",
+  "_用法": "热点反查时若发现某热说法底层踩的是一条老理论,把该老理论作为新条目加进 topics(status=pending)。",
+  "_status_values": "pending=待做 | in_progress=在做 | done=已上线(填slug) | skip=查后证据不足/不做(填原因)",
+  "topics": [
+    {
+      "topic": "隔夜菜致癌（剩菜亚硝酸盐）",
+      "category": "营养",
+      "cognitive_gap": "以为剩菜=毒；实际冷藏储存得当亚硝酸盐远低于危害量，癌症联系被夸大（但反复加热/久放的绿叶菜另说）",
+      "anchor_hint": "亚硝酸盐/N-亚硝基化合物与胃癌队列；冷藏储存亚硝酸盐实测；IARC 加工肉口径",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "喝醋/苹果醋软化血管、降血压、减肥",
+      "category": "心肺",
+      "cognitive_gap": "以为醋能溶斑块软化血管；机制不成立，体内 pH 不受饮食醋影响；减重证据微弱",
+      "anchor_hint": "apple cider vinegar weight/glycemia RCT 系统综述",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "骨头汤补钙",
+      "category": "营养",
+      "cognitive_gap": "以为骨头汤高钙；实测钙含量极低、主要是脂肪和嘌呤",
+      "anchor_hint": "bone broth 钙含量实测；膳食钙来源（奶/豆/绿叶）官方口径",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "趁热吃/烫食与食道癌",
+      "category": "其他",
+      "cognitive_gap": "反向认知差：以为趁热吃养胃没事；实际 >65℃ 热饮被 IARC 列为 2A 类可能致癌",
+      "anchor_hint": "IARC Monographs 很烫饮品 65℃ 2A；食管癌队列",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "阿胶/红枣补血（补铁、治贫血）",
+      "category": "营养",
+      "cognitive_gap": "以为红枣阿胶补铁补血；红枣铁含量低且非血红素铁吸收差，阿胶主要是胶原蛋白",
+      "anchor_hint": "缺铁性贫血膳食补铁官方指南；植物性非血红素铁吸收",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "食物相克（菠菜+豆腐、海鲜+维C 等）",
+      "category": "营养",
+      "cognitive_gap": "以为特定食物同食中毒/有害；多数无人体证据，剂量远不可及",
+      "anchor_hint": "草酸钙/草酸吸收；海鲜砷+维C 剂量学；食物相克科学审查",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "微波炉加热致癌/破坏营养",
+      "category": "其他",
+      "cognitive_gap": "以为微波致癌、辐射残留、营养全毁；实为非电离辐射，营养损失不高于其他烹饪",
+      "anchor_hint": "微波 vs 其他烹饪营养保留；非电离辐射安全官方页",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "左旋肉碱减肥",
+      "category": "补剂",
+      "cognitive_gap": "以为左旋肉碱燃脂减肥；对体重影响微弱、证据弱",
+      "anchor_hint": "L-carnitine body weight 系统综述/meta",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "抗糖化/戒糖抗衰（抗糖丸、抗糖饮食）",
+      "category": "长寿",
+      "cognitive_gap": "热门抗衰概念；AGEs 与衰老的人体干预证据薄弱，'抗糖丸'更无依据",
+      "anchor_hint": "dietary AGEs 健康结局系统综述；糖与皮肤老化证据等级",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "大蒜抗癌/杀菌防感冒",
+      "category": "营养",
+      "cognitive_gap": "以为大蒜抗癌防感冒；观察性有弱信号，干预证据有限",
+      "anchor_hint": "garlic cancer/cold 系统综述；WCRF 口径",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "蜂蜜营养高于糖/润肠通便",
+      "category": "营养",
+      "cognitive_gap": "以为蜂蜜是健康糖；本质仍是游离糖，营养优势微小",
+      "anchor_hint": "蜂蜜 vs 蔗糖代谢；WHO 游离糖建议",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "隔夜茶/千滚水致癌",
+      "category": "其他",
+      "cognitive_gap": "以为隔夜茶、反复烧开的水亚硝酸盐致癌；实测远低于限量",
+      "anchor_hint": "千滚水/隔夜茶亚硝酸盐实测；饮用水亚硝酸盐限值",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "燕窝美容/营养（唾液酸）",
+      "category": "营养",
+      "cognitive_gap": "以为燕窝高营养美容；主要成分蛋白质且不优于鸡蛋，唾液酸口服获益无人体证据",
+      "anchor_hint": "燕窝唾液酸口服生物利用度；蛋白质来源对比",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "豆浆/大豆异黄酮致乳腺癌（植物雌激素）",
+      "category": "营养",
+      "cognitive_gap": "反向：很多人怕豆制品致癌；实际适量大豆与乳腺癌风险不升、可能略降",
+      "anchor_hint": "soy isoflavone breast cancer 系统综述/队列；AICR 口径",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "防蓝光眼镜护眼/防黄斑变性",
+      "category": "其他",
+      "cognitive_gap": "以为防蓝光眼镜护眼防病；RCT 未见对眼疲劳/视力/睡眠明确获益",
+      "anchor_hint": "blue-light filtering lenses Cochrane 2023",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "生姜/姜茶治感冒、驱寒",
+      "category": "营养",
+      "cognitive_gap": "以为姜茶治感冒；对普通感冒病程无证据，恶心方向另有有限证据",
+      "anchor_hint": "ginger common cold；ginger nausea 系统综述",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "「肠道占70-80%免疫力」校准",
+      "category": "其他",
+      "theme": "肠道菌群",
+      "priority": "P1",
+      "cognitive_gap": "GALT(肠道淋巴组织)≠菌群、免疫细胞驻扎≠免疫力产生、70%(免疫细胞)与80%(浆细胞)是两个分母",
+      "anchor_hint": "Vighi 2008 综述 PMID 18721321;标方向真/数字为启发式",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "菌群参与免疫发育(强)≠某款益生菌增强我的免疫力(弱)",
+      "category": "其他",
+      "theme": "肠道菌群",
+      "priority": "P1",
+      "cognitive_gap": "把无菌鼠基础科学的硬度,借给补剂疗效",
+      "anchor_hint": "免疫学综述germ-free mice共识;区分证据层级",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "菌群失调(dysbiosis):是因还是果+术语无共识定义被滥用",
+      "category": "其他",
+      "theme": "肠道菌群",
+      "priority": "P1",
+      "cognitive_gap": "横断面关联被读成致病;MR显示因果效应小;dysbiosis无统一定义、成卖检测的万能筐",
+      "anchor_hint": "两样本MR(代谢综合征/肥胖 β<0.1)+批判dysbiosis定义的综述",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "益生菌防感冒/增强免疫:Cochrane 2022 效应小+证据质量低",
+      "category": "补剂",
+      "theme": "肠道菌群",
+      "priority": "P1",
+      "cognitive_gap": "统计显著的小效果≠显著增强免疫力;摆效应量+证据等级",
+      "anchor_hint": "Cochrane 2022 CD006895.pub4 URTI",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "益生菌治肠易激(IBS):AGA 2020 指南不推荐、不要治腹胀",
+      "category": "其他",
+      "theme": "肠道菌群",
+      "priority": "P1",
+      "cognitive_gap": "患者当常规治疗,权威指南是不作推荐、GRADE低到极低",
+      "anchor_hint": "AGA 2020 Probiotics in GI Disorders 指南",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "FMT证据地图:仅复发性C.diff扎实并获批;减肥/抑郁/自闭/瘦人移植仍研究阶段+致死风险",
+      "category": "其他",
+      "theme": "肠道菌群",
+      "priority": "P1",
+      "cognitive_gap": "以为偏方 or 当换肠道治百病神术;真相只C.diff一个适应症循证扎实",
+      "anchor_hint": "FDA批Rebyota 2022/Vowst 2023+2019 ESBL致死安全警告(合并5条FMT)",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "抗生素后补益生菌'恢复菌群':Suez 2018反而延迟黏膜重建",
+      "category": "补剂",
+      "theme": "肠道菌群",
+      "priority": "P1",
+      "cognitive_gap": "几乎所有人默认抗生素后补益生菌=帮恢复;前沿证据相反",
+      "anchor_hint": "Suez 2018 Cell(标:样本小、被ISAPP批评、单研究未复制)",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "益生菌证据较强的窄场景:预防抗生素相关性腹泻(AAD,布拉氏酵母菌)",
+      "category": "补剂",
+      "theme": "肠道菌群",
+      "priority": "P1",
+      "cognitive_gap": "防腹泻(特定菌株/终点,证据较好)≠重建菌群生态",
+      "anchor_hint": "AAD系统综述/Cochrane;S.boulardii 18.7%→8.5%",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "益生菌多'过路'不定植:粪便检出≠黏膜定植,因人而异",
+      "category": "补剂",
+      "theme": "肠道菌群",
+      "priority": "P1",
+      "cognitive_gap": "以为吃益生菌=好菌住下繁殖;实则定植抵抗、个体化",
+      "anchor_hint": "Zmora/Suez 2018 Cell黏膜活检",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "「90%血清素在肠道」前真后偷换:外周5-HT不过血脑屏障、不直接管情绪",
+      "category": "心理",
+      "theme": "肠道菌群",
+      "priority": "P1",
+      "cognitive_gap": "真实统计被读成'吃益生菌补血清素治抑郁';肠脑走间接通路",
+      "anchor_hint": "神经科学血脑屏障共识+肠脑轴综述",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "「宿便/清肠排毒」:医学不存在宿便,频繁清肠破坏菌群且有害",
+      "category": "其他",
+      "theme": "肠道菌群",
+      "priority": "P1",
+      "cognitive_gap": "以为肠道堆着几公斤毒素需定期清;清肠/灌肠不当可致电解质紊乱/肠穿孔",
+      "anchor_hint": "Mayo Clinic清肠FAQ+NCCIH detox+Georgetown综述(直接打假,多重官方锚)",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "「肠漏症leaky gut」当独立诊断不被主流承认(但肠道通透性增加在特定病真实)",
+      "category": "其他",
+      "theme": "肠道菌群",
+      "priority": "P1",
+      "cognitive_gap": "功能医学当万病之因卖补剂;区分'肠漏症(营销诊断)'vs'通透性增加(是结果非原因)'",
+      "anchor_hint": "Mayo/Harvard对leaky gut立场",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "'人人每天吃益生菌养生'缺证据:ISAPP不支持对健康人普遍推荐",
+      "category": "补剂",
+      "theme": "肠道菌群",
+      "priority": "P2",
+      "cognitive_gap": "当每日保健品;注意与库内nccih-probiotics去重,聚焦'全人群推荐'反驳",
+      "anchor_hint": "ISAPP对健康人群普遍补充的立场",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "市售益生菌'千亿活菌'标称vs到达肠道活菌:胃酸存活/抽检合格率",
+      "category": "补剂",
+      "theme": "肠道菌群",
+      "priority": "P2",
+      "cognitive_gap": "活菌数越大越好的误导;数字游戏掩盖菌株/存活/临床证据",
+      "anchor_hint": "需国内消协/药监抽检实测作锚(否则降级)",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "家用肠道菌群检测试剂盒缺乏临床效用",
+      "category": "其他",
+      "theme": "肠道菌群",
+      "priority": "P2",
+      "cognitive_gap": "以为测一管粪便=精准报告指导买补剂;菌群每日波动、无医生解读",
+      "anchor_hint": "微生物组学家/权威媒体对家用检测的批评",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "'胖菌/瘦菌'F/B比值判胖瘦被人群meta推翻",
+      "category": "代谢",
+      "theme": "肠道菌群",
+      "priority": "P2",
+      "cognitive_gap": "营销当定论;源于小鼠+小样本,人群荟萃无稳定关联",
+      "anchor_hint": "Sze & Schloss 人群meta",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "Akkermansia(灭活)对代谢:Depommier 2019概念验证RCT(非减肥神药)",
+      "category": "代谢",
+      "theme": "肠道菌群",
+      "priority": "P2",
+      "cognitive_gap": "要么没听过要么当暴瘦神器;真实在中间、效应不大、基线低者获益",
+      "anchor_hint": "Depommier 2019 Nat Med RCT(前沿待核)",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "纤维不是越杂越好:'不同纤维喂不同菌'+「每周30种植物」是关联非因果",
+      "category": "营养",
+      "theme": "肠道菌群",
+      "priority": "P2",
+      "cognitive_gap": "30种植物源自横断面关联(混杂),30非魔法阈值;无万能纤维",
+      "anchor_hint": "McDonald 2018 American Gut+纤维结构特异性研究(Deehan等)",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "发酵食品 Wastyk 2021 Cell:10周提多样性+降炎症(高纤维组10周没变)",
+      "category": "营养",
+      "theme": "肠道菌群",
+      "priority": "P2",
+      "cognitive_gap": "以为多吃纤维=菌群更多样;此RCT恰是发酵食品快、纤维慢",
+      "anchor_hint": "Wastyk 2021 Cell(标:样本36、未独立复制)",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "发酵食品活菌多'过客'+很多货架发酵品(巴氏杀菌)无活菌",
+      "category": "营养",
+      "theme": "肠道菌群",
+      "priority": "P2",
+      "cognitive_gap": "以为吃酸奶/泡菜=益生菌住进肠道;靠过路代谢、停吃即走",
+      "anchor_hint": "发酵食品菌株过路性研究",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "益生元菊粉:胀气是剂量依赖副作用、不是越多越好",
+      "category": "营养",
+      "theme": "肠道菌群",
+      "priority": "P2",
+      "cognitive_gap": "把益生元当无脑越多越好;发酵纤维最常见副作用是胀气、剂量依赖",
+      "anchor_hint": "菊粉/可发酵纤维耐受性综述",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "丁酸/SCFA口服补剂:机制清楚但人体补剂证据小而稀",
+      "category": "补剂",
+      "theme": "肠道菌群",
+      "priority": "P2",
+      "cognitive_gap": "机制故事卖丁酸补剂;口服丁酸≠体内菌发酵纤维,人体效果温和(合并抗性淀粉)",
+      "anchor_hint": "SCFA/丁酸口服补剂人体RCT综述",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "肠脑轴:动物因果强(JB-1)→人体常翻译失败(Kelly 2017阴性)",
+      "category": "心理",
+      "theme": "肠道菌群",
+      "priority": "P2",
+      "cognitive_gap": "引小鼠不焦虑却不提人体复制失败;动物阳性=假设非结论",
+      "anchor_hint": "Bravo 2011 JB-1 + Kelly 2017 'Lost in Translation'健康男性RCT",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "精神益生菌(psychobiotics)抗抑郁焦虑:有信号但GRADE评为低",
+      "category": "心理",
+      "theme": "肠道菌群",
+      "priority": "P2",
+      "cognitive_gap": "有RCT/Meta≠高质量证据;去高偏倚研究后效应缩水",
+      "anchor_hint": "2024 psychobiotics GRADE系统综述",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "抗生素扰动菌群确凿+恢复无'X天重建时间表'+耐药基因滞留更久",
+      "category": "其他",
+      "theme": "肠道菌群",
+      "priority": "P2",
+      "cognitive_gap": "两极:无影响 or 一次永久破坏;真相扰动确凿但因药因人、恢复个体化(合并3条+联动库内WHO抗微生物耐药)",
+      "anchor_hint": "抗生素菌群扰动/恢复纵向综述+resistome前瞻研究",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "益生元/益生菌/合生元/后生元 概念地图(四词被混用)",
+      "category": "补剂",
+      "theme": "肠道菌群",
+      "priority": "P2",
+      "cognitive_gap": "[研究补缺]四个被营销混用的术语一次讲清",
+      "anchor_hint": "ISAPP各术语共识定义",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "剖宫产vs顺产、母乳vs配方 对婴儿早期菌群定植",
+      "category": "其他",
+      "theme": "肠道菌群",
+      "priority": "P2",
+      "cognitive_gap": "[研究补缺]大众关心、有证据、ISAPP/WHO有口径",
+      "anchor_hint": "ISAPP/WHO + 队列",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "菌群与肿瘤免疫治疗(PD-1)应答",
+      "category": "长寿",
+      "theme": "肠道菌群",
+      "priority": "P2",
+      "cognitive_gap": "[研究补缺]前沿但人体证据在升级的好案例(emerging)",
+      "anchor_hint": "特定菌群影响PD-1疗效的人体研究",
+      "status": "pending",
+      "slug": ""
+    },
+    {
+      "topic": "后生元(postbiotics)2021才被ISAPP定义:商品宣称跑在科学前",
+      "category": "补剂",
+      "theme": "肠道菌群",
+      "priority": "P2",
+      "cognitive_gap": "带货包装成'下一代益生菌',人体获益证据早期",
+      "anchor_hint": "ISAPP 2021 postbiotics共识",
+      "status": "pending",
+      "slug": ""
+    }
+  ],
+  "_肠道菌群_打假目标": "抗性淀粉养肠减脂夸大/瘦人粪移植减肥无效/康普茶过度包装/益生菌直接减肥(监管处罚)/旅行者腹泻益生菌CDC不推荐/'第二大脑控制情绪'修辞夸张——作小红书祛魅或并入相关条,不单独做。"
+}
