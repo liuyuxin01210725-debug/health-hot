@@ -19,6 +19,8 @@ data/items/*.json，再跑 build.py 上站。
 纯标准库。用法：
     python3 collect.py                 # 抓全部信源
     python3 collect.py PubMed Attia    # 只抓名字匹配的
+    python3 collect.py --doctor        # 信源体检：探活每个源的搜索/抓取机制（不写候选、不上线）
+    python3 collect.py --doctor --check-urls  # 体检并联网巡检官方锚点 URL（仅告警，反爬/代理误报多）
 """
 import json, os, sys, glob, re, html, time, threading, urllib.request, urllib.parse, urllib.error
 import xml.etree.ElementTree as ET
@@ -30,6 +32,7 @@ ITEMS = os.path.join(ROOT, "data", "items")
 OUT = "/tmp/health_candidates.json"
 META_OUT = "/tmp/health_collection_meta.json"
 HOT_OUT = "/tmp/health_hot_topics.json"
+DOCTOR_OUT = "/tmp/health_source_doctor.json"
 UA = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36'}
 PER_SOURCE = 5
 DESC_CHARS = 2500
@@ -57,6 +60,8 @@ ATOM = '{http://www.w3.org/2005/Atom}'
 MEDIA = '{http://search.yahoo.com/mrss/}'
 CONTENT = '{http://purl.org/rss/1.0/modules/content/}encoded'
 EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
+PUBMED_TOOL = "health-hot"
+PUBMED_EMAIL = "liuyuxin01210725-debug@users.noreply.github.com"
 MON = {'jan':'01','feb':'02','mar':'03','apr':'04','may':'05','jun':'06',
        'jul':'07','aug':'08','sep':'09','oct':'10','nov':'11','dec':'12'}
 
@@ -267,13 +272,13 @@ def parse_feed(raw):
 def fetch_pubmed(query, n=PER_SOURCE):
     """PubMed：按主题找最新论文，抓免费摘要。返回 [{title,url,published,desc,journal}]"""
     es = (f"{EUTILS}/esearch.fcgi?db=pubmed&retmode=json&sort=date&retmax={n}"
-          f"&tool=health-hot&email=liuyuxin01210725-debug@users.noreply.github.com&term=" + urllib.parse.quote(query))
+          f"&tool={PUBMED_TOOL}&email={PUBMED_EMAIL}&term=" + urllib.parse.quote(query))
     ids = [i for i in json.loads(fetch(es).decode()).get('esearchresult', {}).get('idlist', [])
            if isinstance(i, str) and i.isascii() and i.isdigit()]  # ASCII 数字才收（全角数字 isdigit 也为真）
     if not ids:
         return []
     ef = (f"{EUTILS}/efetch.fcgi?db=pubmed&retmode=xml&rettype=abstract"
-          f"&tool=health-hot&email=liuyuxin01210725-debug@users.noreply.github.com&id=" + ",".join(ids))
+          f"&tool={PUBMED_TOOL}&email={PUBMED_EMAIL}&id=" + ",".join(ids))
     root = safe_fromstring(fetch(ef))
     out = []
     for art in root.findall('.//PubmedArticle'):
@@ -484,7 +489,9 @@ def seen_records():
 def select_sources(sources, args):
     """默认跑权威层与可信专家发现层；--include-discovery 再加入实验型雷达。"""
     include_discovery = '--include-discovery' in args
-    filt = [x.lower() for x in args if x != '--include-discovery']
+    # 旗标（--doctor/--no-hot/--include-discovery/--check-urls 等）不作为名称过滤词，
+    # 否则单独传一个旗标会过滤出空集合、误判"没有匹配的信源"。
+    filt = [x.lower() for x in args if not x.startswith('--')]
     if filt:
         return [s for s in sources if isinstance(s, dict)
                 and any(f in s.get('name', '').lower() for f in filt)]
@@ -497,6 +504,170 @@ def failure_is_warning(source):
     """发现层波动不应阻断权威主流程；anchor 失败始终阻断，配置不能绕过。"""
     return (source.get('failure_policy') == 'warn'
             and source.get('role') in {'discovery', 'radar'})
+
+
+# ── 信源体检（--doctor）：探活每个信源的"搜索/抓取"机制，三态汇总 ──
+# 借鉴 agent-reach 的 doctor 思路（每源自检 + 单源异常隔离 + N/total 聚合），
+# 但落在"输入侧"：检查 sources.json 里的源现在还能不能被检索/抓取、还出不出数。
+# 与 audit_library.py 互补——后者查"输出侧"已发布条目里的链接是否还活。
+# 只读探活：复用现有 fetch()/parse_feed()，不写候选、不触发 build.py 上线闸门。
+_DOCTOR_ICON = {'ok': '✓', 'warn': '⚠', 'down': '✗'}
+
+
+def _probe_pubmed(s):
+    """只跑 esearch（最便宜的健康信号）：query 还能不能在 PubMed 命中。"""
+    query = s.get('query')
+    if not isinstance(query, str) or not query.strip():
+        return 'down', '缺 query 字段'
+    es = (f"{EUTILS}/esearch.fcgi?db=pubmed&retmode=json&sort=date&retmax=1"
+          f"&tool={PUBMED_TOOL}&email={PUBMED_EMAIL}&term=" + urllib.parse.quote(query))
+    res = json.loads(fetch(es).decode()).get('esearchresult', {})
+    try:
+        count = int(res.get('count', 0))
+    except (TypeError, ValueError):
+        count = 0
+    if count > 0:
+        return 'ok', f'esearch 正常，query 命中 {count} 篇'
+    return 'warn', 'esearch 可达但 0 命中（query 可能过窄/失效，需人工核 query 串）'
+
+
+def _probe_feed(s):
+    """抓 feed 并解析：0 条目正是 youtube channel_id 失效 / 源已空的典型信号。"""
+    typ = s['type']
+    if typ == 'youtube':
+        cid = s.get('channel_id')
+        if not isinstance(cid, str) or not cid.strip():
+            return 'down', '缺 channel_id 字段'
+        url = f"https://www.youtube.com/feeds/videos.xml?channel_id={cid}"
+    else:
+        url = s.get('url')
+        if not isinstance(url, str) or not url.strip():
+            return 'down', '缺 url 字段'
+    entries = parse_feed(fetch(url, attempts=1, timeout=12))
+    if entries:
+        return 'ok', f'feed 正常，解析到 {len(entries)} 条'
+    stale = 'youtube channel_id 可能失效' if typ == 'youtube' else '源可能已空/格式变动'
+    return 'warn', f'feed 可达但 0 条目（{stale}，需人工核）'
+
+
+def _probe_official(s, check_urls=False):
+    """官方精选目录：默认只做确定性的结构校验（无误报）；--check-urls 才联网巡检锚点 URL。"""
+    entries = official_catalog_entries(s)  # 结构非法会抛 → probe_source 归为 down
+    if not check_urls:
+        return 'ok', f'目录结构合法，{len(entries)} 个锚点（默认不联网；--check-urls 巡检 URL）'
+    import audit_library  # 惰性引入：仅 --check-urls 时借其诚实 UA + restricted/broken 分类
+    broken, restricted = [], []
+    for e in entries:
+        r = audit_library.check_url(e['url'])
+        if r['status'] == 'broken':
+            broken.append(e['url'])
+        elif r['status'] in ('restricted', 'error'):
+            restricted.append(e['url'])
+    if broken:
+        state = 'down' if len(broken) == len(entries) else 'warn'
+        return state, f'{len(broken)}/{len(entries)} 个锚点疑似失效(404/410)，含 {broken[0]}'
+    if restricted:
+        return 'warn', f'{len(restricted)}/{len(entries)} 个锚点受限/临时错误（多为反爬，非确证失效）'
+    return 'ok', f'{len(entries)} 个锚点页全部可达'
+
+
+def probe_source(s, check_urls=False):
+    """探一个信源的"搜索/抓取"机制是否还活、还出数。返回 {name,type,role,optional,state,detail}。
+    单源异常在此被吞并归为 down，绝不让一个坏源带崩整张体检表（doctor 容错聚合）。"""
+    is_dict = isinstance(s, dict)
+    row = {'name': s.get('name', '<未命名>') if is_dict else '<非对象>',
+           'type': s.get('type', '?') if is_dict else '?',
+           'role': s.get('role', '') if is_dict else '',
+           'optional': failure_is_warning(s) if is_dict else False}
+    try:
+        if not is_dict or 'type' not in s:
+            row.update(state='down', detail='source 缺 type 字段')
+            return row
+        typ = s['type']
+        if typ == 'pubmed':
+            state, detail = _probe_pubmed(s)
+        elif typ == 'official_catalog':
+            state, detail = _probe_official(s, check_urls=check_urls)
+        elif typ in ('youtube', 'rss'):
+            state, detail = _probe_feed(s)
+        else:
+            state, detail = 'down', f'不支持的 source type：{typ!r}'
+    except Exception as ex:
+        state, detail = 'down', str(ex)[:200]
+    row.update(state=state, detail=detail)
+    return row
+
+
+def probe_aux_dependencies():
+    """探非 sources.json 内、但采集主流程依赖的外部机制：热榜聚合器（单点）+ gh CLI。"""
+    rows = []
+    hot_name = f'热点反查 API（{urllib.parse.urlsplit(HOT_API).netloc}）'
+    try:
+        data = json.loads(fetch(f"{HOT_API}/{HOT_PLATFORMS[0]}", attempts=1, timeout=12))
+        items = data.get('data', [])
+        if isinstance(items, dict):
+            items = items.get('list') or items.get('data') or []
+        n = len(items) if isinstance(items, list) else 0
+        rows.append({'name': hot_name, 'type': 'hot_api', 'role': 'discovery', 'optional': True,
+                     'state': 'ok' if n else 'warn',
+                     'detail': f'可达，{HOT_PLATFORMS[0]} 返回 {n} 条' if n else '可达但 0 条（接口结构可能变动）'})
+    except Exception as ex:
+        rows.append({'name': hot_name, 'type': 'hot_api', 'role': 'discovery', 'optional': True,
+                     'state': 'down', 'detail': f'不可达（单点故障，热点反查将整体失效）：{str(ex)[:80]}'})
+    import shutil, subprocess
+    gh_name = 'gh CLI（用户提交待核说法）'
+    gh = shutil.which('gh')
+    if not gh:
+        rows.append({'name': gh_name, 'type': 'gh', 'role': 'discovery', 'optional': True,
+                     'state': 'warn', 'detail': 'gh 未安装 → 用户提交的待核说法本轮会被跳过（不影响主流程）'})
+        return rows
+    try:
+        r = subprocess.run([gh, 'auth', 'status'], capture_output=True, text=True, timeout=10)
+        if r.returncode == 0:
+            rows.append({'name': gh_name, 'type': 'gh', 'role': 'discovery', 'optional': True,
+                         'state': 'ok', 'detail': 'gh 已安装并认证'})
+        else:
+            rows.append({'name': gh_name, 'type': 'gh', 'role': 'discovery', 'optional': True,
+                         'state': 'warn',
+                         'detail': 'gh 已装但未认证 → 用户提交的待核说法会被静默丢弃，运行 gh auth login 恢复'})
+    except Exception as ex:
+        rows.append({'name': gh_name, 'type': 'gh', 'role': 'discovery', 'optional': True,
+                     'state': 'warn', 'detail': f'gh 状态检查失败：{str(ex)[:60]}'})
+    return rows
+
+
+def doctor_exit_code(rows):
+    """退出码：任一非可选（anchor/权威）信源 down → 1（需修复后再采集）；否则 0。
+    发现层 / 可选依赖的 down / warn 不阻断（沿用 failure_is_warning 哲学）。"""
+    return 1 if any(r.get('state') == 'down' and not r.get('optional') for r in rows) else 0
+
+
+def run_doctor(sources, check_urls=False):
+    """信源体检：逐源探活搜索/抓取机制 + 附加依赖，三态聚合报告，写机读 JSON，返回退出码。"""
+    src_rows = [probe_source(s, check_urls=check_urls) for s in sources]
+    aux_rows = probe_aux_dependencies()
+    rows = src_rows + aux_rows
+    counts = {st: sum(1 for r in rows if r['state'] == st) for st in ('ok', 'warn', 'down')}
+    print("信源体检（--doctor）：探活'搜索/抓取'机制，不写候选、不触发上线闸门\n")
+    for r in src_rows:
+        opt = ' ·（发现层，失败仅告警）' if r['optional'] else ''
+        print(f"  {_DOCTOR_ICON.get(r['state'], '?')} [{r['state']:>4}] {r['name'][:26]:<26} {r['type']:<16} {r['detail']}{opt}")
+    print("\n  附加依赖（非 sources.json，但主流程依赖）：")
+    for r in aux_rows:
+        print(f"  {_DOCTOR_ICON.get(r['state'], '?')} [{r['state']:>4}] {r['name'][:26]:<26} {r['detail']}")
+    print(f"\n小计：{counts['ok']}/{len(rows)} ok · {counts['warn']} warn · {counts['down']} down")
+    print("注：本机沙箱可能走代理，可达性'绿/红'仅供参考，以站长真实环境复核为准。")
+    blocking = [r for r in rows if r['state'] == 'down' and not r['optional']]
+    payload = {'generated_at': time.strftime('%Y-%m-%d %H:%M:%S'),
+               'summary': {'total': len(rows), **counts, 'blocking': [r['name'] for r in blocking]},
+               'sources': src_rows, 'aux': aux_rows}
+    json.dump(payload, open(DOCTOR_OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+    print(f"→ 机读结果：{DOCTOR_OUT}")
+    if blocking:
+        print(f"\n⛔ {len(blocking)} 个权威/锚点信源不可达，需修复后再采集：" + "、".join(r['name'] for r in blocking))
+    elif counts['down'] or counts['warn']:
+        print(f"\n⚠ {counts['down']} 个失效 / {counts['warn']} 个降级，均为发现层或可选依赖，主流程不阻断。")
+    return doctor_exit_code(rows)
 
 
 def main():
@@ -512,6 +683,8 @@ def main():
     if not sources:
         print("[!] 没有匹配的信源，请检查筛选参数或 sources.json")
         sys.exit(1)
+    if '--doctor' in sys.argv:
+        sys.exit(run_doctor(sources, check_urls='--check-urls' in sys.argv))
     seen, seen_canonical = seen_records()
     seen_doi, seen_title = set(), set()
     cands, succeeded, failed, warnings, failures = [], 0, 0, 0, []

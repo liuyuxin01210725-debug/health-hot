@@ -322,6 +322,46 @@ class CollectTests(unittest.TestCase):
         self.assertEqual([claim["title"] for claim in claims], ["肌酸伤肾吗", "酵素排毒吗", "酸碱体质是真的吗"])
         self.assertTrue(all(claim["needs_semantic_filter"] for claim in claims))
 
+    def test_doctor_probe_feed_three_states(self):
+        ok_feed = b"<rss><channel><item><title>x</title><link>https://e.com/p</link></item></channel></rss>"
+        with mock.patch.object(collect, "fetch", return_value=ok_feed):
+            row = collect.probe_source({"name": "F", "type": "rss", "url": "https://e.com/feed",
+                                        "role": "discovery", "failure_policy": "warn"})
+        self.assertEqual(row["state"], "ok")
+        self.assertTrue(row["optional"])  # discovery+warn → 失败仅告警
+        empty_feed = b"<rss><channel></channel></rss>"
+        with mock.patch.object(collect, "fetch", return_value=empty_feed):
+            row = collect.probe_source({"name": "Y", "type": "youtube", "channel_id": "UCdead",
+                                        "role": "discovery", "failure_policy": "warn"})
+        self.assertEqual(row["state"], "warn")  # 0 条目 = 频道 ID 可能失效
+        with mock.patch.object(collect, "fetch", side_effect=urllib.error.URLError("boom")):
+            row = collect.probe_source({"name": "A", "type": "rss", "url": "https://e.com/feed",
+                                        "role": "anchor"})
+        self.assertEqual(row["state"], "down")
+        self.assertFalse(row["optional"])  # anchor → 不可绕过
+
+    def test_doctor_probe_pubmed_counts(self):
+        hit = json.dumps({"esearchresult": {"count": "7", "idlist": ["1"]}}).encode()
+        with mock.patch.object(collect, "fetch", return_value=hit):
+            row = collect.probe_source({"name": "P", "type": "pubmed", "role": "anchor", "query": "creatine"})
+        self.assertEqual(row["state"], "ok")
+        miss = json.dumps({"esearchresult": {"count": "0", "idlist": []}}).encode()
+        with mock.patch.object(collect, "fetch", return_value=miss):
+            row = collect.probe_source({"name": "P", "type": "pubmed", "role": "anchor", "query": "zzzznotarealterm"})
+        self.assertEqual(row["state"], "warn")
+
+    def test_doctor_unknown_or_missing_type_is_isolated_down(self):
+        # 单源异常/缺字段不抛、归类为 down，绝不带崩整张体检表
+        self.assertEqual(collect.probe_source({"name": "bad"})["state"], "down")
+        self.assertEqual(collect.probe_source({"name": "x", "type": "weibo"})["state"], "down")
+        self.assertEqual(collect.probe_source("非对象")["state"], "down")
+
+    def test_doctor_exit_code_blocks_only_on_anchor_down(self):
+        self.assertEqual(collect.doctor_exit_code(
+            [{"state": "down", "optional": True}, {"state": "warn", "optional": False}]), 0)
+        self.assertEqual(collect.doctor_exit_code([{"state": "down", "optional": False}]), 1)
+        self.assertEqual(collect.doctor_exit_code([{"state": "ok", "optional": False}]), 0)
+
 
 class BuildFailSafeTests(unittest.TestCase):
     def test_blocked_item_does_not_replace_existing_docs(self):
