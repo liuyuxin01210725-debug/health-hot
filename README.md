@@ -69,6 +69,7 @@
 python3 collect.py                       # 默认：官方 + PubMed + 专家解释层 + 已配置实验型雷达
 python3 collect.py --include-discovery   # 可选：再加入未来配置的额外发现源
 python3 collect.py 'PubMed·肌酸'         # 只抓名字匹配的信源
+python3 collect.py --doctor              # 信源体检：逐源探活检索/抓取机制（只读、不写候选；--check-urls 另巡检官方锚点）
 ```
 
 候选写入 `/tmp/health_candidates.json`。PubMed 窄主题雷达会附带 `relevance_hint`：
