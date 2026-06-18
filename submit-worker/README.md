@@ -43,3 +43,18 @@ HEALTH_HOT_SUBMIT_ENDPOINT="https://health-hot-submit.pages.dev/submit" python3 
 ```
 
 未配置 `HEALTH_HOT_SUBMIT_ENDPOINT` 时，网页会自动退回复制/分享，不会假装提交成功。
+
+## 站内搜索计数端点 `/event`（精选「热点度」数据源）
+
+同一 Worker 还有两条路由（复用同一 `PENDING_KV` / CORS / 限流）：
+
+- `POST /event`，body `{term, hit}`：记录站内搜索词命中/未命中计数。存 `evt:q:<sha256(规范化term)>` →
+  `{t,h,m,ts}`，TTL 180 天。**隐私**：只存规范化词 + 计数 + 末次日期，不存 IP（仅哈希做 48h 软限流
+  `evtrate:`）、不存用户/历史；词长 ≤60、<2 字符丢弃。永远返回 204（fire-and-forget）。软限流上限
+  env `EVENT_DAILY_LIMIT_PER_IP`（默认 300）。
+- `GET /event/stats?token=<EVENT_STATS_TOKEN>`：按总次数降序读回 `{count, terms:[{term,h,m,ts}]}`（默认 top 200）。
+  **token 保护**，不公开裸搜索词；给构建期 / `scripts/search_hotness.py` 读回，喂精选「热点度」打分。
+
+前端打点在 `build.py` 生成的 `all.html` 搜索框：停手约 1 秒才发一条（防抖 + 同词去重，sendBeacon/text-plain 免预检）。
+端点默认 `https://health-hot-submit.pages.dev/event`，可用 env `HEALTH_HOT_EVENT_ENDPOINT` 覆盖。
+`EVENT_STATS_TOKEN` 走 secret（`wrangler pages secret put EVENT_STATS_TOKEN --project-name=health-hot-submit` 或 CF 面板），不写进 toml / 仓库。

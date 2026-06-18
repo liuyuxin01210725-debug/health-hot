@@ -14,10 +14,13 @@
 - `audit_library.py` — 审计已发布馆藏：复核到期、证据待补、来源分布和链接可达性（纯标准库）
 - `build.py` — 生成静态站到 `docs/`（精选 + 全部 + 关于 + 各条详情页 + `claims.json` 机读 feed；纯标准库）。**自带发布闸门 + 强审硬锁**，详见「强审与发布闸门」。
 - `scripts/prepush_check.py` — 增量强审闸门：改动条目须有 PASS 强审记录才放行（本机 pre-push 钩子与 CI 都调它）
+- `scripts/search_hotness.py` — 读回站内搜索计数（`/event`，见「用户提交闭环」），供精选「热点度」打分（纯读，需 `EVENT_STATS_TOKEN`）
 - `data/review_audit.json` — `/health-review` 强审账本，按 `content_sha` 绑定正文（正文一改记录即作废）
 - `data/strong_review_grandfather.json` — 待强审存量固化清单（与 `review_audit.json` 互斥，随强审瘦身；**勿手工重生成**）
+- `data/topic_backlog.json` — 常青选题清单（不分新旧的高价值待做话题；周更从「新候选 + 此清单」一起挑，常青话题按最强证据搜、不按日期）
+- `data/source_blocklist.json` — 噱头 / 带货 / 伪科学黑名单（惰性：未接入 `collect.py` 采集；兼作小红书打假选题库）
 - `make_og.py` — 生成社交分享卡 `assets/og.png`（需 Pillow，单独运行，不进构建）
-- `submit-worker/` — 一键提交接收端的共享 Worker 实现：把搜索无结果时的用户提交创建成 GitHub issue
+- `submit-worker/` — 一键提交接收端的共享 Worker 实现：把搜索无结果时的用户提交创建成 GitHub issue；并提供 `/event` 站内搜索计数端点（精选「热点度」数据源，见「用户提交闭环」）
 - `submit-pages/` — 生产提交端（Cloudflare Pages Functions），复用 `submit-worker/src/worker.js`，公开端点为 `https://health-hot-submit.pages.dev`
 - `skill/SKILL.md` — 公开 health-hot Skill，构建时拷进 `docs/skill/`
 - 部署：**Vercel** 以 `python3 build.py` 为 buildCommand 构建上线（见 `vercel.json`）；`docs/` 也提交入库。因此 build.py 的闸门就是线上站的部署硬锁。
@@ -45,11 +48,20 @@
 
 - **增量强审已是硬锁**：从现在起，改动 / 新增条目不过 `/health-review` 就上不了线。
 - **audit 权威，grandfather 只兜底**：条目一旦在 `review_audit.json` 有记录就以它为准——`FIX` / `BLOCK`、或 `PASS` 但 `content_sha` 不符，一律拦，grandfather **不能**覆盖否决；grandfather 仅对【无 audit 记录】的条目按 `content_sha` 兜底放行。
-- **全库强审尚未完成**：当前 **9 条**有 PASS 记录（走 audit 权威路径），**134 条**仅由 `data/strong_review_grandfather.json` 固化兜底——**不代表已被强审**，只是冻结了当时正文、让硬锁上线当天不冻结全站。
+- **全库强审尚未完成**：当前 **18 条**有 PASS 记录（走 audit 权威路径），**134 条**仅由 `data/strong_review_grandfather.json` 固化兜底——**不代表已被强审**，只是冻结了当时正文、让硬锁上线当天不冻结全站。
 - **grandfather = 真实待审存量，会瘦身**：`record_review.py` 记任何 verdict 时即把该 slug 移出 grandfather，所以 `len(grandfather)` 就是「从未强审过」的条数（现 134），两个账本互斥。**编辑任一固化条目**（哪怕改错字）→ 哈希变 → 脱离兜底 → 必须强审。
 - **切勿手工重新生成** `strong_review_grandfather.json`——那等于把当前未审内容重新「洗白」。要消化存量，就逐条跑 `/health-review`（自动瘦身）。
 
 **早警 CI（`.github/workflows/ci.yml`，push / PR 触发）** 复刻 build.py 全库闸门 + 单测 + 馆藏审计 + 对改动条目跑 `scripts/prepush_check.py`（本机 pre-push 钩子的云端镜像）。它是**早警，不是合并硬门**：仓库若「直推 main + Vercel 自动部署」，CI 拦不住部署本身。要让它成为合并硬门，需在 GitHub 仓库设置开 **Branch protection**（要求本 workflow 通过 + 禁直推 main，改走 PR 流）。本机 `.git/hooks/pre-push` 不进版本库，仅本机有效。
+
+## 精选 / 重点核验怎么选
+
+首页「重点核验」**不靠手动标记，由 `build.py` 算「重点核验分」自动选取**（`select_featured`）：
+`0.45·证据强度 + 0.20·rank(编辑重要性) + 0.20·新鲜度 + 0.15·热点度`，只取已核验层（前沿待核不进门面），
+类目均衡（每类 ≤6）取约 24 条，每次构建自动刷新——新加的强证据 / 新条目会自动浮上来，不会冻住。
+`featured` 由算分在内存标记（数据文件不写回手动值，首页精选块 / ✦ 星标 / `claims.json` 统一用它）。
+`rank`(0–100) 是**编辑拉杆**：想让 expert / 综述层但认知差大的条目顶门面，把它 `rank` 设高即可。
+热点度来自 `data/search_hotness.json`（站内搜索 `/event` 计数，文件在场才生效；暂无数据时记 0、其余三项照常驱动）。
 
 ## 候选采集
 
@@ -159,7 +171,7 @@ HEALTH_HOT_CF_ANALYTICS_TOKEN="cloudflare-token" python3 build.py
 ```
 
 Cloudflare Web Analytics 适合看页面访问、来源和热门 URL；它不记录站内搜索词，也不支持自定义事件。
-如果以后要统计“搜了什么但没提交”，需要单独做事件端点。
+站内「搜了什么、有没有命中」由独立的 `/event` 事件端点统计（见「用户提交闭环」），与 CF Analytics 互补。
 
 ## 本地预览
 
