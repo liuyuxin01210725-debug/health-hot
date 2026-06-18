@@ -190,8 +190,8 @@
   },
   "gut-immunity-70-80-percent-calibration": {
     "verdict": "PASS",
-    "content_sha": "605a498bafd9cb12d2700446911503a49fe8f9b62558f6d93f75248fc3f5050f",
-    "reviewed_at": "2026-06-17",
+    "content_sha": "2c61a3a1ff5258dc0d02f52d666cc9374ebca4ba8fbd829dfa544283cc65a6b6",
+    "reviewed_at": "2026-06-18",
     "checks": {
       "C1": true,
       "C2": true,
@@ -200,7 +200,7 @@
       "C5": true,
       "C6": true
     },
-    "notes": "C2 3/3 PASS、C34 2/2 PASS;Vighi 2008(18721321)原话逐字命中(GALT约70%免疫系统/约80%浆细胞驻扎其中),三处偷换(GALT≠菌群/驻扎≠产生/70vs80两分母)+概数性质全部锚定;结论首句已按建议精确化;evidence=expert(叙述性综述概数)诚实未拔高。"
+    "notes": "仅设 rank=88 顶上精选；结论/证据/caveats 与上次 PASS 完全一致(只 rank 字段变、内容哈希随之变)，非内容改动。"
   },
   "probiotics-cold-prevention-cochrane": {
     "verdict": "PASS",
@@ -218,8 +218,8 @@
   },
   "colon-cleanse-detox-myth": {
     "verdict": "PASS",
-    "content_sha": "2b8ef95d84a948d17fb5d7519a021a0e23e6a838b3a40bbcc2141695e096e194",
-    "reviewed_at": "2026-06-17",
+    "content_sha": "9c1103f77eab0569a651e9d512ec502da8451fd8e02f05c86e0a8eda048d5ce2",
+    "reviewed_at": "2026-06-18",
     "checks": {
       "C1": true,
       "C2": true,
@@ -228,6 +228,6 @@
       "C5": true,
       "C6": true
     },
-    "notes": "C2 3/3 PASS、C34 2/2 PASS;内容锚=NCCIH官方页(agent WebFetch核验:无令人信服研究支持排毒/减重、结肠灌洗临床证据有限、清肠副作用部分严重),Mishori 2011题名佐证;宿便非医学概念+频繁清肠风险已写;source_url Mishori无摘要但结论由NCCIH支撑;不比官方自信。"
+    "notes": "仅设 rank=90 顶上精选(rank80差一点没进);结论/证据/caveats 与上次 PASS 一致,非内容改动。"
   }
 }

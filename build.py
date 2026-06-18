@@ -378,6 +378,86 @@ EVIDENCE_ABOUT = {"rct": "随机对照试验", "meta": "荟萃 / 系统综述", 
                   "blogger": "科普博主", "anecdote": "个案 / 轶事"}
 
 
+# ── 精选 / 重点核验：算分自动选取（替代手动 featured bool，避免冻住）──────────────
+# 重点核验分 = 0.45·证据强度 + 0.20·编辑重要性(rank) + 0.20·新鲜度 + 0.15·热点度。
+# 硬门槛：只从"已核验层"(study_supported / official_basis)选，前沿待核(frontier_pending)不进门面。
+# 热点度来自 data/search_hotness.json(站内搜索计数，/event 收集)；无该文件时记 0、其余三项照常驱动，
+# 所以即便还没搜索数据，精选也已"算分自动刷新"、不再冻在最初那批。
+FEATURED_N = 24
+FEATURED_PER_CAT_CAP = 6
+
+
+def _freshness(it):
+    """新鲜度 0~1：按本站复核日(reviewed_at，缺则 date)做时间衰减(~60 天量级)。"""
+    ds = (it.get("reviewed_at") or it.get("date") or "")[:10]
+    try:
+        days = (datetime.date.today() - datetime.date.fromisoformat(ds)).days
+    except ValueError:
+        return 0.0
+    return 1.0 / (1.0 + max(days, 0) / 60.0)
+
+
+def _hotness_norm(items):
+    """站内搜索词计数(data/search_hotness.json，/event 收集)→ 每条目热点度 0~1(按 slug)。
+    匹配：规范化搜索词是条目(标题/结论/摘要/别名)子串则计入该词总次数，再按全站最大值归一。
+    无搜索数据(端点刚上线，常见)→ 返回空 → 热点度全 0。matcher 待真实数据到位后校准。"""
+    p = os.path.join(ROOT, "data", "search_hotness.json")
+    if not os.path.isfile(p):
+        return {}
+    try:
+        with open(p, encoding="utf-8") as fh:
+            terms = (json.load(fh) or {}).get("terms", [])
+    except (ValueError, OSError):
+        return {}
+    norm = lambda s: re.sub(r"[，。！？,.!?、\s]+", "", str(s or "").lower())
+    raw = {}
+    for it in items:
+        text = norm(search_blob(it))
+        total = sum(int(t.get("h", 0)) + int(t.get("m", 0)) for t in terms
+                    if len(norm(t.get("term", ""))) >= 2 and norm(t.get("term", "")) in text)
+        if total:
+            raw[it.get("slug", "")] = total
+    mx = max(raw.values()) if raw else 0
+    return {k: v / mx for k, v in raw.items()} if mx else {}
+
+
+def featured_score(it, hot_norm):
+    ev = EVIDENCE_SCORE.get(it.get("evidence", ""), 0) / 7.0
+    rank = min(max(int(it.get("rank", 0) or 0), 0), 100) / 100.0
+    return 0.45 * ev + 0.20 * rank + 0.20 * _freshness(it) + 0.15 * hot_norm.get(it.get("slug", ""), 0.0)
+
+
+def select_featured(items, n=FEATURED_N, per_cat_cap=FEATURED_PER_CAT_CAP):
+    """重点核验分 top-N + 类目均衡。只取已核验层；前沿待核不进精选。"""
+    hot = _hotness_norm(items)
+    scored = sorted((it for it in items if verification_basis(it) != "frontier_pending"),
+                    key=lambda it: featured_score(it, hot), reverse=True)
+    out, per_cat = [], {}
+    for it in scored:
+        c = it.get("category", "其他")
+        if per_cat.get(c, 0) >= per_cat_cap:
+            continue
+        out.append(it)
+        per_cat[c] = per_cat.get(c, 0) + 1
+        if len(out) >= n:
+            break
+    if len(out) < n:  # 类目上限没填满 → 放宽补齐
+        have = {id(x) for x in out}
+        for it in scored:
+            if id(it) not in have:
+                out.append(it)
+                if len(out) >= n:
+                    break
+    return out
+
+
+def _mark_featured(items):
+    """按算分在内存里标 featured（不改数据文件）；首页精选块、列表 ✦精选 星标、claims.json 统一用它。"""
+    chosen = {it.get("slug") for it in select_featured(items)}
+    for it in items:
+        it["featured"] = it.get("slug") in chosen
+
+
 def trust_badge(basis):
     """维度 A：普通用户可理解的三类依据。待核是诚实的不确定，不渲染成错误。"""
     if basis == "study_supported":
@@ -1202,6 +1282,8 @@ def main():
         sr_files = {fn for fn, _ in sr_failures}
         good = [it for it in good if it.get("_file") not in sr_files]
         blocked.extend(sr_failures)
+    # 重点核验(精选)=算分自动选取(证据+rank+新鲜度+热点度)+类目均衡，替代手动 featured，避免冻住
+    _mark_featured(good)
     # 先全部写进临时目录，成功后再原子替换 docs/——渲染中途崩溃不会删掉已上线的站
     tmp = OUT + ".tmp"
     tmp_claims = os.path.join(tmp, "claims")
