@@ -47,7 +47,7 @@ def slug_of(path):
 
 def git(*args):
     try:
-        out = subprocess.run(["git", "-C", ROOT, *args],
+        out = subprocess.run(["git", "-C", ROOT, "-c", "core.quotepath=false", *args],
                              capture_output=True, text=True, timeout=30)
         return out.stdout.strip()
     except Exception:

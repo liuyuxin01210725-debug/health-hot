@@ -38,7 +38,7 @@
         "https://pubmed.ncbi.nlm.nih.gov/21814639/",
         "https://www.nccih.nih.gov/health/detoxes-and-cleanses-what-you-need-to-know"
       ],
-      "featured": true,
+      "featured": false,
       "date": "2026-06-17",
       "source_published_at": "2011-08-01",
       "reviewed_at": "2026-06-17"
@@ -67,7 +67,7 @@
       "source_urls": [
         "https://pubmed.ncbi.nlm.nih.gov/18721321/"
       ],
-      "featured": true,
+      "featured": false,
       "date": "2026-06-17",
       "source_published_at": "2008-09-01",
       "reviewed_at": "2026-06-17"
@@ -189,7 +189,7 @@
       "source_urls": [
         "https://pubmed.ncbi.nlm.nih.gov/42280443/"
       ],
-      "featured": true,
+      "featured": false,
       "date": "2026-06-16",
       "source_published_at": "2026-06-03",
       "reviewed_at": "2026-06-16"
@@ -358,7 +358,7 @@
         "https://pubmed.ncbi.nlm.nih.gov/40023186/",
         "https://pubmed.ncbi.nlm.nih.gov/29221645/"
       ],
-      "featured": true,
+      "featured": false,
       "date": "2026-06-14",
       "source_published_at": "2025-04-01",
       "reviewed_at": "2026-06-14"
@@ -1636,7 +1636,7 @@
       "source_urls": [
         "https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know"
       ],
-      "featured": false,
+      "featured": true,
       "date": "2026-06-01",
       "source_published_at": "",
       "reviewed_at": "2026-06-01"
@@ -4011,7 +4011,7 @@
       "source_urls": [
         "https://pubmed.ncbi.nlm.nih.gov/42104355/"
       ],
-      "featured": true,
+      "featured": false,
       "date": "2026-05-01",
       "source_published_at": "2026-05-08",
       "reviewed_at": "2026-05-31"
@@ -4179,7 +4179,7 @@
       "source_urls": [
         "https://www.who.int/news-room/fact-sheets/detail/healthy-diet"
       ],
-      "featured": false,
+      "featured": true,
       "date": "2026-01-26",
       "source_published_at": "2026-01-26",
       "reviewed_at": "2026-06-01"
@@ -4353,7 +4353,7 @@
       "source_urls": [
         "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/osteoporosis-screening"
       ],
-      "featured": false,
+      "featured": true,
       "date": "2025-01-14",
       "source_published_at": "2025-01-14",
       "reviewed_at": "2026-06-01"
@@ -4382,7 +4382,7 @@
       "source_urls": [
         "https://www.who.int/news-room/fact-sheets/detail/physical-activity"
       ],
-      "featured": false,
+      "featured": true,
       "date": "2024-06-26",
       "source_published_at": "2024-06-26",
       "reviewed_at": "2026-06-01"
@@ -4497,7 +4497,7 @@
       "source_urls": [
         "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/hypertension-in-adults-screening"
       ],
-      "featured": false,
+      "featured": true,
       "date": "2021-04-27",
       "source_published_at": "2021-04-27",
       "reviewed_at": "2026-06-01"

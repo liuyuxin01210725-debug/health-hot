@@ -229,5 +229,75 @@
       "C6": true
     },
     "notes": "仅设 rank=90 顶上精选(rank80差一点没进);结论/证据/caveats 与上次 PASS 一致,非内容改动。"
+  },
+  "uspstf-hypertension-screening-confirmation": {
+    "verdict": "PASS",
+    "content_sha": "6b7bd890de11d68a324228e62ed8c699ef5cfeb0b9ca7e97096f78040f537b3f",
+    "reviewed_at": "2026-06-18",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "仅设 rank=64 让官方依据常青条目进入精选；结论/证据/caveats 未改，仅展示优先级变更。"
+  },
+  "uspstf-osteoporosis-screening-women": {
+    "verdict": "PASS",
+    "content_sha": "1feda9d4f24a39a757661545a57a58f09e2906115ff89c054a975e295b9f6c97",
+    "reviewed_at": "2026-06-18",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "仅设 rank=63 让官方依据常青条目进入精选；结论/证据/caveats 未改，仅展示优先级变更。"
+  },
+  "who-physical-activity-baseline": {
+    "verdict": "PASS",
+    "content_sha": "8e1475bd46314801d488e4a2cc373b631c371848d61da324f284e3ee987e98a8",
+    "reviewed_at": "2026-06-18",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "仅设 rank=62 让官方依据常青条目进入精选；结论/证据/caveats 未改，仅展示优先级变更。"
+  },
+  "who-healthy-diet-baseline": {
+    "verdict": "PASS",
+    "content_sha": "488130ae4d70c999afd4a3986432a91ff061ae3199d208f3741fba1b9f5541ac",
+    "reviewed_at": "2026-06-18",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "仅设 rank=61 让官方依据常青条目进入精选；结论/证据/caveats 未改，仅展示优先级变更。"
+  },
+  "nccih-melatonin-sleep-boundaries": {
+    "verdict": "PASS",
+    "content_sha": "451d48329fd92096f22deeedb120c6df415d4b5457ec6da58821888f57c2a2dd",
+    "reviewed_at": "2026-06-18",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "仅设 rank=60 让官方依据常青条目进入精选；结论/证据/caveats 未改，仅展示优先级变更。"
   }
 }

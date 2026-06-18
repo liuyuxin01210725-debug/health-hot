@@ -6,6 +6,7 @@ import json
 import os
 import sys
 import tempfile
+import types
 import unittest
 import urllib.error
 from pathlib import Path
@@ -542,6 +543,7 @@ class SkillDataSourceTests(unittest.TestCase):
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts"))
 import pending_dashboard as pd  # noqa: E402
+import prepush_check as pc  # noqa: E402
 
 
 class PendingDashboardTests(unittest.TestCase):
@@ -600,6 +602,119 @@ class PendingDashboardTests(unittest.TestCase):
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0]["count"], 3)
         self.assertEqual(rows[0]["status"], pd.STATUS_PENDING)
+
+
+class PrepushCheckTests(unittest.TestCase):
+    def test_git_disables_quoted_non_ascii_paths(self):
+        # git diff --name-only 默认会把中文路径转义成带引号的八进制串，changed_item_files()
+        # 随后 os.path.exists 会误判文件不存在。必须用 core.quotepath=false 输出真实 UTF-8 路径。
+        with mock.patch("subprocess.run", return_value=mock.Mock(stdout="", stderr="")) as run:
+            pc.git("diff", "--name-only", "--", "data/items")
+        args = run.call_args[0][0]
+        self.assertIn("-c", args)
+        self.assertIn("core.quotepath=false", args)
+
+
+class FeaturedScoringTests(unittest.TestCase):
+    """精选打分(featured_score / select_featured / _freshness / _hotness_norm)的覆盖。
+    建立前为零覆盖；重点回归是 #3——精选选取不得依赖 date.today()(跨天 byte 漂移会假红 CI)。"""
+
+    def _scoring_item(self, slug, evidence="rct", reviewed_at="2026-06-17", category="运动", rank=0):
+        it = valid_item()
+        it.update(slug=slug, evidence=evidence, reviewed_at=reviewed_at, date=reviewed_at,
+                  category=category, rank=rank,
+                  source_url="https://pubmed.ncbi.nlm.nih.gov/123/",
+                  evidence_source_urls=["https://pubmed.ncbi.nlm.nih.gov/123/"])
+        return it
+
+    def test_score_ref_date_is_max_reviewed_at(self):
+        items = [self._scoring_item("a", reviewed_at="2026-06-01"),
+                 self._scoring_item("b", reviewed_at="2026-06-17"),
+                 self._scoring_item("c", reviewed_at="2026-05-31")]
+        self.assertEqual(build._score_ref_date(items), datetime.date(2026, 6, 17))
+
+    def test_freshness_is_pure_function_of_ref_date(self):
+        ref = datetime.date(2026, 6, 17)
+        newest = self._scoring_item("n", reviewed_at="2026-06-17")
+        self.assertAlmostEqual(build._freshness(newest, ref), 1.0)          # 复核日==锚点 → 1.0
+        older = self._scoring_item("o", reviewed_at="2026-04-18")           # 锚点前 60 天
+        self.assertAlmostEqual(build._freshness(older, ref), 0.5, places=2)  # 1/(1+60/60)
+        bad = self._scoring_item("x", reviewed_at="not-a-date")
+        self.assertEqual(build._freshness(bad, ref), 0.0)
+
+    def test_select_featured_independent_of_wall_clock(self):
+        """#3 回归：date.today() 漂到任意未来都不得改变精选选取。"""
+        items = [self._scoring_item("a", "rct", "2026-06-17", "运动", 80),
+                 self._scoring_item("b", "meta", "2026-06-01", "营养", 0),
+                 self._scoring_item("c", "observational", "2026-06-10", "睡眠", 0),
+                 self._scoring_item("d", "expert", "2026-06-15", "补剂", 0),
+                 self._scoring_item("e", "rct", "2026-05-31", "其他", 0)]
+        base = [x["slug"] for x in build.select_featured(items, n=3, per_cat_cap=6)]
+        self.assertEqual(len(base), 3)  # 防止空==空的假通过
+
+        class _FixedToday(datetime.date):
+            @classmethod
+            def today(cls):
+                return cls(2027, 1, 1)
+        shim = types.SimpleNamespace(date=_FixedToday)
+        with mock.patch.object(build, "datetime", shim):
+            drift = [x["slug"] for x in build.select_featured(items, n=3, per_cat_cap=6)]
+        self.assertEqual(base, drift)
+
+    def test_featured_score_weights(self):
+        ref = datetime.date(2026, 6, 17)
+        rct = self._scoring_item("hi", "rct", "2026-06-17", rank=0)        # ev=1.0, fresh=1.0
+        expert = self._scoring_item("lo", "expert", "2026-06-17", rank=0)  # ev=2/7
+        self.assertGreater(build.featured_score(rct, {}, ref), build.featured_score(expert, {}, ref))
+        ranked = self._scoring_item("hi", "rct", "2026-06-17", rank=100)
+        self.assertAlmostEqual(build.featured_score(ranked, {}, ref) - build.featured_score(rct, {}, ref),
+                               0.20, places=6)  # rank 满分加 0.20
+        self.assertAlmostEqual(build.featured_score(rct, {"hi": 1.0}, ref) - build.featured_score(rct, {}, ref),
+                               0.15, places=6)  # 热点满分加 0.15
+
+    def test_select_featured_excludes_frontier_pending(self):
+        items = [self._scoring_item("ok", "rct", "2026-06-17")]
+        fp = valid_item()
+        fp.update(slug="fp", source_url="https://www.youtube.com/watch?v=1",
+                  evidence_source_urls=[], discovery_source_url="https://www.youtube.com/watch?v=1")
+        self.assertEqual(build.verification_basis(fp), "frontier_pending")  # 前置确认
+        items.append(fp)
+        chosen = {x["slug"] for x in build.select_featured(items, n=10)}
+        self.assertIn("ok", chosen)
+        self.assertNotIn("fp", chosen)
+
+    def test_select_featured_respects_category_cap(self):
+        items = [self._scoring_item(f"n{i}", "rct", "2026-06-17", "营养") for i in range(10)]
+        items += [self._scoring_item(f"s{i}", "rct", "2026-06-17", "睡眠") for i in range(10)]
+        chosen = build.select_featured(items, n=8, per_cat_cap=6)
+        from collections import Counter
+        c = Counter(x["category"] for x in chosen)
+        self.assertEqual(len(chosen), 8)
+        self.assertLessEqual(c["营养"], 6)
+        self.assertLessEqual(c["睡眠"], 6)
+
+    def test_hotness_norm_no_file_returns_empty(self):
+        # 仓库当前无 data/search_hotness.json → 全 0(优雅降级)
+        self.assertEqual(build._hotness_norm([self._scoring_item("a")]), {})
+
+    def test_safe_int_tolerates_garbage(self):
+        self.assertEqual(build._safe_int("oops"), 0)
+        self.assertEqual(build._safe_int(None), 0)
+        self.assertEqual(build._safe_int({}), 0)
+        self.assertEqual(build._safe_int("5"), 5)
+        self.assertEqual(build._safe_int(3), 3)
+
+    def test_hotness_norm_tolerates_nonnumeric_counts(self):
+        """外部 /event 文件把 h/m 写成非数字时，构建不得崩(只记 0、合法计数照常归一)。"""
+        it = valid_item()
+        it.update(slug="creatine", title="肌酸", summary="肌酸 与 血脂")
+        payload = json.dumps({"terms": [{"term": "肌酸", "h": "oops", "m": 2},
+                                        {"term": "血脂", "h": 3, "m": None}]})
+        with mock.patch("build.os.path.isfile", return_value=True), \
+             mock.patch("build.open", mock.mock_open(read_data=payload), create=True):
+            out = build._hotness_norm([it])  # 修复前 int("oops") 会抛 ValueError
+        self.assertIn("creatine", out)
+        self.assertEqual(out["creatine"], 1.0)
 
 
 if __name__ == "__main__":

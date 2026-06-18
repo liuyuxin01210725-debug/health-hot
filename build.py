@@ -387,14 +387,36 @@ FEATURED_N = 24
 FEATURED_PER_CAT_CAP = 6
 
 
-def _freshness(it):
-    """新鲜度 0~1：按本站复核日(reviewed_at，缺则 date)做时间衰减(~60 天量级)。"""
+def _score_ref_date(items):
+    """精选打分的时间锚点：全库 max(reviewed_at|date)，与 generated_at 同源(见 main)。
+    用它替代 date.today() 做新鲜度衰减基准 → 精选选取(及写进 claims.json 的 featured 位)
+    成为 committed 数据的纯函数、跨天 byte 可复现；否则同样内容换了一天就会换入/换出条目，
+    令 CI 的 docs/claims.json byte 校验假红(codex 审出)。"""
+    best = max(((it.get("reviewed_at") or it.get("date") or "")[:10] for it in items), default="")
+    try:
+        return datetime.date.fromisoformat(best)
+    except ValueError:
+        return datetime.date.fromisoformat(TODAY)
+
+
+def _freshness(it, ref_date):
+    """新鲜度 0~1：按本站复核日(reviewed_at，缺则 date)相对 ref_date 做时间衰减(~60 天量级)。
+    ref_date 是构建锚点(全库 max 复核日，见 _score_ref_date)而非 today()，使精选跨天确定。"""
     ds = (it.get("reviewed_at") or it.get("date") or "")[:10]
     try:
-        days = (datetime.date.today() - datetime.date.fromisoformat(ds)).days
+        days = (ref_date - datetime.date.fromisoformat(ds)).days
     except ValueError:
         return 0.0
     return 1.0 / (1.0 + max(days, 0) / 60.0)
+
+
+def _safe_int(v):
+    """容错取整：data/search_hotness.json 来自外部 /event 端点、未过 validate()，
+    h/m 若被写成非数字不该崩掉整个构建(codex 审出)——非法值记 0。"""
+    try:
+        return int(v)
+    except (ValueError, TypeError):
+        return 0
 
 
 def _hotness_norm(items):
@@ -413,7 +435,7 @@ def _hotness_norm(items):
     raw = {}
     for it in items:
         text = norm(search_blob(it))
-        total = sum(int(t.get("h", 0)) + int(t.get("m", 0)) for t in terms
+        total = sum(_safe_int(t.get("h", 0)) + _safe_int(t.get("m", 0)) for t in terms
                     if len(norm(t.get("term", ""))) >= 2 and norm(t.get("term", "")) in text)
         if total:
             raw[it.get("slug", "")] = total
@@ -421,17 +443,19 @@ def _hotness_norm(items):
     return {k: v / mx for k, v in raw.items()} if mx else {}
 
 
-def featured_score(it, hot_norm):
+def featured_score(it, hot_norm, ref_date):
     ev = EVIDENCE_SCORE.get(it.get("evidence", ""), 0) / 7.0
     rank = min(max(int(it.get("rank", 0) or 0), 0), 100) / 100.0
-    return 0.45 * ev + 0.20 * rank + 0.20 * _freshness(it) + 0.15 * hot_norm.get(it.get("slug", ""), 0.0)
+    return 0.45 * ev + 0.20 * rank + 0.20 * _freshness(it, ref_date) + 0.15 * hot_norm.get(it.get("slug", ""), 0.0)
 
 
 def select_featured(items, n=FEATURED_N, per_cat_cap=FEATURED_PER_CAT_CAP):
-    """重点核验分 top-N + 类目均衡。只取已核验层；前沿待核不进精选。"""
+    """重点核验分 top-N + 类目均衡。只取已核验层；前沿待核不进精选。
+    打分时间锚点固定为全库 max 复核日(见 _score_ref_date)，使选取跨天确定、不随 today() 漂。"""
     hot = _hotness_norm(items)
+    ref = _score_ref_date(items)
     scored = sorted((it for it in items if verification_basis(it) != "frontier_pending"),
-                    key=lambda it: featured_score(it, hot), reverse=True)
+                    key=lambda it: featured_score(it, hot, ref), reverse=True)
     out, per_cat = [], {}
     for it in scored:
         c = it.get("category", "其他")
