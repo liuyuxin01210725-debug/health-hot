@@ -302,8 +302,8 @@
   },
   "turmeric-black-pepper-bioavailability": {
     "verdict": "PASS",
-    "content_sha": "e2352afe6a260a37496640c953bc732a04fa1ff306cea3a755580988f261eacc",
-    "reviewed_at": "2026-06-21",
+    "content_sha": "6ea5a4ff1cf05f65151bd5336af8f808bd936d375cc611dcb0a0f744e0f0ceda",
+    "reviewed_at": "2026-06-22",
     "checks": {
       "C1": true,
       "C2": true,
@@ -313,12 +313,12 @@
       "C6": true,
       "C7": true
     },
-    "notes": "4个PMID(9619120/21413691/17999464/29065496)经esummary+efetch核真、类型匹配;conclusion/summary逐句⊆摘要原文(2000%、葡糖醛酸化抑制、29倍仍低于抗炎所需均原文有);方向比官方更保守(C3);反证(Cuomo自承不够)+利益冲突+单一小样本证据集中度入caveats(C4/C7);FIX:删去无一手PMID的5-AR/DHT句、药物相互作用改锚Shoba机制(C2/C5)"
+    "notes": "深度版:葡糖醛酸化机制+2000%近零基线+吸收≠有效(Cuomo)+新号12130727(Bhardwaj胡椒碱抑CYP3A4/P-gp抬药浓度)/36252717(DILIN姜黄肝损伤10例1死)/39995754(案例)全NCBI核真标题匹配;肝损伤标病例级、药物相互作用标机制风险;无剂量处方(2g/20mg为研究值)无疗效"
   },
   "low-plastic-diet-phthalates-perth": {
     "verdict": "PASS",
-    "content_sha": "86cbec4eaf2ce71abcf6d7735e7831e292e9fcfa0bd694ae7bf0c02598a637fc",
-    "reviewed_at": "2026-06-21",
+    "content_sha": "5c0bfc7ac042cf7915b3ca4608375c0bb1dc69d67c47278c2c4492c6ecc0a133",
+    "reviewed_at": "2026-06-22",
     "checks": {
       "C1": true,
       "C2": true,
@@ -328,12 +328,12 @@
       "C6": true,
       "C7": true
     },
-    "notes": "PMID 42014506/40854835经核真;三项降幅(-37.5/-53.5/-59.7%)+60人7天先导RCT+211队列均⊆Nat Med摘要原文;明确纠正'排塑料颗粒'误读=实为降尿塑化剂(替代终点);C3比官方更保守;反证(替代终点非健康结局)+Minderoo资助利益关联+单一小先导证据集中度入caveats;无剂量无疗效暗示"
+    "notes": "深度版:塑化剂(可代谢排)vs颗粒(蓄积)分清;新号38446676(Marfella NEJM斑块HR4.53)/39901044(Nihart脑蓄积)/26544531(Gore EDC-2)/15700144(Koch DEHP半衰期)/26115537(Thayer BPA6.4h)/42303082(Kim)/20077198(Lim)全NCBI核真标题匹配;数字⊆摘要;颗粒证据标观察性非因果;Minderoo COI/替代终点入caveats;无剂量无疗效"
   },
   "racquet-social-sports-longevity": {
     "verdict": "PASS",
-    "content_sha": "91a5ecc28f67592504b3101b3409bf16c48452dd7c4394db6cbf1c7921aaa0d3",
-    "reviewed_at": "2026-06-21",
+    "content_sha": "d617df328e581962be950a2902911450ba9eba00c32d40f007007ea10efd47df",
+    "reviewed_at": "2026-06-22",
     "checks": {
       "C1": true,
       "C2": true,
@@ -343,7 +343,7 @@
       "C6": true,
       "C7": true
     },
-    "notes": "PMID30193744/27895075核真;寿命增益(网球9.7等)⊆Schnohr摘要、HR(球拍0.53/游泳0.72/CVD0.44)⊆Oja摘要、'跑步足球无显著'⊆Oja;观察性不定因果(Schnohr原文)+社交假说仅推测+强混杂+不可读成跑步无用 全入caveats;双独立队列(丹/英)互证C7;无处方"
+    "notes": "深度版:信号真(球拍类两国复现)量级假(选择偏倚因果倒置);三机制之争;社交假说有独立证据20668659(Holt-Lunstad OR1.50)/25910392(孤立≈风险因素,按原文未点名吸烟);运动量U型25844730(Arem 3-5x见顶)/25660917(Schnohr跑步U型CI宽存疑)全NCBI核真;全程observational标关联非因果"
   },
   "cardiorespiratory-fitness-vo2max-mortality": {
     "verdict": "PASS",
