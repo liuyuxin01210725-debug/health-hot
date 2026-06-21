@@ -299,5 +299,80 @@
       "C6": true
     },
     "notes": "仅设 rank=60 让官方依据常青条目进入精选；结论/证据/caveats 未改，仅展示优先级变更。"
+  },
+  "turmeric-black-pepper-bioavailability": {
+    "verdict": "PASS",
+    "content_sha": "e2352afe6a260a37496640c953bc732a04fa1ff306cea3a755580988f261eacc",
+    "reviewed_at": "2026-06-21",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true,
+      "C7": true
+    },
+    "notes": "4个PMID(9619120/21413691/17999464/29065496)经esummary+efetch核真、类型匹配;conclusion/summary逐句⊆摘要原文(2000%、葡糖醛酸化抑制、29倍仍低于抗炎所需均原文有);方向比官方更保守(C3);反证(Cuomo自承不够)+利益冲突+单一小样本证据集中度入caveats(C4/C7);FIX:删去无一手PMID的5-AR/DHT句、药物相互作用改锚Shoba机制(C2/C5)"
+  },
+  "low-plastic-diet-phthalates-perth": {
+    "verdict": "PASS",
+    "content_sha": "86cbec4eaf2ce71abcf6d7735e7831e292e9fcfa0bd694ae7bf0c02598a637fc",
+    "reviewed_at": "2026-06-21",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true,
+      "C7": true
+    },
+    "notes": "PMID 42014506/40854835经核真;三项降幅(-37.5/-53.5/-59.7%)+60人7天先导RCT+211队列均⊆Nat Med摘要原文;明确纠正'排塑料颗粒'误读=实为降尿塑化剂(替代终点);C3比官方更保守;反证(替代终点非健康结局)+Minderoo资助利益关联+单一小先导证据集中度入caveats;无剂量无疗效暗示"
+  },
+  "racquet-social-sports-longevity": {
+    "verdict": "PASS",
+    "content_sha": "91a5ecc28f67592504b3101b3409bf16c48452dd7c4394db6cbf1c7921aaa0d3",
+    "reviewed_at": "2026-06-21",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true,
+      "C7": true
+    },
+    "notes": "PMID30193744/27895075核真;寿命增益(网球9.7等)⊆Schnohr摘要、HR(球拍0.53/游泳0.72/CVD0.44)⊆Oja摘要、'跑步足球无显著'⊆Oja;观察性不定因果(Schnohr原文)+社交假说仅推测+强混杂+不可读成跑步无用 全入caveats;双独立队列(丹/英)互证C7;无处方"
+  },
+  "cardiorespiratory-fitness-vo2max-mortality": {
+    "verdict": "PASS",
+    "content_sha": "82be1afa79d3b5be8a0d5ed0977998e10ee2685e7295b527c9726ab2630e51ca",
+    "reviewed_at": "2026-06-21",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true,
+      "C7": true
+    },
+    "notes": "PMID30646252/35926933核真;HR5.04(low vs elite)/吸烟1.41/CAD1.29/糖尿1.40/无获益上限⊆Mandsager摘要、750302老兵+CRF负相关⊆Kokkinos摘要;'比吸烟危险'明确限定为该研究HR比较非抵消吸烟(C3);观察性/回顾/反向因果/相对风险入caveats;双大队列C7;无剂量处方"
+  },
+  "red-light-therapy-evidence-grading": {
+    "verdict": "PASS",
+    "content_sha": "9ff1cbc973dcd0220412f29c5a087bf7a0c1ba6755ee4ee19d7cde905c7aa00e",
+    "reviewed_at": "2026-06-21",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true,
+      "C7": true
+    },
+    "notes": "5个PMID(28070154/24286286/40826200/32596723/20011653)核真+类型匹配;机制(CCO/NO/ATP)⊆Hamblin、皮肤RCT136人⊆Wunsch、脱发7RCT meta MD6.62/I²56%/作米诺加成⊆Mawu、670nm仅40+部分显著⊆Shinhmar、双相剂量⊆Huang2009;逐适应症分级不夸大、减脂抗衰标无证据;带货乱象+终点主观+行业关联+剂量双相全入caveats;FIX:双相句补Huang2009源"
   }
 }

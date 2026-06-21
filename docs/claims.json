@@ -5,13 +5,178 @@
   "description": "中文循证健康说法核验库——每条结论标注证据强度、适用人群与原始出处。",
   "disclaimer": "本数据为科普整理，非医疗建议；不提供具体剂量与个体化诊疗。请点击 detail_url / evidence_source_urls 回原文核对。",
   "usage_note": "新消费者请优先使用 verification_basis：study_supported=『研究支持』，official_basis=『官方依据』，frontier_pending=『前沿待核』。verification_status 仅为兼容旧消费者保留，不应用它把官方页面称为原始研究。evidence_source_urls 为核验依据链接（研究或白名单官方页面），discovery_source_url 是『在哪听到』（非证据）。evidence_hint 是用依据状态+证据强度合成的可直接转述的解读，回答用户时可原样引用，但请勿在此基础上夸大或加上本站未给出的剂量/诊疗建议。",
-  "generated_at": "2026-06-17",
-  "count": 152,
-  "verified_count": 142,
-  "study_supported_count": 64,
+  "generated_at": "2026-06-21",
+  "count": 157,
+  "verified_count": 147,
+  "study_supported_count": 69,
   "official_basis_count": 78,
   "frontier_pending_count": 10,
   "claims": [
+    {
+      "slug": "turmeric-black-pepper-bioavailability",
+      "title": "姜黄加黑胡椒能让吸收「提高 2000%」？吸收确实大涨，但涨幅是从近零基线算的，且「吸收高」不等于「体内有效」",
+      "detail_url": "https://health-hot.vercel.app/claims/turmeric-black-pepper-bioavailability.html",
+      "category": "营养",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "observational",
+      "evidence_label": "观察",
+      "evidence_hint": "有可追溯的原始研究支撑；只能显示相关、不能证明因果，勿据此改变重大决定。",
+      "conclusion": "黑胡椒里的胡椒碱确实能显著提升姜黄素的口服吸收（Shoba 1998 人体小样本 PK：单吃几乎测不到，合用胡椒碱 20mg 后生物利用度升高、报告为 +2000%），机制是抑制肝/肠葡萄糖醛酸化；但「2000%」是从近零基线算的百分比、绝对浓度可能仍低，且即便换成吸收约 29 倍的磷脂配方，血浆浓度仍低于多数抗炎所需（Cuomo 2011）——「吸收变高」不等于「体内有效」。",
+      "population": "健康成年志愿者（Shoba 1998 人体部分为小样本、含大鼠实验；Cuomo 2011 为健康受试者随机双盲交叉）。测的是血药浓度（吸收替代终点），非任何疾病的临床结局。",
+      "caveats": "证据强度有限：人体「2000%」出自单一小样本药代动力学研究，至今无大样本独立复制；测的是血药浓度（替代指标）不是健康结局。「2000%/29倍」都是从极低基线算的相对值，绝对浓度可能仍达不到体外抗炎所需（Cuomo 2011 作者明确指出）。多项吸收研究有产业利益关联（如 BioPerine/Sabinsa、Meriva/USANA），独立性需打折。安全提醒：胡椒碱是已知的葡萄糖醛酸化抑制剂（Shoba 1998），机制上同样可能减缓其它经此途径代谢的药物的清除、抬高其血药浓度，正在服药者把「姜黄素+胡椒碱」当补剂叠加需警惕药物相互作用、请咨询医生。外推边界：研究用的是姜黄素提取物 + 20mg 胡椒碱，不等于日常咖喱撒黑胡椒（香料里两者的量都低得多）。本条不给具体剂量、不构成用药/补剂建议，服药或特殊人群请咨询医生或注册营养师。",
+      "summary": "「姜黄配黑胡椒吸收提高 2000%」这句广为流传的话，出处是 Shoba 1998（Planta Med）。要点要拆开看：①姜黄素口服生物利用度本来就极差——吸收少、在肝和肠壁被快速代谢、清除快，所以「吃姜黄/咖喱就抗炎」卡在吸收这关（Anand 2007）。②黑胡椒里的胡椒碱（piperine）是葡萄糖醛酸化抑制剂，能减缓姜黄素被代谢；Shoba 1998 里人体单吃 2g 姜黄素血清几乎测不到，加 20mg 胡椒碱后血药浓度显著上升、生物利用度「增加 2000%」（同一只大鼠实验里只 +154%）。③但「2000%」是从近零基线算的百分比——基线几乎为零，任何升高的百分比都会显得巨大，绝对浓度可能仍很低。④换另一条路径（磷脂配方 Meriva）吸收约 29 倍，作者却明确说血浆浓度「仍低于多数抗炎靶点所需」（Cuomo 2011）——吸收倍数高 ≠ 体内达到有效浓度。⑤人体「2000%」来自单一小样本研究、至今缺大样本独立复制，且多项吸收研究有产业利益关联。结论：配脂肪 + 一撮黑胡椒，确实是把姜黄素更合理「喂进去」的吃法（方向被低估）；但别据此把它当能治病的神药（效果被夸大）。",
+      "source": "Shoba 1998 人体/动物药代动力学研究（Planta Med）；Cuomo 2011 随机双盲交叉吸收试验；Anand 2007、Hewlings 2017 综述",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/9619120/",
+        "https://pubmed.ncbi.nlm.nih.gov/21413691/",
+        "https://pubmed.ncbi.nlm.nih.gov/17999464/",
+        "https://pubmed.ncbi.nlm.nih.gov/29065496/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/9619120/",
+        "https://pubmed.ncbi.nlm.nih.gov/21413691/",
+        "https://pubmed.ncbi.nlm.nih.gov/17999464/",
+        "https://pubmed.ncbi.nlm.nih.gov/29065496/"
+      ],
+      "featured": false,
+      "date": "2026-06-21",
+      "source_published_at": "1998-05-01",
+      "reviewed_at": "2026-06-21"
+    },
+    {
+      "slug": "low-plastic-diet-phthalates-perth",
+      "title": "「低塑饮食7天排出一半塑料」？真相：减的是尿里的塑化剂（邻苯二甲酸酯/双酚A）、7天降约37%–60%，不是排出体内的塑料颗粒，而且只是60人的7天小先导试验",
+      "detail_url": "https://health-hot.vercel.app/claims/low-plastic-diet-phthalates-perth.html",
+      "category": "营养",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "rct",
+      "evidence_label": "RCT",
+      "evidence_hint": "有可追溯的原始研究支撑；证据强度较高，可作较可靠参考；仍要看样本量与是否被重复。",
+      "conclusion": "一个为期 7 天、60 人的先导随机对照试验（PERTH，Nat Med 2026）显示：减少食物塑料接触点的「低塑饮食/生活方式」能在 7 天内显著降低尿中塑化剂——单丁基邻苯二甲酸酯 −37.5%、单苄基邻苯二甲酸酯 −53.5%、双酚A −59.7%。但降的是塑化剂（邻苯/双酚A）的暴露与尿排泄、不是排出体内的塑料颗粒；这是替代终点、非健康结局，样本小、周期短。",
+      "population": "澳大利亚成人；211 人横断观察队列 + 60 人 7 天先导 RCT。测尿中塑化剂代谢物（替代指标），非疾病结局。",
+      "caveats": "①「7天排出一半塑料」的说法把对象讲错了：研究降的是尿中塑化剂（邻苯二甲酸酯、双酚A）的暴露/排泄，不是排出已进入组织的微/纳米塑料颗粒。②「一半」是约数：单苄基邻苯 −53.5%、双酚A −59.7% 接近一半，单丁基邻苯只 −37.5%，且双酚A的95%置信区间很宽（−82.5 ~ −6.87）。③证据是小样本、短周期、先导性质：RCT 仅 60 人、7 天，主要终点是尿生物标志物（替代指标），没有测任何健康或疾病结局——塑化剂下降不等于健康获益。④微塑料/塑化剂对人体的因果危害本身仍未确立，所以这是「减一种暴露」、不是「预防某疾病」。⑤利益关联：由 Minderoo 基金会（含「塑料与人体健康」项目）资助、部分作者受雇于该基金会，资深作者另有药企顾问披露；基金会声明未影响结论。本条不构成医疗建议。",
+      "summary": "网上流传的「普通人7天就能排出一半塑料」，出处是 2026 年《自然医学》的 PERTH 试验。先把它说准：①研究包含 211 人的观察队列 + 一个仅 60 人、为期 7 天的先导随机对照试验（「211人」是队列、不是 RCT 人数）。②干预＝换无塑厨具 + 低塑个护用品 + 尽量不接触塑料的食物（来自 100 多个生产者）；对照组不干预。③结果：在维持每日热量不变的前提下，干预 7 天后尿中——单丁基邻苯二甲酸酯降 37.5%、单苄基邻苯二甲酸酯降 53.5%、双酚A降 59.7%（均有统计学意义）。④队列分析显示：高度加工、塑料包装、罐装食品是尿中塑化剂的重要可改变来源。关键澄清：降的是「塑化剂（邻苯二甲酸酯、双酚A）的体内暴露和尿排泄」，不是把已经进入身体的微塑料颗粒排出去；「一半」也是约数（两项接近一半、一项只 37.5%）。而且这是 60 人、7 天的小先导，测的是尿里的生物标志物（替代指标），没有测任何疾病或健康结局——「塑化剂降了」不等于「更健康了」。能落地的一条：真正的抓手是「食物」，少吃加工/罐装/塑料包装食品，比纠结瓶装水更能动尿里的塑化剂，而且低成本、低风险、还环保。",
+      "source": "PERTH 试验（Nature Medicine 2026，西澳大学；211人观察队列 + 60人7天先导RCT）",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/42014506/",
+        "https://pubmed.ncbi.nlm.nih.gov/40854835/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/42014506/",
+        "https://pubmed.ncbi.nlm.nih.gov/40854835/"
+      ],
+      "featured": true,
+      "date": "2026-06-21",
+      "source_published_at": "2026-04-21",
+      "reviewed_at": "2026-06-21"
+    },
+    {
+      "slug": "racquet-social-sports-longevity",
+      "title": "「最延寿的运动是球类、不是跑步游泳」？两个大型队列确实显示球拍类（网球/羽毛球）死亡风险最低，但都是观察性、强混杂，不能当因果，更不是叫你别跑步",
+      "detail_url": "https://health-hot.vercel.app/claims/racquet-social-sports-longevity.html",
+      "category": "运动",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "observational",
+      "evidence_label": "观察",
+      "evidence_hint": "有可追溯的原始研究支撑；只能显示相关、不能证明因果，勿据此改变重大决定。",
+      "conclusion": "两个大型前瞻队列（哥本哈根8577人、英国80306人）一致显示：球拍类运动（网球/羽毛球）与最低的死亡风险、最长的预期寿命相关，跑步/足球的关联较弱或不显著。但两者都是观察性研究、存在强混杂（社会经济、健康基线），不能据此说某运动「导致」长寿；「社交性运动更延寿」是作者假说、未证实；也不能解读为「跑步无用」（那只是运动之间的相对比较）。",
+      "population": "Schnohr：哥本哈根8577名成人，随访最长25年；Oja：英格兰/苏格兰合并队列80306人（54%女性，平均52岁）。均为一般成人观察队列。",
+      "caveats": "①观察性研究，只能说相关、不能定因果（Schnohr 原文：「是否因果仍不确定」）。②强混杂：球拍类参与者往往社会经济地位更高、基线更健康，「网球+9.7年」不可能是换个运动就能获得的纯因果增益。③「社交性运动更延寿」是作者推测的假说、明确「值得进一步研究」，非定论。④别误读为「跑步/游泳没用」：慢跑相比久坐仍+3.2年；Oja 里「跑步不显著」可能受样本量、自报偏差、强度差异影响，与大量「跑步降死亡」证据并存。⑤这些运动同时含高强度、协调、户外、社交等多因素，无法归因到单一原因。本条不构成运动处方，特殊人群运动前请咨询医生。",
+      "summary": "「最延寿的运动不是跑步游泳、而是球类」这个说法有两个真实出处。①哥本哈根心脏研究（Schnohr 2018，8577人随访最长25年）：相比久坐组，校正后预期寿命增益——网球+9.7年、羽毛球+6.2年、足球+4.7年、骑车+3.7年、游泳+3.4年、慢跑+3.2年。②英国8万人队列（Oja 2017）：全因死亡风险，球拍类HR=0.53、游泳0.72、骑车0.85，而足球和跑步无显著关联；心血管死亡里球拍类HR=0.44最低。两国、两个团队，方向一致：球拍类运动和最低死亡风险相关。但关键要讲清：这都是观察性研究，Schnohr 原文明说「是否因果仍不确定」——打网球的人往往社会经济地位更高、本来就更健康，「网球多活近10年」几乎不可能靠改打网球就拿到。作者提出「社交性强的运动延寿更多」只是假说、写明「值得进一步研究」，不是结论。也别读成「跑步没用」：哥本哈根里慢跑相比久坐仍+3.2年，比较的是运动之间的相对差异，不是「运动 vs 不动」。可能真正的共性是：有社交、有趣味、能长期坚持——选一个你愿意一直打、还能约到人的运动，比纠结「哪种最延寿」更实在。",
+      "source": "Schnohr 2018（哥本哈根心脏研究，8577人随访25年，Mayo Clin Proc）；Oja 2017（英国80306人队列，Br J Sports Med）",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/30193744/",
+        "https://pubmed.ncbi.nlm.nih.gov/27895075/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/30193744/",
+        "https://pubmed.ncbi.nlm.nih.gov/27895075/"
+      ],
+      "featured": false,
+      "date": "2026-06-21",
+      "source_published_at": "2018-12-01",
+      "reviewed_at": "2026-06-21"
+    },
+    {
+      "slug": "cardiorespiratory-fitness-vo2max-mortality",
+      "title": "心肺能力（VO2max）差，关联的死亡风险比吸烟还高？大型队列：最不健康组全因死亡风险约为顶尖组的5倍，而且「越高越好、没有上限」——但这是相关、且心肺能力可改善",
+      "detail_url": "https://health-hot.vercel.app/claims/cardiorespiratory-fitness-vo2max-mortality.html",
+      "category": "心肺",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "observational",
+      "evidence_label": "观察",
+      "evidence_hint": "有可追溯的原始研究支撑；只能显示相关、不能证明因果，勿据此改变重大决定。",
+      "conclusion": "大型队列（Mandsager 2018）显示，风险校正后心肺适能（VO2max 衡量）与全因死亡率成反比：最不健康组相比顶尖组的校正 HR=5.04（95%CI 4.10–6.20），高于同研究里吸烟（1.41）、冠心病（1.29）、糖尿病（1.40）的风险，且未见获益上限；约75万老兵队列（Kokkinos 2022）方向一致。但这是观察性/回顾性证据，存在反向因果等混杂，HR 为组间相对风险；心肺能力是可经训练改善的可控变量。",
+      "population": "Mandsager：Cleveland Clinic 接受运动负荷测试的大型成人队列；Kokkinos：约75万美军老兵，跨年龄/种族/性别。均为观察性。",
+      "caveats": "①观察性、且 Mandsager 为回顾性单中心队列，存在反向因果——本身有病/虚弱的人心肺能力就低，不能全部归因于「没锻炼」。②HR=5.04 是最不健康组 vs 顶尖组的相对风险，不等于「不练就会死5倍」，也不是个体预测。③「比吸烟危险」指的是该研究中低心肺适能的 HR 高于吸烟的 HR，是关联强度比较，不是说锻炼能抵消吸烟。④「无获益上限」来自该队列观察，极高水平人群样本较少。⑤好的一面：与基因/年龄不同，心肺能力可通过规律有氧+适度高强度间歇改善（具体强度/方案因人而异，有心血管或关节问题者开始前应咨询医生并做必要筛查）。本条不构成运动处方。",
+      "summary": "「心肺能力（用 VO2max / 跑步机测的心肺适能衡量）差，比吸烟还危险」这句话来自 Mandsager 2018（JAMA Network Open）。这项大型回顾队列发现：风险校正后的全因死亡率与心肺适能成反比——最不健康组相比顶尖组，全因死亡的校正风险比 HR=5.04（95%CI 4.10–6.20）；作为对照，同一研究里吸烟的 HR 只有 1.41、冠心病 1.29、糖尿病 1.40。也就是说「心肺能力差」关联的死亡风险，比这些传统危险因素都高。而且「没有观察到获益上限」——心肺越好、死亡风险越低，看不到平台。另一项约75万美军老兵的队列（Kokkinos 2022，跨年龄/种族/性别）方向一致：心肺适能越低、死亡风险越高。但要讲清边界：这是观察性研究、且为回顾性，存在反向因果（本来有病的人心肺能力就低，未必全是「不练」造成）；HR=5.04 是组间相对风险、不是「不练就会死5倍」。好消息是——和基因、年龄不同，心肺能力是可以通过训练改善的可控变量。",
+      "source": "Mandsager 2018（Cleveland Clinic 回顾队列，JAMA Network Open）；Kokkinos 2022（约75万美军老兵队列，J Am Coll Cardiol）佐证",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/30646252/",
+        "https://pubmed.ncbi.nlm.nih.gov/35926933/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/30646252/",
+        "https://pubmed.ncbi.nlm.nih.gov/35926933/"
+      ],
+      "featured": false,
+      "date": "2026-06-21",
+      "source_published_at": "2018-10-19",
+      "reviewed_at": "2026-06-21"
+    },
+    {
+      "slug": "red-light-therapy-evidence-grading",
+      "title": "红光疗法是「地球上最被低估的疗愈工具」？机制是真的，皮肤年轻化和雄脱(作米诺地尔加成)有RCT/meta级温和证据，但减脂/抗衰/治百病基本是卖器械的夸大，且不是越强越好",
+      "detail_url": "https://health-hot.vercel.app/claims/red-light-therapy-evidence-grading.html",
+      "category": "其他",
+      "verification_status": "verified",
+      "verification_label": "已核验",
+      "verification_basis": "study_supported",
+      "verification_basis_label": "研究支持",
+      "evidence": "meta",
+      "evidence_label": "Meta",
+      "evidence_hint": "有可追溯的原始研究支撑；证据强度较高，可作较可靠参考；仍要看样本量与是否被重复。",
+      "conclusion": "红光/近红外疗法（光生物调节）的机制真实（被线粒体细胞色素c氧化酶吸收、ATP增加），且在两个窄适应症有RCT/meta级的温和证据：皮肤年轻化（136人RCT，终点偏主观）、雄激素性脱发（7 RCT的meta，但是作为米诺地尔的加成、非单用证明、异质性中等）；670nm改善40岁以上视力只是小型先导；减脂/抗衰/治百病等宣称没有可靠证据。剂量-反应非线性（双相），并非功率越大、照越久越好。",
+      "population": "皮肤RCT为成年志愿者(136人)；脱发meta为AGA患者(7 RCT合并)；视力为28–72岁小型先导。各适应症人群不同，不能互相外推。",
+      "caveats": "①「机制真实」常被滥用为一切疗效背书——机制成立不等于某具体疗效成立。②有证据的也只是窄适应症+温和效应：皮肤年轻化终点偏主观（满意度/轮廓仪/超声胶原）、多发表于激光治疗专业期刊，行业关联需知悉；脱发是「LLLT加在米诺地尔上更好」、不是单用证明，且meta异质性中等(I²=56%)。③视力那条仅40+、部分指标不显著、心理物理替代终点、需独立复制。④减脂/抗衰/「疗愈万病」无可靠人体证据。⑤剂量-反应非线性（双相剂量反应）：适量有益、过量可能抑制，「越强越久越好」是错误卖点，波长(nm)、剂量(J/cm²)、距离都决定有没有用。⑥该话题网络内容多为卖红光器械/桑拿的带货，按循证标准只采一手RCT/meta/机制综述。本条不构成医疗/消费建议，具体适应症与设备请咨询专业人员。",
+      "summary": "红光/近红外疗法（光生物调节，PBM/LLLT）这两年被大量「卖红光板、红光桑拿」的账号包装成「地球上最被低估的疗愈工具」。把它拆开按适应症看：①机制是真的——红/近红外光（约600–1000nm）被线粒体的细胞色素c氧化酶吸收、使抑制性一氧化氮解离、ATP生成增加（de Freitas & Hamblin 2016）。但「机制真实」不等于「各种疗效都成立」。②皮肤年轻化：有RCT支持但效应温和——136人随机对照里红光/近红外改善了肤质粗糙度、真皮胶原密度，不过终点偏主观、发表在激光治疗专业期刊（Wunsch 2014）。③雄激素性脱发（AGA）：meta级证据，但定位是「米诺地尔的加成」——7项RCT的meta显示「低强度激光+米诺地尔」比单用米诺地尔毛发密度更高（MD 6.62），不是「单照红光就能生发」，且异质性中等（Mawu 2025）。④40岁以上视力：只有小型先导（670nm在40+人群部分色觉/视杆指标改善、年轻人无效），属前沿、需复制（Shinhmar 2020）。⑤减脂、抗衰、「疗愈万病」：没有可靠证据，是把机制外推的营销话术。还有一个关键误区：该领域公认存在「双相剂量反应」——适量有益、过量反而抑制，所以「功率越大、照越久越好」是错的，波长/剂量/距离都影响结果。一句话：别全盘当智商税（皮肤、脱发确有温和证据），也别当万能神器（绝大多数宣称无据，且不是越强越好）。",
+      "source": "de Freitas & Hamblin 2016 机制综述（IEEE JSTQE）；Wunsch 2014 皮肤RCT（136人，Photomed Laser Surg）；Mawu 2025 脱发meta（7 RCT，Lasers Med Sci）；Shinhmar 2020 670nm视力先导（J Gerontol A）",
+      "evidence_source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/40826200/",
+        "https://pubmed.ncbi.nlm.nih.gov/28070154/",
+        "https://pubmed.ncbi.nlm.nih.gov/24286286/",
+        "https://pubmed.ncbi.nlm.nih.gov/32596723/",
+        "https://pubmed.ncbi.nlm.nih.gov/20011653/"
+      ],
+      "discovery_source_url": "",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/40826200/",
+        "https://pubmed.ncbi.nlm.nih.gov/28070154/",
+        "https://pubmed.ncbi.nlm.nih.gov/24286286/",
+        "https://pubmed.ncbi.nlm.nih.gov/32596723/",
+        "https://pubmed.ncbi.nlm.nih.gov/20011653/"
+      ],
+      "featured": true,
+      "date": "2026-06-21",
+      "source_published_at": "2025-08-19",
+      "reviewed_at": "2026-06-21"
+    },
     {
       "slug": "colon-cleanse-detox-myth",
       "title": "「宿便、清肠排毒」？医学上没有「宿便」，清肠/排毒缺乏证据且可能有害",
@@ -129,7 +294,7 @@
         "https://pubmed.ncbi.nlm.nih.gov/30178451/",
         "https://pubmed.ncbi.nlm.nih.gov/26463139/"
       ],
-      "featured": true,
+      "featured": false,
       "date": "2026-06-16",
       "source_published_at": "2019-05-05",
       "reviewed_at": "2026-06-16"
@@ -160,7 +325,7 @@
         "https://pubmed.ncbi.nlm.nih.gov/40075437/",
         "https://pubmed.ncbi.nlm.nih.gov/40058591/"
       ],
-      "featured": true,
+      "featured": false,
       "date": "2026-06-16",
       "source_published_at": "2025-03-12",
       "reviewed_at": "2026-06-16"
@@ -222,7 +387,7 @@
         "https://pubmed.ncbi.nlm.nih.gov/37515843/",
         "https://pubmed.ncbi.nlm.nih.gov/42144851/"
       ],
-      "featured": true,
+      "featured": false,
       "date": "2026-06-16",
       "source_published_at": "2021-12-21",
       "reviewed_at": "2026-06-16"
@@ -4011,7 +4176,7 @@
       "source_urls": [
         "https://pubmed.ncbi.nlm.nih.gov/42104355/"
       ],
-      "featured": false,
+      "featured": true,
       "date": "2026-05-01",
       "source_published_at": "2026-05-08",
       "reviewed_at": "2026-05-31"
