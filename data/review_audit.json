@@ -362,7 +362,7 @@
   },
   "red-light-therapy-evidence-grading": {
     "verdict": "PASS",
-    "content_sha": "9ff1cbc973dcd0220412f29c5a087bf7a0c1ba6755ee4ee19d7cde905c7aa00e",
+    "content_sha": "a2ebf87a95d4b1124458b70f53debf71053ea4df758b488df850cac78ee61ac3",
     "reviewed_at": "2026-06-21",
     "checks": {
       "C1": true,
@@ -373,6 +373,6 @@
       "C6": true,
       "C7": true
     },
-    "notes": "5个PMID(28070154/24286286/40826200/32596723/20011653)核真+类型匹配;机制(CCO/NO/ATP)⊆Hamblin、皮肤RCT136人⊆Wunsch、脱发7RCT meta MD6.62/I²56%/作米诺加成⊆Mawu、670nm仅40+部分显著⊆Shinhmar、双相剂量⊆Huang2009;逐适应症分级不夸大、减脂抗衰标无证据;带货乱象+终点主观+行业关联+剂量双相全入caveats;FIX:双相句补Huang2009源"
+    "notes": "深研重做版:12 PMID全NCBI核真+类型匹配;分档结论逐条⊆已核摘要(运动恢复SMD0.27仅耐力 35802348/34428975、脱发SMD1.1-1.4+半头无加成 39404126/33998004、膝OA只止痛不改善功能 39367994、类风湿阴性 37683021、颞颌指南反对 38101929、JAAD共识未列美容嫩肤 40253006、减脂BMI不变厂商放大 20393809、双相 22461763、卒中III期失败);C3与ACR/OARSI/BMJ/JAAD一致不更自信;'名人在用非证据'为逻辑非健康断言;COI/替代终点/前沿/双相/家用≠临床/FDA清关≠有效/眼安全争议全入caveats;无剂量无疗效暗示"
   }
 }
