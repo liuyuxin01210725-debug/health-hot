@@ -374,5 +374,215 @@
       "C7": true
     },
     "notes": "深研重做版:12 PMID全NCBI核真+类型匹配;分档结论逐条⊆已核摘要(运动恢复SMD0.27仅耐力 35802348/34428975、脱发SMD1.1-1.4+半头无加成 39404126/33998004、膝OA只止痛不改善功能 39367994、类风湿阴性 37683021、颞颌指南反对 38101929、JAAD共识未列美容嫩肤 40253006、减脂BMI不变厂商放大 20393809、双相 22461763、卒中III期失败);C3与ACR/OARSI/BMJ/JAAD一致不更自信;'名人在用非证据'为逻辑非健康断言;COI/替代终点/前沿/双相/家用≠临床/FDA清关≠有效/眼安全争议全入caveats;无剂量无疗效暗示"
+  },
+  "milk-medication-absorption": {
+    "verdict": "PASS",
+    "content_sha": "d25532956bf4efaebda82168e571544d309becdbc9679dfd80613eef39cb205c",
+    "reviewed_at": "2026-06-25",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "三个PMID亲手efetch复核均真实且类型匹配(1934862=7人随机交叉RCT环丙沙星AUC降30-36%、29589994=10人健康受试者随机交叉PK左甲状腺素AUC67.3vs73.5 p=0.02、33801406=PRISMA系统综述121检索63纳入且原文自评\"limited evidence/需更大试验\");结论与summary全部数字与方向均⊆摘要、无超纲无张冠李戴(明确限钙螯合几类药、非所有药),措辞不超原文确定性(承认证据有限/样本小),反证(小样本/有限证据/护胃≠助吸收/以说明书药师为准)入caveats,无具体剂量与间隔(450mg/355mL仅作机制背景非给药指导),evidence=meta对应系统综述source_url合规,7铁律齐备。"
+  },
+  "cancer-survivorship-lifestyle": {
+    "verdict": "PASS",
+    "content_sha": "a5ec7697a4cbf7db15a97f3b0e5293242f8df7d79a15e4126ae921623b939a40",
+    "reviewed_at": "2026-06-25",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "独立 efetch 复核三个 PMID 均真实且类型相符；conclusion/summary 的全部 HR(乳腺0.69/前列腺0.73/肺0.76/结直肠0.71/皮肤0.86跨1非显著)、\"近150万/151队列\"、饮食23%与地中海饮食、ACS指南均逐句⊆摘要；正确把运动生存定性为观察性而非RCT硬终点、反向因果/混杂/癌种不均衡全部入caveats；无剂量、有不替代医疗边界、措辞较原文更保守，六关全过。"
+  },
+  "pregnancy-iron-supplementation": {
+    "verdict": "PASS",
+    "content_sha": "53d9ffdc3b08c99e439bafdb4bbb788ff83537450cea787b51a9ee3bc6a63a8f",
+    "reviewed_at": "2026-06-25",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "独立efetch核验4个PMID全部真实且类型相符,conclusion/summary逐项RR与百分比与pub6/AOGS摘要一字不差、certainty等级(低/中)如实保留为may/probably,硬终点无获益与Hb>130铁过量反证均入caveats,全程无具体剂量(WHO原页含30-60mg剂量却被刻意剔除并指向医生),source_url及全部evidence_source_urls均在who.int/pubmed/cochranelibrary白名单内——六关全过。"
+  },
+  "pregnancy-calcium-preeclampsia": {
+    "verdict": "PASS",
+    "content_sha": "780d4270dd5445f4cb9df8e7dafab02b7c85052c1b1c5033b45fcbb30202e88f",
+    "reviewed_at": "2026-06-25",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "FIX→PASS:对抗强审C1-C5通过(WHO+Cochrane pub5/pub6+BJOG再分析PMID均实测真实、结论⊆摘要、效应弱化与HELLP风险入caveats);C6原残留WHO 1.5-2.0g剂量引述,已人工删除改为'不给出剂量',现合规。"
+  },
+  "vitamin-d-children-respiratory-infection": {
+    "verdict": "PASS",
+    "content_sha": "a864fe0c38dc19a72783fac8434eb383e43144639dc3a69dbfd77372cb71ca3e",
+    "reviewed_at": "2026-06-25",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "独立 efetch 三个 PMID 全部真实且类型相符(42037591=Cochrane 2026 系统综述+meta、39993397=Lancet 2025 更新版meta、28202713=BMJ 2017 IPD meta,均匹配 evidence=meta);条目所有数字逐项与摘要一致(RR0.95/CI0.91-1.00/P0.03/低确定性、MD0.07/P0.32/中等确定性/probably does not reduce、107RCT/31521人、Lancet OR0.94/0.88-1.00/p0.057/亚组无效应修饰/漏斗左偏p0.0020、BMJ OR0.88保护),措辞未超原文确定性(全程\"可能/擦边/低确定性\",就诊比例≠次数区分清楚),反证(擦边显著、发表偏倚、BMJ早期乐观被稀释)入caveats,无剂量、有不替代医疗边界、evidence_sour"
+  },
+  "exercise-depression-mental-health": {
+    "verdict": "PASS",
+    "content_sha": "afd03ce449b03bfd5696228ebf6db17430a21bd9dbaecfde08f1a3edda43d449",
+    "reviewed_at": "2026-06-25",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "独立 efetch 复核三个 PMID 全部真实且类型与 evidence=meta 相符；条目所有 g 值/SMD/百分比/剂量阈值逐字源自摘要，治疗与预防两套人群分清、JAMA 明确标为观察性非因果，措辞较 BMJ 原文\"effective treatment/core treatments\"更保守，低置信度/未设盲/异质性/边际递减等反证齐入 caveats，无具体运动处方且明确不替代规范治疗——六关全过。"
+  },
+  "b12-supplementation-anaemia": {
+    "verdict": "PASS",
+    "content_sha": "5af5f0ecce2c0f29cdd709e9ab16da5231f739172a380861570d32f43bd6de37",
+    "reviewed_at": "2026-06-25",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "四个 PMID 均亲手 efetch 复核:38189492(主证据)母体贫血 RR 1.08(0.93-1.26)极低确定性、B12缺乏率 RR 0.38、preterm 0.97、LBW 1.50、『longer-term...not yet established』与人群(LMIC孕妇/26-51%缺乏/30-46%贫血)逐项与摘要原文吻合;42227307、26091836 作旁证方向一致且已标注为不同人群/不同问题;措辞不超官方确定性、无剂量、有医疗边界、反证入 caveats、白名单源,六关全 true。"
+  },
+  "stretching-flexibility-evidence": {
+    "verdict": "PASS",
+    "content_sha": "e18cbe52bed3a3912a22d323b050625f76a5f431da40010acc8fd327467138ba",
+    "reviewed_at": "2026-06-25",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "三PMID均亲手efetch重拉核对:37301370(77研究/186效应量,ES-1.002,量/强度/频率无显著作用,女性获益高)、36622555(55研究,RT ES0.73,RTvs拉伸ES0.08 p0.79,自重训练无显著改善,久坐者ES1.042)、26642915(SS-3.7%/PNF-4.4%/DS+1.3%,≥60s-4.6%,损伤无清晰效果/DS无数据,ROM<30min,接动态活动后表现损害消失仍推荐含动态热身)——结论全部⊆摘要;损伤写\"不明确\"非\"无效\"、\"may不必需\"保留不确定、未给任何具体剂量、争议(异质性/自重例外/动态活动救回表现/个体差异)入caveats,六关全true。"
+  },
+  "fasting-vs-calorie-restriction-weight": {
+    "verdict": "PASS",
+    "content_sha": "4d29a1b28f4d6e2bcc8a1acd457e9312387ab3cbda80f552cb4d6290a31ac253",
+    "reviewed_at": "2026-06-25",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "独立curl efetch复核5个PMID全部真实且类型匹配,所有效应量(BMJ ADF -1.29kg中等确定性/Ann Intern Med isocaloric 2.3 vs 2.6kg差0.3kg/Nutrients2022 SMD-0.21/Nutrients2024 -0.94kg无临床意义/NatMed 6mo改善18mo消失)逐字落在摘要内,措辞不超原文,方向不一致与行业资助及样本局限均入caveats,无剂量/进食窗处方且指向持证医生,六关全true。"
+  },
+  "creatine-timing-resistance-training": {
+    "verdict": "PASS",
+    "content_sha": "3e7be3f9291883a5f2b9fedac789ccc56b97d3b9d3e2081a8ee3d7ef4d2da66c",
+    "reviewed_at": "2026-06-25",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "对抗强审C1-C5通过(8周/32周慢性RCT显示长期时机无差异、2026小pilot仅作探索性caveat);二次过目删除caveats残留'0.1g/kg'剂量,现C6合规"
+  },
+  "creatine-endurance-mixed-sport": {
+    "verdict": "PASS",
+    "content_sha": "b51defd759ecc8ccb987464f2dac7cf6922d17e693caee8bda470ac62c5fad65",
+    "reviewed_at": "2026-06-25",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "独立curl efetch复核四个PMID全部真实且类型匹配;耐力SMD-0.07/p=0.47与VO2max ES-0.32/p=0.002逐字吻合摘要,纯耐力用\"无效\"匹配原文\"ineffective/negative effect\",混合项目\"较稳健证据\"不超ISSN确定性且明确标注ISSN未点名球类、稀释机制为推断非原文证实;争议/小样本/增重/行业关联全入caveats;条目本身无任何剂量(摘要里的30g/75mg未被搬入),有不替代医疗边界——六关全过。"
+  },
+  "children-24h-movement-guidelines": {
+    "verdict": "PASS",
+    "content_sha": "3f09f4bba98cedc5cd7ab84b0d20916f3afd1aa63e121d72b5cac15f86bddb84",
+    "reviewed_at": "2026-06-25",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "三个PMID均亲手efetch复核:35066216(7.12%全达标/19.21%全不达标/女3.75%男6.89%/学龄前11.26%学龄10.31%青少年2.68%)、34176439(~13%达标/肥胖r=-0.03无显著/认知无关联/仅社会心理剂量反应)、39215263(残障7%达标/PA22%/ST49%/睡眠59%/21101人)全部逐字对应摘要,无超纲;条目主动把\"达标率事实\"与\"达标=更健康\"因果切开、把null结果写入caveats、三类人群声明不可合并,措辞低于原文确定性,指南数值仅作元指标定义引用并明确不作个体处方,六关全过。"
+  },
+  "cholesterol-apoe-dementia": {
+    "verdict": "PASS",
+    "content_sha": "f1636584f0ce54c8b859039e810da799a5e2c39797e1a5c862dc454cc2009f67",
+    "reviewed_at": "2026-06-25",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "独立 efetch 复核全部 6 个 PMID:类型均匹配(Cochrane SR、3篇JAD队列/治疗meta、1篇APOE跨种族meta、1篇MR),conclusion/summary 的每个效应量与方向均逐字命中摘要(midlife TC RR 2.14、Cochrane痴呆OR 1.00、PCSK9 OR 1.45、APOE ε4在黑人减弱、Hispanic OR 3.80);他汀阴性结论firmly陈述但贴合\"good evidence...do not prevent\",PCSK9与MR均正确降级为遗传预测信号;反证(指示偏倚/反向因果/观察性vs RCT张力/族裔差异/衰弱混杂)入caveats;全文无剂量、有医疗边界与免责。六关全过。"
+  },
+  "fiber-glycemic-control-diabetes": {
+    "verdict": "PASS",
+    "content_sha": "e9ba10c7a661a1d15d2c178205525ea650450dd78582c2aaf7655db40a7a8847",
+    "reviewed_at": "2026-06-25",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "对抗强审C1-C5通过(29项RCT Clin Nutr 2021/Nutrients 2020菌群/2026 FRI 34人逆转窗口PMID均实测;三层证据强弱拆清入caveats);二次过目删除summary残留'每日7-8克'纤维剂量,现C6合规"
+  },
+  "china-dietary-guidelines-2022": {
+    "verdict": "PASS",
+    "content_sha": "86964de0cea5bf36ccf86237f8b8fe98ea5436945aba5409b1432a5dcdba32d4",
+    "reviewed_at": "2026-06-25",
+    "checks": {
+      "C1": true,
+      "C2": true,
+      "C3": true,
+      "C4": true,
+      "C5": true,
+      "C6": true
+    },
+    "notes": "独立 efetch 复核 PMID 24944055 确为上海13.4万成人前瞻队列(观察性),HR 0.67(男)/0.87(女)、单项蔬果豆鱼蛋显著而谷奶肉脂盐不显著、CVD/癌/糖尿病死亡下降且男性更明显——条目所有效应量与方向均⊆摘要、无超纲,evidence=guideline 未冒充队列,相关非因果与各项局限齐入caveats,无剂量、有免责边界、evidence_source_urls仅白名单,六关全过。"
   }
 }
