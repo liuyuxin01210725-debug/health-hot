@@ -13,7 +13,7 @@
 - `collect.py` — 从信源抓取候选、去重（纯标准库）
 - `audit_library.py` — 审计已发布馆藏：复核到期、证据待补、来源分布和链接可达性（纯标准库）
 - `build.py` — 生成静态站到 `docs/`（精选 + 全部 + 关于 + 各条详情页 + `claims.json` 机读 feed；纯标准库）。**自带发布闸门 + 强审硬锁**，详见「强审与发布闸门」。
-- `scripts/prepush_check.py` — 增量强审闸门：改动条目须有 PASS 强审记录才放行（本机 pre-push 钩子与 CI 都调它）
+- `scripts/prepush_check.py` — 增量强审闸门：改动条目须有 PASS 强审记录才放行（本机 pre-push 钩子与 CI 都调它）。另带**剂量数字 lint**（7 铁律③）：扫改动条目 `title/conclusion/summary/caveats/population`，命中疑似「数字+mg/克/g/IU…」（排除 g/L 等浓度、可按体重 g·kg 命中）即 ⚠ WARN 列清单，默认不拦、交人工确认（`--dose-strict` 升级为阻断；条目加 `dosage_lint_ok:true` 豁免）
 - `scripts/search_hotness.py` — 读回站内搜索计数（`/event`，见「用户提交闭环」），供精选「热点度」打分（纯读，需 `EVENT_STATS_TOKEN`）
 - `data/review_audit.json` — `/health-review` 强审账本，按 `content_sha` 绑定正文（正文一改记录即作废）
 - `data/strong_review_grandfather.json` — 待强审存量固化清单（与 `review_audit.json` 互斥，随强审瘦身；**勿手工重生成**）
@@ -48,8 +48,8 @@
 
 - **增量强审已是硬锁**：从现在起，改动 / 新增条目不过 `/health-review` 就上不了线。
 - **audit 权威，grandfather 只兜底**：条目一旦在 `review_audit.json` 有记录就以它为准——`FIX` / `BLOCK`、或 `PASS` 但 `content_sha` 不符，一律拦，grandfather **不能**覆盖否决；grandfather 仅对【无 audit 记录】的条目按 `content_sha` 兜底放行。
-- **全库强审尚未完成**：当前 **18 条**有 PASS 记录（走 audit 权威路径），**134 条**仅由 `data/strong_review_grandfather.json` 固化兜底——**不代表已被强审**，只是冻结了当时正文、让硬锁上线当天不冻结全站。
-- **grandfather = 真实待审存量，会瘦身**：`record_review.py` 记任何 verdict 时即把该 slug 移出 grandfather，所以 `len(grandfather)` 就是「从未强审过」的条数（现 134），两个账本互斥。**编辑任一固化条目**（哪怕改错字）→ 哈希变 → 脱离兜底 → 必须强审。
+- **全库强审尚未完成**：当前 **43 条**有 PASS 记录（走 audit 权威路径），**129 条**仅由 `data/strong_review_grandfather.json` 固化兜底——**不代表已被强审**，只是冻结了当时正文、让硬锁上线当天不冻结全站。
+- **grandfather = 真实待审存量，会瘦身**：`record_review.py` 记任何 verdict 时即把该 slug 移出 grandfather，所以 `len(grandfather)` 就是「从未强审过」的条数（现 129），两个账本互斥。**编辑任一固化条目**（哪怕改错字）→ 哈希变 → 脱离兜底 → 必须强审。
 - **切勿手工重新生成** `strong_review_grandfather.json`——那等于把当前未审内容重新「洗白」。要消化存量，就逐条跑 `/health-review`（自动瘦身）。
 
 **早警 CI（`.github/workflows/ci.yml`，push / PR 触发）** 复刻 build.py 全库闸门 + 单测 + 馆藏审计 + 对改动条目跑 `scripts/prepush_check.py`（本机 pre-push 钩子的云端镜像）。它是**早警，不是合并硬门**：仓库若「直推 main + Vercel 自动部署」，CI 拦不住部署本身。要让它成为合并硬门，需在 GitHub 仓库设置开 **Branch protection**（要求本 workflow 通过 + 禁直推 main，改走 PR 流）。本机 `.git/hooks/pre-push` 不进版本库，仅本机有效。
